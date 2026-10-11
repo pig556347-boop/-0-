@@ -38,6 +38,9 @@ jobs:
           buildMethod: HUDCIBuild.Build
       - name: Validate web output
         run: |
+          # Unity builder runs in a container and leaves root-owned output.
+          # The browser test publishes its verified screenshot with the game.
+          sudo chown -R "$(id -u):$(id -g)" build/WebGL
           test -s build/WebGL/index.html
           test -n "$(find build/WebGL/Build -name '*.wasm' -size +0c -print -quit)"
           test -n "$(find build/WebGL/Build -name '*.data' -size +0c -print -quit)"
