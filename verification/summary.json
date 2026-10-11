@@ -1,0 +1,31 @@
+{
+  "commit": "27cc3a1a50d51682d8f0bd7d15c0f2868eccaff3",
+  "executions": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "checks": 120
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "checks": 120
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": 120
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "checks": 120
+    }
+  ],
+  "playerReady": true,
+  "deongchiReady": true,
+  "lastTutorialRole": "TUTORIAL_ROLE step=Heavy infinite=True\n",
+  "runtimeErrors": [],
+  "fullscreen": true,
+  "resize": true
+}
