@@ -5,10 +5,11 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    const executions=[];
     for (const [width,height] of [[1920,1080],[1280,720],[1024,768],[2560,1080]]) {
       const page = await browser.newPage({viewport:{width,height}});
       const errors=[];let passed=false;
-      page.on('console', msg=>{const s=msg.text();if(s.includes('HUD_TEST_PASS')){passed=true;console.log("::notice::"+s)}if(/HUD_TEST_FAIL|Exception|Can't add component/.test(s))errors.push(s)});
+      page.on('console', msg=>{const s=msg.text();if(s.includes('HUD_TEST_PASS')){passed=true;executions.push({width,height,checks:Number(s.match(/checks=(\d+)/)[1])});console.log("::notice::"+s)}if(/HUD_TEST_FAIL|Exception|Can't add component/.test(s))errors.push(s)});
       page.on('pageerror',err=>errors.push(String(err)));
       await page.goto('http://127.0.0.1:8780/HUDTest/');
       // Default Unity template uses a fixed canvas. Resize the actual game canvas as the browser host would.
@@ -57,7 +58,8 @@ const { PNG } = require('pngjs');
     if(!playerReady)throw Error('Production player model was not loaded');
     if(!deongchiReady)throw Error('Tutorial Move/Jump/Crouch progression did not load Deongchi');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png'])
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,playerReady,deongchiReady,runtimeErrors,fullscreen:true,resize:true},null,2));
+    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
     await live.close();

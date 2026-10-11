@@ -9,3 +9,16 @@
 설명해: 오프닝 종료부터 무한 체력. 덩치: 기본공격 과제부터 마지막 궁극기 과제 완료 전까지 무한 체력. 무한 체력도 피격/가드/패링/콤보/궁극기 적중 이벤트는 발생한다. 오프닝 명치만과 튜토리얼 완료 이후 실전 적은 유한 체력이다. HUD는 보호 상태에서 ∞ / ∞를 표시한다.
 
 검증 자료: `skin-audit.json`은 Blender 메시의 실제 변형과 바닥 높이를 기록한다. Player/Deongchi 자세 PNG는 Blender 검증 렌더이며 인게임 사진이 아니다. 실제 웹 실행 사진은 배포 사이트 `/verification/motion-walk.png`, `/verification/motion-crouch.png`, `/verification/motion-kick.png`, `/verification/production-hud.png`에 게시한다. Unity 테스트 장면은 출시 장면과 분리한다.
+
+## 재현
+
+Blender 4.3.2에서 `SourceArt/Characters/Player.blend`, `Deongchi.blend`를 열면 리그·UV·텍스처가 포함된 편집 가능한 모델을 볼 수 있다.
+
+```sh
+blender -b -t 2 -P Tools/Motion/verify_poses.py
+blender -b -t 2 -P Tools/Motion/rebuild_rigs.py
+```
+
+첫 명령은 자세 렌더와 변형 검증, 둘째 명령은 가중치를 재계산하고 Unity Resources의 FBX와 텍스처를 생성한다. Blender 원본은 Assets 바깥에 두어 Unity/CI가 Blender 설치 없이 FBX로 빌드하도록 했다.
+
+자가 진단 중 실제 공격 테스트가 뒤따르는 HUD 테스트의 체력을 감소시키는 테스트 격리 문제를 발견하여, 두 테스트 사이에 체력을 복원하도록 수정했다. 검증 사진과 실제 검사 수/소스 커밋은 verification 브랜치에도 보관한다.

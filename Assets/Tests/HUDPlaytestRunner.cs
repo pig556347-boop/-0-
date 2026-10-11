@@ -110,6 +110,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         yield return new WaitForSeconds(enemy.VisualWindup + .06f);
         Check(enemy.State == CombatActor.ActionState.ATTACK, "Deongchi attack retains gameplay timing");
         yield return new WaitForSeconds(.6f);
+        player.RestoreForTutorial(); enemy.RestoreForTutorial();
         PrototypeHUD hud=gameObject.AddComponent<PrototypeHUD>();hud.Initialize(player,enemy);
         hud.EncounterText="학교 1-5 · 잔몹 라운드 1\n라운드 1/3 · 남은 적 4";
         CombatHUDView view=GetComponent<CombatHUDView>();

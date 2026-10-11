@@ -1,6 +1,7 @@
 import bpy,math,json
 from pathlib import Path
 from mathutils import Vector
+ROOT=Path(__file__).resolve().parents[2]
 
 def prepare(kind,blend,height,width):
  bpy.ops.wm.open_mainfile(filepath=blend)
@@ -42,7 +43,7 @@ def prepare(kind,blend,height,width):
   for name,w in chosen:groups[name].add([v.index],w/total,'REPLACE')
  bpy.data.objects.remove(proxy,do_unlink=True)
  obj.parent=rig;mod=obj.modifiers.new('Anatomical skin','ARMATURE');mod.object=rig
- root=Path('/workspace/-0-/Assets/Resources/Characters')/kind;root.mkdir(parents=True,exist_ok=True)
+ root=ROOT/'Assets/Resources/Characters'/kind;root.mkdir(parents=True,exist_ok=True)
  for mat in obj.data.materials:
   bsdf=next(n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
   col=next((l.from_node.image for l in mat.node_tree.links if l.to_node==bsdf and l.to_socket.name=='Base Color' and l.from_node.type=='TEX_IMAGE'),None)
@@ -54,8 +55,8 @@ def prepare(kind,blend,height,width):
    if n.type=='TEX_IMAGE' and n.image!=col:mat.node_tree.nodes.remove(n)
  bpy.ops.object.select_all(action='DESELECT');obj.select_set(True);rig.select_set(True);bpy.context.view_layer.objects.active=rig
  bpy.ops.file.pack_all()
- bpy.ops.wm.save_as_mainfile(filepath='/workspace/'+kind+'_Repaired.blend')
+ bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'SourceArt/Characters'/(kind+'.blend')),compress=True)
  bpy.ops.export_scene.fbx(filepath=str(root/(kind+'Model.fbx')),use_selection=True,object_types={'ARMATURE','MESH'},add_leaf_bones=False,bake_anim=False,axis_forward='-Z',axis_up='Y',path_mode='STRIP')
  print('RIG_REPAIRED',kind,len(obj.data.vertices),flush=True)
-prepare('Player','/workspace/Player_Prepared.blend',1.85,1)
-prepare('Deongchi','/workspace/Deongchi_Source.blend',1.85,1.45)
+prepare('Player',str(ROOT/'SourceArt/Characters/Player.blend'),1.85,1)
+prepare('Deongchi',str(ROOT/'SourceArt/Characters/Deongchi.blend'),1.85,1.45)

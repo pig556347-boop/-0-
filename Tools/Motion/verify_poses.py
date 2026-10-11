@@ -1,9 +1,10 @@
 import bpy,math,json
 from mathutils import Vector,Quaternion
 from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2]
 reports=[]
 for kind in ['Player','Deongchi']:
- bpy.ops.wm.open_mainfile(filepath='/workspace/'+kind+'_Repaired.blend')
+ bpy.ops.wm.open_mainfile(filepath=str(ROOT/'SourceArt/Characters'/(kind+'.blend')))
  rig=next(o for o in bpy.context.scene.objects if o.type=='ARMATURE');obj=next(o for o in bpy.context.scene.objects if o.type=='MESH');scene=bpy.context.scene
  scene.render.engine='CYCLES';scene.cycles.samples=8;scene.cycles.use_denoising=False;scene.render.resolution_x=420;scene.render.resolution_y=520;scene.render.resolution_percentage=100;scene.world.color=(.45,.45,.45)
  bpy.ops.object.camera_add(location=(3,-5,2));cam=bpy.context.object;cam.rotation_euler=(Vector((0,0,.85))-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.type='ORTHO';cam.data.ortho_scale=2.35;scene.camera=cam
@@ -32,6 +33,8 @@ for kind in ['Player','Deongchi']:
    a,b=e.vertices;rest=(obj.data.vertices[a].co-obj.data.vertices[b].co).length
    if rest>.008:maxstretch=max(maxstretch,(verts[a]-verts[b]).length/rest)
   assert all(math.isfinite(c) for v in verts for c in v)
+  assert maxstretch < 4, (kind,state,maxstretch)
+  assert min(v.z for v in verts)>-.06, (kind,state,"floor penetration")
   reports.append(dict(model=kind,pose=state,edge_stretch=round(maxstretch,3),min_z=round(min(v.z for v in verts),3),max_z=round(max(v.z for v in verts),3)))
-  evaluated.to_mesh_clear();scene.render.filepath='/workspace/-0-/Docs/Motion/'+kind+'_'+state+'.png';bpy.ops.render.render(write_still=True)
-Path('/workspace/-0-/Docs/Motion/skin-audit.json').write_text(json.dumps(reports,indent=2))
+  evaluated.to_mesh_clear();scene.render.filepath=str(ROOT/'Docs/Motion'/(kind+'_'+state+'.png'));bpy.ops.render.render(write_still=True)
+(ROOT/'Docs/Motion/skin-audit.json').write_text(json.dumps(reports,indent=2))
