@@ -228,6 +228,60 @@ internal static class Program
             Assert(!lesson.ConfirmBasicHit(4), "Expired chain continued");
             lesson.Break(); Assert(lesson.Hits == 0, "Damage did not interrupt lesson");
         });
+        Test("campaign matches all eleven approved stage populations and boss placement", () =>
+        {
+            int[] expected = { 3, 3, 4, 4, 9, 10, 10, 12, 12, 11, 16 };
+            int total = 0, areas = 0, bosses = 0;
+            for (int stage = 1; stage <= SchoolCampaign.LastStage; stage++)
+            {
+                int stageTotal = 0;
+                for (int area = 1; area <= SchoolCampaign.AreaCount(stage); area++)
+                {
+                    int count = SchoolCampaign.EnemyCount(stage, area);
+                    stageTotal += count; areas++;
+                    if (SchoolCampaign.IsBossRound(stage, area))
+                    { bosses++; Assert(count == 1, "Boss not alone"); }
+                }
+                Assert(stageTotal == expected[stage-1], "Wrong population for stage " + stage);
+                total += stageTotal;
+            }
+            Assert(total == 94 && areas == 22 && bosses == 3, "Campaign totals");
+            Assert(SchoolCampaign.BossName(5) == "도재학" && SchoolCampaign.BossName(10) == "한승빈" &&
+                SchoolCampaign.BossName(11) == "황빈", "Boss order");
+            Assert(SchoolCampaign.HP(5, true) == 240 && SchoolCampaign.HP(10, true) == 300 &&
+                SchoolCampaign.HP(11, true) == 360, "Boss HP");
+        });
+        Test("difficulty and attack telegraphs change only after stage four", () =>
+        {
+            for (int stage = 1; stage <= 11; stage++)
+            {
+                Assert(SchoolCampaign.Telegraph(stage) == (stage <= 4), "Wrong telegraph stage");
+                Assert(SchoolCampaign.VisibleLimit(stage) == (stage <= 4 ? 3 : 4), "Visible cap");
+                Assert(SchoolCampaign.AttackLimit(stage) == (stage <= 4 ? 1 : 2), "Attack cap");
+                if (stage >= 6 && stage <= 9)
+                    Assert(SchoolCampaign.Damage(stage, false) == SchoolCampaign.Damage(5, true), "Officer stats not inherited");
+            }
+        });
+        Test("reinforcements do not prematurely finish a wave or exceed live limits", () =>
+        {
+            var wave = new WaveProgress(6);
+            for (int i = 0; i < 4; i++) Assert(wave.Spawn(4), "Initial spawn failed");
+            Assert(!wave.Spawn(4) && wave.Alive == 4 && wave.Remaining == 6, "Cap ignored");
+            Assert(wave.Defeat() && wave.Spawn(4), "Reinforcement not admitted");
+            Assert(wave.Defeat() && wave.Spawn(4) && !wave.Spawn(4), "Total exceeded");
+            for (int i = 0; i < 4; i++) Assert(wave.Defeat(), "Remaining enemy ignored");
+            Assert(wave.Complete && wave.Remaining == 0 && !wave.Defeat(), "Wave completion");
+        });
+        Test("round healing clamps and boss floor does not reduce high HP", () =>
+        {
+            var health = new CombatHealth(120); health.Apply(100); health.Heal(18);
+            Assert(health.Current == 38, "Round heal");
+            health.Heal(Math.Max(0, 96 - health.Current)); Assert(health.Current == 96, "Boss floor");
+            health.Heal(1000); Assert(health.Current == 120, "Heal exceeded max");
+            health.Heal(Math.Max(0, 96 - health.Current)); Assert(health.Current == 120, "Boss floor reduced HP");
+            health.Heal(float.NaN); Assert(health.Current == 120, "NaN poisoned health");
+            health.Apply(120); health.Heal(18); Assert(!health.Alive, "Heal revived defeated actor");
+        });
         Console.WriteLine($"{passed} tests passed; 0 failed.");
     }
 }

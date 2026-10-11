@@ -50,11 +50,15 @@ public sealed class TutorialDirector : MonoBehaviour
     {
         if (!Progress.Accept(signal)) return;
         if (Progress.Step != TutorialStep.Complete) enemy.RestoreForTutorial();
+        if (Progress.Step != TutorialStep.Complete)
+            enemy.ConfigureStats((int)Progress.Step < (int)TutorialStep.Basic ? 36 : 72, 4, .65f, .6f);
     }
     private void Update()
     {
-        if (player == null || Time.timeScale == 0) return;
+        if (player == null || enemy == null || Time.timeScale == 0) return;
         TutorialStep step = Progress.Step;
+        if (step != TutorialStep.Opening)
+            enemy.name = (int)step < (int)TutorialStep.Basic ? "설명해" : "덩치";
         comboLesson.Tick(Time.time);
         if (step == TutorialStep.Opening) { brain.Active = false; return; }
         Vector3 moved = player.transform.position - moveStart; moved.y = 0;
@@ -77,6 +81,8 @@ public sealed class TutorialDirector : MonoBehaviour
         CombatInput input = player.GetComponent<CombatInput>();
         PrototypeCharacterView view = player.GetComponentInChildren<PrototypeCharacterView>();
         openingView = view;
+        enemy.name = "명치만";
+        enemy.ConfigureStats(12, 4, .65f, .6f); enemy.TelegraphEnabled = true;
         input.GameplayEnabled = false; motor.GameplayEnabled = false;
         player.GameplayEnabled = false; enemy.GameplayEnabled = false; brain.Active = false;
         view.CinematicPose = true;
@@ -111,6 +117,11 @@ public sealed class TutorialDirector : MonoBehaviour
             yield return null;
         }
         view.SetForcedKick(0); view.CinematicPose = false;
+        enemy.GameplayEnabled = true;
+        enemy.ReceiveHit(new HitRequest(player.gameObject, 12, Vector3.right, true, 3));
+        yield return new WaitForSeconds(.7f);
+        enemy.RestoreForTutorial(); enemy.name = "설명해";
+        enemy.ConfigureStats(36, 4, .65f, .6f);
         enemy.transform.position = enemyHome; Destroy(desk);
         hud.StoryMessage = ""; moveStart = player.transform.position;
         player.GameplayEnabled = true; enemy.GameplayEnabled = true;

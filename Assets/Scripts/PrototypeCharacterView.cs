@@ -88,8 +88,11 @@ public sealed class PrototypeCharacterView : MonoBehaviour
         if (attack)
         {
             float kick = Mathf.Sin(Mathf.Clamp01((Time.time - actionStarted) / .35f) * Mathf.PI);
-            rightLeg.localRotation = Quaternion.Euler(-95 * kick, 0, 0);
-            leftArm.localRotation = Quaternion.Euler(-45, 0, -15);
+            if (actor.Team == 0) rightLeg.localRotation = Quaternion.Euler(-95 * kick, 0, 0);
+            else if (actor.HeavyStrike || actor.State == CombatActor.ActionState.ULTIMATE)
+                rightArm.localRotation = Quaternion.Euler(-90 * kick, 0, 0);
+            else leftArm.localRotation = Quaternion.Euler(-90 * kick, 0, 0);
+            if (actor.Team == 0) leftArm.localRotation = Quaternion.Euler(-45, 0, -15);
         }
         if (actor.State == CombatActor.ActionState.GUARD)
         { leftArm.localRotation = Quaternion.Euler(-90, 0, -15);

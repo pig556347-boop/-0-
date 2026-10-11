@@ -15,7 +15,7 @@ public sealed class PrototypeSmokeTest : MonoBehaviour
 
     private IEnumerator Start()
     {
-        player = GameObject.Find("Sian").GetComponent<CombatActor>();
+        player = GameObject.Find("권민준").GetComponent<CombatActor>();
         enemy = GameObject.Find("Enemy").GetComponent<CombatActor>();
         player.GetComponent<CombatInput>().GameplayEnabled = false;
         player.GetComponent<PlayerController>().GameplayEnabled = false;
@@ -52,6 +52,50 @@ public sealed class PrototypeSmokeTest : MonoBehaviour
         Check(ultimate && enemy.Health.Current < enemy.Health.Maximum && player.Progress.Gauge == 0,
             "Tier-three ultimate hits and consumes gauge");
 
+        // Physics regressions for the reported desk / standing-on-enemy defects.
+        ResetActors();
+        Check(Physics.GetIgnoreCollision(player.GetComponent<Collider>(), enemy.GetComponent<Collider>()),
+            "Actor body collisions cannot create an enemy platform");
+        bool decorationIsNonSolid = true;
+        foreach (Collider shape in Object.FindObjectsByType<Collider>(FindObjectsSortMode.None))
+            if (shape.name.StartsWith("Desk") || shape.name.StartsWith("Drawer"))
+                decorationIsNonSolid &= !shape.enabled;
+        Check(decorationIsNonSolid, "Desk and drawer decorations do not block movement");
+        Rigidbody playerBody = player.GetComponent<Rigidbody>();
+        playerBody.position = enemy.transform.position + Vector3.up * 3;
+        playerBody.linearVelocity = Vector3.zero;
+        Physics.SyncTransforms(); yield return new WaitForSeconds(1.5f);
+        Check(player.transform.position.y < 1.2f && player.GetComponent<PlayerController>().IsGrounded,
+            "Player falls to floor instead of standing on opponent");
+        ResetActors(); yield return new WaitForSeconds(.15f);
+        float startY = player.transform.position.y, apex = startY;
+        playerBody.linearVelocity = Vector3.up * 4.4f;
+        float until = Time.time + 1.2f;
+        while (Time.time < until)
+        { apex = Mathf.Max(apex, player.transform.position.y); yield return new WaitForFixedUpdate(); }
+        Check(apex - startY > .7f && apex - startY < 1.15f,
+            "Revised full jump height is approximately one world unit");
+
+        ResetActors(); enemy.Progress.ConfirmHit(Time.time, gain: 100);
+        Check(!enemy.TryUltimate() && !enemy.TryBossUltimate("forbidden"),
+            "Ordinary enemies cannot use player or boss ultimates even with a full gauge");
+        enemy.BossUltimateEnabled = true;
+        float playerHP = player.Health.Current;
+        bool bossUltimate = enemy.TryBossUltimate("주먹작렬");
+        yield return new WaitForSeconds(1.7f);
+        Check(bossUltimate && player.Health.Current < playerHP,
+            "Authorized boss straight ultimate damages player through a real hitbox");
+        enemy.BossUltimateEnabled = false;
+        ResetActors(); yield return new WaitForSeconds(.15f);
+        CapsuleCollider enemyShape = enemy.GetComponent<CapsuleCollider>();
+        float feet = enemyShape.center.y - enemyShape.height * .5f;
+        bool crouching = enemy.TryCrouch();
+        Check(crouching && Mathf.Approximately(feet, enemyShape.center.y - enemyShape.height * .5f),
+            "Enemy crouch changes the capsule without moving its feet");
+        yield return new WaitForSeconds(.5f);
+        Check(enemy.State == CombatActor.ActionState.IDLE && Mathf.Approximately(enemyShape.height, 2),
+            "Enemy crouch restores its standing capsule and idle state");
+
         Report report = new Report { generatedUtc = System.DateTime.UtcNow.ToString("O"),
             passed = results.Count - failures, failed = failures, results = results.ToArray() };
         string path = Path.Combine(Application.persistentDataPath, "prototype-smoke-results.json");
@@ -65,6 +109,8 @@ public sealed class PrototypeSmokeTest : MonoBehaviour
         player.RestoreForTutorial(); enemy.RestoreForTutorial();
         player.transform.position = new Vector3(-.8f, 1.05f, -2);
         enemy.transform.position = new Vector3(.4f, 1.05f, -2);
+        player.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        enemy.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
         player.SetFacing(Vector3.right); enemy.SetFacing(Vector3.left);
         Physics.SyncTransforms();
     }

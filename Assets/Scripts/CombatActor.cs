@@ -7,7 +7,14 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public sealed class CombatActor : MonoBehaviour, IHitReceiver
 {
-    public enum ActionState { IDLE, ATTACK, HIT, GUARD, DODGE, GRAB, ULTIMATE, DEAD }
+    public enum ActionState { IDLE, ATTACK, HIT, GUARD, DODGE, GRAB, ULTIMATE, DEAD, CROUCH }
+    public bool TelegraphEnabled { get; set; }
+    public bool BossUltimateEnabled { get; set; }
+    public float GrabCounterChance { get; set; }
+    public string WarningText { get; private set; } = "";
+    public float WarningUntil { get; private set; }
+    public bool HeavyStrike => activeHeavy;
+    private bool crouched;
     [SerializeField, Min(1)] private float maximumHP = 120;
     [SerializeField, Min(0)] private float basicDamage = 12;
     [SerializeField, Min(0)] private float heavyDamage = 24;
@@ -57,6 +64,13 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         motor = GetComponent<PlayerController>();
         if (motor != null) motor.MovementSuppressed = () => State != ActionState.IDLE;
     }
+    public void ConfigureStats(float hp, float damage, float windup, float recovery)
+    {
+        maximumHP = Mathf.Max(1, hp); Health = new CombatHealth(maximumHP);
+        basicDamage = damage; heavyDamage = damage * 1.7f;
+        attackWindup = windup; attackRecovery = recovery;
+    }
+    public void ReleaseGuard() { if (State == ActionState.GUARD) State = ActionState.IDLE; }
     public void Configure(int team) { Team = team; Facing = team == 0 ? Vector3.right : Vector3.left; }
     private void Update()
     {
@@ -94,6 +108,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         do
         {
             queuedBasic = false;
+            if (TelegraphEnabled) Warn(heavy ? "강공격!" : "공격!", attackWindup * (heavy ? 1.8f : 1));
             yield return new WaitForSeconds(attackWindup * (heavy ? 1.8f : 1));
             SpawnStrike(heavy ? heavyDamage : basicDamage + chain * 2,
                 heavy ? 6 : chain == 2 ? 4 : 1.2f, false);
@@ -102,16 +117,18 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         } while (!heavy && queuedBasic && chain < 3);
         State = ActionState.IDLE;
     }
-    private void SpawnStrike(float damage, float knockback, bool unblockable)
+    private void Warn(string text, float duration) { WarningText = text; WarningUntil = Time.time + duration; }
+    private void SpawnStrike(float damage, float knockback, bool unblockable, float reach = 1.3f)
     {
+        WarningText = "";
         boxes.RemoveAll(box => box == null);
         StrikeStarted?.Invoke();
         GameObject box = new GameObject("Attack Hitbox");
-        box.transform.position = transform.position + Facing * .95f;
+        box.transform.position = transform.position + Facing * (.95f + (reach - 1.3f) * .5f);
         box.transform.rotation = Quaternion.LookRotation(Facing);
         AttackHitbox hitbox = box.AddComponent<AttackHitbox>(); boxes.Add(hitbox);
         hitbox.Configure(gameObject, Team, new HitRequest(gameObject, damage, Facing,
-            unblockable, knockback), new Vector3(1.2f, 1.5f, 1.3f), .10f, OnConfirmedHit);
+            unblockable, knockback), new Vector3(1.2f, 1.5f, reach), .10f, OnConfirmedHit);
     }
     private void OnConfirmedHit(IHitReceiver receiver, Vector3 position)
     {
@@ -191,7 +208,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     }
     public bool TryUltimate()
     {
-        if (!CanAct || Progress.UltimateTier == 0) return false;
+        if (!CanAct || Team != 0 || Progress.UltimateTier == 0) return false;
         int tier = Progress.ConsumeUltimate(); StartCoroutine(UltimateRoutine(tier)); return true;
     }
     private IEnumerator UltimateRoutine(int tier)
@@ -219,6 +236,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     private void CancelActions()
     {
         StopAllCoroutines();
+        WarningText = ""; SetEnemyCrouch(false);
         queuedBasic = false;
         activeUltimate = 0; counterWindowUntil = 0;
         if (heldTarget != null)
@@ -255,6 +273,8 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
             nearest = target; distance = range;
         }
         if (nearest == null) return false;
+        if (nearest.State == ActionState.GUARD && UnityEngine.Random.value < nearest.GrabCounterChance)
+        { Stagger(.45f); return false; }
         StartCoroutine(GrabRoutine(nearest)); return true;
     }
     private IEnumerator GrabRoutine(CombatActor target)
@@ -278,6 +298,51 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     private void StopPlanarMotion()
     {
         Vector3 velocity = GetVelocity(); velocity.x = 0; velocity.z = 0; SetVelocity(velocity);
+    }
+    public bool TryJump()
+    {
+        if (!CanAct || !Physics.Raycast(body.position, Vector3.down, out RaycastHit hit, 1.15f,
+            ~0, QueryTriggerInteraction.Ignore) || hit.collider.GetComponentInParent<CombatActor>() != null) return false;
+        Vector3 velocity = GetVelocity(); velocity.y = 4.4f; SetVelocity(velocity);
+        return true;
+    }
+    public bool TryCrouch()
+    {
+        if (!CanAct || Mathf.Abs(GetVelocity().y) > .1f) return false;
+        StartCoroutine(CrouchRoutine()); return true;
+    }
+    private IEnumerator CrouchRoutine()
+    {
+        State = ActionState.CROUCH; StopPlanarMotion(); SetEnemyCrouch(true);
+        yield return new WaitForSeconds(.4f);
+        SetEnemyCrouch(false); State = ActionState.IDLE;
+    }
+    private void SetEnemyCrouch(bool value)
+    {
+        if (Team == 0 || value == crouched) return;
+        crouched = value;
+        CapsuleCollider shape = GetComponent<CapsuleCollider>();
+        shape.height = value ? 1.2f : 2; shape.center = value ? Vector3.down * .4f : Vector3.zero;
+        PrototypeCharacterView view = GetComponentInChildren<PrototypeCharacterView>();
+        if (view != null)
+        { view.transform.localScale = new Vector3(1, value ? .6f : 1, 1);
+          view.transform.localPosition = value ? Vector3.down * .4f : Vector3.zero; }
+    }
+    public bool TryBossUltimate(string title)
+    {
+        if (!CanAct || Team == 0 || !BossUltimateEnabled) return false;
+        StartCoroutine(BossUltimateRoutine(title)); return true;
+    }
+    private IEnumerator BossUltimateRoutine(string title)
+    {
+        State = ActionState.ULTIMATE; StopPlanarMotion();
+        if (TelegraphEnabled) Warn(title, .8f);
+        UltimateStarted?.Invoke(3);
+        yield return new WaitForSeconds(.8f);
+        SpawnStrike(basicDamage * 3, 8, false, 2.6f);
+        Vector3 v = GetVelocity(); v.x = Facing.x * 6; v.z = Facing.z * 6; SetVelocity(v);
+        yield return new WaitForSeconds(.2f); StopPlanarMotion();
+        yield return new WaitForSeconds(.6f); State = ActionState.IDLE;
     }
     private Vector3 GetVelocity()
     {

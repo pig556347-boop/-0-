@@ -33,7 +33,7 @@ public sealed class PrototypeHUD : MonoBehaviour
         scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = .5f;
         canvas = root.transform;
         barSprite = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 1, 1), new Vector2(.5f, .5f));
-        Label("Title", "교칙 제0조  |  시안", new Vector2(32, -24), new Vector2(420, 40), 28);
+        Label("Title", "교칙 제0조  |  권민준", new Vector2(32, -24), new Vector2(420, 40), 28);
         hp = Bar("HP", new Vector2(32, -75), new Vector2(360, 25), new Color(.8f, .15f, .18f));
         hpLabel = Label("HP value", "", new Vector2(32, -106), new Vector2(360, 32), 22);
         gauge = Bar("Ultimate gauge", new Vector2(32, -147), new Vector2(360, 18), new Color(.9f, .6f, .2f));
@@ -103,8 +103,9 @@ public sealed class PrototypeHUD : MonoBehaviour
         if (enemy != null)
         {
             enemyHP.fillAmount = enemy.Health.Current / enemy.Health.Maximum;
-            enemyLabel.text = $"상대  {enemy.Health.Current:0} / {enemy.Health.Maximum:0}";
+            enemyLabel.text = enemy.name;
         }
+        else { enemyHP.fillAmount = 0; enemyLabel.text = ""; }
         int hits = player.Progress.Combo;
         combo.text = hits > 0 ? $"{hits} HIT" + (hits >= 6 ? " / GOOD!" : "") : "";
         combo.color = new Color(1, .3f, .2f, Mathf.Clamp01(player.Progress.ComboExpires - Time.time));

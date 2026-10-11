@@ -20,6 +20,11 @@ namespace SchoolRuleZero
             Maximum = maximum; Current = maximum;
         }
         public void Reset() => Current = Maximum;
+        public void Heal(float amount)
+        {
+            if (!Alive || amount <= 0 || float.IsNaN(amount) || float.IsInfinity(amount)) return;
+            Current = Math.Min(Maximum, Current + amount);
+        }
         public DamageResult Apply(float damage, bool invulnerable = false,
             bool guarding = false, bool parry = false, bool frontal = true,
             bool unblockable = false, float guardMultiplier = .25f)

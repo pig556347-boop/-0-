@@ -5,6 +5,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../Assets/Scripts/SchoolCampaign.cs" Link="SchoolCampaign.cs" />
     <Compile Include="../../Assets/Scripts/PlayerMovementStateMachine.cs" Link="PlayerMovementStateMachine.cs" />
     <Compile Include="../../Assets/Scripts/JumpRules.cs" Link="JumpRules.cs" />
     <Compile Include="../../Assets/Scripts/CombatRules.cs" Link="CombatRules.cs" />

@@ -12,6 +12,7 @@ public static class GameKeys
         {
             case KeyCode.W: return Key.W; case KeyCode.A: return Key.A;
             case KeyCode.S: return Key.S; case KeyCode.D: return Key.D;
+            case KeyCode.R: return Key.R; case KeyCode.Return: return Key.Enter;
             case KeyCode.C: return Key.C; case KeyCode.J: return Key.J;
             case KeyCode.K: return Key.K; case KeyCode.L: return Key.L;
             case KeyCode.I: return Key.I; case KeyCode.Q: return Key.Q;

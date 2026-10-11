@@ -21,7 +21,7 @@ public sealed class PlayerController : MonoBehaviour, IMovementStateContext
 
     [Header("Movement: XZ floor, Y jump")]
     [SerializeField, Min(0f)] private float moveSpeed = 5f;
-    [SerializeField, Min(0f)] private float jumpSpeed = 7f;
+    [SerializeField, Min(0f)] private float jumpSpeed = 4.4f;
     [SerializeField, Range(0f, 1f)] private float jumpCancelMultiplier = 0.45f;
     [SerializeField, Range(0f, 1f)] private float crouchSpeedMultiplier = 0.4f;
 
@@ -207,7 +207,7 @@ public sealed class PlayerController : MonoBehaviour, IMovementStateContext
         for (int i = 0; i < count; i++)
         {
             RaycastHit hit = groundHits[i];
-            if (!IsOwnCollider(hit.collider) && hit.normal.y >= minimumGroundNormalY)
+            if (!IsOwnCollider(hit.collider) && hit.collider.GetComponentInParent<CombatActor>() == null && hit.normal.y >= minimumGroundNormalY)
                 return true;
         }
         return false;
@@ -218,7 +218,8 @@ public sealed class PlayerController : MonoBehaviour, IMovementStateContext
 
     private void CheckGroundContacts(Collision collision)
     {
-        if ((groundLayers.value & (1 << collision.gameObject.layer)) == 0)
+        if (collision.gameObject.GetComponentInParent<CombatActor>() != null ||
+            (groundLayers.value & (1 << collision.gameObject.layer)) == 0)
             return;
         for (int i = 0; i < collision.contactCount; i++)
             if (collision.GetContact(i).normal.y >= minimumGroundNormalY)
@@ -246,7 +247,7 @@ public sealed class PlayerController : MonoBehaviour, IMovementStateContext
         if (count == clearanceHits.Length)
             return false;
         for (int i = 0; i < count; i++)
-            if (!IsOwnCollider(clearanceHits[i]))
+            if (!IsOwnCollider(clearanceHits[i]) && clearanceHits[i].GetComponentInParent<CombatActor>() == null)
                 return false;
         return true;
     }
