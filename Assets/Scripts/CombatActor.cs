@@ -43,6 +43,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public event Action<int> UltimateLanded;
     public event Action<bool> AttackLanded;
     public event Action StrikeStarted;
+    public event Action AttackPrepared;
     private readonly List<AttackHitbox> boxes = new List<AttackHitbox>();
     private Rigidbody body;
     private CombatInput input;
@@ -109,6 +110,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         do
         {
             queuedBasic = false;
+            AttackPrepared?.Invoke();
             if (TelegraphEnabled) Warn(heavy ? "강공격!" : "공격!", attackWindup * (heavy ? 1.8f : 1));
             yield return new WaitForSeconds(attackWindup * (heavy ? 1.8f : 1));
             SpawnStrike(heavy ? heavyDamage : basicDamage + chain * 2,

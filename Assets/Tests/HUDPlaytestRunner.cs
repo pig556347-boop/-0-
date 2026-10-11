@@ -124,6 +124,13 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
             if (bone.name == "LeftUpperArm") punchArm = bone;
             if (bone.name == "LeftForearm") punchElbow = bone;
         }
+        // Place actors at fighting distance instead of initially interpenetrating.
+        player.GetComponent<Rigidbody>().position = Vector3.zero;
+        enemy.GetComponent<Rigidbody>().position = Vector3.right * 1.1f;
+        Physics.SyncTransforms();
+        yield return new WaitForFixedUpdate(); yield return null;
+        Debug.Log("MOTION_METRICS hit source=" + player.transform.position + " target=" + enemy.transform.position +
+            " collider=" + enemy.GetComponent<Collider>().bounds);
         Quaternion thighBefore = kickBone.localRotation, kneeBefore = kneeBone.localRotation;
         bool strikeObserved = false;
         System.Action observeStrike = () => strikeObserved = true;

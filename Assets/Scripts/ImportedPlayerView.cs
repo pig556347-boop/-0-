@@ -53,7 +53,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         foreach (SkinnedMeshRenderer renderer in view.model.GetComponentsInChildren<SkinnedMeshRenderer>())
         renderer.updateWhenOffscreen = true;
         foreach (Animator animator in view.model.GetComponentsInChildren<Animator>()) animator.enabled = false;
-        actor.StrikeStarted += view.OnStrike;
+        actor.StrikeStarted += view.OnStrike; actor.AttackPrepared += view.OnPrepare;
         Debug.Log((kind == "Player" ? "PLAYER_MODEL_READY" : "DEONGCHI_MODEL_READY") + " bones=19 anatomical_skin=true");
         return true;
     }
@@ -133,9 +133,10 @@ public sealed class ImportedPlayerView : MonoBehaviour
             float extend = since >= 0 && since < .23f ? 1 - Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.06f, .23f, since)) : 0;
             float chamber = struckAt >= actionStarted ? 1 - Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.18f, .34f, since)) :
                 Mathf.Clamp01((Time.time - actionStarted) / Mathf.Max(.03f, actor.VisualWindup));
+            int poseStrike = struckAt >= actionStarted ? strikeNumber : strikeNumber + 1;
             if (actor.Team == 0)
             {
-                string leg = strikeNumber % 2 == 0 ? "Left" : "Right";
+                string leg = poseStrike % 2 == 0 ? "Left" : "Right";
                 Set(leg + "Thigh", -Mathf.Lerp(62, actor.HeavyStrike ? 100 : 86, extend) * chamber);
                 Set(leg + "Shin", Mathf.Lerp(100, 9, extend) * chamber);
                 Set(leg + "Foot", 10 * chamber);
@@ -145,7 +146,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
             }
             else
             {
-                string arm = actor.HeavyStrike || strikeNumber % 2 == 0 ? "Right" : "Left";
+                string arm = actor.HeavyStrike || poseStrike % 2 == 0 ? "Right" : "Left";
                 Set(arm + "UpperArm", Mathf.Lerp(-30, -87, extend));
                 Set(arm + "Forearm", Mathf.Lerp(-95, -12, extend)); Set("Chest", 8 * extend);
             }
@@ -164,7 +165,8 @@ public sealed class ImportedPlayerView : MonoBehaviour
         if (actor.State == CombatActor.ActionState.DEAD)
             transform.localRotation *= Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 75, (Time.time - actionStarted) / .35f));
     }
+    private void OnPrepare() { actionStarted = Time.time; previous = actor.State; }
     private void OnStrike() { struckAt = Time.time; strikeNumber++; }
     private void OnDestroy()
-    { if (actor != null) actor.StrikeStarted -= OnStrike; if (material != null) Destroy(material); }
+    { if (actor != null) { actor.StrikeStarted -= OnStrike; actor.AttackPrepared -= OnPrepare; } if (material != null) Destroy(material); }
 }
