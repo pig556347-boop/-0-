@@ -5,14 +5,17 @@
 사용자 Unity Console에서 PrototypeSmokeTest의 JsonUtility를 찾을 수 없는
 CS0103 오류를 확인했습니다. Packages/manifest.json에
 com.unity.modules.jsonserialize 1.0.0을 추가했습니다.
-현재 사용하는 Input.GetKey와 Font/Text의 모듈도 명확하게 선언하도록
-inputlegacy와 textrendering 1.0.0을 추가했습니다.
+재검토에서 추가했던 inputlegacy와 textrendering 1.0.0은 사용자 Unity 6.4의
+Package Manager가 찾지 못하는 것으로 확인되어 제거했습니다.
+이 두 이름을 패키지 의존성으로 요구하지 않습니다.
 
 ## 이번 수정본에서 실행한 확인
 
 - 실제 순수 C# 로직을 컴파일하고 자동 테스트 54개 통과.
 - 에디터/플레이어 전처리 분기 각각 84개, 총 168개 C# 구문 검사 통과.
-- 사용 모듈 선언, JSON 문법, Unity 6000.4.10f1 버전 설정 확인.
+- JSON 문법, Unity 6000.4.10f1 버전 설정 확인.
+  패키지 이름 존재 여부를 클라우드 정적 검사로 검증하지 못했고,
+  사용자 임포트에서 발견된 두 잘못된 선언을 제거했습니다.
 - 모든 Assets 메타데이터 존재, GUID 중복 없음 확인.
 - Prototype 씬의 Bootstrap 스크립트 GUID 연결 확인.
 - Resources의 한글 글꼴, 카툰/타격 셰이더 파일 존재 확인.
