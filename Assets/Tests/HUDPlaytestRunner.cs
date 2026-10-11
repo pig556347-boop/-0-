@@ -28,6 +28,13 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         CombatHUDView view=GetComponent<CombatHUDView>();
         yield return null;yield return null;
         Check(view.PlayerMeter.ValueText=="120 / 120","initial player HP");
+        foreach(string label in new[]{"Player panel surface","Enemy panel surface","State overlay surface","Player HP fill","Player HP outline"})
+        {
+            Image visual=GameObject.Find("Combat HUD").GetComponent<RectTransform>().GetComponentsInChildren<Image>(true)[0];
+            foreach(Image candidate in GameObject.Find("Combat HUD").GetComponentsInChildren<Image>(true))
+                if(candidate.name==label) {visual=candidate;break;}
+            Check(visual.name==label && visual.sprite!=null && visual.sprite.name.StartsWith("Silent "),"Silent exported sprite bound "+label);
+        }
         player.ReceiveHit(new HitRequest(enemy.gameObject,30,Vector3.left,true,0));
         yield return new WaitForSecondsRealtime(.08f);
         Check(view.PlayerMeter.ValueText=="90 / 120","real player damage numeric binding");

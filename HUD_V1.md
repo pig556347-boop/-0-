@@ -30,3 +30,9 @@ Docs/ArtBrief/images/early-concept.png 및 production-concept.png는 기존 참�
 복사하지 않습니다. 이번 버전은 별도 이미지 없이 uGUI 프레임/채움/텍스트로 구현합니다.
 
 첨부 이미지는 색상이나 내용을 그대로 복사하는 용도가 아니라, **UI의 배치 밀도·크기·게임 HUD 느낌만 참고**해줘.
+
+## Silent GUI skin — 2026-10-12
+
+User supplied `asset.zip` from Prinbles Silent GUI. Seven unchanged 2x PNG exports are included under `Assets/Resources/UI/Silent`: panels, state window, progress frame/fill and pause/retry/continue icons. `SilentHUDSkin` caches neutral versions of the colored bars/icons at runtime; panel opacity is 78%. Existing Korean font, health/combo/gauge binding, controls and game state transitions remain unchanged. State icons indicate existing keyboard actions; they are not new clickable controls.
+
+Validation adds five assertions that the actual exported Silent sprites are bound to both HUD panels, the state window and player health frame/fill. The existing real damage, boss, combo, pause, death and four-resolution tests still apply. Asset usage terms and source are recorded in the resource folder. Screenshots from CI represent actual Unity execution, not source-pack mockups.

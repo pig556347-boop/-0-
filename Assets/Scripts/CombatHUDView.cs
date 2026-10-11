@@ -7,6 +7,8 @@ public sealed class CombatHUDView : MonoBehaviour
     private RectTransform canvas;
     private Font font;
     private Sprite solid;
+    private SilentHUDSkin skin;
+    private Image stateIcon;
     private HUDHealthMeter playerMeter, enemyMeter;
     private Text playerName, enemyName, enemyRole, quest, combo, dialogue, modalTitle, modalBody;
     private Image gauge;
@@ -23,6 +25,7 @@ public sealed class CombatHUDView : MonoBehaviour
         font = Resources.Load<Font>("Fonts/NotoSansCJKkr-Regular");
         if (font == null) font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         solid = Sprite.Create(Texture2D.whiteTexture,new Rect(0,0,1,1),new Vector2(.5f,.5f));
+        skin = gameObject.AddComponent<SilentHUDSkin>();
         GameObject root = new GameObject("Combat HUD",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler));
         root.transform.SetParent(transform,false); canvas = (RectTransform)root.transform;
         root.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
@@ -35,6 +38,7 @@ public sealed class CombatHUDView : MonoBehaviour
         Label("Special label",p,new Vector2(.04f,.05f),new Vector2(.22f,.24f),18,TextAnchor.MiddleLeft).text="특수 게이지";
         Image track = MakeImage("Ultimate track",p,new Vector2(.24f,.11f),new Vector2(.75f,.17f),new Color(1,1,1,.12f));
         gauge = MakeImage("Ultimate fill",track.rectTransform,Vector2.zero,Vector2.one,new Color(.72f,.73f,.7f));
+        gauge.sprite=skin.Load("BarFill",true);
         gauge.type=Image.Type.Filled; gauge.fillMethod=Image.FillMethod.Horizontal;
         for(int i=0;i<3;i++) orbs[i]=MakeImage("Ultimate charge "+(i+1),p,
             new Vector2(.8f+i*.05f,.09f),new Vector2(.83f+i*.05f,.19f),new Color(1,1,1,.2f));
@@ -55,7 +59,9 @@ public sealed class CombatHUDView : MonoBehaviour
         dialogue=Label("Dialogue",d,new Vector2(.035f,.10f),new Vector2(.965f,.90f),28,TextAnchor.MiddleCenter);
         RectTransform m=Panel("State overlay",canvas,new Vector2(.285f,.35f),new Vector2(.715f,.65f));
         modal=m.gameObject;
-        modalTitle=Label("State title",m,new Vector2(.07f,.5f),new Vector2(.93f,.86f),42,TextAnchor.MiddleCenter);
+        stateIcon=MakeImage("State icon",m,new Vector2(.465f,.77f),new Vector2(.535f,.94f),Color.white);
+        stateIcon.sprite=skin.Load("Pause",true);stateIcon.preserveAspect=true;
+        modalTitle=Label("State title",m,new Vector2(.07f,.48f),new Vector2(.93f,.75f),42,TextAnchor.MiddleCenter);
         modalBody=Label("State instructions",m,new Vector2(.07f,.1f),new Vector2(.93f,.46f),24,TextAnchor.MiddleCenter);
         dialoguePanel.SetActive(false); modal.SetActive(false); comboPanel.SetActive(false);
     }
@@ -77,6 +83,7 @@ public sealed class CombatHUDView : MonoBehaviour
         bool complete=story.Contains("1학년 완료");
         bool clear=complete || story.Contains("클리어!") || story.Contains("라운드 정리 완료!");
         modal.SetActive(paused||dead||clear);
+        stateIcon.sprite=skin.Load(paused?"Pause":dead?"Replay":"Play",true);
         modalTitle.text=paused?"일시정지":dead?"쓰러졌다":complete?"1학년 완료":clear?"전투 완료":"";
         modalTitle.color=dead ? new Color(.94f,.38f,.36f) : Color.white;
         modalBody.text=paused?"Esc · 계속하기":dead?"R · 현재 라운드 다시 도전":clear?story:"";
@@ -85,9 +92,11 @@ public sealed class CombatHUDView : MonoBehaviour
     private HUDHealthMeter Meter(string name,RectTransform parent,float bottom,float top)
     {
         RectTransform panel=Rect(name,parent,new Vector2(.04f,bottom),new Vector2(.96f,top));
-        Image border=MakeImage(name+" outline",panel,Vector2.zero,Vector2.one,new Color(1,1,1,.19f));
+        Image border=MakeImage(name+" outline",panel,new Vector2(0,0),new Vector2(.70f,1),new Color(1,1,1,.45f));
+        border.sprite=skin.Load("BarFrame",true,20);border.type=Image.Type.Sliced;
         Image bg=MakeImage(name+" track",panel,new Vector2(.006f,.13f),new Vector2(.69f,.87f),new Color(.12f,.13f,.15f,.96f));
         Image fill=MakeImage(name+" fill",bg.rectTransform,new Vector2(.008f,.2f),new Vector2(.992f,.8f),Color.white);
+        fill.sprite=skin.Load("BarFill",true);
         fill.type=Image.Type.Filled;fill.fillMethod=Image.FillMethod.Horizontal;fill.fillOrigin=0;
         Text number=Label(name+" value",panel,new Vector2(.70f,0),new Vector2(.99f,1),21,TextAnchor.MiddleRight);
         HUDHealthMeter meter=panel.gameObject.AddComponent<HUDHealthMeter>();meter.Initialize(fill,border,number);return meter;
@@ -95,10 +104,9 @@ public sealed class CombatHUDView : MonoBehaviour
     private RectTransform Panel(string name,Transform parent,Vector2 min,Vector2 max)
     {
         RectTransform r=Rect(name,parent,min,max);
-        MakeImage(name+" edge",r,Vector2.zero,Vector2.one,new Color(1,1,1,.16f));
-        RectTransform inset=Rect(name+" surface",r,Vector2.zero,Vector2.one);
-        inset.offsetMin=new Vector2(1,1);inset.offsetMax=new Vector2(-1,-1);
-        Image surface=inset.gameObject.AddComponent<Image>();surface.color=new Color(.045f,.05f,.06f,.72f);surface.raycastTarget=false;
+        Image surface=MakeImage(name+" surface",r,Vector2.zero,Vector2.one,new Color(1,1,1,.78f));
+        surface.sprite=skin.Load(name=="State overlay"?"Window":"Panel",false,32);
+        surface.type=Image.Type.Sliced;
         return r;
     }
     private static RectTransform Rect(string name,Transform parent,Vector2 min,Vector2 max)
