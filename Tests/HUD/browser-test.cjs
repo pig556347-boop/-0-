@@ -21,10 +21,11 @@ const { PNG } = require('pngjs');
     }
     const live=await browser.newPage({viewport:{width:1920,height:1080}});
     const runtimeErrors=[];
-    let playerReady=false, deongchiReady=false, lastTutorialRole="";
+    let playerReady=false, deongchiReady=false, lastTutorialRole="", motion=null;
+    live.on('console',msg=>{const s=msg.text();if(s.startsWith('MOTION_LIVE '))motion=JSON.parse(s.slice(12));});
     live.on('console',msg=>{if(msg.text().includes('PLAYER_MODEL_READY'))playerReady=true;if(msg.text().includes('DEONGCHI_MODEL_READY'))deongchiReady=true;if(msg.text().includes('TUTORIAL_ROLE')){lastTutorialRole=msg.text();console.log('::notice::'+lastTutorialRole)}if(/Exception|Can't add component/.test(msg.text()))runtimeErrors.push(msg.text())});
     live.on('pageerror',err=>runtimeErrors.push(String(err)));
-    await live.goto('http://127.0.0.1:8780/WebGL/');
+    await live.goto('http://127.0.0.1:8780/WebGL/?motionVerification=1');
     await live.waitForTimeout(25000);
     const hostBounds=await live.locator('canvas').boundingBox();
     if(Math.abs(hostBounds.width-1920)>1||Math.abs(hostBounds.height-1080)>1)throw Error('Game canvas does not fill browser viewport');
@@ -43,13 +44,33 @@ const { PNG } = require('pngjs');
     await live.keyboard.down('c');await live.waitForTimeout(300);
     await live.screenshot({path:'hud-test-results/motion-crouch.png'});
     await live.keyboard.up('c');await live.waitForTimeout(300);
+    // A screenshot can take several seconds on software WebGL. Approach using
+    // observed world positions, rather than assuming held-key wall time equals distance.
+    async function approachTarget() {
+      if(!motion)throw Error('Read-only motion telemetry missing');
+      for(let i=0;i<60;i++) {
+        const dx=motion.ex-motion.px,dz=motion.ez-motion.pz;
+        const key=Math.abs(dz)>.25?(dz>0?'w':'s'):(dx>0?'d':'a');
+        if(Math.abs(dx)<1.3&&Math.abs(dx)>.8&&Math.abs(dz)<.25) {
+          await live.keyboard.down(key);await live.waitForTimeout(40);await live.keyboard.up(key);
+          await live.waitForTimeout(150);return;
+        }
+        await live.keyboard.down(key);await live.waitForTimeout(80);await live.keyboard.up(key);
+        await live.waitForTimeout(150);
+      }
+      throw Error('Could not approach tutorial target: '+JSON.stringify(motion));
+    }
+    await approachTarget();
     await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
     await live.waitForTimeout(100);await live.screenshot({path:'hud-test-results/motion-kick.png'});
-    await live.waitForTimeout(60);
-    await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
-    await live.waitForTimeout(450);
-    await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
-    await live.waitForTimeout(700);
+    // Re-enter a real three-hit sequence after the evidence capture delay.
+    await live.waitForTimeout(500);
+    await approachTarget();
+    for(let i=0;i<12&&!lastTutorialRole.includes('step=Heavy');i++) {
+      await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
+      await live.waitForTimeout(140);
+    }
+    await live.waitForTimeout(500);
     await live.screenshot({path:'hud-test-results/production-hud.png'});
     const pixels=PNG.sync.read(await live.locator('canvas').screenshot());
     const buckets=new Map();

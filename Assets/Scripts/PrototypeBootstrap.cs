@@ -32,6 +32,7 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         visual.AddComponent<PrototypeCharacterView>().Build(player.GetComponent<CombatActor>());
         GameObject enemy = CreateOpponent("Enemy", new Vector3(1, 1.05f, -2),
             player.GetComponent<CombatActor>()).gameObject;
+        MotionVerificationProbe.Install(player.GetComponent<CombatActor>(), enemy.GetComponent<CombatActor>());
         GameObject cameraObject = new GameObject("Main Camera");
         cameraObject.tag = "MainCamera";
         Camera camera = cameraObject.AddComponent<Camera>();
