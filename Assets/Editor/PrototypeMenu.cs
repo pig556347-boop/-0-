@@ -3,6 +3,8 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
+using System.IO;
+using System.IO.Compression;
 
 public static class PrototypeMenu
 {
@@ -36,16 +38,26 @@ public static class PrototypeMenu
         if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
         string output = EditorUtility.SaveFolderPanel("WebGL output folder", "", "SchoolRuleZeroWebGL");
         if (string.IsNullOrEmpty(output)) return;
+        // GitHub Pages does not supply Unity-specific Content-Encoding headers.
+        PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+        PlayerSettings.WebGL.threadsSupport = false;
         BuildReport report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
         {
             scenes = new[] { "Assets/Scenes/Prototype.unity" },
             locationPathName = output,
             target = BuildTarget.WebGL,
-            options = BuildOptions.Development
+            options = BuildOptions.None
         });
         if (report.summary.result == BuildResult.Succeeded)
+        {
+            File.WriteAllText(Path.Combine(output, ".nojekyll"), "");
+            string archive = output.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + ".zip";
+            if (File.Exists(archive)) File.Delete(archive);
+            ZipFile.CreateFromDirectory(output, archive);
             Debug.Log("WebGL build created at " + output +
-                ". Serve this folder over HTTP(S); opening index.html as a local file is insufficient.");
+                ". Upload this ZIP for deployment: " + archive);
+            EditorUtility.RevealInFinder(archive);
+        }
         else Debug.LogError("WebGL build failed: " + report.summary.result);
     }
     [MenuItem("School Rule Zero/Run Smoke Checks")]
