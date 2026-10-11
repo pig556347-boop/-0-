@@ -52,6 +52,19 @@ public sealed class TutorialDirector : MonoBehaviour
         if (Progress.Step != TutorialStep.Complete) enemy.RestoreForTutorial();
         if (Progress.Step != TutorialStep.Complete)
             enemy.ConfigureStats((int)Progress.Step < (int)TutorialStep.Basic ? 36 : 72, 4, .65f, .6f);
+        ApplyTrainingRole();
+    }
+    private void ApplyTrainingRole()
+    {
+        if (enemy == null) return;
+        bool training = TutorialTrainingRules.HasInfiniteHealth(Progress.Step);
+        enemy.Health.Infinite = training;
+        if (training && TutorialTrainingRules.UsesDeongchi(Progress.Step))
+        {
+            enemy.name = "덩치";
+            PrototypeCharacterView view = enemy.GetComponentInChildren<PrototypeCharacterView>();
+            if (view != null) view.UseDeongchiModel();
+        }
     }
     private void Update()
     {
@@ -125,7 +138,7 @@ public sealed class TutorialDirector : MonoBehaviour
         enemy.transform.position = enemyHome; Destroy(desk);
         hud.StoryMessage = ""; moveStart = player.transform.position;
         player.GameplayEnabled = true; enemy.GameplayEnabled = true;
-        input.GameplayEnabled = true; motor.GameplayEnabled = true; Progress.FinishOpening();
+        input.GameplayEnabled = true; motor.GameplayEnabled = true; Progress.FinishOpening(); ApplyTrainingRole();
     }
     private void OnDisable()
     {
@@ -135,7 +148,7 @@ public sealed class TutorialDirector : MonoBehaviour
         if (openingView != null)
         { openingView.transform.localPosition = openingVisualHome; openingView.SetForcedKick(0); }
         player.GameplayEnabled = true;
-        if (enemy != null) enemy.GameplayEnabled = true;
+        if (enemy != null) { enemy.GameplayEnabled = true; enemy.Health.Infinite = false; }
         player.GetComponent<CombatInput>().GameplayEnabled = true; motor.GameplayEnabled = true;
         PrototypeCharacterView view = player.GetComponentInChildren<PrototypeCharacterView>();
         if (view != null) view.CinematicPose = false;

@@ -279,7 +279,7 @@ public sealed class PlayerController : MonoBehaviour, IMovementStateContext
         // Lower the center by half the lost height, keeping the feet fixed.
         capsule.center = standingCenter + Vector3.down *
             ((standingHeight - capsule.height) * 0.5f);
-        if (visualRoot != null)
+        if (visualRoot != null && visualRoot.GetComponentInChildren<ImportedPlayerView>() == null)
         {
             Vector3 scale = standingVisualScale;
             scale.y *= capsule.height / standingHeight;

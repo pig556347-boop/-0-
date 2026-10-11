@@ -26,7 +26,7 @@ public sealed class HUDHealthMeter : MonoBehaviour
         UpdateNumbers();
     }
     private void UpdateNumbers()
-    { value.text = health == null ? "— / —" : $"{health.Current:0} / {health.Maximum:0}"; }
+    { value.text = health == null ? "— / —" : health.Infinite ? "∞ / ∞" : $"{health.Current:0} / {health.Maximum:0}"; }
     private void Update()
     {
         if (fill == null) return;

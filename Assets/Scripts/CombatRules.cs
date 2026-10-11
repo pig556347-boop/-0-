@@ -13,6 +13,7 @@ namespace SchoolRuleZero
         public float Maximum { get; }
         public float Current { get; private set; }
         public bool Alive => Current > 0;
+        public bool Infinite { get; set; }
         public CombatHealth(float maximum)
         {
             if (maximum <= 0 || float.IsNaN(maximum) || float.IsInfinity(maximum))
@@ -35,7 +36,7 @@ namespace SchoolRuleZero
                 return new DamageResult(DamageKind.Parried, 0);
             bool blocked = guarding && frontal && !unblockable;
             if (blocked) damage *= Math.Max(0, Math.Min(1, guardMultiplier));
-            float applied = Math.Min(Current, damage);
+            float applied = Infinite ? 0 : Math.Min(Current, damage);
             Current -= applied;
             return new DamageResult(blocked ? DamageKind.Guarded : DamageKind.Hit, applied);
         }

@@ -19,6 +19,13 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         if(!pass) { Debug.LogError("HUD_TEST_FAIL "+label); throw new Exception(label); }
         checks++;Debug.Log("HUD_TEST_CHECK "+label);
     }
+    private Bounds WorldBounds(SkinnedMeshRenderer renderer, Mesh mesh)
+    {
+        Vector3[] vertices = mesh.vertices;
+        Bounds bounds = new Bounds(renderer.transform.TransformPoint(vertices[0]), Vector3.zero);
+        foreach (Vector3 v in vertices) bounds.Encapsulate(renderer.transform.TransformPoint(v));
+        return bounds;
+    }
     private IEnumerator Start()
     {
         new GameObject("Camera").AddComponent<Camera>().backgroundColor=new Color(.18f,.19f,.2f);
@@ -52,6 +59,57 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         character.SetForcedKick(0);
         Check(Quaternion.Angle(kickPose, kickBone.localRotation) > 40, "imported kick bone responds to existing cinematic pose");
         character.CinematicPose = false;
+        // Exercise all kick phases and reject non-finite/escaping mesh vertices.
+        for (int phase = 0; phase <= 10; phase++)
+        {
+            character.SetForcedKick(phase / 10f);
+            Mesh posed = new Mesh(); render.BakeMesh(posed);
+            bool valid = true;
+            foreach (Vector3 v in posed.vertices)
+                valid &= !float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && (render.transform.TransformPoint(v) - player.transform.position).magnitude < 3;
+            Check(valid, "kick mesh finite and bounded phase " + phase);
+            Destroy(posed);
+        }
+        character.SetForcedKick(0);
+        GameObject enemyVisual = new GameObject("Deongchi test visual");
+        enemyVisual.transform.SetParent(enemy.transform, false);
+        PrototypeCharacterView big = enemyVisual.AddComponent<PrototypeCharacterView>(); big.Build(enemy);
+        Check(big.UseDeongchiModel(), "Deongchi supplied model replaces placeholder");
+        Check(enemyVisual.GetComponent<ImportedPlayerView>().IsReady, "Deongchi complete joint rig");
+        yield return null;
+        SkinnedMeshRenderer bigRender = enemyVisual.GetComponentInChildren<SkinnedMeshRenderer>();
+        Check(bigRender.sharedMaterial.mainTexture != null, "Deongchi texture loaded");
+        Mesh standing = new Mesh(); bigRender.BakeMesh(standing); standing.RecalculateBounds();
+        Bounds standingBounds = WorldBounds(bigRender, standing);
+        float standingHeight = standingBounds.size.y;
+        Check(enemy.TryCrouch(), "Deongchi gameplay crouch starts");
+        yield return new WaitForSeconds(.2f);
+        Mesh sitting = new Mesh(); bigRender.BakeMesh(sitting); sitting.RecalculateBounds();
+        Bounds sittingBounds = WorldBounds(bigRender, sitting);
+        Check(sittingBounds.size.y < standingHeight - .15f, "crouch bends rig and lowers silhouette");
+        Check(enemyVisual.transform.localScale == Vector3.one, "crouch preserves mesh proportions");
+        Check(Mathf.Abs(sittingBounds.min.y - standingBounds.min.y) < .12f, "crouch feet stay near floor");
+        Destroy(standing); Destroy(sitting);
+        yield return new WaitForSeconds(.3f);
+        foreach (SchoolRuleZero.TutorialStep step in System.Enum.GetValues(typeof(SchoolRuleZero.TutorialStep)))
+        {
+            enemy.RestoreForTutorial();
+            enemy.Health.Infinite = TutorialTrainingRules.HasInfiniteHealth(step);
+            bool landed = enemy.ReceiveHit(new HitRequest(player.gameObject, 999, Vector3.right, true, 0));
+            Check(landed, "tutorial protection retains hit confirmation " + step);
+            Check(step == SchoolRuleZero.TutorialStep.Opening || step == SchoolRuleZero.TutorialStep.Complete ?
+                !enemy.Health.Alive : enemy.Health.Current == enemy.Health.Maximum,
+                "tutorial health lifetime " + step);
+        }
+        enemy.Health.Infinite = false; enemy.RestoreForTutorial();
+        Check(player.TryAttack(false), "player real attack starts");
+        yield return new WaitForSeconds(player.VisualWindup + .06f);
+        Check(Mathf.Abs(kickBone.localRotation.x) > .05f, "real strike event drives kick joint");
+        yield return new WaitForSeconds(.4f);
+        Check(enemy.TryAttack(false), "Deongchi real punch starts");
+        yield return new WaitForSeconds(enemy.VisualWindup + .06f);
+        Check(enemy.State == CombatActor.ActionState.ATTACK, "Deongchi attack retains gameplay timing");
+        yield return new WaitForSeconds(.6f);
         PrototypeHUD hud=gameObject.AddComponent<PrototypeHUD>();hud.Initialize(player,enemy);
         hud.EncounterText="학교 1-5 · 잔몹 라운드 1\n라운드 1/3 · 남은 적 4";
         CombatHUDView view=GetComponent<CombatHUDView>();

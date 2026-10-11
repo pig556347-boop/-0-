@@ -1,0 +1,86 @@
+[
+  {
+    "model": "Player",
+    "pose": "Idle",
+    "edge_stretch": 1.706,
+    "min_z": 0.0,
+    "max_z": 1.85
+  },
+  {
+    "model": "Player",
+    "pose": "Walk",
+    "edge_stretch": 1.706,
+    "min_z": 0.021,
+    "max_z": 1.85
+  },
+  {
+    "model": "Player",
+    "pose": "Chamber",
+    "edge_stretch": 2.277,
+    "min_z": 0.001,
+    "max_z": 1.85
+  },
+  {
+    "model": "Player",
+    "pose": "Kick",
+    "edge_stretch": 2.837,
+    "min_z": 0.001,
+    "max_z": 1.85
+  },
+  {
+    "model": "Player",
+    "pose": "Crouch",
+    "edge_stretch": 3.072,
+    "min_z": -0.016,
+    "max_z": 1.526
+  },
+  {
+    "model": "Player",
+    "pose": "Guard",
+    "edge_stretch": 2.093,
+    "min_z": 0.0,
+    "max_z": 1.85
+  },
+  {
+    "model": "Deongchi",
+    "pose": "Idle",
+    "edge_stretch": 2.273,
+    "min_z": 0.0,
+    "max_z": 1.85
+  },
+  {
+    "model": "Deongchi",
+    "pose": "Walk",
+    "edge_stretch": 2.253,
+    "min_z": 0.014,
+    "max_z": 1.85
+  },
+  {
+    "model": "Deongchi",
+    "pose": "Chamber",
+    "edge_stretch": 2.231,
+    "min_z": 0.0,
+    "max_z": 1.85
+  },
+  {
+    "model": "Deongchi",
+    "pose": "Kick",
+    "edge_stretch": 2.656,
+    "min_z": 0.0,
+    "max_z": 1.85
+  },
+  {
+    "model": "Deongchi",
+    "pose": "Crouch",
+    "edge_stretch": 2.727,
+    "min_z": -0.026,
+    "max_z": 1.528
+  },
+  {
+    "model": "Deongchi",
+    "pose": "Guard",
+    "edge_stretch": 3.15,
+    "min_z": 0.0,
+    "max_z": 1.85
+  }
+]

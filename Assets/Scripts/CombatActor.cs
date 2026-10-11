@@ -14,6 +14,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public string WarningText { get; private set; } = "";
     public float WarningUntil { get; private set; }
     public bool HeavyStrike => activeHeavy;
+    public float VisualWindup => attackWindup * (activeHeavy ? 1.8f : 1);
     private bool crouched;
     [SerializeField, Min(1)] private float maximumHP = 120;
     [SerializeField, Min(0)] private float basicDamage = 12;
@@ -324,7 +325,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         CapsuleCollider shape = GetComponent<CapsuleCollider>();
         shape.height = value ? 1.2f : 2; shape.center = value ? Vector3.down * .4f : Vector3.zero;
         PrototypeCharacterView view = GetComponentInChildren<PrototypeCharacterView>();
-        if (view != null)
+        if (view != null && view.GetComponent<ImportedPlayerView>() == null)
         { view.transform.localScale = new Vector3(1, value ? .6f : 1, 1);
           view.transform.localPosition = value ? Vector3.down * .4f : Vector3.zero; }
     }

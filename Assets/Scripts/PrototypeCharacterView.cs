@@ -20,6 +20,18 @@ public sealed class PrototypeCharacterView : MonoBehaviour
         if (rightLeg != null) rightLeg.localRotation = Quaternion.Euler(-95 * amount, 0, 0);
     }
 
+    public bool UseDeongchiModel()
+    {
+        ImportedPlayerView current = GetComponent<ImportedPlayerView>();
+        if (current != null) return current.ModelKind == "Deongchi";
+        if (!ImportedPlayerView.TryBuild(this, actor, "Deongchi")) return false;
+        foreach (Transform child in transform)
+            if (child.name != "Imported Deongchi model") { child.gameObject.SetActive(false); Destroy(child.gameObject); }
+        leftLeg = rightLeg = leftArm = rightArm = null;
+        transform.localScale = Vector3.one; transform.localPosition = Vector3.zero;
+        return true;
+    }
+
     public void Build(CombatActor owner)
     {
         actor = owner; motor = owner.GetComponent<PlayerController>();
