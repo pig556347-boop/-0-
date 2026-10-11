@@ -1,0 +1,32 @@
+from pathlib import Path
+from tree_sitter import Language, Parser
+import tree_sitter_c_sharp
+
+root = Path(__file__).resolve().parents[1]
+parser = Parser(Language(tree_sitter_c_sharp.language()))
+count = 0
+for path in (root / 'Assets').rglob('*.cs'):
+    for unity6 in (False, True):
+        for input_system in (False, True):
+            defines = {'UNITY_6000_0_OR_NEWER': unity6,
+                       'ENABLE_INPUT_SYSTEM': input_system, 'UNITY_EDITOR': True}
+            output, stack, active = [], [], True
+            for line in path.read_text().splitlines():
+                directive = line.strip()
+                if directive.startswith('#if '):
+                    condition = defines[directive[4:]]
+                    stack.append((active, condition))
+                    active = active and condition
+                elif directive == '#else':
+                    parent, condition = stack[-1]
+                    active = parent and not condition
+                elif directive == '#endif':
+                    active = stack.pop()[0]
+                elif active:
+                    output.append(line)
+            assert not stack
+            tree = parser.parse('\n'.join(output).encode())
+            if tree.root_node.has_error:
+                raise RuntimeError(f'C# syntax failure: {path}')
+            count += 1
+print(f'C# syntax: {count} file/configuration combinations passed')

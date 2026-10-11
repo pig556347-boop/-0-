@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Assets/Scripts/PlayerMovementStateMachine.cs" Link="PlayerMovementStateMachine.cs" />
+    <Compile Include="../../Assets/Scripts/JumpRules.cs" Link="JumpRules.cs" />
+    <Compile Include="../../Assets/Scripts/CombatRules.cs" Link="CombatRules.cs" />
+    <Compile Include="../../Assets/Scripts/CombatProgress.cs" Link="CombatProgress.cs" />
+    <Compile Include="../../Assets/Scripts/TutorialProgress.cs" Link="TutorialProgress.cs" />
+    <Compile Include="../../Assets/Scripts/EncounterProgress.cs" Link="EncounterProgress.cs" />
+  </ItemGroup>
+</Project>
