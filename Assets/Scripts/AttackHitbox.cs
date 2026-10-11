@@ -41,10 +41,18 @@ public sealed class AttackHitbox : MonoBehaviour
         BoxCollider box = gameObject.AddComponent<BoxCollider>();
         box.isTrigger = true; box.size = size;
         // Trigger callbacks plus an overlap query catch targets already inside the box.
+        // A slow rendered frame can outlast the short hit window before FixedUpdate.
+        // Resolve the initial overlap immediately using the same bounds and deduplication.
+        Physics.SyncTransforms();
+        ScanOverlaps();
     }
     private void FixedUpdate()
     {
         if (owner == null || Time.time >= expires) { Destroy(gameObject); return; }
+        ScanOverlaps();
+    }
+    private void ScanOverlaps()
+    {
         int count = Physics.OverlapBoxNonAlloc(transform.position, halfExtents,
             overlaps, transform.rotation, ~0, QueryTriggerInteraction.Ignore);
         for (int i = 0; i < count; i++) TryHit(overlaps[i]);
