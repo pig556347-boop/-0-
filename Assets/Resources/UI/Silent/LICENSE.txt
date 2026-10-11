@@ -1,8 +1,0 @@
-Silent GUI by Prinbles
-https://prinbles.itch.io/silent
-Source: user supplied asset.zip (2026-10-12).
-
-Author product page terms: This asset can be used for personal purposes or commerce, but can not be resold.
-Only required PNG parts are included as game resources. Do not redistribute as a standalone asset pack.
-The original exported PNG files are unchanged; neutral bar/icon coloration is created at runtime.
-Fonts from the pack are not included. Korean UI retains NotoSansCJKkr-Regular.

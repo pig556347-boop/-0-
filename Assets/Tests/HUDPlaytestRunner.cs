@@ -33,7 +33,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
             Image visual=GameObject.Find("Combat HUD").GetComponent<RectTransform>().GetComponentsInChildren<Image>(true)[0];
             foreach(Image candidate in GameObject.Find("Combat HUD").GetComponentsInChildren<Image>(true))
                 if(candidate.name==label) {visual=candidate;break;}
-            Check(visual.name==label && visual.sprite!=null && visual.sprite.name.StartsWith("Silent "),"Silent exported sprite bound "+label);
+            Check(visual.name==label && visual.sprite!=null && visual.sprite.name.StartsWith("Pixel "),"Pixel exported sprite bound "+label);
         }
         player.ReceiveHit(new HitRequest(enemy.gameObject,30,Vector3.left,true,0));
         yield return new WaitForSecondsRealtime(.08f);
@@ -49,6 +49,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         CombatActor boss=Actor("도재학",1,240);boss.BossUltimateEnabled=true;hud.SetEnemyTarget(boss);
         yield return null;yield return null;
         Check(view.EnemyRoleText.Contains("BOSS")&&view.EnemyNameText=="도재학","boss name and role");
+        Check(GameObject.Find("Enemy HP outline").GetComponent<Image>().sprite.name=="Pixel BossFrame","dedicated boss frame");
         Check(view.EnemyMeter.ValueText=="240 / 240"&&view.EnemyMeter.DisplayedRatio==1,"new target resets bar");
         boss.ReceiveHit(new HitRequest(player.gameObject,60,Vector3.right,true,0));
         yield return new WaitForSecondsRealtime(.35f);
@@ -56,6 +57,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         for(int i=0;i<6;i++) player.Progress.ConfirmHit(Time.time);
         yield return null;yield return null;
         Check(view.ComboText=="6 HIT  GOOD!","combo read from combat progress");
+        Check(GameObject.Find("Combo").GetComponent<Text>().font.name.Contains("Arcade"),"arcade font bound to real combo count");
         hud.StoryMessage="1-5 클리어! Enter · 다음 스테이지";
         yield return null;yield return null;
         Check(view.ModalText=="전투 완료","clear overlay uses director message");

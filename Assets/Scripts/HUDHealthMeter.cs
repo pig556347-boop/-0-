@@ -14,6 +14,7 @@ public sealed class HUDHealthMeter : MonoBehaviour
     public string ValueText => value == null ? "" : value.text;
     public void Initialize(Image bar, Image border, Text numbers)
     { fill = bar; outline = border; value = numbers; }
+    public void SetFrame(Sprite sprite) { if (outline != null) outline.sprite = sprite; }
     public void Bind(CombatActor source)
     {
         CombatHealth next = source == null ? null : source.Health;
@@ -45,6 +46,6 @@ public sealed class HUDHealthMeter : MonoBehaviour
         bool low = health != null && health.Alive && target <= .25f;
         Color normal = low ? new Color(.86f,.22f,.24f) : new Color(.87f,.89f,.87f);
         fill.color = Color.Lerp(normal, new Color(1,.34f,.32f), pulse / .24f);
-        outline.color = pulse > 0 ? new Color(1,.35f,.32f,.85f) : new Color(1,1,1,.45f);
+        outline.color = pulse > 0 ? new Color(1,.35f,.32f,.85f) : new Color(1,1,1,.9f);
     }
 }

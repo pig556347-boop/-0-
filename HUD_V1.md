@@ -31,8 +31,15 @@ Docs/ArtBrief/images/early-concept.png 및 production-concept.png는 기존 참�
 
 첨부 이미지는 색상이나 내용을 그대로 복사하는 용도가 아니라, **UI의 배치 밀도·크기·게임 HUD 느낌만 참고**해줘.
 
-## Silent GUI skin — 2026-10-12
+## Pixel UI & HUD — 2026-10-12
 
-User supplied `asset.zip` from Prinbles Silent GUI. Seven unchanged 2x PNG exports are included under `Assets/Resources/UI/Silent`: panels, state window, progress frame/fill and pause/retry/continue icons. `SilentHUDSkin` caches neutral versions of the colored bars/icons at runtime; panel opacity is 78%. Existing Korean font, health/combo/gauge binding, controls and game state transitions remain unchanged. State icons indicate existing keyboard actions; they are not new clickable controls.
+사용자가 제공한 Dead Revolver Pixel UI & HUD 팩의 원본 PNG 패널, HP 채움/프레임,
+전용 보스 프레임, 배너, 다이아몬드 충전 표시와 상태 안내 배경을 적용합니다.
+콤보 숫자와 HIT 문구는 제공된 Arcade 폰트를 사용하고, 한글은 기존 폰트를 유지합니다.
+Point 필터와 9-slice 모서리로 픽셀 테두리를 유지합니다. 별도 PixelHUDSkin에서
+리소스를 캐싱하며 Unity Demo의 씬, 입력 시스템, 패키지와 스크립트는 가져오지 않습니다.
+기존 Silent 리소스는 교체했습니다. 라이선스 출처는 리소스 폴더에 기록했습니다.
 
-Validation adds five assertions that the actual exported Silent sprites are bound to both HUD panels, the state window and player health frame/fill. The existing real damage, boss, combo, pause, death and four-resolution tests still apply. Asset usage terms and source are recorded in the resource folder. Screenshots from CI represent actual Unity execution, not source-pack mockups.
+테스트는 원본 팩 이미지 연결 5개, 보스 전용 프레임, 실제 콤보의 Arcade 폰트 연결을
+포함합니다. 기존 실제 데미지 및 4개 해상도 검증과 함께 총 59개 항목을 검사합니다.
+통과한 배포 게임의 실제 캡처는 웹 주소의 verification/production-hud.png로 제공합니다.

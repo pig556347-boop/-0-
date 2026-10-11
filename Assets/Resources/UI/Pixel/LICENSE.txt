@@ -1,0 +1,5 @@
+Pixel UI & HUD by Dead Revolver
+https://deadrevolver.itch.io/pixel-ui-hud-pack
+User-supplied original and Unity demo ZIPs, 2026-10-12.
+Author product page: Can be modified, or used personally and commercially with no crediting required.
+Included PNG exports and Arcade font are unchanged. Only selected parts are used in this game; do not redistribute as a standalone asset pack. Unity demo input code, packages and scenes are not imported.

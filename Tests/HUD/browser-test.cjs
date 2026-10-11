@@ -36,6 +36,8 @@ const { PNG } = require('pngjs');
     const large=[...buckets.values()].filter(n=>n>pixels.width*pixels.height*.025);
     if(large.length<3)throw Error('Production canvas remains blank/loading; expected classroom and HUD');
     if(runtimeErrors.length)throw Error('Production scene runtime errors: '+runtimeErrors.join(' '));
+    fs.mkdirSync('build/WebGL/verification',{recursive:true});
+    fs.copyFileSync('hud-test-results/production-hud.png','build/WebGL/verification/production-hud.png');
     console.log('::notice::Production scene loaded with no runtime exceptions; keyboard input exercised');
     await live.close();
   } finally {await browser.close();}
