@@ -55,6 +55,18 @@ public static class PrototypeMenu
         });
         if (report.summary.result == BuildResult.Succeeded)
         {
+            string buildFolder = Path.Combine(output, "Build");
+            if (!File.Exists(Path.Combine(output, "index.html")) || !Directory.Exists(buildFolder) ||
+                Directory.GetFiles(buildFolder, "*.wasm").Length == 0 ||
+                Directory.GetFiles(buildFolder, "*.data").Length == 0)
+            {
+                Debug.LogError("Unity reported success, but the selected output folder does not contain a complete WebGL game. " +
+                    "ZIP export stopped. Selected folder: " + output +
+                    ". Unity report output: " + report.summary.outputPath +
+                    ". Check the Console and Editor log for the actual build output or errors.");
+                EditorUtility.RevealInFinder(output);
+                return;
+            }
             File.WriteAllText(Path.Combine(output, ".nojekyll"), "");
             string archive = output.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
                 "-" + System.DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + ".zip";
