@@ -38,6 +38,11 @@ public static class PrototypeMenu
         if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
         string output = EditorUtility.SaveFolderPanel("WebGL output folder", "", "SchoolRuleZeroWebGL");
         if (string.IsNullOrEmpty(output)) return;
+        if (Directory.GetFileSystemEntries(output).Length != 0)
+        {
+            EditorUtility.DisplayDialog("WebGL output", "Choose an empty folder so existing files are not mixed into the build.", "OK");
+            return;
+        }
         // GitHub Pages does not supply Unity-specific Content-Encoding headers.
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
         PlayerSettings.WebGL.threadsSupport = false;
@@ -51,12 +56,20 @@ public static class PrototypeMenu
         if (report.summary.result == BuildResult.Succeeded)
         {
             File.WriteAllText(Path.Combine(output, ".nojekyll"), "");
-            string archive = output.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + ".zip";
-            if (File.Exists(archive)) File.Delete(archive);
-            ZipFile.CreateFromDirectory(output, archive);
-            Debug.Log("WebGL build created at " + output +
-                ". Upload this ZIP for deployment: " + archive);
-            EditorUtility.RevealInFinder(archive);
+            string archive = output.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
+                "-" + System.DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + ".zip";
+            try
+            {
+                ZipFile.CreateFromDirectory(output, archive);
+                Debug.Log("WebGL build created at " + output +
+                    ". Upload this ZIP for deployment: " + archive);
+                EditorUtility.RevealInFinder(archive);
+            }
+            catch (System.Exception exception)
+            {
+                Debug.LogError("WebGL build succeeded, but ZIP export failed. The build remains at " +
+                    output + ". " + exception.Message);
+            }
         }
         else Debug.LogError("WebGL build failed: " + report.summary.result);
     }

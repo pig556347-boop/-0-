@@ -94,9 +94,9 @@ public sealed class PrototypeBootstrap : MonoBehaviour
     {
         Color wall = new Color(.7f, .7f, .68f);
         CreateBox("Back wall", new Vector3(0, 2, 5.8f), new Vector3(20, 4, .3f), wall);
-        CreateBox("Left boundary", new Vector3(-9.8f, 1, 0), new Vector3(.3f, 2, 12), wall);
-        CreateBox("Right boundary", new Vector3(9.8f, 1, 0), new Vector3(.3f, 2, 12), wall);
-        CreateBox("Front boundary", new Vector3(0, .2f, -5.8f), new Vector3(20, .4f, .3f), wall);
+        CreateBoundary("Left boundary", new Vector3(-9.8f, 1, 0), new Vector3(.3f, 2, 12), wall);
+        CreateBoundary("Right boundary", new Vector3(9.8f, 1, 0), new Vector3(.3f, 2, 12), wall);
+        CreateBoundary("Front boundary", new Vector3(0, .2f, -5.8f), new Vector3(20, .4f, .3f), wall);
         CreateBox("Chalkboard", new Vector3(0, 2.2f, 5.55f), new Vector3(8, 2, .12f),
             new Color(.1f, .15f, .14f));
         for (int row = 0; row < 2; row++) for (int col = 0; col < 4; col++)
@@ -122,5 +122,15 @@ public sealed class PrototypeBootstrap : MonoBehaviour
             sunbeam.GetComponent<Collider>().enabled = false;
             sunbeam.transform.rotation = Quaternion.Euler(0, -15, 0);
         }
+    }
+    private static void CreateBoundary(string name, Vector3 position, Vector3 scale, Color color)
+    {
+        GameObject wall = CreateBox(name, position, scale, color);
+        BoxCollider collider = wall.GetComponent<BoxCollider>();
+        // Keep the visible low wall, but prevent jumps from leaving the arena.
+        Vector3 size = collider.size;
+        size.y = 6f / scale.y;
+        collider.size = size;
+        collider.center = new Vector3(0, (3f - position.y) / scale.y, 0);
     }
 }

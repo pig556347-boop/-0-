@@ -33,6 +33,11 @@ public sealed class EncounterDirector : MonoBehaviour
             Progress.RecordDefeat(opponentId))
         {
             current.GetComponent<Collider>().enabled = false;
+            // A disabled collider cannot keep a corpse resting on the floor.
+            Rigidbody body = current.GetComponent<Rigidbody>();
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+            body.isKinematic = true;
             if (!Progress.Complete)
             {
                 opponentId++;

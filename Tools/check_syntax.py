@@ -1,4 +1,5 @@
 from pathlib import Path
+from itertools import product
 from tree_sitter import Language, Parser
 import tree_sitter_c_sharp
 
@@ -7,9 +8,9 @@ parser = Parser(Language(tree_sitter_c_sharp.language()))
 count = 0
 for path in (root / 'Assets').rglob('*.cs'):
     for unity6 in (False, True):
-        for input_system in (False, True):
+        for input_system, editor in product((False, True), repeat=2):
             defines = {'UNITY_6000_0_OR_NEWER': unity6,
-                       'ENABLE_INPUT_SYSTEM': input_system, 'UNITY_EDITOR': True}
+                       'ENABLE_INPUT_SYSTEM': input_system, 'UNITY_EDITOR': editor}
             output, stack, active = [], [], True
             for line in path.read_text().splitlines():
                 directive = line.strip()
