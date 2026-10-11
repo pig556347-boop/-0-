@@ -47,7 +47,14 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
     }
     private IEnumerator Start()
     {
-        new GameObject("Camera").AddComponent<Camera>().backgroundColor=new Color(.18f,.19f,.2f);
+        Camera fixtureCamera = new GameObject("Camera").AddComponent<Camera>();
+        fixtureCamera.backgroundColor = new Color(.18f,.19f,.2f);
+        fixtureCamera.transform.position = new Vector3(.55f, 1, -4);
+        fixtureCamera.transform.LookAt(new Vector3(.55f, 0, 0));
+        fixtureCamera.orthographic = true; fixtureCamera.orthographicSize = 1.35f;
+        Light fixtureLight = new GameObject("Fixture light").AddComponent<Light>();
+        fixtureLight.type = LightType.Directional; fixtureLight.intensity = 1.1f;
+        fixtureLight.transform.rotation = Quaternion.Euler(50, -30, 0);
         CombatActor player=Actor("권민준",0,120),enemy=Actor("불량 학생",1,100);
         GameObject playerVisual = new GameObject("Player model test visual");
         playerVisual.transform.SetParent(player.transform, false);

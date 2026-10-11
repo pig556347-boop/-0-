@@ -70,4 +70,8 @@ const { PNG } = require('pngjs');
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
     await live.close();
   } finally {await browser.close();}
-})().catch(e=>{console.error("::error::"+String(e).replace(/\n/g," "));process.exit(1)});
+})().catch(e=>{
+  fs.mkdirSync('hud-test-results',{recursive:true});
+  fs.writeFileSync('hud-test-results/failure.json',JSON.stringify({commit:process.env.GITHUB_SHA,error:String(e)},null,2));
+  console.error("::error::"+String(e).replace(/\n/g," "));process.exit(1)
+});
