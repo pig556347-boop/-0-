@@ -78,6 +78,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         for (int phase = 0; phase <= 10; phase++)
         {
             character.SetForcedKick(phase / 10f);
+            if (phase == 0) Debug.Log("MOTION_METRICS player scale=" + render.transform.lossyScale + " world=" + WorldBounds(render));
             bool valid = true;
             foreach (Vector3 v in WorldVertices(render))
                 valid &= !float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && (v - player.transform.position).magnitude < 3;
@@ -97,6 +98,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Check(enemy.TryCrouch(), "Deongchi gameplay crouch starts");
         yield return new WaitForSeconds(.2f);
         Bounds sittingBounds = WorldBounds(bigRender);
+        Debug.Log("MOTION_METRICS crouch standing=" + standingHeight + " sitting=" + sittingBounds.size.y + " footShift=" + Mathf.Abs(sittingBounds.min.y - standingBounds.min.y));
         Check(sittingBounds.size.y < standingHeight - .35f, "crouch bends rig and lowers silhouette");
         Check(enemyVisual.transform.localScale == Vector3.one, "crouch preserves mesh proportions");
         Check(Mathf.Abs(sittingBounds.min.y - standingBounds.min.y) < .08f, "crouch feet stay near floor");

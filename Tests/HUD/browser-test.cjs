@@ -9,7 +9,7 @@ const { PNG } = require('pngjs');
     for (const [width,height] of [[1920,1080],[1280,720],[1024,768],[2560,1080]]) {
       const page = await browser.newPage({viewport:{width,height}});
       const errors=[];let passed=false;
-      page.on('console', msg=>{const s=msg.text();if(s.includes('HUD_TEST_PASS')){passed=true;executions.push({width,height,checks:Number(s.match(/checks=(\d+)/)[1])});console.log("::notice::"+s)}if(/HUD_TEST_FAIL|Exception|Can't add component/.test(s))errors.push(s)});
+      page.on('console', msg=>{const s=msg.text();if(s.includes('HUD_TEST_PASS')){passed=true;executions.push({width,height,checks:Number(s.match(/checks=(\d+)/)[1])});console.log("::notice::"+s)}if(s.includes('MOTION_METRICS'))console.log('::notice::'+s);if(/HUD_TEST_FAIL|Exception|Can't add component/.test(s))errors.push(s)});
       page.on('pageerror',err=>errors.push(String(err)));
       await page.goto('http://127.0.0.1:8780/HUDTest/');
       // Default Unity template uses a fixed canvas. Resize the actual game canvas as the browser host would.
