@@ -17,14 +17,16 @@ for kind in ['Player','Deongchi']:
  for state in ['Idle','Walk','Chamber','Kick','Crouch','Guard']:
   for b in rig.pose.bones:b.rotation_mode='QUATERNION';b.rotation_quaternion=Quaternion();b.location=(0,0,0)
   for side in ['Left','Right']:pose(side+'UpperArm',-20);pose(side+'Forearm',-55)
-  if state=='Walk':leg('Left',.74,.21);leg('Right',.78,-.21)
+  if state=='Walk':
+   rig.pose.bones['Hips'].location=rig.data.bones['Hips'].matrix_local.to_quaternion().inverted()@Vector((0,0,-.187))
+   leg('Left',.593,.475);leg('Right',.593,-.475);pose('Spine',3);pose('Chest',6)
   if state=='Chamber':pose('RightThigh',-62);pose('RightShin',100)
   if state=='Kick':pose('RightThigh',-86);pose('RightShin',9)
   if state=='Crouch':
    # pose translation expressed in bone local coordinates
-   rig.pose.bones['Hips'].location=rig.data.bones['Hips'].matrix_local.to_quaternion().inverted()@Vector((0,.11,-.31))
-   for side in ['Left','Right']:leg(side,.47,.11)
-   pose('Spine',9);pose('Chest',6);pose('Head',-8)
+   rig.pose.bones['Hips'].location=rig.data.bones['Hips'].matrix_local.to_quaternion().inverted()@Vector((0,.14,-.44))
+   for side in ['Left','Right']:leg(side,.34,.14)
+   pose('Spine',18);pose('Chest',8);pose('Head',-12)
   if state=='Guard':
    for side in ['Left','Right']:pose(side+'UpperArm',-32);pose(side+'Forearm',-105)
   bpy.context.view_layer.update();deps=bpy.context.evaluated_depsgraph_get();evaluated=obj.evaluated_get(deps);mesh=evaluated.to_mesh()

@@ -10,6 +10,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         public Quaternion Rest;
         public Vector3 Axis;
         public float Angle, Target;
+        public bool FootIK;
     }
     private readonly Dictionary<string, Joint> joints = new Dictionary<string, Joint>();
     private CombatActor actor;
@@ -20,7 +21,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private Rigidbody body;
     private Material material;
     private CombatActor.ActionState previous;
-    private float actionStarted, struckAt = -100, gait, crouch;
+    private float actionStarted, struckAt = -100, gait, crouch, walkBlend, visualSpeed;
     private int strikeNumber;
     public bool IsReady => joints.Count == 13 && hips != null;
     public string ModelKind { get; private set; }
@@ -64,7 +65,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private void Set(string name, float degrees, bool instant = false)
     {
         Joint j = joints[name];
-        j.Target = degrees;
+        j.Target = degrees; j.FootIK = false;
         if (instant) { j.Angle = degrees; j.Bone.localRotation = j.Rest * Quaternion.AngleAxis(j.Angle, j.Axis); }
     }
     // Two-joint sagittal IK; targets are relative to each hip, in metres.
@@ -77,6 +78,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         float thigh = -Mathf.Atan2(forward, down) * Mathf.Rad2Deg - alpha * Mathf.Rad2Deg;
         Set(side + "Thigh", thigh, instant); Set(side + "Shin", knee, instant);
         Set(side + "Foot", -thigh - knee, instant);
+        joints[side + "Thigh"].FootIK = joints[side + "Shin"].FootIK = joints[side + "Foot"].FootIK = true;
     }
     public void ForcedKick(float amount)
     {
@@ -96,23 +98,34 @@ public sealed class ImportedPlayerView : MonoBehaviour
         crouch = Mathf.MoveTowards(crouch, crouching ? 1 : 0, Time.deltaTime * 7);
         float speed = body == null ? 0 : new Vector2(body.linearVelocity.x, body.linearVelocity.z).magnitude;
         bool moving = speed > .15f && actor.State == CombatActor.ActionState.IDLE;
-        gait += Time.deltaTime * Mathf.Lerp(6, 13, Mathf.Clamp01(speed / 5));
-        float stride = moving ? Mathf.Clamp(speed * .045f, .05f, .23f) * (1 - crouch * .5f) : 0;
-        float bob = moving ? .014f * Mathf.Cos(gait * 2) : .003f * Mathf.Sin(Time.time * 2);
-        float drop = .31f * crouch;
-        // Hips translate without squashing the mesh. Foot IK preserves floor contact.
-        hips.localPosition = hipsRest + hips.parent.InverseTransformVector(model.up * (-drop + bob) - model.forward * (.11f * crouch));
+        walkBlend = Mathf.MoveTowards(walkBlend, moving ? 1 : 0, Time.deltaTime * 8);
+        visualSpeed = Mathf.Lerp(visualSpeed, speed, 1 - Mathf.Exp(-12 * Time.deltaTime));
+        float stride = Mathf.Clamp(.15f + visualSpeed * .1f, .2f, .52f) * walkBlend * (1 - crouch * .55f);
+        if (moving) gait += Time.deltaTime * Mathf.PI * speed / Mathf.Max(.12f, 2 * stride);
+        float leftPhase = Mathf.Repeat(gait, 2 * Mathf.PI);
+        float stancePhase = leftPhase < Mathf.PI ? leftPhase : leftPhase - Mathf.PI;
+        float stanceForward = Mathf.Lerp(stride, -stride, stancePhase / Mathf.PI);
+        float drop = .44f * crouch;
+        // The planted foot travels backwards at body speed; the other foot swings up.
+        // Hip height follows the reach of the planted leg instead of stretching it.
+        float reach = .76f - drop;
+        float contactBob = Mathf.Sqrt(Mathf.Max(.01f, reach * reach - stanceForward * stanceForward)) - (.78f - drop);
+        float bob = Mathf.Lerp(.003f * Mathf.Sin(Time.time * 2), contactBob, walkBlend) * (1 - crouch);
+        hips.localPosition = hipsRest + hips.parent.InverseTransformVector(model.up * (-drop + bob) - model.forward * (.14f * crouch));
         for (int i = 0; i < 2; i++)
         {
             string side = i == 0 ? "Left" : "Right";
-            float phase = gait + i * Mathf.PI;
-            float lift = moving ? .075f * Mathf.Max(0, Mathf.Sin(phase)) : 0;
-            Leg(side, .78f - drop + bob - lift, .11f * crouch + stride * Mathf.Cos(phase));
+            float phase = Mathf.Repeat(gait + i * Mathf.PI, 2 * Mathf.PI);
+            bool planted = phase < Mathf.PI;
+            float t = planted ? phase / Mathf.PI : (phase - Mathf.PI) / Mathf.PI;
+            float forward = planted ? Mathf.Lerp(stride, -stride, t) : Mathf.Lerp(-stride, stride, Mathf.SmoothStep(0, 1, t));
+            float lift = planted ? 0 : .14f * walkBlend * Mathf.Sin(t * Mathf.PI);
+            Leg(side, .78f - drop + bob - lift, .14f * crouch + forward);
         }
-        float swing = moving ? Mathf.Sin(gait) * 12 : 0;
+        float swing = Mathf.Sin(gait) * 20 * walkBlend;
         Set("LeftUpperArm", -20 - swing); Set("RightUpperArm", -20 + swing);
         Set("LeftForearm", -55); Set("RightForearm", -55);
-        Set("Spine", 9 * crouch); Set("Chest", 6 * crouch); Set("Head", -8 * crouch);
+        Set("Spine", 18 * crouch + 3 * walkBlend); Set("Chest", 8 * crouch + 6 * walkBlend); Set("Head", -12 * crouch);
         bool attack = actor.State == CombatActor.ActionState.ATTACK || actor.State == CombatActor.ActionState.ULTIMATE;
         if (attack)
         {
@@ -146,7 +159,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         if (actor.State == CombatActor.ActionState.DODGE) { Set("Spine", 18); Set("Chest", 12); }
         if (motor != null && !motor.IsGrounded) { Set("LeftThigh", -22); Set("RightThigh", -32); Set("LeftShin", 45); Set("RightShin", 58); }
         foreach (Joint j in joints.Values)
-        { j.Angle = Mathf.Lerp(j.Angle, j.Target, 1 - Mathf.Exp(-30 * Time.deltaTime));
+        { j.Angle = j.FootIK ? j.Target : Mathf.Lerp(j.Angle, j.Target, 1 - Mathf.Exp(-30 * Time.deltaTime));
           j.Bone.localRotation = j.Rest * Quaternion.AngleAxis(j.Angle, j.Axis); }
         if (actor.State == CombatActor.ActionState.DEAD)
             transform.localRotation *= Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 75, (Time.time - actionStarted) / .35f));

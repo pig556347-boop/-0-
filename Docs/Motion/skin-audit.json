@@ -9,9 +9,9 @@
   {
     "model": "Player",
     "pose": "Walk",
-    "edge_stretch": 1.706,
-    "min_z": 0.021,
-    "max_z": 1.85
+    "edge_stretch": 2.109,
+    "min_z": -0.018,
+    "max_z": 1.659
   },
   {
     "model": "Player",
@@ -30,9 +30,9 @@
   {
     "model": "Player",
     "pose": "Crouch",
-    "edge_stretch": 3.072,
+    "edge_stretch": 3.917,
     "min_z": -0.016,
-    "max_z": 1.526
+    "max_z": 1.362
   },
   {
     "model": "Player",
@@ -51,9 +51,9 @@
   {
     "model": "Deongchi",
     "pose": "Walk",
-    "edge_stretch": 2.253,
-    "min_z": 0.014,
-    "max_z": 1.85
+    "edge_stretch": 2.212,
+    "min_z": -0.048,
+    "max_z": 1.661
   },
   {
     "model": "Deongchi",
@@ -72,9 +72,9 @@
   {
     "model": "Deongchi",
     "pose": "Crouch",
-    "edge_stretch": 2.727,
-    "min_z": -0.026,
-    "max_z": 1.528
+    "edge_stretch": 3.559,
+    "min_z": -0.027,
+    "max_z": 1.366
   },
   {
     "model": "Deongchi",

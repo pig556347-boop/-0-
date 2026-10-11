@@ -19,11 +19,30 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         if(!pass) { Debug.LogError("HUD_TEST_FAIL "+label); throw new Exception(label); }
         checks++;Debug.Log("HUD_TEST_CHECK "+label);
     }
-    private Bounds WorldBounds(SkinnedMeshRenderer renderer, Mesh mesh)
+    // Match the renderer skinning equation directly. FBX hierarchies may contain
+    // non-unit scale; applying TransformPoint to BakeMesh output can apply it twice.
+    private Vector3[] WorldVertices(SkinnedMeshRenderer renderer)
     {
-        Vector3[] vertices = mesh.vertices;
-        Bounds bounds = new Bounds(renderer.transform.TransformPoint(vertices[0]), Vector3.zero);
-        foreach (Vector3 v in vertices) bounds.Encapsulate(renderer.transform.TransformPoint(v));
+        Mesh mesh = renderer.sharedMesh;
+        Matrix4x4[] bind = mesh.bindposes, matrices = new Matrix4x4[bind.Length];
+        for (int i = 0; i < bind.Length; i++) matrices[i] = renderer.bones[i].localToWorldMatrix * bind[i];
+        Vector3[] vertices = mesh.vertices, result = new Vector3[vertices.Length];
+        BoneWeight[] weights = mesh.boneWeights;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            BoneWeight w = weights[i]; Vector3 v = vertices[i];
+            result[i] = matrices[w.boneIndex0].MultiplyPoint3x4(v) * w.weight0 +
+                matrices[w.boneIndex1].MultiplyPoint3x4(v) * w.weight1 +
+                matrices[w.boneIndex2].MultiplyPoint3x4(v) * w.weight2 +
+                matrices[w.boneIndex3].MultiplyPoint3x4(v) * w.weight3;
+        }
+        return result;
+    }
+    private Bounds WorldBounds(SkinnedMeshRenderer renderer)
+    {
+        Vector3[] vertices = WorldVertices(renderer);
+        Bounds bounds = new Bounds(vertices[0], Vector3.zero);
+        foreach (Vector3 v in vertices) bounds.Encapsulate(v);
         return bounds;
     }
     private IEnumerator Start()
@@ -41,17 +60,13 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Check(render.sharedMaterial.mainTexture != null, "player source texture bound");
         Check(render.bounds.size.y > 1.6f && render.bounds.size.y < 2.1f, "player model normalized to game scale");
         character.CinematicPose = true;
-        Mesh restMesh = new Mesh();
-        render.BakeMesh(restMesh);
+        Vector3[] restVertices = WorldVertices(render);
         character.SetForcedKick(.5f);
-        Mesh kickMesh = new Mesh();
-        render.BakeMesh(kickMesh);
-        Vector3[] restVertices = restMesh.vertices, kickVertices = kickMesh.vertices;
+        Vector3[] kickVertices = WorldVertices(render);
         float deformation = 0;
         for (int i = 0; i < restVertices.Length; i++)
             deformation = Mathf.Max(deformation, Vector3.Distance(restVertices[i], kickVertices[i]));
         Check(deformation > .03f, "imported mesh skin deforms during kick");
-        Destroy(restMesh); Destroy(kickMesh);
         Transform kickBone = null;
         foreach (Transform bone in playerVisual.GetComponentsInChildren<Transform>())
             if (bone.name == "RightThigh") kickBone = bone;
@@ -63,12 +78,10 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         for (int phase = 0; phase <= 10; phase++)
         {
             character.SetForcedKick(phase / 10f);
-            Mesh posed = new Mesh(); render.BakeMesh(posed);
             bool valid = true;
-            foreach (Vector3 v in posed.vertices)
-                valid &= !float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && (render.transform.TransformPoint(v) - player.transform.position).magnitude < 3;
+            foreach (Vector3 v in WorldVertices(render))
+                valid &= !float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && (v - player.transform.position).magnitude < 3;
             Check(valid, "kick mesh finite and bounded phase " + phase);
-            Destroy(posed);
         }
         character.SetForcedKick(0);
         GameObject enemyVisual = new GameObject("Deongchi test visual");
@@ -79,17 +92,14 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         yield return null;
         SkinnedMeshRenderer bigRender = enemyVisual.GetComponentInChildren<SkinnedMeshRenderer>();
         Check(bigRender.sharedMaterial.mainTexture != null, "Deongchi texture loaded");
-        Mesh standing = new Mesh(); bigRender.BakeMesh(standing); standing.RecalculateBounds();
-        Bounds standingBounds = WorldBounds(bigRender, standing);
+        Bounds standingBounds = WorldBounds(bigRender);
         float standingHeight = standingBounds.size.y;
         Check(enemy.TryCrouch(), "Deongchi gameplay crouch starts");
         yield return new WaitForSeconds(.2f);
-        Mesh sitting = new Mesh(); bigRender.BakeMesh(sitting); sitting.RecalculateBounds();
-        Bounds sittingBounds = WorldBounds(bigRender, sitting);
-        Check(sittingBounds.size.y < standingHeight - .15f, "crouch bends rig and lowers silhouette");
+        Bounds sittingBounds = WorldBounds(bigRender);
+        Check(sittingBounds.size.y < standingHeight - .35f, "crouch bends rig and lowers silhouette");
         Check(enemyVisual.transform.localScale == Vector3.one, "crouch preserves mesh proportions");
-        Check(Mathf.Abs(sittingBounds.min.y - standingBounds.min.y) < .12f, "crouch feet stay near floor");
-        Destroy(standing); Destroy(sitting);
+        Check(Mathf.Abs(sittingBounds.min.y - standingBounds.min.y) < .08f, "crouch feet stay near floor");
         yield return new WaitForSeconds(.3f);
         foreach (SchoolRuleZero.TutorialStep step in System.Enum.GetValues(typeof(SchoolRuleZero.TutorialStep)))
         {
