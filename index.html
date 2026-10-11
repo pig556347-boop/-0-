@@ -38,7 +38,7 @@
           warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
         }
         var div = document.createElement('div');
-        div.innerHTML = msg;
+        div.textContent = msg;
         warningBanner.appendChild(div);
         if (type == 'error') div.style = 'background: red; padding: 10px;';
         else {
@@ -50,6 +50,17 @@
         }
         updateBannerVisibility();
       }
+
+      var runtimeErrorShown = false;
+      var originalConsoleError = console.error.bind(console);
+      console.error = function() {
+        originalConsoleError.apply(console, arguments);
+        var message = Array.from(arguments).map(String).join(" ");
+        if (!runtimeErrorShown && /Exception|Can't add component/.test(message)) {
+          runtimeErrorShown = true;
+          unityShowBanner("게임 초기화 오류가 확인됐습니다. 수정된 Unity 빌드를 준비 중입니다. " + message.split("\n")[0].slice(0, 180), "error");
+        }
+      };
 
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/WebTest.loader.js";
