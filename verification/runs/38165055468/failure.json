@@ -1,0 +1,4 @@
+{
+  "commit": "2d7565d4943fef2ede2a60916398e2f2ac94a5dc",
+  "error": "Error: HUD runtime test failed 2560x1080: HUD_TEST_FAIL real hitbox still confirms combo against infinite HP\n\nException: real hitbox still confirms combo against infinite HP\n  at HUDPlaytestRunner.Check (System.Boolean pass, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
