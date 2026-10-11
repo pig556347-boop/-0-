@@ -48,6 +48,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
     private IEnumerator Start()
     {
         Camera fixtureCamera = new GameObject("Camera").AddComponent<Camera>();
+        fixtureCamera.clearFlags = CameraClearFlags.SolidColor;
         fixtureCamera.backgroundColor = new Color(.18f,.19f,.2f);
         fixtureCamera.transform.position = new Vector3(.55f, 1, -4);
         fixtureCamera.transform.LookAt(new Vector3(.55f, 0, 0));
@@ -132,8 +133,9 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
             if (bone.name == "LeftForearm") punchElbow = bone;
         }
         // Place actors at fighting distance instead of initially interpenetrating.
-        player.GetComponent<Rigidbody>().position = Vector3.zero;
-        enemy.GetComponent<Rigidbody>().position = Vector3.right * 1.1f;
+        player.transform.position = Vector3.zero; enemy.transform.position = Vector3.right * 1.1f;
+        player.GetComponent<Rigidbody>().position = player.transform.position;
+        enemy.GetComponent<Rigidbody>().position = enemy.transform.position;
         Physics.SyncTransforms();
         yield return new WaitForFixedUpdate(); yield return null;
         Debug.Log("MOTION_METRICS hit source=" + player.transform.position + " target=" + enemy.transform.position +
@@ -155,13 +157,33 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         yield return new WaitForSeconds(.4f);
         enemy.Health.Infinite = false; enemy.RestoreForTutorial();
         Quaternion armBefore = punchArm.localRotation, elbowBefore = punchElbow.localRotation;
+        bool punchStarted = false;
+        System.Action observePunch = () => punchStarted = true;
+        enemy.StrikeStarted += observePunch;
         Check(enemy.TryAttack(false), "Deongchi real punch starts");
-        yield return new WaitForSeconds(enemy.VisualWindup + .06f);
-        yield return new WaitForEndOfFrame();
-        Check(enemy.State == CombatActor.ActionState.ATTACK, "Deongchi attack retains gameplay timing");
-        Check(Quaternion.Angle(armBefore, punchArm.localRotation) > 30, "Deongchi punch extends upper arm");
-        Check(Quaternion.Angle(elbowBefore, punchElbow.localRotation) > 20, "Deongchi punch extends elbow");
-        yield return new WaitForSeconds(.6f);
+        float observeUntil = Time.time + enemy.VisualWindup + .25f;
+        float armExtension = 0, elbowExtension = 0;
+        while (Time.time < observeUntil)
+        {
+            yield return new WaitForEndOfFrame();
+            if (punchStarted)
+            {
+                armExtension = Mathf.Max(armExtension, Quaternion.Angle(armBefore, punchArm.localRotation));
+                Quaternion delta = Quaternion.Inverse(elbowBefore) * punchElbow.localRotation;
+                delta.ToAngleAxis(out float angle, out Vector3 axis);
+                if (angle > 180) angle -= 360;
+                float signedExtension = angle * Mathf.Sign(Vector3.Dot(axis,
+                    punchElbow.InverseTransformDirection(enemyVisual.transform.right)));
+                elbowExtension = Mathf.Max(elbowExtension, signedExtension);
+            }
+            yield return null;
+        }
+        enemy.StrikeStarted -= observePunch;
+        Debug.Log("MOTION_METRICS punch arm=" + armExtension + " elbow=" + elbowExtension);
+        Check(punchStarted && enemy.State == CombatActor.ActionState.ATTACK, "Deongchi attack retains gameplay timing");
+        Check(armExtension > 30, "Deongchi punch extends upper arm");
+        Check(elbowExtension > 20, "Deongchi punch extends elbow");
+        yield return new WaitForSeconds(.4f);
         player.RestoreForTutorial(); enemy.RestoreForTutorial();
         PrototypeHUD hud=gameObject.AddComponent<PrototypeHUD>();hud.Initialize(player,enemy);
         hud.EncounterText="학교 1-5 · 잔몹 라운드 1\n라운드 1/3 · 남은 적 4";
