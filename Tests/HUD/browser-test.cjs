@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
+const { PNG } = require('pngjs');
 (async () => {
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
@@ -26,6 +27,14 @@ const fs = require('fs');
     await live.locator('canvas').click();
     await live.keyboard.down('w');await live.waitForTimeout(500);await live.keyboard.up('w');
     await live.screenshot({path:'hud-test-results/production-hud.png'});
+    const pixels=PNG.sync.read(await live.locator('canvas').screenshot());
+    const buckets=new Map();
+    for(let i=0;i<pixels.data.length;i+=4){
+      const key=[pixels.data[i],pixels.data[i+1],pixels.data[i+2]].map(x=>Math.floor(x/16)).join(',');
+      buckets.set(key,(buckets.get(key)||0)+1);
+    }
+    const large=[...buckets.values()].filter(n=>n>pixels.width*pixels.height*.025);
+    if(large.length<3)throw Error('Production canvas remains blank/loading; expected classroom and HUD');
     if(runtimeErrors.length)throw Error('Production scene runtime errors: '+runtimeErrors.join(' '));
     console.log('::notice::Production scene loaded with no runtime exceptions; keyboard input exercised');
     await live.close();
