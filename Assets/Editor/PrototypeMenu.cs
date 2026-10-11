@@ -13,6 +13,7 @@ public static class PrototypeMenu
     {
         const string output = "build/WebGL";
         Directory.CreateDirectory(output);
+        PlayerSettings.WebGL.template = "PROJECT:SchoolFullscreen";
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
         PlayerSettings.WebGL.threadsSupport = false;
         BuildReport report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
@@ -67,6 +68,7 @@ public static class PrototypeMenu
             return;
         }
         // GitHub Pages does not supply Unity-specific Content-Encoding headers.
+        PlayerSettings.WebGL.template = "PROJECT:SchoolFullscreen";
         PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
         PlayerSettings.WebGL.threadsSupport = false;
         BuildReport report = BuildPipeline.BuildPlayer(new BuildPlayerOptions

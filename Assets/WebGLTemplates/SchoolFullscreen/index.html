@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{{{ PRODUCT_NAME }}}</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#141418}#game{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh}#unity-canvas{display:block;width:100%;height:100%;outline:none}#loading{position:absolute;inset:0;display:grid;place-content:center;background:#141418;color:#eee;font:16px sans-serif;text-align:center;pointer-events:none}#loading span{margin-top:12px;color:#bbb;font-size:13px}#fullscreen{position:absolute;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));padding:9px 13px;border:1px solid #888;background:#18181bd9;color:white;font:13px sans-serif;cursor:pointer}#fullscreen:focus-visible{outline:2px solid white;outline-offset:3px}
+</style>
+</head>
+<body>
+<main id="game"><canvas id="unity-canvas" tabindex="0" aria-label="교칙 제0조 게임"></canvas><div id="loading">게임 불러오는 중<span id="progress">0%</span></div><button id="fullscreen" type="button">전체화면 ⛶</button></main>
+<script>
+const canvas=document.getElementById('unity-canvas'),host=document.getElementById('game'),button=document.getElementById('fullscreen');
+button.addEventListener('click',async()=>{
+ try{if(document.fullscreenElement)await document.exitFullscreen();else if(host.requestFullscreen)await host.requestFullscreen();else if(host.webkitRequestFullscreen)host.webkitRequestFullscreen();canvas.focus();}
+ catch(e){button.textContent='전체화면 다시 시도 ⛶';}
+});
+document.addEventListener('fullscreenchange',()=>{button.textContent=document.fullscreenElement?'전체화면 해제 ⛶':'전체화면 ⛶';canvas.focus();});
+const script=document.createElement('script');script.src='Build/{{{ LOADER_FILENAME }}}';
+script.onload=()=>createUnityInstance(canvas,{
+ dataUrl:'Build/{{{ DATA_FILENAME }}}',frameworkUrl:'Build/{{{ FRAMEWORK_FILENAME }}}',codeUrl:'Build/{{{ CODE_FILENAME }}}',streamingAssetsUrl:'StreamingAssets',companyName:'{{{ COMPANY_NAME }}}',productName:'{{{ PRODUCT_NAME }}}',productVersion:'{{{ PRODUCT_VERSION }}}',matchWebGLToCanvasSize:true
+},p=>document.getElementById('progress').textContent=Math.round(p*100)+'%').then(instance=>{window.unityInstance=instance;document.getElementById('loading').remove();canvas.focus();}).catch(e=>{document.getElementById('loading').textContent='게임 로드 실패: '+e;console.error(e);});
+script.onerror=()=>{document.getElementById('loading').textContent='게임 로더를 불러오지 못했습니다.';};document.body.appendChild(script);
+</script>
+</body></html>
