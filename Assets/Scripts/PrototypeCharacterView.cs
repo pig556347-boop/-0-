@@ -15,6 +15,8 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     public bool CinematicPose { get; set; }
     public void SetForcedKick(float amount)
     {
+        ImportedPlayerView imported = GetComponent<ImportedPlayerView>();
+        if (imported != null) imported.ForcedKick(amount);
         if (rightLeg != null) rightLeg.localRotation = Quaternion.Euler(-95 * amount, 0, 0);
     }
 
@@ -22,6 +24,7 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     {
         actor = owner; motor = owner.GetComponent<PlayerController>();
         actor.StrikeStarted += OnStrike;
+        if (owner.Team == 0 && ImportedPlayerView.TryBuild(this, owner)) return;
         Material uniform = MakeMaterial(new Color(.055f, .06f, .075f));
         Material white = MakeMaterial(new Color(.88f, .88f, .85f));
         Material skin = MakeMaterial(new Color(.78f, .67f, .57f));

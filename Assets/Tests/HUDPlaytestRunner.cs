@@ -23,6 +23,35 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
     {
         new GameObject("Camera").AddComponent<Camera>().backgroundColor=new Color(.18f,.19f,.2f);
         CombatActor player=Actor("권민준",0,120),enemy=Actor("불량 학생",1,100);
+        GameObject playerVisual = new GameObject("Player model test visual");
+        playerVisual.transform.SetParent(player.transform, false);
+        PrototypeCharacterView character = playerVisual.AddComponent<PrototypeCharacterView>();
+        character.Build(player);
+        ImportedPlayerView imported = playerVisual.GetComponent<ImportedPlayerView>();
+        Check(imported != null && imported.IsReady, "imported player rig ready");
+        SkinnedMeshRenderer render = playerVisual.GetComponentInChildren<SkinnedMeshRenderer>();
+        Check(render != null && render.sharedMesh.vertexCount < 25000, "web player mesh simplified and skinned");
+        Check(render.sharedMaterial.mainTexture != null, "player source texture bound");
+        Check(render.bounds.size.y > 1.6f && render.bounds.size.y < 2.1f, "player model normalized to game scale");
+        character.CinematicPose = true;
+        Mesh restMesh = new Mesh();
+        render.BakeMesh(restMesh);
+        character.SetForcedKick(.5f);
+        Mesh kickMesh = new Mesh();
+        render.BakeMesh(kickMesh);
+        Vector3[] restVertices = restMesh.vertices, kickVertices = kickMesh.vertices;
+        float deformation = 0;
+        for (int i = 0; i < restVertices.Length; i++)
+            deformation = Mathf.Max(deformation, Vector3.Distance(restVertices[i], kickVertices[i]));
+        Check(deformation > .03f, "imported mesh skin deforms during kick");
+        Destroy(restMesh); Destroy(kickMesh);
+        Transform kickBone = null;
+        foreach (Transform bone in playerVisual.GetComponentsInChildren<Transform>())
+            if (bone.name == "RightThigh") kickBone = bone;
+        Quaternion kickPose = kickBone.localRotation;
+        character.SetForcedKick(0);
+        Check(Quaternion.Angle(kickPose, kickBone.localRotation) > 40, "imported kick bone responds to existing cinematic pose");
+        character.CinematicPose = false;
         PrototypeHUD hud=gameObject.AddComponent<PrototypeHUD>();hud.Initialize(player,enemy);
         hud.EncounterText="학교 1-5 · 잔몹 라운드 1\n라운드 1/3 · 남은 적 4";
         CombatHUDView view=GetComponent<CombatHUDView>();

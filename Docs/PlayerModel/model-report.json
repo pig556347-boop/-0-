@@ -1,0 +1,10 @@
+{
+  "source_triangles": 1963471,
+  "vertices": 16471,
+  "triangles": 20027,
+  "height_m": 1.85,
+  "bones": 19,
+  "source_rig": false,
+  "source_animations": 0,
+  "rig": "new auto-weighted approximation; basic procedural poses, not authored animation"
+}
