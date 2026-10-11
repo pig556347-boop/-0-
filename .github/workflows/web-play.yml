@@ -35,12 +35,28 @@ jobs:
         with:
           unityVersion: 6000.4.10f1
           targetPlatform: WebGL
-          buildMethod: PrototypeMenu.BuildForCI
+          buildMethod: HUDCIBuild.Build
       - name: Validate web output
         run: |
           test -s build/WebGL/index.html
           test -n "$(find build/WebGL/Build -name '*.wasm' -size +0c -print -quit)"
           test -n "$(find build/WebGL/Build -name '*.data' -size +0c -print -quit)"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run real Unity HUD browser tests
+        run: |
+          npm install --no-save --package-lock=false playwright@1.56.1
+          npx playwright install --with-deps chromium
+          python3 -m http.server 8780 --bind 127.0.0.1 --directory build > /tmp/hud-http.log 2>&1 &
+          node Tests/HUD/browser-test.cjs
+      - name: Upload HUD execution screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hud-test-results
+          path: hud-test-results
+          if-no-files-found: ignore
       - uses: actions/upload-pages-artifact@v3
         with:
           path: build/WebGL
