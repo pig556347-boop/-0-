@@ -1,0 +1,4 @@
+{
+  "commit": "3612444c50de8b9c0d6dab0cd4eed83cae51b1f9",
+  "error": "Error: HUD runtime test failed 1920x1080: HUD_TEST_FAIL Deongchi punch extends elbow\n\nException: Deongchi punch extends elbow\n  at HUDPlaytestRunner.Check (System.Boolean pass, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
