@@ -57,6 +57,8 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Check(imported != null && imported.IsReady, "imported player rig ready");
         SkinnedMeshRenderer render = playerVisual.GetComponentInChildren<SkinnedMeshRenderer>();
         Check(render != null && render.sharedMesh.vertexCount < 25000, "web player mesh simplified and skinned");
+        Check(render.sharedMesh.isReadable, "imported skin vertex data readable for runtime verification");
+        Debug.Log("MOTION_METRICS player vertexCount=" + render.sharedMesh.vertexCount + " scale=" + render.transform.lossyScale + " world=" + WorldBounds(render));
         Check(render.sharedMaterial.mainTexture != null, "player source texture bound");
         Check(render.bounds.size.y > 1.6f && render.bounds.size.y < 2.1f, "player model normalized to game scale");
         character.CinematicPose = true;
@@ -114,13 +116,37 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
                 "tutorial health lifetime " + step);
         }
         enemy.Health.Infinite = false; enemy.RestoreForTutorial();
+        Transform kneeBone = null, punchArm = null, punchElbow = null;
+        foreach (Transform bone in playerVisual.GetComponentsInChildren<Transform>())
+            if (bone.name == "RightShin") kneeBone = bone;
+        foreach (Transform bone in enemyVisual.GetComponentsInChildren<Transform>())
+        {
+            if (bone.name == "LeftUpperArm") punchArm = bone;
+            if (bone.name == "LeftForearm") punchElbow = bone;
+        }
+        Quaternion thighBefore = kickBone.localRotation, kneeBefore = kneeBone.localRotation;
+        bool strikeObserved = false;
+        System.Action observeStrike = () => strikeObserved = true;
+        player.StrikeStarted += observeStrike;
+        enemy.Health.Infinite = true;
         Check(player.TryAttack(false), "player real attack starts");
         yield return new WaitForSeconds(player.VisualWindup + .06f);
-        Check(Mathf.Abs(kickBone.localRotation.x) > .05f, "real strike event drives kick joint");
+        yield return new WaitForEndOfFrame();
+        Check(strikeObserved, "real gameplay strike event fired");
+        Check(Quaternion.Angle(thighBefore, kickBone.localRotation) > 40, "real strike drives extended kick thigh");
+        Check(Quaternion.Angle(kneeBefore, kneeBone.localRotation) < 60, "real kick extends chambered knee at impact");
+        Check(enemy.Health.Current == enemy.Health.Maximum, "real hitbox preserves infinite tutorial HP");
+        Check(player.Progress.Combo > 0, "real hitbox still confirms combo against infinite HP");
+        player.StrikeStarted -= observeStrike;
         yield return new WaitForSeconds(.4f);
+        enemy.Health.Infinite = false; enemy.RestoreForTutorial();
+        Quaternion armBefore = punchArm.localRotation, elbowBefore = punchElbow.localRotation;
         Check(enemy.TryAttack(false), "Deongchi real punch starts");
         yield return new WaitForSeconds(enemy.VisualWindup + .06f);
+        yield return new WaitForEndOfFrame();
         Check(enemy.State == CombatActor.ActionState.ATTACK, "Deongchi attack retains gameplay timing");
+        Check(Quaternion.Angle(armBefore, punchArm.localRotation) > 30, "Deongchi punch extends upper arm");
+        Check(Quaternion.Angle(elbowBefore, punchElbow.localRotation) > 20, "Deongchi punch extends elbow");
         yield return new WaitForSeconds(.6f);
         player.RestoreForTutorial(); enemy.RestoreForTutorial();
         PrototypeHUD hud=gameObject.AddComponent<PrototypeHUD>();hud.Initialize(player,enemy);

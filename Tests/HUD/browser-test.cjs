@@ -9,7 +9,7 @@ const { PNG } = require('pngjs');
     for (const [width,height] of [[1920,1080],[1280,720],[1024,768],[2560,1080]]) {
       const page = await browser.newPage({viewport:{width,height}});
       const errors=[];let passed=false;
-      page.on('console', msg=>{const s=msg.text();if(s.includes('HUD_TEST_PASS')){passed=true;executions.push({width,height,checks:Number(s.match(/checks=(\d+)/)[1])});console.log("::notice::"+s)}if(s.includes('MOTION_METRICS'))console.log('::notice::'+s);if(/HUD_TEST_FAIL|Exception|Can't add component/.test(s))errors.push(s)});
+      page.on('console', msg=>{const s=msg.text();if(s.includes('HUD_TEST_PASS')){passed=true;executions.push({width,height,checks:Number(s.match(/checks=(\d+)/)[1])});console.log("::notice::"+s)}if(s.includes('MOTION_METRICS'))console.log('::notice::'+s);if(/HUD_TEST_FAIL|Exception|Can't add component|Not allowed to access/.test(s))errors.push(s)});
       page.on('pageerror',err=>errors.push(String(err)));
       await page.goto('http://127.0.0.1:8780/HUDTest/');
       // Default Unity template uses a fixed canvas. Resize the actual game canvas as the browser host would.
@@ -37,8 +37,8 @@ const { PNG } = require('pngjs');
     if(Math.abs(resized.width-1280)>1||Math.abs(resized.height-720)>1)throw Error('Game canvas does not resize with viewport');
     await live.setViewportSize({width:1920,height:1080});
     await live.locator('canvas').click();
-    await live.keyboard.down('w');await live.waitForTimeout(800);
-    await live.screenshot({path:'hud-test-results/motion-walk.png'});await live.keyboard.up('w');
+    await live.keyboard.down('d');await live.waitForTimeout(800);
+    await live.screenshot({path:'hud-test-results/motion-walk.png'});await live.keyboard.up('d');
     await live.keyboard.press('Space');await live.waitForTimeout(1100);
     await live.keyboard.down('c');await live.waitForTimeout(300);
     await live.screenshot({path:'hud-test-results/motion-crouch.png'});
