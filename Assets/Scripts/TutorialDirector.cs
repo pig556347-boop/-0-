@@ -59,6 +59,7 @@ public sealed class TutorialDirector : MonoBehaviour
         if (enemy == null) return;
         bool training = TutorialTrainingRules.HasInfiniteHealth(Progress.Step);
         enemy.Health.Infinite = training;
+        Debug.Log("TUTORIAL_ROLE step=" + Progress.Step + " infinite=" + training);
         if (training && TutorialTrainingRules.UsesDeongchi(Progress.Step))
         {
             enemy.name = "덩치";
