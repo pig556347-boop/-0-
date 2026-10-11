@@ -8,6 +8,29 @@ using System.IO.Compression;
 
 public static class PrototypeMenu
 {
+    // Noninteractive entry point for GitHub Actions. Never invoke folder dialogs in CI.
+    public static void BuildForCI()
+    {
+        const string output = "build/WebGL";
+        Directory.CreateDirectory(output);
+        PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+        PlayerSettings.WebGL.threadsSupport = false;
+        BuildReport report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+        {
+            scenes = new[] { "Assets/Scenes/Prototype.unity" },
+            locationPathName = output,
+            target = BuildTarget.WebGL,
+            options = BuildOptions.None
+        });
+        string binaries = Path.Combine(output, "Build");
+        if (report.summary.result != BuildResult.Succeeded ||
+            !File.Exists(Path.Combine(output, "index.html")) ||
+            !Directory.Exists(binaries) ||
+            Directory.GetFiles(binaries, "*.wasm").Length == 0 ||
+            Directory.GetFiles(binaries, "*.data").Length == 0)
+            throw new System.InvalidOperationException("A complete WebGL build was not produced.");
+        File.WriteAllText(Path.Combine(output, ".nojekyll"), "");
+    }
     [MenuItem("School Rule Zero/Open Prototype")]
     public static void OpenPrototype()
     {
