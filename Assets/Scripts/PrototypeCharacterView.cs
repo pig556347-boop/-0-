@@ -70,8 +70,9 @@ public sealed class PrototypeCharacterView : MonoBehaviour
         GameObject part = GameObject.CreatePrimitive(shape); part.name = name;
         part.transform.SetParent(parent, false); part.transform.localPosition = position;
         part.transform.localScale = scale;
-        Collider collider = part.GetComponent<Collider>(); collider.enabled = false;
-        Destroy(collider); part.GetComponent<Renderer>().sharedMaterial = material;
+        Collider collider = part.GetComponent<Collider>();
+        if (collider != null) { collider.enabled = false; Destroy(collider); }
+        part.GetComponent<Renderer>().sharedMaterial = material;
     }
     private void Update()
     {

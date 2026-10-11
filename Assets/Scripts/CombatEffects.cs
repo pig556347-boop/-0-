@@ -37,7 +37,8 @@ public sealed class CombatEffects : MonoBehaviour
         ghost.name = "Red afterimage"; ghost.transform.position = position;
         ghost.transform.rotation = Quaternion.LookRotation(facing);
         ghost.transform.localScale = new Vector3(.65f, .9f, .65f);
-        Collider collider = ghost.GetComponent<Collider>(); collider.enabled = false; Destroy(collider);
+        Collider collider = ghost.GetComponent<Collider>();
+        if (collider != null) { collider.enabled = false; Destroy(collider); }
         ghost.GetComponent<Renderer>().sharedMaterial = ghostMaterial; Destroy(ghost, .18f);
     }
     private void OnDestroy() { Destroy(sparkMaterial); Destroy(ghostMaterial); }

@@ -20,3 +20,13 @@ index.html을 파일로 직접 여는 file:// 방식 대신 HTTP(S) 서버로 �
 실제 브라우저 검증은 Chromium 다운로드 도메인 접근 제한으로 미실행입니다.
 공개 Pages 사이트 직접 접근도 이 클라우드의 네트워크 제한으로 확인하지 못했습니다.
 현재 업로드 사실을 브라우저 플레이 성공으로 간주하지 않습니다.
+
+## 검은 화면 원인 확인과 수정
+
+업로드된 빌드를 Chromium(WebGL 소프트웨어 렌더링)에서 실제 실행해 검은 화면을 재현했습니다.
+로그: Can't add component because class 'SphereCollider' doesn't exist! → NullReferenceException.
+런타임 CreatePrimitive(Sphere)에 필요한 컴포넌트가 WebGL 빌드에서 제거되어
+캐릭터 생성 중 중단됐습니다. 카메라 생성 전이라 게임 화면이 검게 남습니다.
+Assets/link.xml로 primitive 렌더러/콜라이더를 보존하고 장식 콜라이더 null 검사도 추가했습니다.
+이 수정은 소스에 적용되어 있으며 실행 파일에 반영하려면 새 Unity WebGL 빌드가 필요합니다.
+현재 배포된 wasm 자체가 수정됐거나 수정본 플레이 검증을 완료한 것은 아닙니다.
