@@ -73,7 +73,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         {
             playerVisual.SetActive(false);
             GameObject model = new GameObject("Deongchi pose preview"); model.transform.SetParent(enemy.transform, false);
-            PrototypeCharacterView view = model.AddComponent<PrototypeCharacterView>(); view.Build(enemy); view.UseDeongchiModel(); view.CinematicPose = true;
+            PrototypeCharacterView previewView = model.AddComponent<PrototypeCharacterView>(); previewView.Build(enemy); previewView.UseDeongchiModel(); previewView.CinematicPose = true;
             ImportedPlayerView rig = model.GetComponent<ImportedPlayerView>();
             if (Application.absoluteURL.Contains("deongchiPose=stride")) rig.PreviewFighting(1.8f, 1);
             else if (Application.absoluteURL.Contains("deongchiPose=jab")) rig.PreviewPunch(.45f);
