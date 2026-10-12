@@ -236,10 +236,12 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
             Check(Vector3.Distance(bigLeftHand.position,bigHead.position)<.45f && Vector3.Distance(bigRightHand.position,bigHead.position)<.45f, "Deongchi movement maintains guard phase " + phase);
         }
         bigRig.PreviewFighting(); big.CinematicPose=false;
+        yield return null; yield return new WaitForEndOfFrame();
         Bounds standingBounds = WorldBounds(bigRender);
         float standingHeight = standingBounds.size.y;
         Check(enemy.TryCrouch(), "Deongchi gameplay crouch starts");
         yield return new WaitForSeconds(.2f);
+        yield return new WaitForEndOfFrame();
         Bounds sittingBounds = WorldBounds(bigRender);
         Debug.Log("MOTION_METRICS crouch standing=" + standingHeight + " sitting=" + sittingBounds.size.y + " footShift=" + Mathf.Abs(sittingBounds.min.y - standingBounds.min.y));
         Check(sittingBounds.size.y < standingHeight - .35f, "crouch bends rig and lowers silhouette");
