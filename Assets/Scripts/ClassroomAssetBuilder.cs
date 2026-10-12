@@ -51,9 +51,13 @@ public sealed class ClassroomAssetBuilder : MonoBehaviour
 
     private void Place(GameObject prototype, string label, Vector3 bottom, Vector3 size, float yaw)
     {
-        GameObject instance = Instantiate(prototype, transform, false);
-        instance.name = label;
-        instance.SetActive(true);
+        // A placement wrapper keeps the FBX root's axis conversion untouched.
+        // Single-mesh FBXs can carry that conversion on their root transform.
+        GameObject instance = new GameObject(label);
+        instance.transform.SetParent(transform, false);
+        GameObject modelCopy = Instantiate(prototype, instance.transform, false);
+        modelCopy.name = "Imported model";
+        modelCopy.SetActive(true);
         Bounds bounds = new Bounds(); bool initialized = false;
         foreach (MeshFilter filter in instance.GetComponentsInChildren<MeshFilter>())
         {
