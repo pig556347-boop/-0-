@@ -79,6 +79,14 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
             Debug.Log("HOOK_PREVIEW_READY");
             yield break;
         }
+        if (Application.absoluteURL.Contains("fightPose="))
+        {
+            character.CinematicPose = true;
+            if (Application.absoluteURL.Contains("fightPose=stride")) imported.PreviewFighting(1.8f, 1);
+            else if (Application.absoluteURL.Contains("fightPose=roundhouse")) imported.PreviewRoundhouse(.48f);
+            else imported.PreviewFighting();
+            yield return new WaitForEndOfFrame(); Debug.Log("FIGHT_PREVIEW_READY"); yield break;
+        }
         character.CinematicPose = true;
         Vector3[] restVertices = WorldVertices(render);
         character.SetForcedKick(.5f);
@@ -97,16 +105,17 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         foreach (Transform bone in playerVisual.GetComponentsInChildren<Transform>())
         { if (bone.name == "LeftFoot") supportFoot = bone; if (bone.name == "RightFoot") hookFoot = bone; }
         character.CinematicPose = true;
-        hookView.PreviewHook(0);
-        Vector3 supportHome = supportFoot.position, kickHome = hookFoot.position;
         Quaternion ankleRest = hookFoot.localRotation;
+        hookView.PreviewHook(0);
+        Quaternion readyRotation = playerVisual.transform.rotation;
+        Vector3 supportHome = supportFoot.position, kickHome = hookFoot.position;
         Vector3 physicalHome = player.transform.position;
         Vector3 facingHome = player.Facing;
         for (int frame = 0; frame <= 20; frame++)
         {
             hookView.PreviewHook(frame / 20f);
             Check(Vector3.Distance(supportFoot.position, supportHome) < .06f, "hook support ankle planted phase " + frame);
-            Check(Quaternion.Angle(hookFoot.localRotation, ankleRest) < .1f, "hook ankle aligned to shin phase " + frame);
+            if (frame >= 8 && frame <= 15) Check(Quaternion.Angle(hookFoot.localRotation, ankleRest) < .1f, "airborne hook ankle aligned to shin phase " + frame);
             bool bounded = true;
             foreach (Vector3 v in WorldVertices(render))
                 bounded &= !float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && (v - physicalHome).magnitude < 3;
@@ -124,8 +133,32 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
             "hook torso turn finishes by impact instead of late recovery");
         hookView.PreviewHook(1);
         Check(Vector3.Distance(hookFoot.position, kickHome) < .06f, "hook same right foot lands in ready stance");
-        Check(Quaternion.Angle(playerVisual.transform.rotation, Quaternion.LookRotation(facingHome)) < .1f, "hook full turn returns to original facing");
+        Check(Quaternion.Angle(playerVisual.transform.rotation, readyRotation) < .1f, "hook full turn returns to fighting stance");
         Check(player.transform.position == physicalHome && player.Facing == facingHome, "hook changes visuals without rotating combat physics");
+        hookView.PreviewFighting();
+        Check(Mathf.Abs(supportFoot.position.y - hookFoot.position.y) < .01f, "ready feet both planted");
+        Check(Vector3.Distance(supportFoot.position, hookFoot.position) > .5f, "ready stance widened and staggered");
+        Vector3 readyLeft = supportFoot.position, readyRight = hookFoot.position;
+        for (int leg = 0; leg < 2; leg++)
+        for (int frame = 0; frame <= 20; frame++)
+        {
+            hookView.PreviewRoundhouse(frame / 20f, leg == 1);
+            Transform supporting = leg == 0 ? supportFoot : hookFoot;
+            Check(Vector3.Distance(supporting.position, leg == 0 ? readyLeft : readyRight) < .06f,
+                "roundhouse support planted leg " + leg + " phase " + frame);
+            bool finite = true;
+            foreach (Vector3 v in WorldVertices(render)) finite &= !float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && (v - physicalHome).magnitude < 3;
+            Check(finite, "roundhouse skin finite leg " + leg + " phase " + frame);
+        }
+        hookView.PreviewRoundhouse(1);
+        Check(Vector3.Distance(hookFoot.position, readyRight) < .02f && Quaternion.Angle(playerVisual.transform.rotation, readyRotation) < .1f, "roundhouse returns to same low ready stance");
+        for (int step = 0; step < 8; step++)
+        {
+            hookView.PreviewFighting(step * Mathf.PI / 4, 1);
+            Check(WorldBounds(render).size.y < 2.1f && supportFoot.position.y >= readyLeft.y - .01f && hookFoot.position.y >= readyRight.y - .01f, "guarded movement feet and silhouette phase " + step);
+        }
+        hookView.PreviewFighting();
+        Check(player.transform.position == physicalHome && player.Facing == facingHome, "fighting poses preserve physics and facing");
         character.CinematicPose = false;
         Check(Quaternion.Angle(kickPose, kickBone.localRotation) > 40, "imported kick bone responds to existing cinematic pose");
         character.CinematicPose = false;
@@ -195,7 +228,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Check(strikeObserved, "real gameplay strike event fired");
         Check(Quaternion.Angle(thighBefore, kickBone.localRotation) > 40, "real strike drives extended kick thigh");
-        Check(Quaternion.Angle(kneeBefore, kneeBone.localRotation) < 60, "real kick extends chambered knee at impact");
+        Check(Vector3.Angle(kneeBone.position - kickBone.position, hookFoot.position - kneeBone.position) < 40, "real kick extends chambered knee at impact");
         Check(enemy.Health.Current == enemy.Health.Maximum, "real hitbox preserves infinite tutorial HP");
         Check(player.Progress.Combo > 0, "real hitbox still confirms combo against infinite HP");
         player.StrikeStarted -= observeStrike;

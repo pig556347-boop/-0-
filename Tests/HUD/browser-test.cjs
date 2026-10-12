@@ -30,6 +30,16 @@ const { PNG } = require('pngjs');
       await page.screenshot({path:'hud-test-results/hook-'+pose+'.png'});
       await page.close();
     }
+    for(const pose of ['ready','stride','roundhouse']) {
+      const page=await browser.newPage({viewport:{width:1280,height:720}});
+      let ready=false;const errors=[];
+      page.on('console',msg=>{if(msg.text().includes('FIGHT_PREVIEW_READY'))ready=true;if(/Exception|HUD_TEST_FAIL/.test(msg.text()))errors.push(msg.text())});
+      page.on('pageerror',e=>errors.push(String(e)));
+      await page.goto('http://127.0.0.1:8780/HUDTest/?fightPose='+pose);
+      for(let i=0;i<90&&!ready&&!errors.length;i++)await page.waitForTimeout(1000);
+      if(!ready||errors.length)throw Error('Fighting pose failed '+pose+': '+errors.join(' '));
+      await page.screenshot({path:'hud-test-results/fight-'+pose+'.png'});await page.close();
+    }
     const live=await browser.newPage({viewport:{width:1920,height:1080}});
     const runtimeErrors=[];
     let playerReady=false, deongchiReady=false, hookReady=false, lastTutorialRole="", motion=null;
@@ -99,7 +109,7 @@ const { PNG } = require('pngjs');
     if(!hookReady)throw Error('Real third combo hit did not start the spinning hook animation');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
     fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true},null,2));
-    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','summary.json'])
+    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
     await live.close();

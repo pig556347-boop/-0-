@@ -8,6 +8,7 @@ public sealed class PrototypeHUD : MonoBehaviour
     public string EncounterText { get; set; } = "";
     private CombatHUDView view;
     private CombatActor player, enemy;
+    public CombatActor CurrentEnemy => enemy;
     public void SetEnemyTarget(CombatActor target) => enemy = target;
     public void Initialize(CombatActor playerActor, CombatActor enemyActor)
     {

@@ -21,6 +21,21 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private Quaternion hipsRestRotation;
     private Vector3 hipsPitchAxis, hipsRollAxis, leftFootHome, rightFootHome;
     private Quaternion leftFootBasis;
+    private Quaternion rightFootBasis, headBasis, fightFacing;
+    private readonly Dictionary<string, Quaternion> segmentBasis = new Dictionary<string, Quaternion>();
+    private Transform leftHand, rightHand;
+    private Quaternion leftHandRest, rightHandRest;
+    private Vector3 leftHandAxis, rightHandAxis;
+    private PrototypeHUD focusHUD;
+    private float nextFocusScan, fightGait, lastDrop = .11f;
+    private bool wasMoving;
+    private readonly FootContact leftContact = new FootContact(), rightContact = new FootContact();
+    private Vector3 attackLeftStart, attackRightStart;
+    private float attackDropStart = .11f;
+    private Quaternion attackRotationStart;
+    private float attackSpineStart, attackChestStart, guardWeight;
+    private bool inPreview;
+    private sealed class FootContact { public bool Planted; public Vector3 Anchor; }
     private float hookSide, hookRollSign;
     private Rigidbody body;
     private Material material;
@@ -57,6 +72,24 @@ public sealed class ImportedPlayerView : MonoBehaviour
         view.leftFootHome = view.model.InverseTransformPoint(view.joints["LeftFoot"].Bone.position) + view.model.localPosition;
         view.rightFootHome = view.model.InverseTransformPoint(view.joints["RightFoot"].Bone.position) + view.model.localPosition;
         view.leftFootBasis = Quaternion.Inverse(view.model.rotation) * view.joints["LeftFoot"].Bone.rotation;
+        view.rightFootBasis = Quaternion.Inverse(view.model.rotation) * view.joints["RightFoot"].Bone.rotation;
+        view.headBasis = Quaternion.Inverse(view.model.rotation) * view.joints["Head"].Bone.rotation;
+        view.fightFacing = Quaternion.LookRotation(actor.Facing);
+        foreach (string side in new[] { "Left", "Right" })
+        {
+            foreach (string part in new[] { "Thigh", "Shin" })
+            {
+                Transform bone = view.joints[side + part].Bone;
+                Transform child = view.joints[side + (part == "Thigh" ? "Shin" : "Foot")].Bone;
+                Vector3 primary = (child.position - bone.position).normalized;
+                Vector3 pole = Vector3.ProjectOnPlane(view.model.forward, primary).normalized;
+                view.segmentBasis[side + part] = Quaternion.LookRotation(bone.InverseTransformDirection(primary), bone.InverseTransformDirection(pole));
+            }
+        }
+        view.leftHand = Find(view.model, "LeftHand"); view.rightHand = Find(view.model, "RightHand");
+        view.leftHandRest = view.leftHand.localRotation; view.rightHandRest = view.rightHand.localRotation;
+        view.leftHandAxis = view.leftHand.InverseTransformDirection(view.leftHand.position - view.joints["LeftForearm"].Bone.position).normalized;
+        view.rightHandAxis = view.rightHand.InverseTransformDirection(view.rightHand.position - view.joints["RightForearm"].Bone.position).normalized;
         view.hookSide = Mathf.Sign(view.rightFootHome.x);
         // FBX coordinate conversion can mirror lateral axes. Measure rather than assume
         // which roll lowers the support hip; the original pose is restored immediately.
@@ -182,11 +215,31 @@ public sealed class ImportedPlayerView : MonoBehaviour
         foreach (Joint j in joints.Values)
         { j.Angle = j.FootIK ? j.Target : Mathf.Lerp(j.Angle, j.Target, 1 - Mathf.Exp(-30 * Time.deltaTime));
           j.Bone.localRotation = j.Rest * Quaternion.AngleAxis(j.Angle, j.Axis); }
-        if (actor.Team == 0 && actor.State == CombatActor.ActionState.ATTACK && !actor.HeavyStrike && actor.BasicComboHit == 3)
+        if (actor.Team == 0 && actor.State != CombatActor.ActionState.DEAD)
         {
-            float phase = struckAt >= actionStarted ? .45f + .55f * Mathf.Clamp01((Time.time - struckAt) / actor.VisualRecovery) :
-                .45f * Mathf.Clamp01((Time.time - actionStarted) / actor.VisualWindup);
-            ApplyHookPose(phase);
+            bool grounded = motor == null || motor.IsGrounded;
+            if (grounded)
+            {
+                if (actor.State == CombatActor.ActionState.ATTACK)
+                {
+                    float phase = struckAt >= actionStarted ? .45f + .55f * Mathf.Clamp01((Time.time - struckAt) / actor.VisualRecovery) :
+                        .45f * Mathf.Clamp01((Time.time - actionStarted) / actor.VisualWindup);
+                    if (!actor.HeavyStrike && actor.BasicComboHit == 3) ApplyHookPose(phase);
+                    else ApplyRoundhousePose(actor.HeavyStrike || actor.BasicComboHit != 2 ? "Right" : "Left", phase);
+                }
+                else
+                {
+                    fightFacing = Quaternion.Slerp(fightFacing, Quaternion.LookRotation(actor.Facing), 1 - Mathf.Exp(-14 * Time.deltaTime));
+                    ApplyFightingPose(speed, fightGait, walkBlend, false);
+                }
+            }
+            else
+            {
+                lastDrop = Mathf.MoveTowards(lastDrop, 0, Time.deltaTime * .9f);
+                SetHip(lastDrop, 0, 0);
+                SetGuard();
+            }
+            AimHead();
         }
         if (actor.State == CombatActor.ActionState.DEAD)
             transform.localRotation *= Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 75, (Time.time - actionStarted) / .35f));
@@ -194,6 +247,10 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private void OnPrepare()
     {
         actionStarted = Time.time; previous = actor.State;
+        attackLeftStart = joints["LeftFoot"].Bone.position; attackRightStart = joints["RightFoot"].Bone.position;
+        attackDropStart = lastDrop;
+        attackRotationStart = transform.rotation;
+        attackSpineStart = joints["Spine"].Angle; attackChestStart = joints["Chest"].Angle;
         if (actor.Team == 0 && !actor.HeavyStrike && actor.BasicComboHit == 3)
             Debug.Log("HOOK_KICK_START combo=3 right_leg=true");
     }
@@ -203,38 +260,204 @@ public sealed class ImportedPlayerView : MonoBehaviour
     // Preview calls the same solver as the real third-hit event. It never changes actor physics.
     public void PreviewHook(float phase)
     {
-        foreach (Joint j in joints.Values) { j.Angle = j.Target = 0; j.Bone.localRotation = j.Rest; }
-        hips.localPosition = hipsRest; hips.localRotation = hipsRestRotation;
-        ApplyHookPose(Mathf.Clamp01(phase));
+        ResetPreview();
+        ApplyHookPose(Mathf.Clamp01(phase), true);
+        AimHead(true);
+        inPreview = false;
     }
 
-    private void ApplyHookPose(float phase)
+    public void PreviewFighting(float gaitPhase = 0, float moveBlend = 0)
+    {
+        ResetPreview(); ApplyFightingPose(0, gaitPhase, moveBlend, true); AimHead(true); inPreview = false;
+    }
+    public void PreviewRoundhouse(float phase, bool left = false)
+    {
+        ResetPreview(); ApplyRoundhousePose(left ? "Left" : "Right", Mathf.Clamp01(phase), true); AimHead(true); inPreview = false;
+    }
+    private void ResetPreview()
+    {
+        inPreview = true;
+        foreach (Joint j in joints.Values) { j.Angle = j.Target = 0; j.Bone.localRotation = j.Rest; }
+        hips.localPosition = hipsRest; hips.localRotation = hipsRestRotation;
+        fightFacing = Quaternion.LookRotation(actor.Facing);
+    }
+    private Vector3 ReadyFoot(string side, float movement = 0, float crouchAmount = 0)
+    {
+        Vector3 home = side == "Left" ? leftFootHome : rightFootHome;
+        home.x *= Mathf.Lerp(Mathf.Lerp(2, 1.25f, crouchAmount), 1.55f, movement);
+        home.z += (side == "Left" ? .20f : -.17f) * (1 - crouchAmount * .5f) * (1 - movement);
+        return home;
+    }
+    private Quaternion FlatFoot(string side, Quaternion facing, float yaw = 0)
+    {
+        float sign = Mathf.Sign((side == "Left" ? leftFootHome : rightFootHome).x);
+        return facing * Quaternion.AngleAxis(yaw + sign * 12, Vector3.up) * (side == "Left" ? leftFootBasis : rightFootBasis);
+    }
+    private void SetHip(float drop, float forward, float lateral)
+    {
+        Quaternion facing = Quaternion.LookRotation(actor.Facing);
+        hips.localPosition = hipsRest + hips.parent.InverseTransformVector(Vector3.down * drop + facing * new Vector3(lateral, 0, forward));
+        hips.localRotation = hipsRestRotation;
+        lastDrop = drop;
+    }
+    private void SetGuard()
+    {
+        guardWeight = inPreview ? 1 : Mathf.MoveTowards(guardWeight, 1, Time.deltaTime * 6);
+        Set("LeftUpperArm", -58 * guardWeight, true); Set("RightUpperArm", -58 * guardWeight, true);
+        joints["LeftUpperArm"].Bone.rotation = Quaternion.AngleAxis(hookSide * 25 * guardWeight, model.forward) * joints["LeftUpperArm"].Bone.rotation;
+        joints["RightUpperArm"].Bone.rotation = Quaternion.AngleAxis(-hookSide * 25 * guardWeight, model.forward) * joints["RightUpperArm"].Bone.rotation;
+        Set("LeftForearm", -100 * guardWeight, true); Set("RightForearm", -100 * guardWeight, true);
+        leftHand.localRotation = leftHandRest * Quaternion.AngleAxis(-hookSide * 40, leftHandAxis);
+        rightHand.localRotation = rightHandRest * Quaternion.AngleAxis(hookSide * 40, rightHandAxis);
+    }
+    private void AimHead(bool preview = false)
+    {
+        Vector3 direction = actor.Facing;
+        if (!preview && Time.time >= nextFocusScan)
+        { nextFocusScan = Time.time + .5f; if (focusHUD == null) focusHUD = FindFirstObjectByType<PrototypeHUD>(); }
+        if (!preview && focusHUD != null && focusHUD.CurrentEnemy != null && actor.State != CombatActor.ActionState.ATTACK)
+        {
+            Vector3 toTarget = focusHUD.CurrentEnemy.transform.position - actor.transform.position; toTarget.y = 0;
+            if (toTarget.sqrMagnitude > .01f && Vector3.Dot(toTarget.normalized, actor.Facing) > .25f) direction = toTarget.normalized;
+        }
+        // Spot the target within a human neck range, then reacquire after a full turn.
+        Transform head = joints["Head"].Bone;
+        head.rotation = Quaternion.RotateTowards(head.rotation, Quaternion.LookRotation(direction) * headBasis, 65);
+    }
+    private void ApplyFightingPose(float speed, float phase, float movement, bool preview)
+    {
+        bool moving = !preview && speed > .15f && actor.State == CombatActor.ActionState.IDLE && crouch < .1f;
+        float stride = Mathf.Clamp(.20f + speed * .046f, .20f, .43f);
+        if (preview) stride = .43f;
+        if (moving && !wasMoving)
+        {
+            fightGait = .4f * 2 * Mathf.PI * .27f;
+            leftContact.Anchor = actor.transform.position + fightFacing * ReadyFoot("Left"); leftContact.Planted = true;
+            rightContact.Planted = false;
+        }
+        if (moving) fightGait += Time.deltaTime * Mathf.PI * .4f * speed / stride;
+        if (!preview) phase = fightGait;
+        wasMoving = moving;
+        float yaw = -hookSide * 20 * (1 - movement);
+        transform.rotation = fightFacing * Quaternion.AngleAxis(yaw, Vector3.up);
+        float drop = Mathf.Lerp(.11f, .15f, movement) + .33f * crouch;
+        SetHip(drop, Mathf.Lerp(.035f, 0, movement) - .10f * crouch, .018f * movement * Mathf.Sin(phase));
+        float lean = 8 + 5 * movement + 18 * crouch + (actor.State == CombatActor.ActionState.HIT ? -12 : 0);
+        Set("Spine", lean, true); Set("Chest", lean * .35f, true); Set("Head", -5, true); SetGuard();
+        for (int i = 0; i < 2; i++)
+        {
+            string side = i == 0 ? "Left" : "Right";
+            FootContact contact = i == 0 ? leftContact : rightContact;
+            Vector3 foot = ReadyFoot(side, movement, crouch);
+            float p = Mathf.Repeat(phase + i * Mathf.PI, 2 * Mathf.PI) / (2 * Mathf.PI);
+            bool planted = p < .4f;
+            float t = planted ? p / .4f : (p - .4f) / .6f;
+            float forward = planted ? Mathf.Lerp(stride, -stride, t) : Mathf.Lerp(-stride, stride, Mathf.SmoothStep(0, 1, t));
+            foot.z += forward * movement;
+            foot.y += planted ? 0 : .10f * movement * Mathf.Sin(t * Mathf.PI);
+            Vector3 target = actor.transform.position + fightFacing * foot;
+            if (moving && movement > .2f && planted)
+            { if (!contact.Planted) contact.Anchor = target; target = contact.Anchor; }
+            contact.Planted = moving && planted;
+            SolveHookLeg(side, target, fightFacing * Vector3.forward, FlatFoot(side, fightFacing));
+        }
+    }
+    private void ApplyRoundhousePose(string leg, float phase, bool preview = false)
+    {
+        Quaternion facing = Quaternion.LookRotation(actor.Facing);
+        float side = Mathf.Sign((leg == "Right" ? rightFootHome : leftFootHome).x);
+        float lift = Ease(.18f, .38f, phase) * (1 - Ease(.76f, 1, phase));
+        float extension = Ease(.36f, .45f, phase) * (1 - Ease(.60f, .76f, phase));
+        float twist = Ease(.12f, .42f, phase) * (1 - Ease(.62f, 1, phase));
+        float baseYaw = -hookSide * 20;
+        float yaw = Mathf.Lerp(baseYaw, -side * 60, twist);
+        Quaternion rotation = facing * Quaternion.AngleAxis(yaw, Vector3.up);
+        transform.rotation = preview ? rotation : Quaternion.Slerp(attackRotationStart, rotation, Ease(0, .12f, phase));
+        float startDrop = preview ? .11f : attackDropStart;
+        SetHip(Mathf.Lerp(startDrop, .11f - .025f * extension, Ease(0, .18f, phase)), .035f + .04f * lift, -side * .025f * lift);
+        Set("Spine", preview ? 8 - 14 * extension : Mathf.Lerp(attackSpineStart, 8 - 14 * extension, Ease(0, .18f, phase)), true);
+        Set("Chest", preview ? 3 - 4 * extension : Mathf.Lerp(attackChestStart, 3 - 4 * extension, Ease(0, .18f, phase)), true); SetGuard();
+        string supportSide = leg == "Right" ? "Left" : "Right";
+        Vector3 support = actor.transform.position + facing * ReadyFoot(supportSide);
+        if (!preview) support = Vector3.Lerp(supportSide == "Left" ? attackLeftStart : attackRightStart, support, Ease(0, .18f, phase));
+        float pivot = -side * 110 * twist;
+        SolveBlendedLeg(supportSide, support, facing * Quaternion.AngleAxis(pivot, Vector3.up) * Vector3.forward, FlatFoot(supportSide, facing, pivot), lift);
+        Vector3 home = actor.transform.position + facing * ReadyFoot(leg);
+        if (!preview) home = Vector3.Lerp(leg == "Left" ? attackLeftStart : attackRightStart, home, Ease(0, .18f, phase));
+        Vector3 folded = actor.transform.position + facing * new Vector3(side * .20f, -.32f, .48f);
+        Vector3 strike = actor.transform.position + facing * new Vector3(side * Mathf.Lerp(.18f, .06f, Ease(.45f, .60f, phase)), .20f, .90f);
+        Vector3 target = Vector3.Lerp(home, Vector3.Lerp(folded, strike, extension), lift);
+        Vector3 bend = Vector3.Slerp(facing * Vector3.forward, facing * Vector3.right * -side, extension);
+        Quaternion pointed = facing * Quaternion.AngleAxis(side * 90, Vector3.forward) * (leg == "Right" ? rightFootBasis : leftFootBasis);
+        SolveBlendedLeg(leg, target, bend, Quaternion.Slerp(FlatFoot(leg, facing), pointed, extension), lift);
+    }
+
+    private void SolveBlendedLeg(string side, Vector3 target, Vector3 bend, Quaternion footRotation, float blend)
+    {
+        SolveHookLeg(side, target, bend, footRotation);
+        Transform thigh = joints[side + "Thigh"].Bone, shin = joints[side + "Shin"].Bone;
+        Quaternion oldThigh = thigh.rotation, oldShin = shin.rotation;
+        SolveFightingLeg(side, target, bend, footRotation);
+        Quaternion newThigh = thigh.rotation, newShin = shin.rotation;
+        thigh.rotation = Quaternion.Slerp(oldThigh, newThigh, blend);
+        shin.rotation = Quaternion.Slerp(oldShin, newShin, blend);
+        joints[side + "Foot"].Bone.rotation = footRotation;
+    }
+
+    private void ApplyHookPose(float phase, bool preview = false)
     {
         Quaternion facing = Quaternion.LookRotation(actor.Facing);
         float yaw = -hookSide * 360 * Ease(0, .45f, phase);
-        transform.rotation = facing * Quaternion.AngleAxis(yaw, Vector3.up);
         float lift = Ease(.18f, .38f, phase) * (1 - Ease(.76f, 1, phase));
         float extension = Ease(.36f, .45f, phase) * (1 - Ease(.60f, .76f, phase));
+        float blend = Ease(0, .18f, phase) * (1 - Ease(.76f, 1, phase));
+        Quaternion rotation = facing * Quaternion.AngleAxis(yaw - hookSide * 20 * (1 - blend), Vector3.up);
+        transform.rotation = preview ? rotation : Quaternion.Slerp(attackRotationStart, rotation, Ease(0, .12f, phase));
+        float spinDrop = .025f * Mathf.Sin(Mathf.PI * Ease(0, .45f, phase));
+        float drop = .11f * (1 - extension) + spinDrop;
+        SetHip(preview ? drop : Mathf.Lerp(attackDropStart, drop, Ease(0, .18f, phase)), .035f, -hookSide * .025f * lift);
         float lean = extension;
         hips.localRotation = hipsRestRotation * Quaternion.AngleAxis(-14 * lean, hipsPitchAxis) *
             Quaternion.AngleAxis(hookRollSign * 30 * lean, hipsRollAxis);
-        Set("LeftUpperArm", -55, true); Set("RightUpperArm", -55, true);
-        Set("LeftForearm", -110, true); Set("RightForearm", -110, true);
+        Set("Spine", preview ? 8 * (1 - extension) : Mathf.Lerp(attackSpineStart, 8 * (1 - extension), Ease(0, .18f, phase)), true);
+        Set("Chest", preview ? 3 * (1 - extension) : Mathf.Lerp(attackChestStart, 3 * (1 - extension), Ease(0, .18f, phase)), true); SetGuard();
 
         // The support ankle remains in the same world location while the sole pivots.
-        Vector3 support = actor.transform.position + facing * leftFootHome;
+        Vector3 support = actor.transform.position + facing * ReadyFoot("Left");
+        if (!preview) support = Vector3.Lerp(attackLeftStart, support, Ease(0, .18f, phase));
         SolveHookLeg("Left", support, facing * Quaternion.AngleAxis(yaw, Vector3.up) * Vector3.forward,
-            facing * Quaternion.AngleAxis(yaw, Vector3.up) * leftFootBasis);
+            FlatFoot("Left", facing, yaw));
 
-        Vector3 home = actor.transform.position + facing * rightFootHome;
+        Vector3 home = actor.transform.position + facing * ReadyFoot("Right");
+        if (!preview) home = Vector3.Lerp(attackRightStart, home, Ease(0, .18f, phase));
         Vector3 folded = actor.transform.position + facing * new Vector3(hookSide * .12f, .20f, .13f);
         float sweep = hookSide * Mathf.Lerp(.22f, .06f, Ease(.45f, .60f, phase));
-        Vector3 high = actor.transform.position + facing * new Vector3(sweep, .70f, .27f);
+        Vector3 high = actor.transform.position + facing * new Vector3(sweep, .70f, .33f);
         Vector3 target = Vector3.Lerp(home, Vector3.Lerp(folded, high, extension), lift);
         Vector3 bend = facing * Vector3.forward;
         SolveHookLeg("Right", target, bend, null);
         // Neutral ankle relative to the shin: no independent sideways ankle twist.
-        joints["RightFoot"].Bone.localRotation = joints["RightFoot"].Rest;
+        Transform foot = joints["RightFoot"].Bone;
+        Quaternion neutral = foot.parent.rotation * joints["RightFoot"].Rest;
+        foot.rotation = Quaternion.Slerp(FlatFoot("Right", facing), neutral, lift);
+    }
+
+    private void SolveFightingLeg(string side, Vector3 target, Vector3 bend, Quaternion footRotation)
+    {
+        Transform thigh = joints[side + "Thigh"].Bone, shin = joints[side + "Shin"].Bone, foot = joints[side + "Foot"].Bone;
+        Vector3 origin = thigh.position;
+        float upper = Vector3.Distance(origin, shin.position), lower = Vector3.Distance(shin.position, foot.position);
+        Vector3 delta = target - origin;
+        float distance = Mathf.Clamp(delta.magnitude, Mathf.Abs(upper - lower) + .001f, upper + lower - .001f);
+        Vector3 direction = delta.normalized;
+        Vector3 pole = Vector3.ProjectOnPlane(bend, direction).normalized;
+        if (pole.sqrMagnitude < .01f) pole = Vector3.ProjectOnPlane(Vector3.right, direction).normalized;
+        float along = (upper * upper + distance * distance - lower * lower) / (2 * distance);
+        Vector3 knee = origin + direction * along + pole * Mathf.Sqrt(Mathf.Max(0, upper * upper - along * along));
+        Vector3 end = origin + direction * distance;
+        thigh.rotation = Quaternion.LookRotation((knee - origin).normalized, pole) * Quaternion.Inverse(segmentBasis[side + "Thigh"]);
+        shin.rotation = Quaternion.LookRotation((end - shin.position).normalized, pole) * Quaternion.Inverse(segmentBasis[side + "Shin"]);
+        foot.rotation = footRotation;
     }
 
     private void SolveHookLeg(string side, Vector3 target, Vector3 bend, Quaternion? footRotation)
