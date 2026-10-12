@@ -19,9 +19,21 @@ const { PNG } = require('pngjs');
       if(!passed||errors.length)throw Error(`HUD runtime test failed ${width}x${height}: ${errors.join('\n')}`);
       await page.close();
     }
+    for(const pose of ['turn','impact','ready']) {
+      const page=await browser.newPage({viewport:{width:1280,height:720}});
+      let ready=false;const errors=[];
+      page.on('console',msg=>{if(msg.text().includes('HOOK_PREVIEW_READY'))ready=true;if(/Exception|HUD_TEST_FAIL/.test(msg.text()))errors.push(msg.text())});
+      page.on('pageerror',e=>errors.push(String(e)));
+      await page.goto('http://127.0.0.1:8780/HUDTest/?hookPose='+pose);
+      for(let i=0;i<90&&!ready&&!errors.length;i++)await page.waitForTimeout(1000);
+      if(!ready||errors.length)throw Error('Hook pose preview failed '+pose+': '+errors.join(' '));
+      await page.screenshot({path:'hud-test-results/hook-'+pose+'.png'});
+      await page.close();
+    }
     const live=await browser.newPage({viewport:{width:1920,height:1080}});
     const runtimeErrors=[];
-    let playerReady=false, deongchiReady=false, lastTutorialRole="", motion=null;
+    let playerReady=false, deongchiReady=false, hookReady=false, lastTutorialRole="", motion=null;
+    live.on('console',msg=>{if(msg.text().includes('HOOK_KICK_START combo=3'))hookReady=true;});
     live.on('console',msg=>{const s=msg.text();if(s.startsWith('MOTION_LIVE '))motion=JSON.parse(s.slice(12));});
     live.on('console',msg=>{if(msg.text().includes('PLAYER_MODEL_READY'))playerReady=true;if(msg.text().includes('DEONGCHI_MODEL_READY'))deongchiReady=true;if(msg.text().includes('TUTORIAL_ROLE')){lastTutorialRole=msg.text();console.log('::notice::'+lastTutorialRole)}if(/Exception|Can't add component/.test(msg.text()))runtimeErrors.push(msg.text())});
     live.on('pageerror',err=>runtimeErrors.push(String(err)));
@@ -84,9 +96,10 @@ const { PNG } = require('pngjs');
     if(!playerReady)throw Error('Production player model was not loaded');
     if(!deongchiReady)throw Error('Tutorial Move/Jump/Crouch progression did not load Deongchi: '+lastTutorialRole);
     if(!lastTutorialRole.includes('step=Heavy'))throw Error('Real basic combo did not complete the three-hit tutorial: '+lastTutorialRole);
+    if(!hookReady)throw Error('Real third combo hit did not start the spinning hook animation');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,playerReady,deongchiReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true},null,2));
-    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','summary.json'])
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true},null,2));
+    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
     await live.close();

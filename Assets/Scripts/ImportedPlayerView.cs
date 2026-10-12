@@ -18,6 +18,9 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private PrototypeCharacterView owner;
     private Transform model, hips;
     private Vector3 hipsRest;
+    private Quaternion hipsRestRotation;
+    private Vector3 hipsPitchAxis, hipsRollAxis, leftFootHome, rightFootHome;
+    private Quaternion leftFootBasis;
     private Rigidbody body;
     private Material material;
     private CombatActor.ActionState previous;
@@ -47,6 +50,12 @@ public sealed class ImportedPlayerView : MonoBehaviour
         view.hips = Find(view.model, "Hips");
         if (!view.IsReady) { Debug.LogError("Character rig incomplete: " + kind); Destroy(view.model.gameObject); Destroy(view); return false; }
         view.hipsRest = view.hips.localPosition;
+        view.hipsRestRotation = view.hips.localRotation;
+        view.hipsPitchAxis = view.hips.InverseTransformDirection(view.model.right);
+        view.hipsRollAxis = view.hips.InverseTransformDirection(view.model.forward);
+        view.leftFootHome = view.model.InverseTransformPoint(view.joints["LeftFoot"].Bone.position) + view.model.localPosition;
+        view.rightFootHome = view.model.InverseTransformPoint(view.joints["RightFoot"].Bone.position) + view.model.localPosition;
+        view.leftFootBasis = Quaternion.Inverse(view.model.rotation) * view.joints["LeftFoot"].Bone.rotation;
         view.material = new Material(Resources.Load<Shader>("Shaders/SchoolCharacter"));
         view.material.mainTexture = Resources.Load<Texture2D>("Characters/" + kind + "/" + kind + "_BaseColor");
         foreach (Renderer renderer in view.model.GetComponentsInChildren<Renderer>()) renderer.sharedMaterial = view.material;
@@ -112,6 +121,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         float contactBob = Mathf.Sqrt(Mathf.Max(.01f, reach * reach - stanceForward * stanceForward)) - (.78f - drop);
         float bob = Mathf.Lerp(.003f * Mathf.Sin(Time.time * 2), contactBob, walkBlend) * (1 - crouch);
         hips.localPosition = hipsRest + hips.parent.InverseTransformVector(model.up * (-drop + bob) - model.forward * (.14f * crouch));
+        hips.localRotation = hipsRestRotation;
         for (int i = 0; i < 2; i++)
         {
             string side = i == 0 ? "Left" : "Right";
@@ -162,10 +172,79 @@ public sealed class ImportedPlayerView : MonoBehaviour
         foreach (Joint j in joints.Values)
         { j.Angle = j.FootIK ? j.Target : Mathf.Lerp(j.Angle, j.Target, 1 - Mathf.Exp(-30 * Time.deltaTime));
           j.Bone.localRotation = j.Rest * Quaternion.AngleAxis(j.Angle, j.Axis); }
+        if (actor.Team == 0 && actor.State == CombatActor.ActionState.ATTACK && !actor.HeavyStrike && actor.BasicComboHit == 3)
+        {
+            float phase = struckAt >= actionStarted ? .45f + .55f * Mathf.Clamp01((Time.time - struckAt) / actor.VisualRecovery) :
+                .45f * Mathf.Clamp01((Time.time - actionStarted) / actor.VisualWindup);
+            ApplyHookPose(phase);
+        }
         if (actor.State == CombatActor.ActionState.DEAD)
             transform.localRotation *= Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 75, (Time.time - actionStarted) / .35f));
     }
-    private void OnPrepare() { actionStarted = Time.time; previous = actor.State; }
+    private void OnPrepare()
+    {
+        actionStarted = Time.time; previous = actor.State;
+        if (actor.Team == 0 && !actor.HeavyStrike && actor.BasicComboHit == 3)
+            Debug.Log("HOOK_KICK_START combo=3 right_leg=true");
+    }
+
+    private static float Ease(float start, float end, float phase) => Mathf.SmoothStep(0, 1, Mathf.InverseLerp(start, end, phase));
+
+    // Preview calls the same solver as the real third-hit event. It never changes actor physics.
+    public void PreviewHook(float phase)
+    {
+        foreach (Joint j in joints.Values) { j.Angle = j.Target = 0; j.Bone.localRotation = j.Rest; }
+        hips.localPosition = hipsRest; hips.localRotation = hipsRestRotation;
+        ApplyHookPose(Mathf.Clamp01(phase));
+    }
+
+    private void ApplyHookPose(float phase)
+    {
+        Quaternion facing = Quaternion.LookRotation(actor.Facing);
+        float yaw = phase < .45f ? 300 * Ease(0, .45f, phase) : Mathf.Lerp(300, 360, Ease(.45f, .66f, phase));
+        transform.rotation = facing * Quaternion.AngleAxis(yaw, Vector3.up);
+        float lift = Ease(.18f, .38f, phase) * (1 - Ease(.76f, 1, phase));
+        float extension = Ease(.36f, .45f, phase) * (1 - Ease(.60f, .76f, phase));
+        float lean = extension;
+        hips.localRotation = hipsRestRotation * Quaternion.AngleAxis(-32 * lean, hipsPitchAxis) *
+            Quaternion.AngleAxis(16 * lean, hipsRollAxis);
+        Set("LeftUpperArm", -28, true); Set("RightUpperArm", -28, true);
+        Set("LeftForearm", -95, true); Set("RightForearm", -95, true);
+
+        // The support ankle remains in the same world location while the sole pivots.
+        Vector3 support = actor.transform.position + facing * leftFootHome;
+        SolveHookLeg("Left", support, facing * Quaternion.AngleAxis(yaw, Vector3.up) * Vector3.forward,
+            facing * Quaternion.AngleAxis(yaw, Vector3.up) * leftFootBasis);
+
+        Vector3 home = actor.transform.position + facing * rightFootHome;
+        Vector3 folded = actor.transform.position + facing * new Vector3(-.12f, .20f, .13f);
+        float sweep = Mathf.Lerp(.22f, -.12f, Ease(.45f, .60f, phase));
+        Vector3 high = actor.transform.position + facing * new Vector3(sweep, .70f, .27f);
+        Vector3 target = Vector3.Lerp(home, Vector3.Lerp(folded, high, extension), lift);
+        Vector3 bend = facing * Vector3.forward;
+        SolveHookLeg("Right", target, bend, null);
+        // Neutral ankle relative to the shin: no independent sideways ankle twist.
+        joints["RightFoot"].Bone.localRotation = joints["RightFoot"].Rest;
+    }
+
+    private void SolveHookLeg(string side, Vector3 target, Vector3 bend, Quaternion? footRotation)
+    {
+        Transform thigh = joints[side + "Thigh"].Bone, shin = joints[side + "Shin"].Bone, foot = joints[side + "Foot"].Bone;
+        Vector3 origin = thigh.position;
+        float upper = Vector3.Distance(origin, shin.position), lower = Vector3.Distance(shin.position, foot.position);
+        Vector3 delta = target - origin;
+        float distance = Mathf.Clamp(delta.magnitude, Mathf.Abs(upper - lower) + .001f, upper + lower - .001f);
+        Vector3 direction = delta.sqrMagnitude > .000001f ? delta.normalized : Vector3.down;
+        Vector3 perpendicular = Vector3.ProjectOnPlane(bend, direction).normalized;
+        if (perpendicular.sqrMagnitude < .01f) perpendicular = Vector3.ProjectOnPlane(Vector3.right, direction).normalized;
+        float along = (upper * upper + distance * distance - lower * lower) / (2 * distance);
+        float height = Mathf.Sqrt(Mathf.Max(0, upper * upper - along * along));
+        Vector3 knee = origin + direction * along + perpendicular * height;
+        Vector3 reached = origin + direction * distance;
+        thigh.rotation = Quaternion.FromToRotation(shin.position - origin, knee - origin) * thigh.rotation;
+        shin.rotation = Quaternion.FromToRotation(foot.position - shin.position, reached - shin.position) * shin.rotation;
+        if (footRotation.HasValue) foot.rotation = footRotation.Value;
+    }
     private void OnStrike() { struckAt = Time.time; strikeNumber++; }
     private void OnDestroy()
     { if (actor != null) { actor.StrikeStarted -= OnStrike; actor.AttackPrepared -= OnPrepare; } if (material != null) Destroy(material); }

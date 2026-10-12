@@ -15,6 +15,8 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public float WarningUntil { get; private set; }
     public bool HeavyStrike => activeHeavy;
     public float VisualWindup => attackWindup * (activeHeavy ? 1.8f : 1);
+    public float VisualRecovery => attackRecovery * (activeHeavy ? 1.6f : 1);
+    public int BasicComboHit { get; private set; }
     private bool crouched;
     [SerializeField, Min(1)] private float maximumHP = 120;
     [SerializeField, Min(0)] private float basicDamage = 12;
@@ -110,6 +112,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         do
         {
             queuedBasic = false;
+            BasicComboHit = heavy ? 0 : chain + 1;
             AttackPrepared?.Invoke();
             if (TelegraphEnabled) Warn(heavy ? "강공격!" : "공격!", attackWindup * (heavy ? 1.8f : 1));
             yield return new WaitForSeconds(attackWindup * (heavy ? 1.8f : 1));

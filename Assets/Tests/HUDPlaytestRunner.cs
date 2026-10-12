@@ -69,6 +69,16 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Debug.Log("MOTION_METRICS player vertexCount=" + render.sharedMesh.vertexCount + " scale=" + render.transform.lossyScale + " world=" + WorldBounds(render));
         Check(render.sharedMaterial.mainTexture != null, "player source texture bound");
         Check(render.bounds.size.y > 1.6f && render.bounds.size.y < 2.1f, "player model normalized to game scale");
+        if (Application.absoluteURL.Contains("hookPose="))
+        {
+            character.CinematicPose = true;
+            float preview = Application.absoluteURL.Contains("hookPose=turn") ? .30f :
+                Application.absoluteURL.Contains("hookPose=impact") ? .48f : 1;
+            playerVisual.GetComponent<ImportedPlayerView>().PreviewHook(preview);
+            yield return new WaitForEndOfFrame();
+            Debug.Log("HOOK_PREVIEW_READY");
+            yield break;
+        }
         character.CinematicPose = true;
         Vector3[] restVertices = WorldVertices(render);
         character.SetForcedKick(.5f);
@@ -82,6 +92,33 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
             if (bone.name == "RightThigh") kickBone = bone;
         Quaternion kickPose = kickBone.localRotation;
         character.SetForcedKick(0);
+        ImportedPlayerView hookView = playerVisual.GetComponent<ImportedPlayerView>();
+        Transform supportFoot = null, hookFoot = null;
+        foreach (Transform bone in playerVisual.GetComponentsInChildren<Transform>())
+        { if (bone.name == "LeftFoot") supportFoot = bone; if (bone.name == "RightFoot") hookFoot = bone; }
+        character.CinematicPose = true;
+        hookView.PreviewHook(0);
+        Vector3 supportHome = supportFoot.position, kickHome = hookFoot.position;
+        Quaternion ankleRest = hookFoot.localRotation;
+        Vector3 physicalHome = player.transform.position;
+        Vector3 facingHome = player.Facing;
+        for (int frame = 0; frame <= 20; frame++)
+        {
+            hookView.PreviewHook(frame / 20f);
+            Check(Vector3.Distance(supportFoot.position, supportHome) < .06f, "hook support ankle planted phase " + frame);
+            Check(Quaternion.Angle(hookFoot.localRotation, ankleRest) < .1f, "hook ankle aligned to shin phase " + frame);
+            bool bounded = true;
+            foreach (Vector3 v in WorldVertices(render))
+                bounded &= !float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && (v - physicalHome).magnitude < 3;
+            Check(bounded, "hook skin finite and bounded phase " + frame);
+        }
+        hookView.PreviewHook(.48f);
+        Check(hookFoot.position.y > kickHome.y + 1.25f, "hook raised right heel reaches high target");
+        hookView.PreviewHook(1);
+        Check(Vector3.Distance(hookFoot.position, kickHome) < .06f, "hook same right foot lands in ready stance");
+        Check(Quaternion.Angle(playerVisual.transform.rotation, Quaternion.LookRotation(facingHome)) < .1f, "hook full turn returns to original facing");
+        Check(player.transform.position == physicalHome && player.Facing == facingHome, "hook changes visuals without rotating combat physics");
+        character.CinematicPose = false;
         Check(Quaternion.Angle(kickPose, kickBone.localRotation) > 40, "imported kick bone responds to existing cinematic pose");
         character.CinematicPose = false;
         // Exercise all kick phases and reject non-finite/escaping mesh vertices.
