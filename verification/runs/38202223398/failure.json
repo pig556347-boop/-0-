@@ -1,0 +1,4 @@
+{
+  "commit": "edd6dcff2876b2a1fd5e5551f2770d17495abd71",
+  "error": "Error: HUD runtime test failed 1920x1080: HUD_TEST_FAIL hook support ankle planted phase 9\n\nException: hook support ankle planted phase 9\n  at HUDPlaytestRunner.Check (System.Boolean pass, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
