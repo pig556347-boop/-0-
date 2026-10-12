@@ -21,6 +21,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private Quaternion hipsRestRotation;
     private Vector3 hipsPitchAxis, hipsRollAxis, leftFootHome, rightFootHome;
     private Quaternion leftFootBasis;
+    private float hookSide, hookRollSign;
     private Rigidbody body;
     private Material material;
     private CombatActor.ActionState previous;
@@ -56,6 +57,13 @@ public sealed class ImportedPlayerView : MonoBehaviour
         view.leftFootHome = view.model.InverseTransformPoint(view.joints["LeftFoot"].Bone.position) + view.model.localPosition;
         view.rightFootHome = view.model.InverseTransformPoint(view.joints["RightFoot"].Bone.position) + view.model.localPosition;
         view.leftFootBasis = Quaternion.Inverse(view.model.rotation) * view.joints["LeftFoot"].Bone.rotation;
+        view.hookSide = Mathf.Sign(view.rightFootHome.x);
+        // FBX coordinate conversion can mirror lateral axes. Measure rather than assume
+        // which roll lowers the support hip; the original pose is restored immediately.
+        float supportHeight = view.joints["LeftThigh"].Bone.position.y;
+        view.hips.localRotation = view.hipsRestRotation * Quaternion.AngleAxis(5, view.hipsRollAxis);
+        view.hookRollSign = view.joints["LeftThigh"].Bone.position.y > supportHeight ? -1 : 1;
+        view.hips.localRotation = view.hipsRestRotation;
         view.material = new Material(Resources.Load<Shader>("Shaders/SchoolCharacter"));
         view.material.mainTexture = Resources.Load<Texture2D>("Characters/" + kind + "/" + kind + "_BaseColor");
         foreach (Renderer renderer in view.model.GetComponentsInChildren<Renderer>()) renderer.sharedMaterial = view.material;
@@ -203,13 +211,13 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private void ApplyHookPose(float phase)
     {
         Quaternion facing = Quaternion.LookRotation(actor.Facing);
-        float yaw = 360 * Ease(0, .45f, phase);
+        float yaw = -hookSide * 360 * Ease(0, .45f, phase);
         transform.rotation = facing * Quaternion.AngleAxis(yaw, Vector3.up);
         float lift = Ease(.18f, .38f, phase) * (1 - Ease(.76f, 1, phase));
         float extension = Ease(.36f, .45f, phase) * (1 - Ease(.60f, .76f, phase));
         float lean = extension;
         hips.localRotation = hipsRestRotation * Quaternion.AngleAxis(-14 * lean, hipsPitchAxis) *
-            Quaternion.AngleAxis(-30 * lean, hipsRollAxis);
+            Quaternion.AngleAxis(hookRollSign * 30 * lean, hipsRollAxis);
         Set("LeftUpperArm", -55, true); Set("RightUpperArm", -55, true);
         Set("LeftForearm", -110, true); Set("RightForearm", -110, true);
 
@@ -219,8 +227,8 @@ public sealed class ImportedPlayerView : MonoBehaviour
             facing * Quaternion.AngleAxis(yaw, Vector3.up) * leftFootBasis);
 
         Vector3 home = actor.transform.position + facing * rightFootHome;
-        Vector3 folded = actor.transform.position + facing * new Vector3(-.12f, .20f, .13f);
-        float sweep = Mathf.Lerp(-.22f, -.06f, Ease(.45f, .60f, phase));
+        Vector3 folded = actor.transform.position + facing * new Vector3(hookSide * .12f, .20f, .13f);
+        float sweep = hookSide * Mathf.Lerp(.22f, .06f, Ease(.45f, .60f, phase));
         Vector3 high = actor.transform.position + facing * new Vector3(sweep, .70f, .27f);
         Vector3 target = Vector3.Lerp(home, Vector3.Lerp(folded, high, extension), lift);
         Vector3 bend = facing * Vector3.forward;
