@@ -35,3 +35,5 @@ Prop atlases disable mipmaps and lossy block compression to prevent atlas-neighb
 A matching back-face-culling Blender render reproduced the remaining white cracks: reversed-winding facets exposed the backing surface. Scenery now renders opaque faces on both sides with sign-independent continuous lighting. The fixed camera uses a 0.3–50m clip range to improve depth precision for closely layered scan surfaces.
 
 The board's front writing area also restores the median original green color. This removes pale internal-backing colors sampled by projection on a few reduced facets; the provided frame and geometry are retained. The 99% board regression threshold stays unchanged.
+
+Original back-side inspection identified the two pale central shapes as rear mounting hardware. The board placement now uses yaw -90 to present the actual writing face after Unity FBX axis conversion. The source front frame and writing-area color are preserved.

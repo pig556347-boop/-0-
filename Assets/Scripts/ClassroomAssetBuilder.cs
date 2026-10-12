@@ -16,7 +16,7 @@ public sealed class ClassroomAssetBuilder : MonoBehaviour
         for (int x = 0; x < 4; x++)
             kit.Place(wall, "Classroom wall", new Vector3(-10.5f + x * 7, 0, 8.65f), new Vector3(7, 4, .22f), 180);
         GameObject board = kit.Load("board");
-        kit.Place(board, "Chalkboard asset", new Vector3(0, 1.5f, 8.35f), new Vector3(.12f, 1.8f, 5.5f), 90);
+        kit.Place(board, "Chalkboard asset", new Vector3(0, 1.5f, 8.35f), new Vector3(.12f, 1.8f, 5.5f), -90);
         GameObject window = kit.Load("window");
         for (int x = 0; x < 2; x++)
             kit.Place(window, "Window asset", new Vector3(-9.5f + x * 19, 1.5f, 8.3f), new Vector3(3.5f, 1.7f, .15f), 180);
