@@ -14,6 +14,7 @@ public sealed class PrototypeBootstrap : MonoBehaviour
 #endif
         CreateBox("Classroom floor", new Vector3(0, -.5f, 0),
             new Vector3(28, 1, 18), new Color(.55f, .55f, .53f));
+        GameObject.Find("Classroom floor").GetComponent<Renderer>().enabled = false;
         CreateClassroom();
         GameObject player = new GameObject("권민준");
         player.transform.position = new Vector3(-3, 1.05f, -2);
@@ -110,31 +111,13 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         CreateBoundary("Left boundary", new Vector3(-13.8f, 1, 0), new Vector3(.3f, 2, 18), wall);
         CreateBoundary("Right boundary", new Vector3(13.8f, 1, 0), new Vector3(.3f, 2, 18), wall);
         CreateBoundary("Front boundary", new Vector3(0, .2f, -8.8f), new Vector3(28, .4f, .3f), wall);
-        CreateBox("Chalkboard", new Vector3(0, 2.2f, 8.55f), new Vector3(8, 2, .12f),
-            new Color(.1f, .15f, .14f));
-        for (int row = 0; row < 2; row++) for (int col = 0; col < 4; col++)
+        // Imported visual kit replaces the blockout; retain the original boundaries.
+        for (int i = 0; i < scenery.childCount; i++)
         {
-            Vector3 desk = new Vector3(-6 + col * 4, .8f, 1.3f + row * 2.3f);
-            CreateBox("Desk top", desk, new Vector3(1.5f, .15f, .9f), new Color(.5f, .45f, .38f));
-            CreateBox("Desk support", desk + Vector3.down * .4f,
-                new Vector3(.75f, .75f, .5f), new Color(.18f, .18f, .2f));
+            Renderer boundaryRenderer = scenery.GetChild(i).GetComponent<Renderer>();
+            if (boundaryRenderer != null) boundaryRenderer.enabled = false;
         }
-        for (int i = 0; i < 3; i++)
-            CreateBox("Window", new Vector3(-9.6f, 2.4f, -2 + i * 2.5f),
-                new Vector3(.08f, 1.5f, 1.8f), new Color(.85f, .63f, .43f));
-        CreateBox("Classroom drawers", new Vector3(7.8f, .65f, 5),
-            new Vector3(2.4f, 1.3f, 1), new Color(.43f, .4f, .36f));
-        for (int i = 0; i < 3; i++)
-        {
-            CreateBox("Drawer front", new Vector3(7.8f, .25f + .4f * i, 4.48f),
-                new Vector3(2.2f, .32f, .06f), new Color(.5f, .46f, .4f));
-            CreateBox("Drawer handle", new Vector3(7.8f, .25f + .4f * i, 4.43f),
-                new Vector3(.35f, .05f, .04f), new Color(.15f, .15f, .17f));
-            GameObject sunbeam = CreateBox("Sunset floor light", new Vector3(-7.2f, .012f, -2 + i * 2.5f),
-                new Vector3(3.8f, .008f, 1.4f), new Color(.68f, .54f, .4f));
-            sunbeam.GetComponent<Collider>().enabled = false;
-            sunbeam.transform.rotation = Quaternion.Euler(0, -15, 0);
-        }
+        ClassroomAssetBuilder.Build(scenery);
     }
     public static void SetArena(int stage, int area, bool boss)
     {
