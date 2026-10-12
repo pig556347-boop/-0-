@@ -304,9 +304,25 @@ public sealed class ImportedPlayerView : MonoBehaviour
     {
         guardWeight = inPreview ? 1 : Mathf.MoveTowards(guardWeight, 1, Time.deltaTime * 6);
         Set("LeftUpperArm", -58 * guardWeight, true); Set("RightUpperArm", -58 * guardWeight, true);
-        joints["LeftUpperArm"].Bone.rotation = Quaternion.AngleAxis(hookSide * 25 * guardWeight, model.forward) * joints["LeftUpperArm"].Bone.rotation;
-        joints["RightUpperArm"].Bone.rotation = Quaternion.AngleAxis(-hookSide * 25 * guardWeight, model.forward) * joints["RightUpperArm"].Bone.rotation;
         Set("LeftForearm", -100 * guardWeight, true); Set("RightForearm", -100 * guardWeight, true);
+        for (int i = 0; i < 2; i++)
+        {
+            string side = i == 0 ? "Left" : "Right";
+            Transform upper = joints[side + "UpperArm"].Bone, elbow = joints[side + "Forearm"].Bone, hand = i == 0 ? leftHand : rightHand;
+            float sign = Mathf.Sign((i == 0 ? leftFootHome : rightFootHome).x);
+            Vector3 target = actor.transform.position + model.rotation * new Vector3(sign * .17f, .60f - lastDrop, .23f);
+            target = Vector3.Lerp(hand.position, target, guardWeight);
+            Vector3 origin = upper.position, delta = target - origin;
+            float a = Vector3.Distance(origin, elbow.position), b = Vector3.Distance(elbow.position, hand.position);
+            float d = Mathf.Clamp(delta.magnitude, Mathf.Abs(a - b) + .001f, a + b - .001f);
+            Vector3 direction = delta.normalized;
+            Vector3 bend = model.rotation * new Vector3(sign * .35f, -1, .1f);
+            Vector3 pole = Vector3.ProjectOnPlane(bend, direction).normalized;
+            float along = (a * a + d * d - b * b) / (2 * d);
+            Vector3 knee = origin + direction * along + pole * Mathf.Sqrt(Mathf.Max(0, a * a - along * along));
+            upper.rotation = Quaternion.FromToRotation(elbow.position - origin, knee - origin) * upper.rotation;
+            elbow.rotation = Quaternion.FromToRotation(hand.position - elbow.position, origin + direction * d - elbow.position) * elbow.rotation;
+        }
         leftHand.localRotation = leftHandRest * Quaternion.AngleAxis(-hookSide * 40, leftHandAxis);
         rightHand.localRotation = rightHandRest * Quaternion.AngleAxis(hookSide * 40, rightHandAxis);
     }
