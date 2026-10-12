@@ -1,5 +1,5 @@
 {
-  "commit": "0b6cbd4050652f24499ea761707322b834039cb9",
+  "commit": "f46bf48355724a4e48cc7a45487ebcc7e4871df8",
   "executions": [
     {
       "width": 1920,
@@ -28,5 +28,6 @@
   "lastTutorialRole": "TUTORIAL_ROLE step=Heavy infinite=True\n",
   "runtimeErrors": [],
   "fullscreen": true,
-  "resize": true
+  "resize": true,
+  "combatCameraZoom": true
 }
