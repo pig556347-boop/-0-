@@ -290,19 +290,21 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         yield return new WaitForSeconds(.4f);
         enemy.Health.Infinite = false; enemy.RestoreForTutorial();
         Quaternion armBefore = punchArm.localRotation;
+        Vector3 handBefore = bigLeftHand.position;
         float elbowBefore = Vector3.Angle(punchElbow.position-punchArm.position,bigLeftHand.position-punchElbow.position);
         bool punchStarted = false;
         System.Action observePunch = () => punchStarted = true;
         enemy.StrikeStarted += observePunch;
         Check(enemy.TryAttack(false), "Deongchi real punch starts");
         float observeUntil = Time.time + enemy.VisualWindup + .25f;
-        float armExtension = 0, elbowExtension = 0;
+        float armExtension = 0, elbowExtension = 0, handExtension = 0;
         while (Time.time < observeUntil)
         {
             yield return new WaitForEndOfFrame();
             if (punchStarted)
             {
                 armExtension = Mathf.Max(armExtension, Quaternion.Angle(armBefore, punchArm.localRotation));
+                handExtension = Mathf.Max(handExtension, Vector3.Dot(bigLeftHand.position-handBefore, enemy.Facing));
                 float angle = Vector3.Angle(punchElbow.position-punchArm.position,bigLeftHand.position-punchElbow.position);
                 elbowExtension = Mathf.Max(elbowExtension, elbowBefore-angle);
             }
@@ -311,7 +313,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         enemy.StrikeStarted -= observePunch;
         Debug.Log("MOTION_METRICS punch arm=" + armExtension + " elbow=" + elbowExtension);
         Check(punchStarted && enemy.State == CombatActor.ActionState.ATTACK, "Deongchi attack retains gameplay timing");
-        Check(armExtension > 30, "Deongchi punch extends upper arm");
+        Check(handExtension > .2f, "Deongchi real strike extends guarded hand toward target");
         Check(elbowExtension > 20, "Deongchi punch extends elbow");
         yield return new WaitForSeconds(.4f);
         player.RestoreForTutorial(); enemy.RestoreForTutorial();
