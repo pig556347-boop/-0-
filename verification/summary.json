@@ -1,5 +1,5 @@
 {
-  "commit": "9e5cf12cfd0cbdc0be5e280e80459aac61ed2777",
+  "commit": "6ef1bac7534892a834aa0138f6caba27d9876b45",
   "executions": [
     {
       "width": 1920,
@@ -22,6 +22,7 @@
       "checks": 398
     }
   ],
+  "classroomReady": true,
   "playerReady": true,
   "deongchiReady": true,
   "hookReady": true,
