@@ -36,7 +36,6 @@ jobs:
           unityVersion: 6000.4.10f1
           targetPlatform: WebGL
           buildMethod: HUDCIBuild.Build
-          customParameters: -logFile /github/workspace/unity-build.log
       - name: Report Unity compiler diagnostics
         if: always()
         run: |
