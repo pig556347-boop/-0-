@@ -17,12 +17,17 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            const run = context.payload.workflow_run?.id || 38216308286;
+            let run = context.payload.workflow_run?.id;
+            if (!run) {
+              const failures = await github.rest.actions.listWorkflowRuns({...context.repo, workflow_id: 'web-play.yml', status: 'failure', per_page: 1});
+              run = failures.data.workflow_runs[0]?.id;
+            }
+            if (!run) { core.notice('No failed build to diagnose'); return; }
             const jobs = await github.rest.actions.listJobsForWorkflowRun({...context.repo, run_id: run});
             const build = jobs.data.jobs.find(j => j.name === 'build');
             if (!build) throw new Error('Build job missing');
             const result = await github.rest.actions.downloadJobLogsForWorkflowRun({...context.repo, job_id: build.id});
             const log = typeof result.data === 'string' ? result.data : Buffer.from(result.data).toString('utf8');
-            const lines = log.split('\n').filter(s => /error CS[0-9]+|Failed to|Activation failed|HTTP error code|error:|Exception|Build failed/i.test(s));
+            const lines = log.split('\n').filter(s => /error CS[0-9]+|Failed to|Activation failed|HTTP error code|error:|Exception:|Build failed/i.test(s));
             core.notice('Diagnostic source run=' + run + ' matched=' + lines.length);
             for (const line of lines.slice(-50)) core.notice(line.substring(0, 1000));

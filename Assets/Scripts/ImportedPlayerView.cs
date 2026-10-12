@@ -395,7 +395,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         Transform shoulder = joints[side + "UpperArm"].Bone, elbow = joints[side + "Forearm"].Bone;
         float reach = Vector3.Distance(shoulder.position, elbow.position) + Vector3.Distance(elbow.position, hand.position);
         Vector3 strike = shoulder.position + facing * new Vector3(-sign * .03f, .09f, reach * .98f);
-        Vector3 targetHand = Vector3.Lerp(guard - facing * .025f * anticipation, strike, extension);
+        Vector3 targetHand = Vector3.Lerp(guard - actor.Facing * .025f * anticipation, strike, extension);
         if (!preview) targetHand = Vector3.Lerp(side == "Left" ? attackLeftHandStart : attackRightHandStart, targetHand, Ease(0, .15f, phase));
         SolveArm(side, targetHand);
     }
