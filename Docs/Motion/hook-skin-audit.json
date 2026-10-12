@@ -1,0 +1,170 @@
+[
+  {
+    "phase": 0.0,
+    "yaw": 0,
+    "support_error": 0.001,
+    "right_ankle_height": 0.101,
+    "stretch": 2.862,
+    "min_z": -0.0
+  },
+  {
+    "phase": 0.05,
+    "yaw": 12.345679012345679,
+    "support_error": 0.0015,
+    "right_ankle_height": 0.1015,
+    "stretch": 2.867,
+    "min_z": -0.004
+  },
+  {
+    "phase": 0.1,
+    "yaw": 45.432098765432094,
+    "support_error": 0.0074,
+    "right_ankle_height": 0.1074,
+    "stretch": 2.879,
+    "min_z": -0.014
+  },
+  {
+    "phase": 0.15,
+    "yaw": 93.33333333333333,
+    "support_error": 0.0236,
+    "right_ankle_height": 0.1229,
+    "stretch": 2.889,
+    "min_z": -0.021
+  },
+  {
+    "phase": 0.2,
+    "yaw": 150.12345679012347,
+    "support_error": 0.0405,
+    "right_ankle_height": 0.1409,
+    "stretch": 2.885,
+    "min_z": -0.015
+  },
+  {
+    "phase": 0.25,
+    "yaw": 209.87654320987656,
+    "support_error": 0.0405,
+    "right_ankle_height": 0.3958,
+    "stretch": 2.914,
+    "min_z": 0.031
+  },
+  {
+    "phase": 0.3,
+    "yaw": 266.66666666666663,
+    "support_error": 0.0236,
+    "right_ankle_height": 0.7804,
+    "stretch": 3.37,
+    "min_z": 0.017
+  },
+  {
+    "phase": 0.35,
+    "yaw": 314.56790123456784,
+    "support_error": 0.0074,
+    "right_ankle_height": 1.0862,
+    "stretch": 3.403,
+    "min_z": 0.005
+  },
+  {
+    "phase": 0.4,
+    "yaw": 347.65432098765433,
+    "support_error": 0.0,
+    "right_ankle_height": 1.3585,
+    "stretch": 3.806,
+    "min_z": -0.002
+  },
+  {
+    "phase": 0.45,
+    "yaw": 360,
+    "support_error": 0.0,
+    "right_ankle_height": 1.65,
+    "stretch": 3.88,
+    "min_z": -0.002
+  },
+  {
+    "phase": 0.5,
+    "yaw": 360,
+    "support_error": 0.0,
+    "right_ankle_height": 1.65,
+    "stretch": 3.9,
+    "min_z": -0.002
+  },
+  {
+    "phase": 0.55,
+    "yaw": 360,
+    "support_error": 0.0,
+    "right_ankle_height": 1.65,
+    "stretch": 3.934,
+    "min_z": -0.002
+  },
+  {
+    "phase": 0.6,
+    "yaw": 360,
+    "support_error": 0.0,
+    "right_ankle_height": 1.65,
+    "stretch": 3.953,
+    "min_z": -0.002
+  },
+  {
+    "phase": 0.65,
+    "yaw": 360,
+    "support_error": 0.0,
+    "right_ankle_height": 1.534,
+    "stretch": 3.888,
+    "min_z": -0.002
+  },
+  {
+    "phase": 0.7,
+    "yaw": 360,
+    "support_error": 0.0,
+    "right_ankle_height": 1.3082,
+    "stretch": 3.764,
+    "min_z": -0.002
+  },
+  {
+    "phase": 0.75,
+    "yaw": 360,
+    "support_error": 0.0002,
+    "right_ankle_height": 1.1556,
+    "stretch": 3.692,
+    "min_z": 0.0
+  },
+  {
+    "phase": 0.8,
+    "yaw": 360,
+    "support_error": 0.001,
+    "right_ankle_height": 1.0722,
+    "stretch": 3.603,
+    "min_z": 0.001
+  },
+  {
+    "phase": 0.85,
+    "yaw": 360,
+    "support_error": 0.001,
+    "right_ankle_height": 0.8178,
+    "stretch": 3.971,
+    "min_z": 0.001
+  },
+  {
+    "phase": 0.9,
+    "yaw": 360,
+    "support_error": 0.001,
+    "right_ankle_height": 0.495,
+    "stretch": 3.458,
+    "min_z": 0.001
+  },
+  {
+    "phase": 0.95,
+    "yaw": 360,
+    "support_error": 0.001,
+    "right_ankle_height": 0.2177,
+    "stretch": 3.056,
+    "min_z": 0.001
+  },
+  {
+    "phase": 1.0,
+    "yaw": 360,
+    "support_error": 0.001,
+    "right_ankle_height": 0.101,
+    "stretch": 2.862,
+    "min_z": -0.0
+  }
+]
