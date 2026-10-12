@@ -1,5 +1,5 @@
 {
-  "commit": "50b7306835751c93f586d49263098120f586f849",
+  "commit": "63d1aa9fe52d7372afd17fa90671b3d5d844174c",
   "executions": [
     {
       "width": 1920,
@@ -23,8 +23,8 @@
     }
   ],
   "visualChecks": {
-    "wallLumaRange": 1.643000000000029,
-    "boardGreenFraction": 0.95
+    "wallLumaRange": 1.3569999999999993,
+    "boardGreenFraction": 0.9975
   },
   "classroomReady": true,
   "playerReady": true,
