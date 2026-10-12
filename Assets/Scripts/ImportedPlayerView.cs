@@ -319,7 +319,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
             string side = i == 0 ? "Left" : "Right";
             Transform upper = joints[side + "UpperArm"].Bone, elbow = joints[side + "Forearm"].Bone, hand = i == 0 ? leftHand : rightHand;
             float sign = Mathf.Sign((i == 0 ? leftFootHome : rightFootHome).x);
-            Vector3 target = joints["Head"].Bone.position + model.rotation * new Vector3(sign * .14f, .06f, .17f);
+            Vector3 target = joints["Head"].Bone.position + model.rotation * new Vector3(sign * .14f, 0, .17f);
             target = Vector3.Lerp(hand.position, target, guardWeight);
             Vector3 origin = upper.position, delta = target - origin;
             float a = Vector3.Distance(origin, elbow.position), b = Vector3.Distance(elbow.position, hand.position);

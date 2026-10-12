@@ -33,7 +33,7 @@ def pose(p):
  for n,deg in [('Spine',8*(1-ext)),('Chest',3*(1-ext))]:
   b=bones[n];b.rotation_quaternion=Quaternion(b.bone.matrix_local.to_quaternion().inverted()@Vector((1,0,0)),math.radians(deg))
  for side in ['Left','Right']:
-  sign=1 if side=='Left' else -1;names=[side+'UpperArm',side+'Forearm',side+'Hand'];a,b,c=[pos(n) for n in names];target=pos('Head')+yq@Vector((sign*.14,-.17,.06));u=(b-a).length;l=(c-b).length;delta=target-a;d=max(abs(u-l)+.001,min(u+l-.001,delta.length));direction=delta.normalized();bend=yq@Vector((sign*.35,-.1,-1));pole=(bend-direction*bend.dot(direction)).normalized();along=(u*u+d*d-l*l)/(2*d);k=a+direction*along+pole*math.sqrt(max(0,u*u-along*along));rotate(names[0],(b-a).rotation_difference(k-a));b=pos(names[1]);c=pos(names[2]);rotate(names[1],(c-b).rotation_difference(a+direction*d-b))
+  sign=1 if side=='Left' else -1;names=[side+'UpperArm',side+'Forearm',side+'Hand'];a,b,c=[pos(n) for n in names];target=pos('Head')+yq@Vector((sign*.14,-.17,0));u=(b-a).length;l=(c-b).length;delta=target-a;d=max(abs(u-l)+.001,min(u+l-.001,delta.length));direction=delta.normalized();bend=yq@Vector((sign*.35,-.1,-1));pole=(bend-direction*bend.dot(direction)).normalized();along=(u*u+d*d-l*l)/(2*d);k=a+direction*along+pole*math.sqrt(max(0,u*u-along*along));rotate(names[0],(b-a).rotation_difference(k-a));b=pos(names[1]);c=pos(names[2]);rotate(names[1],(c-b).rotation_difference(a+direction*d-b))
  for side in ['Left','Right']:
   b=bones[side+'Hand'];long=(bones[side+'Hand'].head-bones[side+'Forearm'].head).normalized();b.rotation_quaternion=Quaternion(b.bone.matrix_local.to_quaternion().inverted()@long,math.radians(40 if side=='Left' else -40))
  bpy.context.view_layer.update();left=home['Left'].copy();left.x*=2;left.y-=.20

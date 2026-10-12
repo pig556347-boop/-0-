@@ -4,7 +4,7 @@
     "yaw": 20,
     "support_error": 0.0,
     "right_ankle_height": 0.1,
-    "stretch": 3.111,
+    "stretch": 3.68,
     "min_z": -0.018
   },
   {
@@ -12,7 +12,7 @@
     "yaw": 28.573388203017828,
     "support_error": 0.0,
     "right_ankle_height": 0.1,
-    "stretch": 3.12,
+    "stretch": 3.689,
     "min_z": -0.023
   },
   {
@@ -20,7 +20,7 @@
     "yaw": 53.77229080932784,
     "support_error": 0.0,
     "right_ankle_height": 0.1,
-    "stretch": 3.14,
+    "stretch": 3.705,
     "min_z": -0.031
   },
   {
@@ -28,7 +28,7 @@
     "yaw": 94.81481481481481,
     "support_error": 0.0,
     "right_ankle_height": 0.1018,
-    "stretch": 3.163,
+    "stretch": 3.69,
     "min_z": -0.028
   },
   {
@@ -36,7 +36,7 @@
     "yaw": 150.12345679012347,
     "support_error": 0.0009,
     "right_ankle_height": 0.1294,
-    "stretch": 3.437,
+    "stretch": 3.768,
     "min_z": -0.013
   },
   {
@@ -44,7 +44,7 @@
     "yaw": 209.87654320987656,
     "support_error": 0.0,
     "right_ankle_height": 0.3958,
-    "stretch": 3.501,
+    "stretch": 3.869,
     "min_z": -0.011
   },
   {
@@ -52,7 +52,7 @@
     "yaw": 266.66666666666663,
     "support_error": 0.0,
     "right_ankle_height": 0.7804,
-    "stretch": 3.711,
+    "stretch": 4.396,
     "min_z": -0.007
   },
   {
@@ -60,7 +60,7 @@
     "yaw": 314.56790123456784,
     "support_error": 0.0,
     "right_ankle_height": 1.0862,
-    "stretch": 4.151,
+    "stretch": 4.847,
     "min_z": -0.001
   },
   {
@@ -68,7 +68,7 @@
     "yaw": 347.65432098765433,
     "support_error": 0.0,
     "right_ankle_height": 1.3585,
-    "stretch": 3.937,
+    "stretch": 4.625,
     "min_z": 0.003
   },
   {
@@ -76,7 +76,7 @@
     "yaw": 360,
     "support_error": 0.0,
     "right_ankle_height": 1.646,
-    "stretch": 3.71,
+    "stretch": 4.218,
     "min_z": 0.004
   },
   {
@@ -84,7 +84,7 @@
     "yaw": 360,
     "support_error": 0.0,
     "right_ankle_height": 1.65,
-    "stretch": 3.755,
+    "stretch": 4.263,
     "min_z": 0.004
   },
   {
@@ -92,7 +92,7 @@
     "yaw": 360,
     "support_error": 0.0,
     "right_ankle_height": 1.65,
-    "stretch": 3.829,
+    "stretch": 4.338,
     "min_z": 0.004
   },
   {
@@ -100,7 +100,7 @@
     "yaw": 360,
     "support_error": 0.0,
     "right_ankle_height": 1.65,
-    "stretch": 3.874,
+    "stretch": 4.381,
     "min_z": 0.004
   },
   {
@@ -108,7 +108,7 @@
     "yaw": 360,
     "support_error": 0.0,
     "right_ankle_height": 1.534,
-    "stretch": 3.791,
+    "stretch": 4.391,
     "min_z": 0.004
   },
   {
@@ -116,7 +116,7 @@
     "yaw": 360,
     "support_error": 0.0,
     "right_ankle_height": 1.3082,
-    "stretch": 3.952,
+    "stretch": 4.659,
     "min_z": 0.003
   },
   {
@@ -124,7 +124,7 @@
     "yaw": 360,
     "support_error": 0.0,
     "right_ankle_height": 1.1556,
-    "stretch": 4.252,
+    "stretch": 4.96,
     "min_z": 0.003
   },
   {
@@ -132,7 +132,7 @@
     "yaw": 361.48148148148147,
     "support_error": 0.0,
     "right_ankle_height": 1.0722,
-    "stretch": 4.223,
+    "stretch": 4.927,
     "min_z": 0.003
   },
   {
@@ -140,7 +140,7 @@
     "yaw": 366.328125,
     "support_error": 0.0,
     "right_ankle_height": 0.8178,
-    "stretch": 4.135,
+    "stretch": 4.843,
     "min_z": 0.004
   },
   {
@@ -148,7 +148,7 @@
     "yaw": 372.47685185185185,
     "support_error": 0.0,
     "right_ankle_height": 0.495,
-    "stretch": 3.448,
+    "stretch": 3.996,
     "min_z": 0.005
   },
   {
@@ -156,7 +156,7 @@
     "yaw": 377.75752314814815,
     "support_error": 0.0,
     "right_ankle_height": 0.2177,
-    "stretch": 3.136,
+    "stretch": 3.684,
     "min_z": 0.006
   },
   {
@@ -164,7 +164,7 @@
     "yaw": 380,
     "support_error": 0.0,
     "right_ankle_height": 0.1,
-    "stretch": 3.111,
+    "stretch": 3.68,
     "min_z": -0.018
   }
 ]
