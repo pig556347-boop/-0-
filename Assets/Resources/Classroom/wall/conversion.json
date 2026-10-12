@@ -1,6 +1,7 @@
 {
   "asset": "wall",
-  "vertices": 4188,
+  "vertices": 3994,
   "triangles": 3999,
-  "fbxBytes": 228188
+  "method": "source base color transferred by nearest surface, padded coherent UV atlas",
+  "samples": 2935275
 }

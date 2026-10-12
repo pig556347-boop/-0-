@@ -1,6 +1,7 @@
 {
   "asset": "furniture",
-  "vertices": 36559,
+  "vertices": 36291,
   "triangles": 15999,
-  "fbxBytes": 1168044
+  "method": "source base color transferred by nearest surface, padded coherent UV atlas",
+  "samples": 1452976
 }

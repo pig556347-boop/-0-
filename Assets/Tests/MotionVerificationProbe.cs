@@ -20,9 +20,11 @@ public sealed class MotionVerificationProbe : MonoBehaviour
             ex = enemy.transform.position.x, ez = enemy.transform.position.z,
             state = player.State.ToString(), combo = player.Progress.Combo,
             sx = Camera.main.WorldToViewportPoint(player.transform.position).x,
-            sy = Camera.main.WorldToViewportPoint(player.transform.position).y, cameraSize = Camera.main.orthographicSize
+            sy = Camera.main.WorldToViewportPoint(player.transform.position).y,
+            cameraX = Camera.main.transform.parent.position.x, cameraY = Camera.main.transform.parent.position.y,
+            cameraZ = Camera.main.transform.parent.position.z, cameraSize = Camera.main.orthographicSize
         }));
     }
     [System.Serializable] private sealed class Sample
-    { public float px, pz, ex, ez, sx, sy, cameraSize; public string state; public int combo; }
+    { public float px, pz, ex, ez, sx, sy, cameraSize, cameraX, cameraY, cameraZ; public string state; public int combo; }
 }

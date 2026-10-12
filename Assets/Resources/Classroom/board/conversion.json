@@ -1,6 +1,7 @@
 {
   "asset": "board",
-  "vertices": 4694,
+  "vertices": 4409,
   "triangles": 4000,
-  "fbxBytes": 245196
+  "method": "source base color transferred by nearest surface, padded coherent UV atlas",
+  "samples": 2941315
 }

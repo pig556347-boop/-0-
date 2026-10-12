@@ -30,7 +30,7 @@ public sealed class ClassroomAssetBuilder : MonoBehaviour
     {
         GameObject model = Resources.Load<GameObject>("Classroom/" + kind + "/" + kind + "Model");
         Texture2D texture = Resources.Load<Texture2D>("Classroom/" + kind + "/BaseColor");
-        Shader shader = Resources.Load<Shader>("Shaders/SchoolCharacter");
+        Shader shader = Resources.Load<Shader>("Shaders/SchoolScenery");
         if (model == null || texture == null || shader == null)
             throw new InvalidOperationException("Classroom resource missing: " + kind);
         Material material = new Material(shader) { mainTexture = texture };

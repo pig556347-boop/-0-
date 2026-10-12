@@ -14,7 +14,7 @@ public static class ClassroomBuildCheck
             long triangles = 0;
             foreach (MeshFilter filter in model.GetComponentsInChildren<MeshFilter>())
                 triangles += filter.sharedMesh.triangles.Length / 3;
-            if (triangles <= 0 || triangles > 20000 || texture.width > 1024 || texture.height > 1024)
+            if (triangles <= 0 || triangles > 20000 || texture.width > 2048 || texture.height > 2048)
                 throw new InvalidOperationException("Classroom asset exceeds web budget: " + kind);
             Debug.Log("CLASSROOM_BUILD_CHECK " + kind + " triangles=" + triangles + " texture=" + texture.width + "x" + texture.height);
         }

@@ -2,7 +2,7 @@
 
 All five individually uploaded ZIPs were received. Originals are kept outside the checkout under `/workspace/asset-import/classroom` and have not been overwritten. Their hashes and dimensions are recorded in `source-inspection.json`.
 
-Runtime copies: FBX meshes and 1024px base-color textures in `Assets/Resources/Classroom`. Mesh budgets: floor 12, wall 3,999, board 4,000, window 6,000, furniture 15,999 triangles. Floor color is baked from the supplied mesh onto a shallow tile to preserve UV details; the side slab has no overlapping top face. Original models had approximately one million vertices each. The furniture is one desk/chair set, not two desks.
+Runtime copies: FBX meshes and 2048px base-color textures (1024px floor) in `Assets/Resources/Classroom`. Mesh budgets: floor 12, wall 3,999, board 4,000, window 6,000, furniture 15,999 triangles. Floor color is baked from the supplied mesh onto a shallow tile to preserve UV details; the side slab has no overlapping top face. Original models had approximately one million vertices each. The furniture is one desk/chair set, not two desks.
 
 The shared visual builder places 126 two-metre floor modules, four rear wall modules, one board, two windows and eight desk/chair sets. Each set is 1.10m wide, 0.85m high and 1.05m deep, measured against the 1.85m character mesh. Rear-facing scenery uses the existing orthographic camera. Existing floor and arena boundary colliders remain; original blockout renderers are hidden. Classroom prop renderers do not add gameplay colliders. Corridor/boss layouts continue hiding the desk sets.
 
@@ -18,3 +18,14 @@ Run: https://github.com/pig556347-boop/-0-/actions/runs/38245430322
 Unity build and Pages deployment succeeded. Real browser tests passed 398 checks at each of 1920×1080, 1280×720, 1024×768 and 2560×1080 (1,592 checks total). Production checks confirmed five classroom assets loaded, player/Deongchi loaded, real third-hit hook animation, fullscreen/resize and no runtime exceptions. `verification.json` records the matching source commit.
 
 Manual capture inspection initially exposed an FBX root-axis rotation being overwritten by placement. Placement now uses a parent wrapper and retains the imported model's root rotation. The corrected actual Unity capture is `classroom-ingame.png`; desk tops are horizontal, furniture rests on the supplied floor, and the combat viewport remains unobstructed. Camera framing shows nearby scenery; the rear board/windows are at the far side of the room.
+
+
+## Texture cleanup and fixed camera
+
+The first simplified models reused source UVs and a character toon shader, which produced triangle patches on flat surfaces. The final conversion repacks a dense UV atlas and transfers original base colors from nearest source surfaces, avoiding ray misses and metallic shading contamination. UV margins are padded, wall/board/window/furniture atlases are 2048px, and the floor remains 1024px. The furniture frame finish is restored to a consistent painted gray while retaining wood and rubber feet.
+
+`SchoolScenery` uses continuous low-contrast lighting, so tiny normal variations cannot jump between toon bands. Character rendering and combat code remain unchanged.
+
+`ClassroomCameraFrame` fixes the rig at the classroom centre; actor movement and facing do not scroll the view. At 16:9 the orthographic size is 9.4; narrow views expand to fit the entire 28m arena. HUD and arena boundaries are unchanged. Browser regressions check that the rig stays stationary, 4:3 uses 11.25, wall interior luminance variation stays below 20/255, and at least 95% of sampled board interior remains green.
+
+Rebuild supplied prop copies: run `export_classroom.py`, `repack_classroom.py`, then `bake_nearest_surface.py` for each of wall/board/window/furniture. These operate on working copies and keep the original GLBs intact. Inspection renders now use the same continuous lighting model as the game rather than PBR self-shadowing.

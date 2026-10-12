@@ -14,7 +14,7 @@ public sealed class ClassroomModelImport : AssetPostprocessor
     {
         if (!assetPath.StartsWith("Assets/Resources/Classroom/")) return;
         TextureImporter importer = (TextureImporter)assetImporter;
-        importer.maxTextureSize = 1024;
+        importer.maxTextureSize = 2048;
         importer.mipmapEnabled = true;
     }
 }

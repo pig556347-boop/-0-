@@ -1,6 +1,7 @@
 {
   "asset": "window",
-  "vertices": 6222,
+  "vertices": 6106,
   "triangles": 6000,
-  "fbxBytes": 338988
+  "method": "source base color transferred by nearest surface, padded coherent UV atlas",
+  "samples": 2039272
 }

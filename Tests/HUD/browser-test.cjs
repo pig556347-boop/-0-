@@ -69,11 +69,18 @@ const { PNG } = require('pngjs');
     await live.waitForTimeout(500);
     const resized=await live.locator('canvas').boundingBox();
     if(Math.abs(resized.width-1280)>1||Math.abs(resized.height-720)>1)throw Error('Game canvas does not resize with viewport');
+    await live.setViewportSize({width:1024,height:768});
+    await live.waitForTimeout(500);
+    if(!motion||Math.abs(motion.cameraSize-11.25)>.01)throw Error('Fixed room does not fit a 4:3 viewport');
     await live.setViewportSize({width:1920,height:1080});
+    await live.waitForTimeout(500);
     await live.locator('canvas').click();
+    if(!motion)throw Error('Camera telemetry missing');
+    const cameraOrigin=[motion.cameraX,motion.cameraY,motion.cameraZ];
     await live.keyboard.down('d');await live.waitForTimeout(800);
     await live.screenshot({path:'hud-test-results/motion-walk.png'});await live.keyboard.up('d');
-    if(!motion||Math.abs(motion.cameraSize-6.5)>.01||motion.sx<.1||motion.sx>.9||motion.sy<.15||motion.sy>.8)throw Error('Zoomed follow camera lost player: '+JSON.stringify(motion));
+    if(!motion||Math.abs(motion.cameraSize-9.4)>.01||motion.sx<.1||motion.sx>.9||motion.sy<.15||motion.sy>.8)throw Error('Fixed classroom camera lost player: '+JSON.stringify(motion));
+    if([motion.cameraX,motion.cameraY,motion.cameraZ].some((v,i)=>Math.abs(v-cameraOrigin[i])>.001))throw Error('Classroom camera followed player movement');
     await live.keyboard.down('Space');await live.waitForTimeout(100);await live.keyboard.up('Space');await live.waitForTimeout(1000);
     await live.keyboard.down('c');await live.waitForTimeout(300);
     await live.screenshot({path:'hud-test-results/motion-crouch.png'});
@@ -107,6 +114,25 @@ const { PNG } = require('pngjs');
     await live.waitForTimeout(500);
     await live.screenshot({path:'hud-test-results/production-hud.png'});
     const pixels=PNG.sync.read(await live.locator('canvas').screenshot());
+    // Probe unobstructed wall/board interiors in the fixed room view. This catches
+    // the large triangle patches and white texture contamination seen previously.
+    function roomPixel(x,y,z) {
+      const sx=Math.round((.5+x/(2*9.4*(pixels.width/pixels.height)))*pixels.width);
+      const sy=Math.round((.5-((y-3.2)*Math.cos(35*Math.PI/180)+z*Math.sin(35*Math.PI/180))/(2*9.4))*pixels.height);
+      const i=(sy*pixels.width+sx)*4;return [...pixels.data.slice(i,i+3)];
+    }
+    const wallLuma=[],boardColors=[];
+    for(let x=0;x<20;x++)for(let y=0;y<20;y++) {
+      const c=roomPixel(-4+x/20,2+y*.8/20,8.54);
+      wallLuma.push(c[0]*.2126+c[1]*.7152+c[2]*.0722);
+      boardColors.push(roomPixel(-.7+x*1.4/20,2+y*.7/20,8.29));
+    }
+    wallLuma.sort((a,b)=>a-b);
+    const wallLumaRange=wallLuma[360]-wallLuma[40];
+    const boardGreenFraction=boardColors.filter(c=>c[1]>c[0]*1.15&&c[1]>c[2]*1.05).length/boardColors.length;
+    if(wallLumaRange>20)throw Error('Wall still has large shading/texture patches: '+wallLumaRange);
+    if(boardGreenFraction<.95)throw Error('Board interior still has white texture contamination: '+boardGreenFraction);
+    const visualChecks={wallLumaRange,boardGreenFraction};
     const buckets=new Map();
     for(let i=0;i<pixels.data.length;i+=4){
       const key=[pixels.data[i],pixels.data[i+1],pixels.data[i+2]].map(x=>Math.floor(x/16)).join(',');
@@ -121,7 +147,7 @@ const { PNG } = require('pngjs');
     if(!lastTutorialRole.includes('step=Heavy'))throw Error('Real basic combo did not complete the three-hit tutorial: '+lastTutorialRole);
     if(!hookReady)throw Error('Real third combo hit did not start the spinning hook animation');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,combatCameraZoom:true},null,2));
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
     for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
