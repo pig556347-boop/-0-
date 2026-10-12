@@ -4,6 +4,9 @@ Shader "SchoolRuleZero/Scenery"
     SubShader
     {
         Tags { "RenderType"="Opaque" }
+        // Reduced scan meshes contain reversed-winding facets. Render both
+        // opaque sides so the wall/background cannot show through those facets.
+        Cull Off
         Pass
         {
             CGPROGRAM
@@ -22,7 +25,7 @@ Shader "SchoolRuleZero/Scenery"
             {
                 // Continuous lighting prevents small normal variations on flat
                 // imported walls from becoming large contrasting triangle patches.
-                float light=dot(normalize(i.normal),normalize(float3(-.3,.8,-.5)));
+                float light=abs(dot(normalize(i.normal),normalize(float3(-.3,.8,-.5))));
                 float tone=.88+.12*saturate(light*.5+.5);
                 return fixed4(tex2D(_MainTex,i.uv).rgb*tone,1);
             }

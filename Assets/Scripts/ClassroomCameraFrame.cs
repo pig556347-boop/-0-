@@ -7,6 +7,10 @@ public sealed class ClassroomCameraFrame : MonoBehaviour
     public void Initialize(Camera camera)
     {
         view = camera;
+        // The entire arena is within 30m. A tighter range improves precision
+        // for closely layered surfaces in imported classroom props.
+        view.nearClipPlane = .3f;
+        view.farClipPlane = 50f;
         transform.position = new Vector3(0, 3.2f, 0);
         ApplyFrame();
     }

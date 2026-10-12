@@ -31,3 +31,5 @@ The first simplified models reused source UVs and a character toon shader, which
 Rebuild supplied prop copies: run `export_classroom.py`, `repack_classroom.py`, then `bake_nearest_surface.py` for each of wall/board/window/furniture. These operate on working copies and keep the original GLBs intact. Inspection renders now use the same continuous lighting model as the game rather than PBR self-shadowing.
 
 Prop atlases disable mipmaps and lossy block compression to prevent atlas-neighbour colors bleeding into narrow UV islands at the fixed camera distance. Floor mipmaps remain enabled. The importer version and build validation force these settings on existing project imports as well.
+
+A matching back-face-culling Blender render reproduced the remaining white cracks: reversed-winding facets exposed the backing surface. Scenery now renders opaque faces on both sides with sign-independent continuous lighting. The fixed camera uses a 0.3–50m clip range to improve depth precision for closely layered scan surfaces.

@@ -8,7 +8,7 @@ objects=[o for o in bpy.context.scene.objects if o.type=='MESH']
 mat=bpy.data.materials.new('Base');mat.use_nodes=True;nodes=mat.node_tree.nodes;tex=nodes.new('ShaderNodeTexImage');tex.image=bpy.data.images.load(str(root/'Assets/Resources/Classroom'/kind/'BaseColor.png'));mat.node_tree.links.new(tex.outputs['Color'],nodes.get('Principled BSDF').inputs['Base Color'])
 # Match the game's continuous scenery lighting, without PBR self-shadow artifacts.
 geom=nodes.new('ShaderNodeNewGeometry');dot=nodes.new('ShaderNodeVectorMath');dot.operation='DOT_PRODUCT';dot.inputs[1].default_value=Vector((-.3,.5,.8)).normalized();mat.node_tree.links.new(geom.outputs['Normal'],dot.inputs[0])
-previous=dot.outputs['Value']
+absolute=nodes.new('ShaderNodeMath');absolute.operation='ABSOLUTE';mat.node_tree.links.new(dot.outputs['Value'],absolute.inputs[0]);previous=absolute.outputs[0]
 for operation,value,clamp in [('MULTIPLY',.5,False),('ADD',.5,True),('MULTIPLY',.12,False),('ADD',.88,False)]:
  n=nodes.new('ShaderNodeMath');n.operation=operation;n.inputs[1].default_value=value;n.use_clamp=clamp;mat.node_tree.links.new(previous,n.inputs[0]);previous=n.outputs[0]
 mix=nodes.new('ShaderNodeMixRGB');mix.blend_type='MULTIPLY';mix.inputs[0].default_value=1;mat.node_tree.links.new(tex.outputs['Color'],mix.inputs[1]);mat.node_tree.links.new(previous,mix.inputs[2])
