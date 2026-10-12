@@ -1,5 +1,5 @@
 {
-  "commit": "ed31d558c39b8c16fadbd0194ad01c5c499d1098",
+  "commit": "50b7306835751c93f586d49263098120f586f849",
   "executions": [
     {
       "width": 1920,
@@ -22,6 +22,10 @@
       "checks": 398
     }
   ],
+  "visualChecks": {
+    "wallLumaRange": 1.643000000000029,
+    "boardGreenFraction": 0.95
+  },
   "classroomReady": true,
   "playerReady": true,
   "deongchiReady": true,
@@ -30,5 +34,5 @@
   "runtimeErrors": [],
   "fullscreen": true,
   "resize": true,
-  "combatCameraZoom": true
+  "fixedClassroomCamera": true
 }
