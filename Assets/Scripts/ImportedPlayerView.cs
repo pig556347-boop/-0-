@@ -203,7 +203,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private void ApplyHookPose(float phase)
     {
         Quaternion facing = Quaternion.LookRotation(actor.Facing);
-        float yaw = phase < .45f ? 300 * Ease(0, .45f, phase) : Mathf.Lerp(300, 360, Ease(.45f, .66f, phase));
+        float yaw = 360 * Ease(0, .45f, phase);
         transform.rotation = facing * Quaternion.AngleAxis(yaw, Vector3.up);
         float lift = Ease(.18f, .38f, phase) * (1 - Ease(.76f, 1, phase));
         float extension = Ease(.36f, .45f, phase) * (1 - Ease(.60f, .76f, phase));

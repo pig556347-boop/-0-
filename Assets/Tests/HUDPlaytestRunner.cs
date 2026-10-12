@@ -114,6 +114,8 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         }
         hookView.PreviewHook(.48f);
         Check(hookFoot.position.y > kickHome.y + 1.25f, "hook raised right heel reaches high target");
+        Check(Quaternion.Angle(playerVisual.transform.rotation, Quaternion.LookRotation(facingHome)) < .1f,
+            "hook torso turn finishes by impact instead of late recovery");
         hookView.PreviewHook(1);
         Check(Vector3.Distance(hookFoot.position, kickHome) < .06f, "hook same right foot lands in ready stance");
         Check(Quaternion.Angle(playerVisual.transform.rotation, Quaternion.LookRotation(facingHome)) < .1f, "hook full turn returns to original facing");
