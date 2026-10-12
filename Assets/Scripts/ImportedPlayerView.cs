@@ -133,8 +133,10 @@ public sealed class ImportedPlayerView : MonoBehaviour
             Leg(side, .78f - drop + bob - lift, .14f * crouch + forward);
         }
         float swing = Mathf.Sin(gait) * 20 * walkBlend;
-        Set("LeftUpperArm", -20 - swing); Set("RightUpperArm", -20 + swing);
-        Set("LeftForearm", -55); Set("RightForearm", -55);
+        float readyGuard = actor.Team == 0 ? 1 - walkBlend : 0;
+        Set("LeftUpperArm", Mathf.Lerp(-20 - swing, -55, readyGuard));
+        Set("RightUpperArm", Mathf.Lerp(-20 + swing, -55, readyGuard));
+        Set("LeftForearm", Mathf.Lerp(-55, -110, readyGuard)); Set("RightForearm", Mathf.Lerp(-55, -110, readyGuard));
         Set("Spine", 18 * crouch + 3 * walkBlend); Set("Chest", 8 * crouch + 6 * walkBlend); Set("Head", -12 * crouch);
         bool attack = actor.State == CombatActor.ActionState.ATTACK || actor.State == CombatActor.ActionState.ULTIMATE;
         if (attack)
@@ -151,8 +153,8 @@ public sealed class ImportedPlayerView : MonoBehaviour
                 Set(leg + "Shin", Mathf.Lerp(100, 9, extend) * chamber);
                 Set(leg + "Foot", 10 * chamber);
                 Set("Spine", -8 * extend); Set("Chest", -7 * extend);
-                Set("LeftUpperArm", -28); Set("RightUpperArm", -22);
-                Set("LeftForearm", -90); Set("RightForearm", -95);
+                Set("LeftUpperArm", -55); Set("RightUpperArm", -55);
+                Set("LeftForearm", -110); Set("RightForearm", -110);
             }
             else
             {
@@ -208,8 +210,8 @@ public sealed class ImportedPlayerView : MonoBehaviour
         float lean = extension;
         hips.localRotation = hipsRestRotation * Quaternion.AngleAxis(-32 * lean, hipsPitchAxis) *
             Quaternion.AngleAxis(16 * lean, hipsRollAxis);
-        Set("LeftUpperArm", -28, true); Set("RightUpperArm", -28, true);
-        Set("LeftForearm", -95, true); Set("RightForearm", -95, true);
+        Set("LeftUpperArm", -55, true); Set("RightUpperArm", -55, true);
+        Set("LeftForearm", -110, true); Set("RightForearm", -110, true);
 
         // The support ankle remains in the same world location while the sole pivots.
         Vector3 support = actor.transform.position + facing * leftFootHome;

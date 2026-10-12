@@ -76,7 +76,7 @@ const { PNG } = require('pngjs');
     await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
     await live.waitForTimeout(100);await live.screenshot({path:'hud-test-results/motion-kick.png'});
     // Re-enter a real three-hit sequence after the evidence capture delay.
-    await live.waitForTimeout(500);
+    await live.waitForTimeout(2000);
     await approachTarget();
     for(let i=0;i<12&&!lastTutorialRole.includes('step=Heavy');i++) {
       await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
