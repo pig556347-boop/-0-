@@ -117,7 +117,8 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Transform hookHip = null, hookKnee = null;
         foreach (Transform bone in playerVisual.GetComponentsInChildren<Transform>())
         { if (bone.name == "RightThigh") hookHip = bone; if (bone.name == "RightShin") hookKnee = bone; }
-        Check(Vector3.Angle(hookKnee.position - hookHip.position, hookFoot.position - hookKnee.position) < 15,
+        // Keep a soft striking knee (source pose is ~20 degrees), clearly distinct from the folded chamber.
+        Check(Vector3.Angle(hookKnee.position - hookHip.position, hookFoot.position - hookKnee.position) < 30,
             "hook striking knee extends without folding across torso");
         Check(Quaternion.Angle(playerVisual.transform.rotation, Quaternion.LookRotation(facingHome)) < .1f,
             "hook torso turn finishes by impact instead of late recovery");
