@@ -35,6 +35,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private Quaternion attackRotationStart;
     private float attackSpineStart, attackChestStart, guardWeight;
     private bool inPreview;
+    private float ultimateWindup = .12f;
     private sealed class FootContact { public bool Planted; public Vector3 Anchor; }
     private float hookSide, hookRollSign;
     private Rigidbody body;
@@ -103,7 +104,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         foreach (SkinnedMeshRenderer renderer in view.model.GetComponentsInChildren<SkinnedMeshRenderer>())
         renderer.updateWhenOffscreen = true;
         foreach (Animator animator in view.model.GetComponentsInChildren<Animator>()) animator.enabled = false;
-        actor.StrikeStarted += view.OnStrike; actor.AttackPrepared += view.OnPrepare;
+        actor.StrikeStarted += view.OnStrike; actor.AttackPrepared += view.OnPrepare; actor.UltimateStarted += view.OnUltimate;
         Debug.Log((kind == "Player" ? "PLAYER_MODEL_READY" : "DEONGCHI_MODEL_READY") + " bones=19 anatomical_skin=true");
         return true;
     }
@@ -220,11 +221,12 @@ public sealed class ImportedPlayerView : MonoBehaviour
             bool grounded = motor == null || motor.IsGrounded;
             if (grounded)
             {
-                if (actor.State == CombatActor.ActionState.ATTACK)
+                if (actor.State == CombatActor.ActionState.ATTACK || actor.State == CombatActor.ActionState.ULTIMATE)
                 {
-                    float phase = struckAt >= actionStarted ? .45f + .55f * Mathf.Clamp01((Time.time - struckAt) / actor.VisualRecovery) :
-                        .45f * Mathf.Clamp01((Time.time - actionStarted) / actor.VisualWindup);
-                    if (!actor.HeavyStrike && actor.BasicComboHit == 3) ApplyHookPose(phase);
+                    bool ultimate = actor.State == CombatActor.ActionState.ULTIMATE;
+                    float phase = struckAt >= actionStarted ? .45f + .55f * Mathf.Clamp01((Time.time - struckAt) / (ultimate ? .18f : actor.VisualRecovery)) :
+                        .45f * Mathf.Clamp01((Time.time - actionStarted) / (ultimate ? ultimateWindup : actor.VisualWindup));
+                    if (!ultimate && !actor.HeavyStrike && actor.BasicComboHit == 3) ApplyHookPose(phase);
                     else ApplyRoundhousePose(actor.HeavyStrike || actor.BasicComboHit != 2 ? "Right" : "Left", phase);
                 }
                 else
@@ -253,6 +255,13 @@ public sealed class ImportedPlayerView : MonoBehaviour
         attackSpineStart = joints["Spine"].Angle; attackChestStart = joints["Chest"].Angle;
         if (actor.Team == 0 && !actor.HeavyStrike && actor.BasicComboHit == 3)
             Debug.Log("HOOK_KICK_START combo=3 right_leg=true");
+    }
+    private void OnUltimate(int tier)
+    {
+        ultimateWindup = tier == 3 ? .4f : tier == 2 ? .65f : .12f;
+        attackLeftStart = joints["LeftFoot"].Bone.position; attackRightStart = joints["RightFoot"].Bone.position;
+        attackDropStart = lastDrop; attackRotationStart = transform.rotation;
+        attackSpineStart = joints["Spine"].Angle; attackChestStart = joints["Chest"].Angle;
     }
 
     private static float Ease(float start, float end, float phase) => Mathf.SmoothStep(0, 1, Mathf.InverseLerp(start, end, phase));
@@ -496,5 +505,5 @@ public sealed class ImportedPlayerView : MonoBehaviour
     }
     private void OnStrike() { struckAt = Time.time; strikeNumber++; }
     private void OnDestroy()
-    { if (actor != null) { actor.StrikeStarted -= OnStrike; actor.AttackPrepared -= OnPrepare; } if (material != null) Destroy(material); }
+    { if (actor != null) { actor.StrikeStarted -= OnStrike; actor.AttackPrepared -= OnPrepare; actor.UltimateStarted -= OnUltimate; } if (material != null) Destroy(material); }
 }

@@ -139,6 +139,11 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Check(Mathf.Abs(supportFoot.position.y - hookFoot.position.y) < .01f, "ready feet both planted");
         Check(Vector3.Distance(supportFoot.position, hookFoot.position) > .5f, "ready stance widened and staggered");
         Vector3 readyLeft = supportFoot.position, readyRight = hookFoot.position;
+        Transform readyKnee = null, readyHand = null, readyHead = null;
+        foreach (Transform bone in playerVisual.GetComponentsInChildren<Transform>())
+        { if (bone.name == "RightShin") readyKnee = bone; if (bone.name == "RightHand") readyHand = bone; if (bone.name == "Head") readyHead = bone; }
+        Check(Vector3.Angle(readyKnee.position - kickBone.position, hookFoot.position - readyKnee.position) > 20, "low fighting stance bends knees");
+        Check(Vector3.Distance(readyHand.position, readyHead.position) < .4f, "ready guard stays near jaw");
         for (int leg = 0; leg < 2; leg++)
         for (int frame = 0; frame <= 20; frame++)
         {
@@ -155,6 +160,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         for (int step = 0; step < 8; step++)
         {
             hookView.PreviewFighting(step * Mathf.PI / 4, 1);
+            Check(Vector3.Distance(readyHand.position, readyHead.position) < .4f, "moving guard stays near jaw phase " + step);
             Check(WorldBounds(render).size.y < 2.1f && supportFoot.position.y >= readyLeft.y - .01f && hookFoot.position.y >= readyRight.y - .01f, "guarded movement feet and silhouette phase " + step);
         }
         hookView.PreviewFighting();
