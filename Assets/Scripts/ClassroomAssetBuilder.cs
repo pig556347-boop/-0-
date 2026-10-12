@@ -22,7 +22,7 @@ public sealed class ClassroomAssetBuilder : MonoBehaviour
             kit.Place(window, "Window asset", new Vector3(-9.5f + x * 19, 1.5f, 8.3f), new Vector3(3.5f, 1.7f, .15f), 180);
         GameObject furniture = kit.Load("furniture");
         for (int row = 0; row < 2; row++) for (int col = 0; col < 4; col++)
-            kit.Place(furniture, "Desk and chair", new Vector3(-6 + col * 4, 0, 1.3f + row * 2.3f), new Vector3(1.42f, 1.15f, 1.33f), 0);
+            kit.Place(furniture, "Desk and chair", new Vector3(-6 + col * 4, 0, 1.3f + row * 2.3f), new Vector3(1.1f, .85f, 1.05f), 0);
         Debug.Log("CLASSROOM_ASSETS_READY count=5 floorTiles=126 furniture=8 physics=preserved");
     }
 
