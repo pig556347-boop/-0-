@@ -20,7 +20,7 @@ public sealed class HitImpactManager : MonoBehaviour
         Instance = this; originalTimeScale = Time.timeScale;
     }
     public void Initialize(Camera camera)
-    { targetCamera = camera; cameraHome = camera.transform.position; }
+    { targetCamera = camera; cameraHome = camera.transform.localPosition; }
     public void OnHit(CombatActor source, CombatActor target, Vector3 point)
     {
         freezeUntil = Mathf.Max(freezeUntil, Time.unscaledTime + hitStopSeconds);
@@ -37,13 +37,13 @@ public sealed class HitImpactManager : MonoBehaviour
     private void LateUpdate()
     {
         if (targetCamera == null) return;
-        targetCamera.transform.position = cameraHome + (!Paused && Time.unscaledTime < shakeUntil
+        targetCamera.transform.localPosition = cameraHome + (!Paused && Time.unscaledTime < shakeUntil
             ? Random.insideUnitSphere * shakeStrength : Vector3.zero);
     }
     private void OnDisable()
     {
         Time.timeScale = originalTimeScale;
-        if (targetCamera != null) targetCamera.transform.position = cameraHome;
+        if (targetCamera != null) targetCamera.transform.localPosition = cameraHome;
         if (Instance == this) Instance = null;
     }
 }

@@ -62,6 +62,7 @@ const { PNG } = require('pngjs');
     await live.locator('canvas').click();
     await live.keyboard.down('d');await live.waitForTimeout(800);
     await live.screenshot({path:'hud-test-results/motion-walk.png'});await live.keyboard.up('d');
+    if(!motion||Math.abs(motion.cameraSize-6.5)>.01||motion.sx<.1||motion.sx>.9||motion.sy<.15||motion.sy>.8)throw Error('Zoomed follow camera lost player: '+JSON.stringify(motion));
     await live.keyboard.down('Space');await live.waitForTimeout(100);await live.keyboard.up('Space');await live.waitForTimeout(1000);
     await live.keyboard.down('c');await live.waitForTimeout(300);
     await live.screenshot({path:'hud-test-results/motion-crouch.png'});
@@ -108,7 +109,7 @@ const { PNG } = require('pngjs');
     if(!lastTutorialRole.includes('step=Heavy'))throw Error('Real basic combo did not complete the three-hit tutorial: '+lastTutorialRole);
     if(!hookReady)throw Error('Real third combo hit did not start the spinning hook animation');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true},null,2));
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,combatCameraZoom:true},null,2));
     for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');

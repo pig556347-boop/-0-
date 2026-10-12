@@ -36,9 +36,12 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         GameObject cameraObject = new GameObject("Main Camera");
         cameraObject.tag = "MainCamera";
         Camera camera = cameraObject.AddComponent<Camera>();
-        camera.transform.position = new Vector3(0, 13, -16);
+        GameObject cameraRig = new GameObject("Combat camera rig");
+        camera.transform.SetParent(cameraRig.transform, false);
         camera.transform.rotation = Quaternion.Euler(35, 0, 0);
-        camera.orthographic = true; camera.orthographicSize = 10.5f;
+        camera.orthographic = true; camera.orthographicSize = 6.5f;
+        camera.transform.localPosition = Quaternion.Euler(35, 0, 0) * Vector3.back * 20;
+        cameraRig.AddComponent<CombatCameraFollow>().Initialize(player.GetComponent<CombatActor>());
         camera.clearFlags = CameraClearFlags.SolidColor;
         camera.backgroundColor = new Color(.12f, .12f, .14f);
         cameraObject.AddComponent<AudioListener>();

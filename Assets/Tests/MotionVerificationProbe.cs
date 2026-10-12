@@ -18,9 +18,11 @@ public sealed class MotionVerificationProbe : MonoBehaviour
         Debug.Log("MOTION_LIVE " + JsonUtility.ToJson(new Sample {
             px = player.transform.position.x, pz = player.transform.position.z,
             ex = enemy.transform.position.x, ez = enemy.transform.position.z,
-            state = player.State.ToString(), combo = player.Progress.Combo
+            state = player.State.ToString(), combo = player.Progress.Combo,
+            sx = Camera.main.WorldToViewportPoint(player.transform.position).x,
+            sy = Camera.main.WorldToViewportPoint(player.transform.position).y, cameraSize = Camera.main.orthographicSize
         }));
     }
     [System.Serializable] private sealed class Sample
-    { public float px, pz, ex, ez; public string state; public int combo; }
+    { public float px, pz, ex, ez, sx, sy, cameraSize; public string state; public int combo; }
 }
