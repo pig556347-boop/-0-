@@ -1,25 +1,25 @@
 {
-  "commit": "65c7e51aeebf7c8a32566c4980dd5afc4a43e447",
+  "commit": "9b15c33347fe0cb0e67dd3645ad5281b54ac24f2",
   "executions": [
     {
       "width": 1920,
       "height": 1080,
-      "checks": 187
+      "checks": 189
     },
     {
       "width": 1280,
       "height": 720,
-      "checks": 187
+      "checks": 189
     },
     {
       "width": 1024,
       "height": 768,
-      "checks": 187
+      "checks": 189
     },
     {
       "width": 2560,
       "height": 1080,
-      "checks": 187
+      "checks": 189
     }
   ],
   "playerReady": true,
