@@ -33,3 +33,5 @@ Rebuild supplied prop copies: run `export_classroom.py`, `repack_classroom.py`, 
 Prop atlases disable mipmaps and lossy block compression to prevent atlas-neighbour colors bleeding into narrow UV islands at the fixed camera distance. Floor mipmaps remain enabled. The importer version and build validation force these settings on existing project imports as well.
 
 A matching back-face-culling Blender render reproduced the remaining white cracks: reversed-winding facets exposed the backing surface. Scenery now renders opaque faces on both sides with sign-independent continuous lighting. The fixed camera uses a 0.3–50m clip range to improve depth precision for closely layered scan surfaces.
+
+The board's front writing area also restores the median original green color. This removes pale internal-backing colors sampled by projection on a few reduced facets; the provided frame and geometry are retained. The 99% board regression threshold stays unchanged.

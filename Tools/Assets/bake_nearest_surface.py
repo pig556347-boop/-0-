@@ -18,6 +18,12 @@ existing=set(bpy.context.scene.objects);bpy.ops.import_scene.fbx(filepath=str(ou
 low=[o for o in bpy.context.scene.objects if o.type=='MESH' and o not in existing]
 size=2048;atlas=np.zeros((size,size,4),dtype=np.float32);atlas[:,:,3]=1;mask=np.zeros((size,size),dtype=bool)
 started=time.time();samples=0
+board_green=None
+if kind=='board':
+ rgb=colors[:,:,:3]
+ green=(rgb[:,:,1]>rgb[:,:,0]*1.3)&(rgb[:,:,1]>rgb[:,:,2]*1.1)&(rgb[:,:,1]>.1)
+ board_green=np.median(rgb[green],axis=0)
+ assert np.isfinite(board_green).all()
 for obj in low:
  local=source.matrix_world.inverted()@obj.matrix_world
  target_uv=obj.data.uv_layers.active.data
@@ -40,6 +46,12 @@ for obj in low:
     Vector((*uv[li[0]].uv,0)),Vector((*uv[li[1]].uv,0)),Vector((*uv[li[2]].uv,0)))
    sx=min(w-1,max(0,round(mapped.x*(w-1))));sy=min(h-1,max(0,round(mapped.y*(h-1))))
    color=colors[sy,sx].copy()
+   if kind=='board':
+    surface=source.matrix_world@point
+    # Restore the front writing surface while retaining the supplied frame.
+    # Reduction/projection can incorrectly sample the pale internal backing.
+    if surface.x>0 and abs(surface.y)<.445 and .055<surface.z<.700:
+     color[:3]=board_green
    if kind=='furniture':
     # The source base-color map itself has noisy marks on painted metal.
     # Preserve wood and rubber feet, but restore a clean uniform frame finish.
