@@ -37,3 +37,12 @@ A matching back-face-culling Blender render reproduced the remaining white crack
 The board's front writing area also restores the median original green color. This removes pale internal-backing colors sampled by projection on a few reduced facets; the provided frame and geometry are retained. The 99% board regression threshold stays unchanged.
 
 Original back-side inspection identified the two pale central shapes as rear mounting hardware. The board placement now uses yaw -90 to present the actual writing face after Unity FBX axis conversion. The source front frame and writing-area color are preserved.
+
+## Final cleanup and fixed-camera verification
+
+Source: `63d1aa9fe52d7372afd17fa90671b3d5d844174c`.
+CI: https://github.com/pig556347-boop/-0-/actions/runs/38259180606
+
+All four HUD executions passed 398 checks each (1,592 total). Real production checks passed: five classroom assets loaded, movement/jump/crouch/three-hit hook tutorial, Deongchi infinite HP until the required lesson, fullscreen/resize, stationary camera rig, and correct 4:3 arena framing. Runtime exceptions: zero.
+
+Visual regressions passed without lowering the 99% board threshold: wall interior luminance range 1.357/255; sampled board interior green fraction 99.75%. The final actual Unity screenshot was manually inspected and is `classroom-ingame.png`; `verification.json` matches the tested source. The supplied originals remain intact.
