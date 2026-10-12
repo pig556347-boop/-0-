@@ -265,6 +265,11 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private void OnPrepare()
     {
         actionStarted = Time.time; previous = actor.State;
+        if (ModelKind == "Deongchi")
+        {
+            wasMoving = false;
+            leftContact.Planted = rightContact.Planted = false;
+        }
         attackLeftStart = joints["LeftFoot"].Bone.position; attackRightStart = joints["RightFoot"].Bone.position;
         attackLeftHandStart = leftHand.position; attackRightHandStart = rightHand.position;
         attackDropStart = lastDrop;
