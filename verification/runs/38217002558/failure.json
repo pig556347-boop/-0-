@@ -1,0 +1,4 @@
+{
+  "commit": "2c8970962cb5d5e789f8ef316fbfbd01e52049f9",
+  "error": "Error: HUD runtime test failed 2560x1080: HUD_TEST_FAIL crouch bends rig and lowers silhouette\n\nException: crouch bends rig and lowers silhouette\n  at HUDPlaytestRunner.Check (System.Boolean pass, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
