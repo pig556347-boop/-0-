@@ -36,6 +36,25 @@ jobs:
           unityVersion: 6000.4.10f1
           targetPlatform: WebGL
           buildMethod: HUDCIBuild.Build
+          customParameters: -logFile /github/workspace/unity-build.log
+      - name: Report Unity compiler diagnostics
+        if: always()
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          logs = [Path('unity-build.log')]
+          bee = Path('Library/Bee')
+          if bee.exists(): logs.extend(bee.rglob('*.log'))
+          found = set()
+          for path in logs:
+            if not path.is_file(): continue
+            for line in path.read_text(errors='replace').splitlines():
+              if re.search(r'\berror CS[0-9]+\b', line) and line not in found:
+                found.add(line)
+                print('::error::' + line.replace('%', '%25').replace('\r', '%0D').replace('\n', '%0A'))
+          print('::notice::Compiler diagnostics found: ' + str(len(found)))
+          PY
       - name: Validate web output
         run: |
           # Unity builder runs in a container and leaves root-owned output.
