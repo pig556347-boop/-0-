@@ -208,8 +208,8 @@ public sealed class ImportedPlayerView : MonoBehaviour
         float lift = Ease(.18f, .38f, phase) * (1 - Ease(.76f, 1, phase));
         float extension = Ease(.36f, .45f, phase) * (1 - Ease(.60f, .76f, phase));
         float lean = extension;
-        hips.localRotation = hipsRestRotation * Quaternion.AngleAxis(-32 * lean, hipsPitchAxis) *
-            Quaternion.AngleAxis(16 * lean, hipsRollAxis);
+        hips.localRotation = hipsRestRotation * Quaternion.AngleAxis(-14 * lean, hipsPitchAxis) *
+            Quaternion.AngleAxis(-30 * lean, hipsRollAxis);
         Set("LeftUpperArm", -55, true); Set("RightUpperArm", -55, true);
         Set("LeftForearm", -110, true); Set("RightForearm", -110, true);
 
@@ -220,7 +220,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
 
         Vector3 home = actor.transform.position + facing * rightFootHome;
         Vector3 folded = actor.transform.position + facing * new Vector3(-.12f, .20f, .13f);
-        float sweep = Mathf.Lerp(.22f, -.12f, Ease(.45f, .60f, phase));
+        float sweep = Mathf.Lerp(-.22f, -.06f, Ease(.45f, .60f, phase));
         Vector3 high = actor.transform.position + facing * new Vector3(sweep, .70f, .27f);
         Vector3 target = Vector3.Lerp(home, Vector3.Lerp(folded, high, extension), lift);
         Vector3 bend = facing * Vector3.forward;

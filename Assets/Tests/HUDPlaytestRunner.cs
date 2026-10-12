@@ -114,6 +114,11 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         }
         hookView.PreviewHook(.48f);
         Check(hookFoot.position.y > kickHome.y + 1.25f, "hook raised right heel reaches high target");
+        Transform hookHip = null, hookKnee = null;
+        foreach (Transform bone in playerVisual.GetComponentsInChildren<Transform>())
+        { if (bone.name == "RightThigh") hookHip = bone; if (bone.name == "RightShin") hookKnee = bone; }
+        Check(Vector3.Angle(hookKnee.position - hookHip.position, hookFoot.position - hookKnee.position) < 15,
+            "hook striking knee extends without folding across torso");
         Check(Quaternion.Angle(playerVisual.transform.rotation, Quaternion.LookRotation(facingHome)) < .1f,
             "hook torso turn finishes by impact instead of late recovery");
         hookView.PreviewHook(1);
