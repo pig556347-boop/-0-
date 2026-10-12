@@ -26,6 +26,8 @@ The first simplified models reused source UVs and a character toon shader, which
 
 `SchoolScenery` uses continuous low-contrast lighting, so tiny normal variations cannot jump between toon bands. Character rendering and combat code remain unchanged.
 
-`ClassroomCameraFrame` fixes the rig at the classroom centre; actor movement and facing do not scroll the view. At 16:9 the orthographic size is 9.4; narrow views expand to fit the entire 28m arena. HUD and arena boundaries are unchanged. Browser regressions check that the rig stays stationary, 4:3 uses 11.25, wall interior luminance variation stays below 20/255, and at least 95% of sampled board interior remains green.
+`ClassroomCameraFrame` fixes the rig at the classroom centre; actor movement and facing do not scroll the view. At 16:9 the orthographic size is 9.4; narrow views expand to fit the entire 28m arena. HUD and arena boundaries are unchanged. Browser regressions check that the rig stays stationary, 4:3 uses 11.25, wall interior luminance variation stays below 20/255, and at least 99% of sampled board interior remains green.
 
 Rebuild supplied prop copies: run `export_classroom.py`, `repack_classroom.py`, then `bake_nearest_surface.py` for each of wall/board/window/furniture. These operate on working copies and keep the original GLBs intact. Inspection renders now use the same continuous lighting model as the game rather than PBR self-shadowing.
+
+Prop atlases disable mipmaps and lossy block compression to prevent atlas-neighbour colors bleeding into narrow UV islands at the fixed camera distance. Floor mipmaps remain enabled. The importer version and build validation force these settings on existing project imports as well.

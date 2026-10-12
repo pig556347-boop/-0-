@@ -11,6 +11,16 @@ public static class ClassroomBuildCheck
             GameObject model = Resources.Load<GameObject>("Classroom/" + kind + "/" + kind + "Model");
             Texture2D texture = Resources.Load<Texture2D>("Classroom/" + kind + "/BaseColor");
             if (model == null || texture == null) throw new InvalidOperationException("Missing classroom asset: " + kind);
+            string texturePath = "Assets/Resources/Classroom/" + kind + "/BaseColor.png";
+            TextureImporter importer = (TextureImporter)AssetImporter.GetAtPath(texturePath);
+            if (kind != "floor" && (importer.mipmapEnabled || importer.textureCompression != TextureImporterCompression.Uncompressed))
+            {
+                importer.mipmapEnabled = false;
+                importer.textureCompression = TextureImporterCompression.Uncompressed;
+                importer.filterMode = FilterMode.Bilinear;
+                importer.SaveAndReimport();
+                texture = Resources.Load<Texture2D>("Classroom/" + kind + "/BaseColor");
+            }
             long triangles = 0;
             foreach (MeshFilter filter in model.GetComponentsInChildren<MeshFilter>())
                 triangles += filter.sharedMesh.triangles.Length / 3;

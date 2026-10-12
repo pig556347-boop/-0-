@@ -131,7 +131,7 @@ const { PNG } = require('pngjs');
     const wallLumaRange=wallLuma[360]-wallLuma[40];
     const boardGreenFraction=boardColors.filter(c=>c[1]>c[0]*1.15&&c[1]>c[2]*1.05).length/boardColors.length;
     if(wallLumaRange>20)throw Error('Wall still has large shading/texture patches: '+wallLumaRange);
-    if(boardGreenFraction<.95)throw Error('Board interior still has white texture contamination: '+boardGreenFraction);
+    if(boardGreenFraction<.99)throw Error('Board interior still has white texture contamination: '+boardGreenFraction);
     const visualChecks={wallLumaRange,boardGreenFraction};
     const buckets=new Map();
     for(let i=0;i<pixels.data.length;i+=4){
