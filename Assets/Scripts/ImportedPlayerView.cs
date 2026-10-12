@@ -30,7 +30,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private float nextFocusScan, fightGait, lastDrop = .11f;
     private bool wasMoving;
     private readonly FootContact leftContact = new FootContact(), rightContact = new FootContact();
-    private Vector3 attackLeftStart, attackRightStart;
+    private Vector3 attackLeftStart, attackRightStart, attackLeftHandStart, attackRightHandStart;
     private float attackDropStart = .11f;
     private Quaternion attackRotationStart;
     private float attackSpineStart, attackChestStart, guardWeight;
@@ -149,7 +149,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         crouch = Mathf.MoveTowards(crouch, crouching ? 1 : 0, Time.deltaTime * 7);
         float speed = body == null ? 0 : new Vector2(body.linearVelocity.x, body.linearVelocity.z).magnitude;
         bool moving = speed > .15f && actor.State == CombatActor.ActionState.IDLE;
-        walkBlend = Mathf.MoveTowards(walkBlend, moving ? 1 : 0, Time.deltaTime * 8);
+        walkBlend = Mathf.MoveTowards(walkBlend, moving ? 1 : 0, Time.deltaTime * (ModelKind == "Deongchi" ? 5 : 8));
         visualSpeed = Mathf.Lerp(visualSpeed, speed, 1 - Mathf.Exp(-12 * Time.deltaTime));
         float stride = Mathf.Clamp(.15f + visualSpeed * .1f, .2f, .52f) * walkBlend * (1 - crouch * .55f);
         if (moving) gait += Time.deltaTime * Mathf.PI * speed / Mathf.Max(.12f, 2 * stride);
@@ -243,6 +243,22 @@ public sealed class ImportedPlayerView : MonoBehaviour
             }
             AimHead();
         }
+        if (ModelKind == "Deongchi" && actor.State != CombatActor.ActionState.DEAD)
+        {
+            if (actor.State == CombatActor.ActionState.ATTACK)
+            {
+                float phase = struckAt >= actionStarted ? .45f + .55f * Mathf.Clamp01((Time.time - struckAt) / actor.VisualRecovery) :
+                    .45f * Mathf.Clamp01((Time.time - actionStarted) / actor.VisualWindup);
+                int number = struckAt >= actionStarted ? strikeNumber : strikeNumber + 1;
+                ApplyPunchPose(actor.HeavyStrike || number % 2 == 0 ? "Right" : "Left", phase);
+            }
+            else if (actor.State != CombatActor.ActionState.ULTIMATE)
+            {
+                fightFacing = Quaternion.Slerp(fightFacing, Quaternion.LookRotation(actor.Facing), 1 - Mathf.Exp(-10 * Time.deltaTime));
+                ApplyFightingPose(speed, fightGait, walkBlend, false);
+            }
+            AimHead();
+        }
         if (actor.State == CombatActor.ActionState.DEAD)
             transform.localRotation *= Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 75, (Time.time - actionStarted) / .35f));
     }
@@ -250,6 +266,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     {
         actionStarted = Time.time; previous = actor.State;
         attackLeftStart = joints["LeftFoot"].Bone.position; attackRightStart = joints["RightFoot"].Bone.position;
+        attackLeftHandStart = leftHand.position; attackRightHandStart = rightHand.position;
         attackDropStart = lastDrop;
         attackRotationStart = transform.rotation;
         attackSpineStart = joints["Spine"].Angle; attackChestStart = joints["Chest"].Angle;
@@ -282,6 +299,10 @@ public sealed class ImportedPlayerView : MonoBehaviour
     public void PreviewRoundhouse(float phase, bool left = false)
     {
         ResetPreview(); ApplyRoundhousePose(left ? "Left" : "Right", Mathf.Clamp01(phase), true); AimHead(true); inPreview = false;
+    }
+    public void PreviewPunch(float phase, bool right = false)
+    {
+        ResetPreview(); ApplyPunchPose(right ? "Right" : "Left", Mathf.Clamp01(phase), true); AimHead(true); inPreview = false;
     }
     private void ResetPreview()
     {
@@ -317,30 +338,68 @@ public sealed class ImportedPlayerView : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             string side = i == 0 ? "Left" : "Right";
-            Transform upper = joints[side + "UpperArm"].Bone, elbow = joints[side + "Forearm"].Bone, hand = i == 0 ? leftHand : rightHand;
+            Transform hand = i == 0 ? leftHand : rightHand;
             float sign = Mathf.Sign((i == 0 ? leftFootHome : rightFootHome).x);
-            Vector3 target = joints["Head"].Bone.position + model.rotation * new Vector3(sign * .14f, 0, .17f);
+            Vector3 target = joints["Head"].Bone.position + model.rotation * new Vector3(sign * (ModelKind == "Deongchi" ? .22f : .14f), 0, ModelKind == "Deongchi" ? .22f : .17f);
             target = Vector3.Lerp(hand.position, target, guardWeight);
-            Vector3 origin = upper.position, delta = target - origin;
-            float a = Vector3.Distance(origin, elbow.position), b = Vector3.Distance(elbow.position, hand.position);
-            float d = Mathf.Clamp(delta.magnitude, Mathf.Abs(a - b) + .001f, a + b - .001f);
-            Vector3 direction = delta.normalized;
-            Vector3 bend = model.rotation * new Vector3(sign * .35f, -1, .1f);
-            Vector3 pole = Vector3.ProjectOnPlane(bend, direction).normalized;
-            float along = (a * a + d * d - b * b) / (2 * d);
-            Vector3 knee = origin + direction * along + pole * Mathf.Sqrt(Mathf.Max(0, a * a - along * along));
-            upper.rotation = Quaternion.FromToRotation(elbow.position - origin, knee - origin) * upper.rotation;
-            elbow.rotation = Quaternion.FromToRotation(hand.position - elbow.position, origin + direction * d - elbow.position) * elbow.rotation;
+            SolveArm(side, target);
         }
         leftHand.localRotation = leftHandRest * Quaternion.AngleAxis(-hookSide * 40, leftHandAxis);
         rightHand.localRotation = rightHandRest * Quaternion.AngleAxis(hookSide * 40, rightHandAxis);
+    }
+    private void SolveArm(string side, Vector3 target)
+    {
+        Transform upper = joints[side + "UpperArm"].Bone, elbow = joints[side + "Forearm"].Bone;
+        Transform hand = side == "Left" ? leftHand : rightHand;
+        float sign = Mathf.Sign((side == "Left" ? leftFootHome : rightFootHome).x);
+        Vector3 origin = upper.position, delta = target - origin;
+        float a = Vector3.Distance(origin, elbow.position), b = Vector3.Distance(elbow.position, hand.position);
+        float d = Mathf.Clamp(delta.magnitude, Mathf.Abs(a - b) + .001f, a + b - .001f);
+        Vector3 direction = delta.normalized;
+        Vector3 pole = Vector3.ProjectOnPlane(model.rotation * new Vector3(sign * .35f, -1, .1f), direction).normalized;
+        float along = (a * a + d * d - b * b) / (2 * d);
+        Vector3 knee = origin + direction * along + pole * Mathf.Sqrt(Mathf.Max(0, a * a - along * along));
+        upper.rotation = Quaternion.FromToRotation(elbow.position - origin, knee - origin) * upper.rotation;
+        elbow.rotation = Quaternion.FromToRotation(hand.position - elbow.position, origin + direction * d - elbow.position) * elbow.rotation;
+    }
+    private void ApplyPunchPose(string side, float phase, bool preview = false)
+    {
+        Quaternion facing = Quaternion.LookRotation(actor.Facing);
+        float sign = Mathf.Sign((side == "Left" ? leftFootHome : rightFootHome).x);
+        float extension = Ease(.26f, .45f, phase) * (1 - Ease(.52f, .88f, phase));
+        float anticipation = Ease(0, .25f, phase) * (1 - extension) * (1 - Ease(.75f, 1, phase));
+        float readyYaw = -hookSide * 20;
+        float punchYaw = side == "Right" ? -hookSide * 45 : hookSide * 8;
+        Quaternion desired = facing * Quaternion.AngleAxis(Mathf.Lerp(readyYaw, punchYaw, extension), Vector3.up);
+        transform.rotation = preview ? desired : Quaternion.Slerp(attackRotationStart, desired, Ease(0, .15f, phase));
+        SetHip(preview ? .09f : Mathf.Lerp(attackDropStart, .09f, Ease(0, .15f, phase)),
+            .035f + .055f * extension - .015f * anticipation, -sign * .025f * extension);
+        Set("Spine", preview ? 6 + 4 * extension : Mathf.Lerp(attackSpineStart, 6 + 4 * extension, Ease(0, .15f, phase)), true);
+        Set("Chest", 2.1f + 2 * extension, true);
+        joints["Chest"].Bone.rotation = Quaternion.AngleAxis(-sign * 8 * extension, Vector3.up) * joints["Chest"].Bone.rotation;
+        foreach (string leg in new[] { "Left", "Right" })
+        {
+            Vector3 target = actor.transform.position + facing * ReadyFoot(leg);
+            if (!preview) target = Vector3.Lerp(leg == "Left" ? attackLeftStart : attackRightStart, target, Ease(0, .18f, phase));
+            float pivot = leg == side ? (punchYaw - readyYaw) * extension : 0;
+            SolveHookLeg(leg, target, facing * Vector3.forward, FlatFoot(leg, facing, pivot));
+        }
+        SetGuard();
+        Transform hand = side == "Left" ? leftHand : rightHand;
+        Vector3 guard = hand.position;
+        Transform shoulder = joints[side + "UpperArm"].Bone, elbow = joints[side + "Forearm"].Bone;
+        float reach = Vector3.Distance(shoulder.position, elbow.position) + Vector3.Distance(elbow.position, hand.position);
+        Vector3 strike = shoulder.position + facing * new Vector3(-sign * .03f, .09f, reach * .98f);
+        Vector3 targetHand = Vector3.Lerp(guard - facing * .025f * anticipation, strike, extension);
+        if (!preview) targetHand = Vector3.Lerp(side == "Left" ? attackLeftHandStart : attackRightHandStart, targetHand, Ease(0, .15f, phase));
+        SolveArm(side, targetHand);
     }
     private void AimHead(bool preview = false)
     {
         Vector3 direction = actor.Facing;
         if (!preview && Time.time >= nextFocusScan)
         { nextFocusScan = Time.time + .5f; if (focusHUD == null) focusHUD = FindFirstObjectByType<PrototypeHUD>(); }
-        if (!preview && focusHUD != null && focusHUD.CurrentEnemy != null && actor.State != CombatActor.ActionState.ATTACK)
+        if (!preview && actor.Team == 0 && focusHUD != null && focusHUD.CurrentEnemy != null && actor.State != CombatActor.ActionState.ATTACK)
         {
             Vector3 toTarget = focusHUD.CurrentEnemy.transform.position - actor.transform.position; toTarget.y = 0;
             if (toTarget.sqrMagnitude > .01f && Vector3.Dot(toTarget.normalized, actor.Facing) > .25f) direction = toTarget.normalized;
@@ -352,22 +411,25 @@ public sealed class ImportedPlayerView : MonoBehaviour
     private void ApplyFightingPose(float speed, float phase, float movement, bool preview)
     {
         bool moving = !preview && speed > .15f && actor.State == CombatActor.ActionState.IDLE && crouch < .1f;
-        float stride = Mathf.Clamp(.20f + speed * .046f, .20f, .43f);
-        if (preview) stride = .43f;
+        bool heavyBody = ModelKind == "Deongchi";
+        float duty = heavyBody ? .55f : .4f;
+        float stride = heavyBody ? Mathf.Clamp(.24f + visualSpeed * .12f, .24f, .5f) : Mathf.Clamp(.20f + speed * .046f, .20f, .43f);
+        if (preview) stride = heavyBody ? .48f : .43f;
         if (moving && !wasMoving)
         {
-            fightGait = .4f * 2 * Mathf.PI * .27f;
+            fightGait = duty * 2 * Mathf.PI * .27f;
             leftContact.Anchor = actor.transform.position + fightFacing * ReadyFoot("Left"); leftContact.Planted = true;
             rightContact.Planted = false;
         }
-        if (moving) fightGait += Time.deltaTime * Mathf.PI * .4f * speed / stride;
+        if (moving) fightGait += Time.deltaTime * Mathf.PI * duty * speed / stride;
         if (!preview) phase = fightGait;
         wasMoving = moving;
         float yaw = -hookSide * 20 * (1 - movement);
         transform.rotation = fightFacing * Quaternion.AngleAxis(yaw, Vector3.up);
-        float drop = Mathf.Lerp(.11f, .15f, movement) + .33f * crouch;
+        float drop = Mathf.Lerp(heavyBody ? .09f : .11f, heavyBody ? .17f : .15f, movement) + (heavyBody ? .35f : .33f) * crouch;
+        if (heavyBody) drop += .012f * movement * Mathf.Cos(phase * 2);
         SetHip(drop, Mathf.Lerp(.035f, 0, movement) - .10f * crouch, .018f * movement * Mathf.Sin(phase));
-        float lean = 8 + 5 * movement + 18 * crouch + (actor.State == CombatActor.ActionState.HIT ? -12 : 0);
+        float lean = (heavyBody ? 6 : 8) + (heavyBody ? 4 : 5) * movement + 18 * crouch + (actor.State == CombatActor.ActionState.HIT ? -12 : 0);
         Set("Spine", lean, true); Set("Chest", lean * .35f, true); Set("Head", -5, true); SetGuard();
         for (int i = 0; i < 2; i++)
         {
@@ -375,11 +437,11 @@ public sealed class ImportedPlayerView : MonoBehaviour
             FootContact contact = i == 0 ? leftContact : rightContact;
             Vector3 foot = ReadyFoot(side, movement, crouch);
             float p = Mathf.Repeat(phase + i * Mathf.PI, 2 * Mathf.PI) / (2 * Mathf.PI);
-            bool planted = p < .4f;
-            float t = planted ? p / .4f : (p - .4f) / .6f;
+            bool planted = p < duty;
+            float t = planted ? p / duty : (p - duty) / (1 - duty);
             float forward = planted ? Mathf.Lerp(stride, -stride, t) : Mathf.Lerp(-stride, stride, Mathf.SmoothStep(0, 1, t));
             foot.z += forward * movement;
-            foot.y += planted ? 0 : .10f * movement * Mathf.Sin(t * Mathf.PI);
+            foot.y += planted ? 0 : (heavyBody ? .075f : .10f) * movement * Mathf.Sin(t * Mathf.PI);
             Vector3 target = actor.transform.position + fightFacing * foot;
             if (moving && movement > .2f && planted)
             { if (!contact.Planted) contact.Anchor = target; target = contact.Anchor; }

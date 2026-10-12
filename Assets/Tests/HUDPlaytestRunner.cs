@@ -69,6 +69,18 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Debug.Log("MOTION_METRICS player vertexCount=" + render.sharedMesh.vertexCount + " scale=" + render.transform.lossyScale + " world=" + WorldBounds(render));
         Check(render.sharedMaterial.mainTexture != null, "player source texture bound");
         Check(render.bounds.size.y > 1.6f && render.bounds.size.y < 2.1f, "player model normalized to game scale");
+        if (Application.absoluteURL.Contains("deongchiPose="))
+        {
+            playerVisual.SetActive(false);
+            GameObject model = new GameObject("Deongchi pose preview"); model.transform.SetParent(enemy.transform, false);
+            PrototypeCharacterView view = model.AddComponent<PrototypeCharacterView>(); view.Build(enemy); view.UseDeongchiModel(); view.CinematicPose = true;
+            ImportedPlayerView rig = model.GetComponent<ImportedPlayerView>();
+            if (Application.absoluteURL.Contains("deongchiPose=stride")) rig.PreviewFighting(1.8f, 1);
+            else if (Application.absoluteURL.Contains("deongchiPose=jab")) rig.PreviewPunch(.45f);
+            else if (Application.absoluteURL.Contains("deongchiPose=cross")) rig.PreviewPunch(.45f, true);
+            else rig.PreviewFighting();
+            yield return new WaitForEndOfFrame(); Debug.Log("DEONGCHI_PREVIEW_READY"); yield break;
+        }
         if (Application.absoluteURL.Contains("hookPose="))
         {
             character.CinematicPose = true;
@@ -187,6 +199,43 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         yield return null;
         SkinnedMeshRenderer bigRender = enemyVisual.GetComponentInChildren<SkinnedMeshRenderer>();
         Check(bigRender.sharedMaterial.mainTexture != null, "Deongchi texture loaded");
+        ImportedPlayerView bigRig = enemyVisual.GetComponent<ImportedPlayerView>();
+        big.CinematicPose = true; bigRig.PreviewFighting();
+        Transform bigLeftFoot = null, bigRightFoot = null, bigHead = null, bigLeftHand = null, bigRightHand = null;
+        foreach (Transform bone in enemyVisual.GetComponentsInChildren<Transform>())
+        { if (bone.name == "LeftFoot") bigLeftFoot = bone; if (bone.name == "RightFoot") bigRightFoot = bone;
+          if (bone.name == "Head") bigHead = bone; if (bone.name == "LeftHand") bigLeftHand = bone; if (bone.name == "RightHand") bigRightHand = bone; }
+        Vector3 bigLeftHome = bigLeftFoot.position, bigRightHome = bigRightFoot.position;
+        Quaternion bigReadyRotation = enemyVisual.transform.rotation;
+        float bigFloor = WorldBounds(bigRender).min.y;
+        for (int side = 0; side < 2; side++)
+        {
+            bigRig.PreviewPunch(0, side == 1);
+            Vector3 handHome = side == 0 ? bigLeftHand.position : bigRightHand.position;
+            for (int phase = 0; phase <= 20; phase++)
+            {
+                bigRig.PreviewPunch(phase / 20f, side == 1);
+                Check(Vector3.Distance(bigLeftFoot.position, bigLeftHome) < .06f && Vector3.Distance(bigRightFoot.position, bigRightHome) < .06f, "Deongchi punch planted feet side " + side + " phase " + phase);
+                bool finite = true;
+                foreach (Vector3 v in WorldVertices(bigRender)) finite &= !float.IsNaN(v.x) && !float.IsNaN(v.y) && !float.IsNaN(v.z) && (v-enemy.transform.position).magnitude < 3;
+                Check(finite && WorldBounds(bigRender).min.y > bigFloor-.09f, "Deongchi punch bounded skin and ground side " + side + " phase " + phase);
+            }
+            bigRig.PreviewPunch(.45f, side == 1);
+            Transform activeHand = side == 0 ? bigLeftHand : bigRightHand;
+            Transform otherHand = side == 0 ? bigRightHand : bigLeftHand;
+            Check(Vector3.Dot(activeHand.position-handHome, enemy.Facing) > .2f, "Deongchi punch reaches forward side " + side);
+            Check(Vector3.Distance(otherHand.position,bigHead.position) < .45f, "Deongchi off hand guard side " + side);
+            Check(Quaternion.Angle(bigReadyRotation,enemyVisual.transform.rotation) > 20, "Deongchi punch rotates pelvis side " + side);
+            bigRig.PreviewPunch(1, side == 1);
+            Check(Vector3.Distance(activeHand.position,handHome) < .03f && Quaternion.Angle(bigReadyRotation,enemyVisual.transform.rotation)<.1f, "Deongchi punch returns to guard side " + side);
+        }
+        for(int phase=0;phase<12;phase++)
+        {
+            bigRig.PreviewFighting(phase*Mathf.PI/6,1);
+            Check(bigLeftFoot.position.y>=bigLeftHome.y-.03f && bigRightFoot.position.y>=bigRightHome.y-.03f, "Deongchi movement feet above ground phase " + phase);
+            Check(Vector3.Distance(bigLeftHand.position,bigHead.position)<.45f && Vector3.Distance(bigRightHand.position,bigHead.position)<.45f, "Deongchi movement maintains guard phase " + phase);
+        }
+        bigRig.PreviewFighting(); big.CinematicPose=false;
         Bounds standingBounds = WorldBounds(bigRender);
         float standingHeight = standingBounds.size.y;
         Check(enemy.TryCrouch(), "Deongchi gameplay crouch starts");
@@ -240,7 +289,8 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         player.StrikeStarted -= observeStrike;
         yield return new WaitForSeconds(.4f);
         enemy.Health.Infinite = false; enemy.RestoreForTutorial();
-        Quaternion armBefore = punchArm.localRotation, elbowBefore = punchElbow.localRotation;
+        Quaternion armBefore = punchArm.localRotation;
+        float elbowBefore = Vector3.Angle(punchElbow.position-punchArm.position,bigLeftHand.position-punchElbow.position);
         bool punchStarted = false;
         System.Action observePunch = () => punchStarted = true;
         enemy.StrikeStarted += observePunch;
@@ -253,12 +303,8 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
             if (punchStarted)
             {
                 armExtension = Mathf.Max(armExtension, Quaternion.Angle(armBefore, punchArm.localRotation));
-                Quaternion delta = Quaternion.Inverse(elbowBefore) * punchElbow.localRotation;
-                delta.ToAngleAxis(out float angle, out Vector3 axis);
-                if (angle > 180) angle -= 360;
-                float signedExtension = angle * Mathf.Sign(Vector3.Dot(axis,
-                    punchElbow.InverseTransformDirection(enemyVisual.transform.right)));
-                elbowExtension = Mathf.Max(elbowExtension, signedExtension);
+                float angle = Vector3.Angle(punchElbow.position-punchArm.position,bigLeftHand.position-punchElbow.position);
+                elbowExtension = Mathf.Max(elbowExtension, elbowBefore-angle);
             }
             yield return null;
         }
