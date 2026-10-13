@@ -105,7 +105,8 @@ public sealed class ImportedPlayerView : MonoBehaviour
         renderer.updateWhenOffscreen = true;
         foreach (Animator animator in view.model.GetComponentsInChildren<Animator>()) animator.enabled = false;
         if (kind == "Player" && owner.UseAuthoredMotion) AuthoredPlayerView.TryBuild(owner, actor, view.model);
-        actor.StrikeStarted += view.OnStrike; actor.AttackPrepared += view.OnPrepare; actor.UltimateStarted += view.OnUltimate;
+        if (!owner.UseAuthoredMotion)
+        { actor.StrikeStarted += view.OnStrike; actor.AttackPrepared += view.OnPrepare; actor.UltimateStarted += view.OnUltimate; }
         Debug.Log((kind == "Player" ? "PLAYER_MODEL_READY" : "DEONGCHI_MODEL_READY") + " bones=19 anatomical_skin=true");
         return true;
     }
@@ -143,7 +144,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (actor == null || !IsReady || owner.CinematicPose) return;
+        if (actor == null || !IsReady || owner.CinematicPose || owner.UseAuthoredMotion) return;
         transform.rotation = Quaternion.LookRotation(actor.Facing);
         if (previous != actor.State) { previous = actor.State; actionStarted = Time.time; }
         bool crouching = motor != null ? motor.IsCrouching : actor.State == CombatActor.ActionState.CROUCH;

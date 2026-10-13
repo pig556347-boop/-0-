@@ -17,10 +17,10 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     public void SetForcedKick(float amount)
     {
         ImportedPlayerView imported = GetComponent<ImportedPlayerView>();
-        if (imported != null) imported.ForcedKick(amount);
+        if (imported != null && !UseAuthoredMotion) imported.ForcedKick(amount);
         AuthoredPlayerView authored = GetComponent<AuthoredPlayerView>();
         if (authored != null) authored.PreviewKick(amount);
-        if (rightLeg != null) rightLeg.localRotation = Quaternion.Euler(-95 * amount, 0, 0);
+        if (rightLeg != null && !UseAuthoredMotion) rightLeg.localRotation = Quaternion.Euler(-95 * amount, 0, 0);
     }
 
     public bool UseDeongchiModel()
@@ -95,7 +95,7 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     }
     private void Update()
     {
-        if (actor == null || leftLeg == null || CinematicPose) return;
+        if (actor == null || leftLeg == null || CinematicPose || UseAuthoredMotion) return;
         if (previous != actor.State) { previous = actor.State; actionStarted = Time.time; }
         transform.rotation = Quaternion.LookRotation(actor.Facing);
         float walk = motor != null && motor.CurrentState == PlayerController.PlayerState.MOVE

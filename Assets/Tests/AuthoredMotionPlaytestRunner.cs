@@ -89,14 +89,9 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         authored.Preview("FightingIdle",0);
         Bounds standing=BoundsOf(render);
         Check(standing.size.y>1.5f&&standing.size.y<2.1f,"authored fighting stance normal character scale");
-        ImportedPlayerView legacy=visual.GetComponent<ImportedPlayerView>();
-        for(int phase=0;phase<=10;phase++)
-        {
-            legacy.PreviewHook(phase/10f);authored.PreviewFallback("Spinning hook fallback");
-            Bounded(render,origin,"retained hook phase "+phase);
-            Check(actor.transform.position==origin&&actor.Facing==Vector3.right,"hook presentation preserves combat root and facing");
-        }
-        legacy.PreviewFighting();authored.Preview("FightingIdle",0);
+        ImportedPlayerView disabledLegacy=visual.GetComponent<ImportedPlayerView>();
+        Transform legacyFoot=disabledLegacy.GetComponentsInChildren<Transform>()[0];
+        Quaternion legacyRotation=legacyFoot.localRotation;
         character.CinematicPose=false;yield return null;yield return new WaitForEndOfFrame();
         Check(authored.CurrentMotion=="FightingIdle","idle state uses supplied fighting stance");
         foreach(bool heavy in new[]{false,true})
@@ -113,6 +108,14 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
             yield return new WaitForSeconds(actor.VisualRecovery+.15f);
             Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","attack returns to controllable fighting stance");
         }
+        for(int comboHit=1;comboHit<=3;comboHit++)
+        {
+            Check(actor.TryAttack(false),"supplied-only combo starts hit="+comboHit);
+            yield return new WaitForSeconds(actor.VisualWindup);yield return new WaitForEndOfFrame();
+            if(actor.BasicComboHit==3) Check(authored.CurrentMotion=="FightingIdle","third hit never invokes removed procedural hook");
+            yield return new WaitForSeconds(actor.VisualRecovery+.04f);
+        }
+        Check(legacyFoot.localRotation==legacyRotation,"legacy runtime driver does not rotate the hidden model");
         Check(actor.TryGuard(false),"guard starts");yield return new WaitForSeconds(.15f);
         Check(authored.CurrentMotion=="CenterBlock","guard uses CenterBlock");
         actor.ReceiveHit(new HitRequest(null,4,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
@@ -127,16 +130,16 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         Check(authored.CurrentMotion=="ReceivingABigUppercut","strong hit uses bounded reaction section");
         yield return new WaitForSeconds(.45f);
         Check(actor.TryCrouch(),"existing crouch action available");yield return new WaitForSeconds(.2f);yield return new WaitForEndOfFrame();
-        Check(authored.CurrentMotion=="Crouch fallback","missing crouch clip retains procedural action");
+        Check(authored.CurrentMotion=="FightingIdle","missing crouch clip uses supplied neutral stance");
         Bounded(render,origin,"retargeted crouch fallback");
-        Check(BoundsOf(render).size.y<standing.size.y-.2f,"crouch visibly lowers existing character");
+        Check(actor.State==CombatActor.ActionState.CROUCH,"removing custom crouch pose preserves crouch gameplay state");
         yield return new WaitForSeconds(.35f);
         Check(actor.TryDodge(Vector3.right),"dodge action available");yield return null;yield return new WaitForEndOfFrame();
-        Check(authored.CurrentMotion=="Dodge fallback","missing dodge clip retains existing action");
+        Check(authored.CurrentMotion=="FightingIdle","missing dodge clip uses supplied neutral stance");
         Bounded(render,origin,"dodge fallback");yield return new WaitForSeconds(.4f);
         CombatActor opponent=CreateActor("Grab target",1,Vector3.right);
         Check(actor.TryGrab(),"grab target acquired");yield return null;yield return new WaitForEndOfFrame();
-        Check(authored.CurrentMotion=="Grab fallback","grab preserves existing presentation fallback");
+        Check(authored.CurrentMotion=="FightingIdle","missing grab clip uses supplied neutral stance");
         yield return new WaitForSeconds(.5f);Destroy(opponent.gameObject);
         for(int tier=1;tier<=3;tier++)
         {

@@ -108,7 +108,9 @@ public sealed class TutorialDirector : MonoBehaviour
             new Vector3(1.6f, .15f, .9f), new Color(.5f, .45f, .38f));
         openingDesk = desk;
         view.transform.localPosition = home + new Vector3(0, -.1f, .2f);
-        view.transform.localRotation = Quaternion.Euler(65, 0, 0);
+        // The improvised whole-body sleeping rotation has been removed.
+        AuthoredPlayerView openingMotion = view.GetComponent<AuthoredPlayerView>();
+        if (openingMotion != null) openingMotion.PreviewCinematic("FightingIdle", 0);
         hud.StoryMessage = "그냥 조용히 지내고 싶을 뿐이야.";
         yield return new WaitForSeconds(2);
         enemy.transform.position = player.transform.position + new Vector3(1.5f, 0, .2f);

@@ -17,9 +17,6 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     private Quaternion[] restModelRotations;
     private Vector3 restHipModelPosition;
     private readonly Dictionary<string, Transform> bones = new Dictionary<string, Transform>();
-    private readonly List<BridgeBone> bridge = new List<BridgeBone>();
-    private sealed class BridgeBone
-    { public Transform Source, Target; }
     private PrototypeCharacterView owner;
     private CombatActor actor;
     private PlayerController motor;
@@ -96,7 +93,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         foreach (Renderer renderer in view.model.GetComponentsInChildren<Renderer>()) renderer.sharedMaterial = view.material;
         foreach (SkinnedMeshRenderer skin in view.model.GetComponentsInChildren<SkinnedMeshRenderer>()) skin.updateWhenOffscreen = true;
         foreach (Renderer renderer in legacyModel.GetComponentsInChildren<Renderer>()) renderer.enabled = false;
-        view.MakeBridge(legacyModel);
+
         actor.AttackPrepared += view.OnAttack;
         actor.StrikeStarted += view.OnStrike;
         actor.UltimateStarted += view.OnUltimate;
@@ -107,33 +104,13 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         Debug.Log("AUTHORED_PLAYER_READY candidates=20 bones=19 rootMotion=false");
         return true;
     }
-    private void MakeBridge(Transform legacyModel)
-    {
-        var legacy = new Dictionary<string, Transform>();
-        foreach (Transform bone in legacyModel.GetComponentsInChildren<Transform>()) legacy[bone.name] = bone;
-        string[,] map = {
-            {"Hips","Hips",""}, {"Spine","Spine","Chest"}, {"Spine1","Spine","Chest"},
-            {"Spine2","Chest","Neck"}, {"Neck","Neck","Head"}, {"Head","Head",""},
-            {"LeftShoulder","LeftShoulder","LeftUpperArm"}, {"RightShoulder","RightShoulder","RightUpperArm"},
-            {"LeftArm","LeftUpperArm","LeftForearm"}, {"RightArm","RightUpperArm","RightForearm"},
-            {"LeftForeArm","LeftForearm","LeftHand"}, {"RightForeArm","RightForearm","RightHand"},
-            {"LeftHand","LeftHand",""}, {"RightHand","RightHand",""},
-            {"LeftUpLeg","LeftThigh","LeftShin"}, {"RightUpLeg","RightThigh","RightShin"},
-            {"LeftLeg","LeftShin","LeftFoot"}, {"RightLeg","RightShin","RightFoot"},
-            {"LeftFoot","LeftFoot",""}, {"RightFoot","RightFoot",""}
-        };
-        for (int row=0; row<map.GetLength(0); row++)
-        {
-            if (!bones.ContainsKey(map[row,0])) continue;
-            bridge.Add(new BridgeBone { Source=legacy[map[row,1]], Target=bones[map[row,0]] });
-        }
-    }
     private void OnAttack()
     {
         started = Time.time; hitAt = -10;
         attack = actor.HeavyStrike ? "MmaKick1" : actor.BasicComboHit == 2 ? "MmaKick2" : "RoundhouseKick";
         supportName=attack=="MmaKick1"?"RightFoot":"LeftFoot";
         attackAnchor=bones[supportName].position;
+        if (!actor.HeavyStrike && actor.BasicComboHit == 3) Debug.Log("SUPPLIED_MOTION_ONLY combo=3 neutral=true");
         current = ""; // Even two consecutive instances of one clip get a new blend origin.
     }
     private void OnStrike() { hitAt = Time.time; }
@@ -154,17 +131,17 @@ public sealed class AuthoredPlayerView : MonoBehaviour
             if (actor.State != CombatActor.ActionState.ATTACK && actor.State != CombatActor.ActionState.ULTIMATE)
                 started = Time.time;
         }
-        bool passive=actor.State==CombatActor.ActionState.IDLE || actor.State==CombatActor.ActionState.CROUCH;
-        if (passive && ((motor != null && motor.IsCrouching && motor.IsGrounded) || actor.State == CombatActor.ActionState.CROUCH)) { ApplyBridge("Crouch fallback"); return; }
-        if (actor.State == CombatActor.ActionState.ATTACK && !actor.HeavyStrike && actor.BasicComboHit == 3)
-        { ApplyBridge("Spinning hook fallback"); return; }
-        if (actor.State == CombatActor.ActionState.GRAB || actor.State == CombatActor.ActionState.DODGE)
-        { ApplyBridge(actor.State == CombatActor.ActionState.GRAB ? "Grab fallback" : "Dodge fallback"); return; }
         Quaternion facing=Quaternion.LookRotation(actor.Facing);
         visualFacing=actor.State==CombatActor.ActionState.IDLE ?
             Quaternion.Slerp(visualFacing,facing,1-Mathf.Exp(-22*Time.deltaTime)) : facing;
         transform.rotation=visualFacing;
         float elapsed = Time.time - started;
+        // No supplied crouch, dodge, grab or spinning-hook clip: never invent a pose.
+        if (actor.State == CombatActor.ActionState.CROUCH ||
+            (actor.State == CombatActor.ActionState.IDLE && motor != null && motor.IsCrouching) ||
+            actor.State == CombatActor.ActionState.DODGE || actor.State == CombatActor.ActionState.GRAB ||
+            (actor.State == CombatActor.ActionState.ATTACK && !actor.HeavyStrike && actor.BasicComboHit == 3))
+        { Play("FightingIdle", 0, true); return; }
         if (actor.State == CombatActor.ActionState.ATTACK)
         { PlayAttack(attack, elapsed, actor.VisualWindup, actor.VisualRecovery); return; }
         if (actor.State == CombatActor.ActionState.ULTIMATE)
@@ -284,17 +261,6 @@ public sealed class AuthoredPlayerView : MonoBehaviour
             poseBones[i].localPosition=Vector3.Lerp(transitionPositions[i],poseBones[i].localPosition,blend);
         }
     }
-    private void ApplyBridge(string label)
-    {
-        Switch(label); Sample("FightingIdle",0);
-        // These clips were transferred to the exact existing rest rig. A name map
-        // therefore copies local poses without another approximate retargeting step.
-        foreach (BridgeBone joint in bridge)
-        { joint.Target.localRotation=joint.Source.localRotation; joint.Target.localPosition=joint.Source.localPosition; }
-        BlendPose(); GroundFeet(); CurrentMotion=label; visualFacing=transform.rotation;
-    }
-    public void PreviewFallback(string label)
-    { Switch(label); transitionAt=-10; ApplyBridge(label); }
     public void Preview(string name,float normalizedTime)
     {
         if (!IsReady || !clips.ContainsKey(name)) throw new ArgumentException("Unknown motion "+name);
