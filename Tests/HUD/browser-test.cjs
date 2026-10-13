@@ -81,15 +81,16 @@ const { PNG } = require('pngjs');
     }
     const live=await browser.newPage({viewport:{width:1920,height:1080}});
     const runtimeErrors=[];
-    let authoredReady=false;
+    let authoredReady=false, openingSitting=false, openingStanding=false;
     let playerReady=false, deongchiReady=false, hookReady=false, lastTutorialRole="", motion=null, classroomReady=false;
-    live.on('console',msg=>{if(msg.text().includes('CLASSROOM_ASSETS_READY count=5'))classroomReady=true;if(msg.text().includes('AUTHORED_PLAYER_READY'))authoredReady=true;});
+    live.on('console',msg=>{if(msg.text().includes('OPENING_MOTION clip=Sitting'))openingSitting=true;if(msg.text().includes('OPENING_MOTION clip=SitToStand'))openingStanding=true;if(msg.text().includes('CLASSROOM_ASSETS_READY count=5'))classroomReady=true;if(msg.text().includes('AUTHORED_PLAYER_READY'))authoredReady=true;});
     live.on('console',msg=>{if(msg.text().includes('SUPPLIED_MOTION_ONLY combo=3 neutral=true'))hookReady=true;});
     live.on('console',msg=>{const s=msg.text();if(s.startsWith('MOTION_LIVE '))motion=JSON.parse(s.slice(12));});
     live.on('console',msg=>{if(msg.text().includes('PLAYER_MODEL_READY'))playerReady=true;if(msg.text().includes('DEONGCHI_MODEL_READY'))deongchiReady=true;if(msg.text().includes('TUTORIAL_ROLE')){lastTutorialRole=msg.text();console.log('::notice::'+lastTutorialRole)}if(/Exception|Can't add component/.test(msg.text()))runtimeErrors.push(msg.text())});
     live.on('pageerror',err=>runtimeErrors.push(String(err)));
     await live.goto('http://127.0.0.1:8780/WebGL/?motionVerification=1');
     await live.waitForTimeout(25000);
+    if(!openingSitting||!openingStanding)throw Error("Supplied sitting and standing opening motions did not execute");
     const hostBounds=await live.locator('canvas').boundingBox();
     if(Math.abs(hostBounds.width-1920)>1||Math.abs(hostBounds.height-1080)>1)throw Error('Game canvas does not fill browser viewport');
     await live.getByRole('button',{name:'전체화면 ⛶',exact:true}).click();
@@ -186,7 +187,7 @@ const { PNG } = require('pngjs');
     if(!lastTutorialRole.includes('step=Heavy'))throw Error('Real basic combo did not complete the three-hit tutorial: '+lastTutorialRole);
     if(!hookReady)throw Error('Real third combo hit did not use the neutral supplied stance');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,crouchedAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,crouchedAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
     for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');

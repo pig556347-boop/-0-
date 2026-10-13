@@ -269,6 +269,9 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     }
     public void PreviewCinematic(string name,float seconds)
     { if (IsReady && clips.ContainsKey(name)) { Sample(name,seconds); CurrentMotion=name; } }
+    public float MotionDuration(string name) => clips[name].Length;
+    public void PlayCinematic(string name, float seconds)
+    { if (IsReady && clips.ContainsKey(name)) Play(name, seconds, true); }
     public void PreviewKick(float amount)
     { if (IsReady) { Sample("RoundhouseKick",Mathf.Lerp(15/60f,57/60f,Mathf.Clamp01(amount))); GroundFeet(); } }
     private void OnDestroy()

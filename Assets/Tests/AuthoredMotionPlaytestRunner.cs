@@ -95,6 +95,16 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
             if(bone.name=="LeftFoot" && bone.GetComponentInParent<SkinnedMeshRenderer>()==null) { legacyFoot=bone; break; }
         Check(legacyFoot!=null,"legacy initialization rig remains available for removal regression check");
         Quaternion legacyRotation=legacyFoot.localRotation;
+        foreach(string openingClip in new[]{"Sitting","SitToStand"})
+        {
+            for(int phase=0;phase<=10;phase++)
+            {
+                authored.PlayCinematic(openingClip,authored.MotionDuration(openingClip)*phase/10f);
+                Bounded(render,origin,"opening clip="+openingClip+" phase="+phase);
+                Check(actor.transform.position==origin,"opening animation preserves physics root");
+            }
+        }
+        authored.PlayCinematic("FightingIdle",0);
         character.CinematicPose=false;yield return null;yield return new WaitForEndOfFrame();
         Check(authored.CurrentMotion=="FightingIdle","idle state uses supplied fighting stance");
         foreach(bool heavy in new[]{false,true})

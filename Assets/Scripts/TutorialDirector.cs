@@ -10,7 +10,7 @@ public sealed class TutorialDirector : MonoBehaviour
     private EnemyBrain brain;
     private PrototypeHUD hud;
     private Vector3 moveStart;
-    private GameObject openingDesk;
+    private GameObject openingDesk, openingChair;
     private PrototypeCharacterView openingView;
     private Vector3 openingVisualHome;
     private readonly TutorialComboLesson comboLesson = new TutorialComboLesson();
@@ -107,22 +107,33 @@ public sealed class TutorialDirector : MonoBehaviour
             player.transform.position + new Vector3(0, -.3f, .6f),
             new Vector3(1.6f, .15f, .9f), new Color(.5f, .45f, .38f));
         openingDesk = desk;
-        view.transform.localPosition = home + new Vector3(0, -.1f, .2f);
+        view.transform.localPosition = home;
+        view.transform.localRotation = Quaternion.LookRotation(Vector3.right);
         // The improvised whole-body sleeping rotation has been removed.
         AuthoredPlayerView openingMotion = view.GetComponent<AuthoredPlayerView>();
-        if (openingMotion != null) openingMotion.PreviewCinematic("FightingIdle", 0);
+        if (openingMotion != null)
+        {
+            openingMotion.PlayCinematic("Sitting", 0);
+            openingChair = CreateOpeningChair(openingMotion.Bone("Hips").position, player.Facing, player.transform.position.y - .95f);
+            Debug.Log("OPENING_MOTION clip=Sitting");
+        }
         hud.StoryMessage = "그냥 조용히 지내고 싶을 뿐이야.";
-        yield return new WaitForSeconds(2);
+        yield return PlayOpeningMotion(openingMotion, "Sitting", 2);
         enemy.transform.position = player.transform.position + new Vector3(1.5f, 0, .2f);
         enemy.SetFacing(Vector3.left);
         hud.StoryMessage = "야, 전학생. 여기서 자냐?";
-        yield return new WaitForSeconds(.8f);
+        yield return PlayOpeningMotion(openingMotion, "Sitting", .8f);
         Collider deskCollider = desk.GetComponent<Collider>(); deskCollider.enabled = false;
         Rigidbody deskBody = desk.AddComponent<Rigidbody>(); deskBody.mass = 2;
         deskBody.AddForce(new Vector3(-3, 2, 2), ForceMode.Impulse);
         deskBody.AddTorque(new Vector3(2, 0, 3), ForceMode.Impulse);
         hud.StoryMessage = "책상이 걷어차였다.";
-        yield return new WaitForSeconds(.7f);
+        yield return PlayOpeningMotion(openingMotion, "Sitting", .7f);
+        if (openingMotion != null)
+        {
+            Debug.Log("OPENING_MOTION clip=SitToStand");
+            yield return PlayOpeningMotion(openingMotion, "SitToStand", openingMotion.MotionDuration("SitToStand"));
+        }
         view.transform.localPosition = home;
         view.transform.localRotation = Quaternion.LookRotation(Vector3.right);
         hud.StoryMessage = "…그만해.";
@@ -139,15 +150,47 @@ public sealed class TutorialDirector : MonoBehaviour
         enemy.RestoreForTutorial(); enemy.name = "설명해";
         enemy.ConfigureStats(36, 4, .65f, .6f);
         enemy.transform.position = enemyHome; Destroy(desk);
+        if (openingChair != null) Destroy(openingChair);
         hud.StoryMessage = ""; moveStart = player.transform.position;
         player.GameplayEnabled = true; enemy.GameplayEnabled = true;
         input.GameplayEnabled = true; motor.GameplayEnabled = true; Progress.FinishOpening(); ApplyTrainingRole();
+    }
+    private IEnumerator PlayOpeningMotion(AuthoredPlayerView motion, string clip, float duration)
+    {
+        float started = Time.time;
+        while (Time.time - started < duration)
+        {
+            if (motion != null) motion.PlayCinematic(clip, Time.time - started);
+            yield return null;
+        }
+        if (motion != null) motion.PlayCinematic(clip, Mathf.Min(duration, motion.MotionDuration(clip)));
+    }
+    private static GameObject CreateOpeningChair(Vector3 hips, Vector3 facing, float floor)
+    {
+        // Temporary seat fitted to the supplied animation, independent of gameplay colliders.
+        GameObject chair = new GameObject("Opening motion chair");
+        Vector3 seat = hips - Vector3.up * .1f;
+        float height = Mathf.Max(.2f, seat.y - floor);
+        Vector3 side = Vector3.Cross(Vector3.up, facing).normalized;
+        AddChairPart(chair, "Seat", seat, new Vector3(.58f, .08f, .58f));
+        AddChairPart(chair, "Back", seat - facing * .29f + Vector3.up * .3f, new Vector3(.07f, .6f, .58f));
+        foreach (float x in new[] { -.22f, .22f }) foreach (float z in new[] { -.22f, .22f })
+            AddChairPart(chair, "Leg", seat + facing * x + side * z - Vector3.up * height * .5f, new Vector3(.045f, height, .045f));
+        return chair;
+    }
+    private static void AddChairPart(GameObject root, string name, Vector3 position, Vector3 size)
+    {
+        GameObject part = PrototypeBootstrap.CreateBox(name, position, size, new Color(.35f, .32f, .28f));
+        part.transform.SetParent(root.transform, true);
+        Collider shape = part.GetComponent<Collider>();
+        if (shape != null) { shape.enabled = false; Destroy(shape); }
     }
     private void OnDisable()
     {
         if (player == null) return;
         StopAllCoroutines();
         if (openingDesk != null) Destroy(openingDesk);
+        if (openingChair != null) Destroy(openingChair);
         if (openingView != null)
         { openingView.transform.localPosition = openingVisualHome; openingView.SetForcedKick(0); }
         player.GameplayEnabled = true;
