@@ -50,6 +50,33 @@ for name,frames in sampled.items():
  rig.animation_data.action=None
 rig.animation_data.action=bpy.data.actions.get('FightingIdle');bpy.context.scene.render.fps=60;bpy.context.scene.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=str(SOURCE/'retargeted-player.blend'),compress=True)
+# Export model-space world rotation deltas, independent of FBX bone axes/scale.
+import struct
+from mathutils import Matrix
+conversion=Matrix(((-1,0,0),(0,0,1),(0,-1,0)))
+names=[b.name for b in rig.data.bones]
+rest_world={b.name:rig.matrix_world@b.matrix_local for b in rig.data.bones}
+with open(ROOT/'Assets/Resources/Motions/PlayerPoseData.bytes','wb') as stream:
+ def integer(n):stream.write(struct.pack('<i',n))
+ def string(text):
+  encoded=text.encode('utf8');integer(len(encoded));stream.write(encoded)
+ stream.write(b'KMP1');integer(60);integer(len(names))
+ for n in names:string(n)
+ actions=sorted(bpy.data.actions,key=lambda a:a.name);integer(len(actions))
+ for action in actions:
+  rig.animation_data.action=action;string(action.name);integer(int(action.frame_range[1]))
+  for frame in range(1,int(action.frame_range[1])+1):
+   bpy.context.scene.frame_set(frame);bpy.context.view_layer.update()
+   delta=conversion@((rig.matrix_world@rig.pose.bones['mixamorig:Hips'].matrix).translation-rest_world['mixamorig:Hips'].translation)
+   stream.write(struct.pack('<3f',*delta))
+   for n in names:
+    pose=(rig.matrix_world@rig.pose.bones[n].matrix).to_quaternion()
+    rotation=pose@rest_world[n].to_quaternion().inverted()
+    q=(conversion@rotation.to_matrix()@conversion.inverted()).to_quaternion()
+    stream.write(struct.pack('<4f',q.x,q.y,q.z,q.w))
+rig.animation_data.action=None
+for bone in rig.pose.bones:bone.matrix_basis.identity()
+bpy.context.view_layer.update()
 bpy.ops.object.select_all(action='DESELECT');rig.select_set(True);mesh.select_set(True);bpy.context.view_layer.objects.active=rig
-bpy.ops.export_scene.fbx(filepath=str(ROOT/'Assets/Resources/Motions/PlayerMotions.fbx'),use_selection=True,object_types={'ARMATURE','MESH'},add_leaf_bones=False,bake_anim=True,bake_anim_use_all_actions=True,bake_anim_use_nla_strips=False,bake_anim_simplify_factor=0,axis_forward='-Z',axis_up='Y',path_mode='STRIP')
+bpy.ops.export_scene.fbx(filepath=str(ROOT/'Assets/Resources/Motions/PlayerMotions.fbx'),use_selection=True,object_types={'ARMATURE','MESH'},add_leaf_bones=False,bake_anim=False,axis_forward='-Z',axis_up='Y',path_mode='STRIP')
 print('RETARGET_COMPLETE',len(sampled),'character vertices',len(mesh.data.vertices),'bones',len(rig.data.bones),flush=True)

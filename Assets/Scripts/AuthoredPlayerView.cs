@@ -11,16 +11,11 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         "CenterBlock", "RightBlock", "HitReaction", "ReceivingABigUppercut", "Stunned", "FightingIdle",
         "LeftStrafe", "RightStrafe", "Running", "WalkingBackwards", "Walking", "Jump", "Jumping1",
         "Jumping", "SitToStand", "Sitting" };
-    public static string ClipKey(string importedName)
-    {
-        var clean = new System.Text.StringBuilder();
-        foreach (char c in importedName) if (char.IsLetterOrDigit(c)) clean.Append(c);
-        string value=clean.ToString();
-        foreach(string name in RequiredClips)
-            if(value.EndsWith(name,StringComparison.OrdinalIgnoreCase)) return name;
-        return null;
-    }
-    private readonly Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
+    private AuthoredMotionLibrary library;
+    private Dictionary<string,AuthoredMotionLibrary.Clip> clips;
+    private Transform[] sampledBones;
+    private Quaternion[] restModelRotations;
+    private Vector3 restHipModelPosition;
     private readonly Dictionary<string, Transform> bones = new Dictionary<string, Transform>();
     private readonly List<BridgeBone> bridge = new List<BridgeBone>();
     private sealed class BridgeBone
@@ -45,7 +40,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     private bool airborne;
     private string current = "", attack = "RoundhouseKick", hit = "HitReaction";
     private CombatActor.ActionState previous;
-    public bool IsReady => model != null && clips.Count == 20 && hips != null;
+    public bool IsReady => model != null && clips != null && clips.Count == 20 && hips != null;
     public float CurrentSampleTime { get; private set; }
     public string CurrentMotion { get; private set; } = "FightingIdle";
     public string[] ClipNames
@@ -63,15 +58,11 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         view.model = Instantiate(prefab, owner.transform, false);
         view.model.name = "Authored player motion skin";
         view.model.transform.localPosition = view.home;
+        view.model.transform.localRotation = Quaternion.identity;
+        view.model.transform.localScale = Vector3.one;
         foreach (Animation animation in view.model.GetComponentsInChildren<Animation>()) animation.enabled = false;
         foreach (Animator animator in view.model.GetComponentsInChildren<Animator>()) animator.enabled = false;
-        foreach (AnimationClip clip in Resources.LoadAll<AnimationClip>("Motions/PlayerMotions"))
-            if (!clip.name.StartsWith("__preview__"))
-            {
-                string key=ClipKey(clip.name);
-                if(key!=null) view.clips[key]=clip;
-                else Debug.LogError("Unknown imported motion name: "+clip.name);
-            }
+        view.library=AuthoredMotionLibrary.Load();view.clips=view.library.Clips;
         foreach (Transform bone in view.model.GetComponentsInChildren<Transform>())
             if (bone.name.StartsWith("mixamorig:")) view.bones[bone.name.Substring(10)] = bone;
         view.bones.TryGetValue("Hips", out view.hips);
@@ -80,6 +71,15 @@ public sealed class AuthoredPlayerView : MonoBehaviour
             Debug.LogError("Authored motion rig/clips incomplete: " + view.clips.Count);
             Destroy(view.model); Destroy(view); return false;
         }
+        view.sampledBones=new Transform[view.library.BoneNames.Length];
+        view.restModelRotations=new Quaternion[view.sampledBones.Length];
+        for(int i=0;i<view.sampledBones.Length;i++)
+        {
+            string name=view.library.BoneNames[i].Substring(10);
+            if(!view.bones.TryGetValue(name,out view.sampledBones[i]))throw new InvalidOperationException("Baked pose bone missing: "+name);
+            view.restModelRotations[i]=Quaternion.Inverse(view.model.transform.rotation)*view.sampledBones[i].rotation;
+        }
+        view.restHipModelPosition=view.model.transform.InverseTransformPoint(view.hips.position);
         view.poseBones = view.model.GetComponentsInChildren<Transform>();
         view.transitionRotations = new Quaternion[view.poseBones.Length];
         view.transitionPositions = new Vector3[view.poseBones.Length];
@@ -171,7 +171,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
             return;
         }
         if (actor.State == CombatActor.ActionState.DEAD)
-        { Play("Stunned", Mathf.Min(elapsed * 2.5f, clips["Stunned"].length), false); return; }
+        { Play("Stunned", Mathf.Min(elapsed * 2.5f, clips["Stunned"].Length), false); return; }
         if (actor.State == CombatActor.ActionState.HIT)
         {
             // Avoid presenting a floor knockdown while the unchanged gameplay state is standing hit-stun.
@@ -194,7 +194,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         if (Time.time - landingAt < .12f)
         { Play("Jumping1", Mathf.Lerp(1.3f,1.95f,(Time.time-landingAt)/.12f), true, true); return; }
         float speed = new Vector2(velocity.x,velocity.z).magnitude;
-        if (speed < .15f) { gaitTime += Time.deltaTime; Play("FightingIdle", gaitTime % clips["FightingIdle"].length, true); }
+        if (speed < .15f) { gaitTime += Time.deltaTime; Play("FightingIdle", gaitTime % clips["FightingIdle"].Length, true); }
         else
         {
             Vector3 local = Quaternion.Inverse(Quaternion.LookRotation(actor.Facing)) * velocity;
@@ -202,7 +202,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
                 local.z < -.15f ? "WalkingBackwards" : speed > 3.2f ? "Running" : "Walking";
             float sourceSpeed = move == "Running" ? 5.76f : move == "Walking" ? 1.77f : move == "WalkingBackwards" ? 1.11f : 3.5f;
             gaitTime += Time.deltaTime * Mathf.Clamp(speed/(sourceSpeed*.86f),.4f,2.5f);
-            Play(move, gaitTime % clips[move].length, true);
+            Play(move, gaitTime % clips[move].Length, true);
         }
     }
     private void PlayAttack(string name, float elapsed, float windup, float recovery, bool airborneAttack = false)
@@ -210,6 +210,8 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         float first = name == "RoundhouseKick" ? 15/60f : 1/60f;
         float impact = name == "RoundhouseKick" ? 57/60f : name == "MmaKick1" ? 37/60f : name == "FlyingKick" ? 28/60f : 29/60f;
         float last = name == "RoundhouseKick" ? 115/60f : name == "MmaKick1" ? 85/60f : name == "FlyingKick" ? 85/60f : 75/60f;
+        if(actor.State==CombatActor.ActionState.ATTACK || (actor.State==CombatActor.ActionState.ULTIMATE && ultimateTier==3))
+            elapsed=hitAt>=started?windup+Time.time-hitAt:Mathf.Min(elapsed,windup);
         float time = elapsed <= windup ? Mathf.Lerp(first,impact,Mathf.SmoothStep(0,1,Mathf.Clamp01(elapsed/windup))) :
             Mathf.Lerp(impact,last,Mathf.SmoothStep(0,1,Mathf.Clamp01((elapsed-windup)/recovery)));
         Play(name, time, !airborneAttack);
@@ -243,8 +245,15 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         model.transform.localPosition=home;
         model.transform.localRotation=Quaternion.identity;
         model.transform.localScale=Vector3.one;
-        CurrentSampleTime=Mathf.Clamp(time,0,clips[name].length);
-        clips[name].SampleAnimation(model,CurrentSampleTime);
+        AuthoredMotionLibrary.Clip clip=clips[name];
+        CurrentSampleTime=Mathf.Clamp(time,0,clip.Length);
+        float cursor=CurrentSampleTime*clip.FPS;
+        int first=Mathf.Clamp(Mathf.FloorToInt(cursor),0,clip.Frames.Length-1);
+        int second=Mathf.Min(first+1,clip.Frames.Length-1);float weight=cursor-first;
+        AuthoredMotionLibrary.Frame a=clip.Frames[first],b=clip.Frames[second];
+        for(int i=0;i<sampledBones.Length;i++)
+            sampledBones[i].rotation=model.transform.rotation*Quaternion.Slerp(a.Rotations[i],b.Rotations[i],weight)*restModelRotations[i];
+        hips.position=model.transform.TransformPoint(restHipModelPosition+Vector3.Lerp(a.HipDelta,b.HipDelta,weight));
     }
     private float LowestFoot()
     {
@@ -282,7 +291,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     public void Preview(string name,float normalizedTime)
     {
         if (!IsReady || !clips.ContainsKey(name)) throw new ArgumentException("Unknown motion "+name);
-        Sample(name,clips[name].length*Mathf.Clamp01(normalizedTime));
+        Sample(name,clips[name].Length*Mathf.Clamp01(normalizedTime));
         CurrentMotion=name;
     }
     public void PreviewCinematic(string name,float seconds)
