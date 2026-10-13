@@ -13,6 +13,7 @@ public sealed class TutorialDirector : MonoBehaviour
     private GameObject openingDesk, openingChair;
     private PrototypeCharacterView openingView;
     private Vector3 openingVisualHome;
+    private float openingSitTime;
     private readonly TutorialComboLesson comboLesson = new TutorialComboLesson();
     private readonly string[] instructions =
     {
@@ -104,8 +105,8 @@ public sealed class TutorialDirector : MonoBehaviour
         openingVisualHome = home;
         Vector3 enemyHome = enemy.transform.position;
         GameObject desk = PrototypeBootstrap.CreateBox("Opening desk",
-            player.transform.position + new Vector3(0, -.3f, .6f),
-            new Vector3(1.6f, .15f, .9f), new Color(.5f, .45f, .38f));
+            player.transform.position + new Vector3(.9f, -.3f, 0),
+            new Vector3(.65f, .15f, 1.1f), new Color(.5f, .45f, .38f));
         openingDesk = desk;
         view.transform.localPosition = home;
         view.transform.localRotation = Quaternion.LookRotation(Vector3.right);
@@ -161,10 +162,11 @@ public sealed class TutorialDirector : MonoBehaviour
         float started = Time.time;
         while (Time.time - started < duration)
         {
-            if (motion != null) motion.PlayCinematic(clip, Time.time - started);
+            if (motion != null) motion.PlayCinematic(clip, (clip == "Sitting" ? openingSitTime : 0) + Time.time - started);
             yield return null;
         }
-        if (motion != null) motion.PlayCinematic(clip, Mathf.Min(duration, motion.MotionDuration(clip)));
+        if (clip == "Sitting") openingSitTime += duration;
+        if (motion != null) motion.PlayCinematic(clip, Mathf.Min(clip == "Sitting" ? openingSitTime : duration, motion.MotionDuration(clip)));
     }
     private static GameObject CreateOpeningChair(Vector3 hips, Vector3 facing, float floor)
     {
