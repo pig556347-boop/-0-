@@ -60,6 +60,14 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         character.CinematicPose=true;
         Vector3 origin=actor.transform.position;Quaternion physicalRotation=actor.transform.rotation;
         CapsuleCollider collider=actor.GetComponent<CapsuleCollider>();float colliderHeight=collider.height;
+        string preview=Application.absoluteURL.Contains("authoredPose=")?
+            Application.absoluteURL.Substring(Application.absoluteURL.IndexOf("authoredPose=",StringComparison.Ordinal)+13).Split('&')[0]:null;
+        if(preview!=null)
+        {
+            float phase=preview=="RoundhouseKick"?.38f:preview=="MmaKick1"?.39f:preview=="MmaKick2"?.33f:preview=="Stunned"?.95f:.35f;
+            authored.Preview(preview,phase);yield return new WaitForEndOfFrame();
+            Debug.Log("AUTHORED_PREVIEW_READY "+preview);yield break;
+        }
         foreach(string name in authored.ClipNames)
         {
             for(int phase=0;phase<=10;phase++)
@@ -74,14 +82,6 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         authored.Preview("FightingIdle",0);
         Bounds standing=BoundsOf(render);
         Check(standing.size.y>1.5f&&standing.size.y<2.1f,"authored fighting stance normal character scale");
-        string preview=Application.absoluteURL.Contains("authoredPose=")?
-            Application.absoluteURL.Substring(Application.absoluteURL.IndexOf("authoredPose=",StringComparison.Ordinal)+13).Split('&')[0]:null;
-        if(preview!=null)
-        {
-            float phase=preview=="RoundhouseKick"?.38f:preview=="MmaKick1"?.39f:preview=="MmaKick2"?.33f:.35f;
-            authored.Preview(preview,phase);yield return new WaitForEndOfFrame();
-            Debug.Log("AUTHORED_PREVIEW_READY "+preview);yield break;
-        }
         ImportedPlayerView legacy=visual.GetComponent<ImportedPlayerView>();
         for(int phase=0;phase<=10;phase++)
         {
@@ -94,10 +94,16 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         Check(authored.CurrentMotion=="FightingIdle","idle state uses supplied fighting stance");
         foreach(bool heavy in new[]{false,true})
         {
+            Transform support=null;
+            foreach(Transform bone in authored.ModelRoot.GetComponentsInChildren<Transform>())
+                if(bone.name=="mixamorig:"+(heavy?"RightFoot":"LeftFoot"))support=bone;
+            Vector3 anchor=support.position;
             Check(actor.TryAttack(heavy),"attack starts heavy="+heavy);
             yield return new WaitForSeconds(actor.VisualWindup);yield return new WaitForEndOfFrame();
             Check(authored.CurrentMotion==(heavy?"MmaKick1":"RoundhouseKick"),"attack selects distinct imported motion heavy="+heavy);
             Check(Mathf.Abs(authored.CurrentSampleTime-(heavy?37/60f:57/60f))<.15f,"visual impact synchronized with unchanged combat clock");
+            Vector3 drift=support.position-anchor;drift.y=0;
+            Check(drift.magnitude<.06f,"support ankle remains planted at attack impact heavy="+heavy);
             Bounded(render,origin,"attack impact");
             yield return new WaitForSeconds(actor.VisualRecovery+.15f);
             Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","attack returns to controllable fighting stance");

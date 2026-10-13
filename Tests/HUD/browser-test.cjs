@@ -69,7 +69,7 @@ const { PNG } = require('pngjs');
       if(!passed||errors.length)throw Error('Authored motion review '+review+' failed: '+errors.join(' '));
       await page.close();
     }
-    for(const pose of ['FightingIdle','RoundhouseKick','MmaKick1','CenterBlock','Jumping1','Sitting']) {
+    for(const pose of ['FightingIdle','RoundhouseKick','MmaKick1','CenterBlock','Jumping1','Sitting','Stunned']) {
       const page=await browser.newPage({viewport:{width:1280,height:720}});
       let ready=false;const errors=[];
       page.on('console',msg=>{if(msg.text().includes('AUTHORED_PREVIEW_READY'))ready=true;if(/AUTHORED_TEST_FAIL|Exception/.test(msg.text()))errors.push(msg.text());});
@@ -179,7 +179,7 @@ const { PNG } = require('pngjs');
     if(!hookReady)throw Error('Real third combo hit did not start the spinning hook animation');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
     fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
-    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','summary.json'])
+    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
     await live.close();

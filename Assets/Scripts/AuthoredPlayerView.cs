@@ -7,6 +7,19 @@ using UnityEngine;
 [DefaultExecutionOrder(100)]
 public sealed class AuthoredPlayerView : MonoBehaviour
 {
+    public static readonly string[] RequiredClips = { "FlyingKick", "MmaKick1", "MmaKick2", "RoundhouseKick",
+        "CenterBlock", "RightBlock", "HitReaction", "ReceivingABigUppercut", "Stunned", "FightingIdle",
+        "LeftStrafe", "RightStrafe", "Running", "WalkingBackwards", "Walking", "Jump", "Jumping1",
+        "Jumping", "SitToStand", "Sitting" };
+    public static string ClipKey(string importedName)
+    {
+        var clean = new System.Text.StringBuilder();
+        foreach (char c in importedName) if (char.IsLetterOrDigit(c)) clean.Append(c);
+        string value=clean.ToString();
+        foreach(string name in RequiredClips)
+            if(value.EndsWith(name,StringComparison.OrdinalIgnoreCase)) return name;
+        return null;
+    }
     private readonly Dictionary<string, AnimationClip> clips = new Dictionary<string, AnimationClip>();
     private readonly Dictionary<string, Transform> bones = new Dictionary<string, Transform>();
     private readonly List<BridgeBone> bridge = new List<BridgeBone>();
@@ -22,6 +35,9 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     private Quaternion[] transitionRotations;
     private Vector3[] transitionPositions;
     private Material material;
+    private Quaternion visualFacing;
+    private Vector3 attackAnchor;
+    private string supportName;
     private Vector3 home = new Vector3(0, -.95f, 0);
     private float soleHeight, transitionAt = -10, started, hitAt = -10, guardHitAt = -10;
     private float gaitTime, jumpAt, landingAt = -10;
@@ -50,7 +66,12 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         foreach (Animation animation in view.model.GetComponentsInChildren<Animation>()) animation.enabled = false;
         foreach (Animator animator in view.model.GetComponentsInChildren<Animator>()) animator.enabled = false;
         foreach (AnimationClip clip in Resources.LoadAll<AnimationClip>("Motions/PlayerMotions"))
-            if (!clip.name.StartsWith("__preview__")) view.clips[clip.name] = clip;
+            if (!clip.name.StartsWith("__preview__"))
+            {
+                string key=ClipKey(clip.name);
+                if(key!=null) view.clips[key]=clip;
+                else Debug.LogError("Unknown imported motion name: "+clip.name);
+            }
         foreach (Transform bone in view.model.GetComponentsInChildren<Transform>())
             if (bone.name.StartsWith("mixamorig:")) view.bones[bone.name.Substring(10)] = bone;
         view.bones.TryGetValue("Hips", out view.hips);
@@ -73,7 +94,8 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         actor.StrikeStarted += view.OnStrike;
         actor.UltimateStarted += view.OnUltimate;
         actor.Damaged += view.OnDamage;
-        owner.transform.rotation = Quaternion.LookRotation(actor.Facing);
+        view.visualFacing = Quaternion.LookRotation(actor.Facing);
+        owner.transform.rotation = view.visualFacing;
         view.Preview("FightingIdle", 0);
         Debug.Log("AUTHORED_PLAYER_READY candidates=20 bones=19 rootMotion=false");
         return true;
@@ -103,6 +125,8 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     {
         started = Time.time; hitAt = -10;
         attack = actor.HeavyStrike ? "MmaKick1" : actor.BasicComboHit == 2 ? "MmaKick2" : "RoundhouseKick";
+        supportName=attack=="MmaKick1"?"RightFoot":"LeftFoot";
+        attackAnchor=bones[supportName].position;
         current = ""; // Even two consecutive instances of one clip get a new blend origin.
     }
     private void OnStrike() { hitAt = Time.time; }
@@ -128,7 +152,10 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         { ApplyBridge("Spinning hook fallback"); return; }
         if (actor.State == CombatActor.ActionState.GRAB || actor.State == CombatActor.ActionState.DODGE)
         { ApplyBridge(actor.State == CombatActor.ActionState.GRAB ? "Grab fallback" : "Dodge fallback"); return; }
-        transform.rotation = Quaternion.LookRotation(actor.Facing);
+        Quaternion facing=Quaternion.LookRotation(actor.Facing);
+        visualFacing=actor.State==CombatActor.ActionState.IDLE ?
+            Quaternion.Slerp(visualFacing,facing,1-Mathf.Exp(-22*Time.deltaTime)) : facing;
+        transform.rotation=visualFacing;
         float elapsed = Time.time - started;
         if (actor.State == CombatActor.ActionState.ATTACK)
         { PlayAttack(attack, elapsed, actor.VisualWindup, actor.VisualRecovery); return; }
@@ -173,7 +200,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
             string move = Mathf.Abs(local.x) > Mathf.Abs(local.z)*1.3f ? local.x < 0 ? "LeftStrafe" : "RightStrafe" :
                 local.z < -.15f ? "WalkingBackwards" : speed > 3.2f ? "Running" : "Walking";
             float sourceSpeed = move == "Running" ? 5.76f : move == "Walking" ? 1.77f : move == "WalkingBackwards" ? 1.11f : 3.5f;
-            gaitTime += Time.deltaTime * Mathf.Clamp(speed/sourceSpeed,.4f,2.5f);
+            gaitTime += Time.deltaTime * Mathf.Clamp(speed/(sourceSpeed*.86f),.4f,2.5f);
             Play(move, gaitTime % clips[move].length, true);
         }
     }
@@ -185,6 +212,11 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         float time = elapsed <= windup ? Mathf.Lerp(first,impact,Mathf.SmoothStep(0,1,Mathf.Clamp01(elapsed/windup))) :
             Mathf.Lerp(impact,last,Mathf.SmoothStep(0,1,Mathf.Clamp01((elapsed-windup)/recovery)));
         Play(name, time, !airborneAttack);
+        if(actor.State==CombatActor.ActionState.ATTACK && supportName!=null)
+        {
+            Vector3 correction=attackAnchor-bones[supportName].position;correction.y=0;
+            model.transform.position+=Vector3.ClampMagnitude(correction,.45f);
+        }
     }
     private void Switch(string name)
     {
@@ -242,7 +274,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         // therefore copies local poses without another approximate retargeting step.
         foreach (BridgeBone joint in bridge)
         { joint.Target.localRotation=joint.Source.localRotation; joint.Target.localPosition=joint.Source.localPosition; }
-        BlendPose(); GroundFeet(); CurrentMotion=label;
+        BlendPose(); GroundFeet(); CurrentMotion=label; visualFacing=transform.rotation;
     }
     public void PreviewFallback(string label)
     { Switch(label); transitionAt=-10; ApplyBridge(label); }

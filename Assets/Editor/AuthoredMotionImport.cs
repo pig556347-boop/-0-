@@ -6,7 +6,7 @@ using UnityEngine;
 // Legacy sampled clips only drive this visual hierarchy. No Animator root motion.
 public sealed class AuthoredMotionImport : AssetPostprocessor
 {
-    public override uint GetVersion() => 1;
+    public override uint GetVersion() => 2;
     private void OnPreprocessModel()
     {
         if (!assetPath.StartsWith("Assets/Resources/Motions/")) return;
@@ -30,6 +30,12 @@ public sealed class AuthoredMotionImport : AssetPostprocessor
         }
         importer.clipAnimations = clips;
     }
+    private void OnPostprocessAnimation(GameObject root, AnimationClip clip)
+    {
+        if (!assetPath.StartsWith("Assets/Resources/Motions/")) return;
+        string name=AuthoredPlayerView.ClipKey(clip.name);
+        if(name!=null)clip.name=name;
+    }
     public static void Validate()
     {
         const string path = "Assets/Resources/Motions/PlayerMotions.fbx";
@@ -46,9 +52,12 @@ public sealed class AuthoredMotionImport : AssetPostprocessor
             importer.SaveAndReimport();
         }
         int count = 0;
+        var names=new System.Collections.Generic.HashSet<string>();
         foreach (UnityEngine.Object item in AssetDatabase.LoadAllAssetsAtPath(path))
             if (item is AnimationClip clip && !clip.name.StartsWith("__preview__"))
-            { count++; Debug.Log("AUTHORED_CLIP_IMPORT " + clip.name + " seconds=" + clip.length); }
+            { count++; string name=AuthoredPlayerView.ClipKey(clip.name); if(name!=null)names.Add(name);
+                Debug.Log("AUTHORED_CLIP_IMPORT " + clip.name + " seconds=" + clip.length); }
+        if(names.Count!=20)throw new InvalidOperationException("Missing expected motion names: "+string.Join(",",names));
         if (count != 20) throw new InvalidOperationException("Expected 20 authored candidates, got " + count);
     }
 }
