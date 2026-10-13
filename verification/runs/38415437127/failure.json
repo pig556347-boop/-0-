@@ -1,0 +1,4 @@
+{
+  "commit": "75def35f19f46f08e1136d3bc8d33801e2223c95",
+  "error": "Error: Authored motion review 1 failed: AUTHORED_TEST_FAIL CenterBlock phase 0 finite skin without escaping vertices\n Exception: CenterBlock phase 0 finite skin without escaping vertices\n  at AuthoredMotionPlaytestRunner.Check (System.Boolean value, System.String message) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
