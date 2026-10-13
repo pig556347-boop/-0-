@@ -1,5 +1,5 @@
 {
-  "commit": "5a3283e128756992cb653b97f3d04ab380586ae5",
+  "commit": "ae7b17ca5e4be0eebd7e10d91c0945d7aeebbbce",
   "executions": [
     {
       "width": 1920,
@@ -27,13 +27,13 @@
       "review": 1,
       "width": 1280,
       "height": 720,
-      "checks": 512
+      "checks": 492
     },
     {
       "review": 2,
       "width": 1024,
       "height": 768,
-      "checks": 512
+      "checks": 492
     }
   ],
   "authoredReady": true,
