@@ -12,6 +12,7 @@ public static class HUDCIBuild
     {
         CharacterModelImport.PrepareForBuild();
         ClassroomBuildCheck.Validate();
+        AuthoredMotionImport.Validate();
         PrototypeMenu.BuildForCI();
         var test=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
         new GameObject("HUD Playtest").AddComponent<HUDPlaytestRunner>();

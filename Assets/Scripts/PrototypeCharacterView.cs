@@ -13,10 +13,13 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     private float actionStarted;
     private Quaternion baseLeftArm, baseRightArm;
     public bool CinematicPose { get; set; }
+    public bool UseAuthoredMotion { get; private set; }
     public void SetForcedKick(float amount)
     {
         ImportedPlayerView imported = GetComponent<ImportedPlayerView>();
         if (imported != null) imported.ForcedKick(amount);
+        AuthoredPlayerView authored = GetComponent<AuthoredPlayerView>();
+        if (authored != null) authored.PreviewKick(amount);
         if (rightLeg != null) rightLeg.localRotation = Quaternion.Euler(-95 * amount, 0, 0);
     }
 
@@ -32,8 +35,9 @@ public sealed class PrototypeCharacterView : MonoBehaviour
         return true;
     }
 
-    public void Build(CombatActor owner)
+    public void Build(CombatActor owner, bool useAuthoredMotion = true)
     {
+        UseAuthoredMotion = useAuthoredMotion;
         actor = owner; motor = owner.GetComponent<PlayerController>();
         actor.StrikeStarted += OnStrike;
         if (owner.Team == 0 && ImportedPlayerView.TryBuild(this, owner)) return;

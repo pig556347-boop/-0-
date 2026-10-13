@@ -50,10 +50,40 @@ const { PNG } = require('pngjs');
       if(!ready||errors.length)throw Error('Deongchi pose failed '+pose+': '+errors.join(' '));
       await page.screenshot({path:'hud-test-results/deongchi-'+pose+'.png'});await page.close();
     }
+    const authoredReviews=[];
+    for(const [review,width,height] of [[1,1280,720],[2,1024,768]]) {
+      const page=await browser.newPage({viewport:{width,height}});
+      let passed=false;const errors=[];
+      page.on('console',msg=>{
+        const text=msg.text();
+        if(text.includes('AUTHORED_TEST_PASS')) {
+          passed=true;authoredReviews.push({review,width,height,checks:Number(text.match(/checks=(\d+)/)[1])});
+          console.log('::notice::'+text);
+        }
+        if(/AUTHORED_TEST_FAIL|Exception|Can't add component|Not allowed to access/.test(text))errors.push(text);
+      });
+      page.on('pageerror',e=>errors.push(String(e)));
+      await page.goto('http://127.0.0.1:8780/HUDTest/?authoredReview='+review);
+      for(let i=0;i<180&&!passed&&!errors.length;i++)await page.waitForTimeout(1000);
+      await page.screenshot({path:'hud-test-results/authored-review-'+review+'.png'});
+      if(!passed||errors.length)throw Error('Authored motion review '+review+' failed: '+errors.join(' '));
+      await page.close();
+    }
+    for(const pose of ['FightingIdle','RoundhouseKick','MmaKick1','CenterBlock','Jumping1','Sitting']) {
+      const page=await browser.newPage({viewport:{width:1280,height:720}});
+      let ready=false;const errors=[];
+      page.on('console',msg=>{if(msg.text().includes('AUTHORED_PREVIEW_READY'))ready=true;if(/AUTHORED_TEST_FAIL|Exception/.test(msg.text()))errors.push(msg.text());});
+      page.on('pageerror',e=>errors.push(String(e)));
+      await page.goto('http://127.0.0.1:8780/HUDTest/?authoredReview=1&authoredPose='+pose);
+      for(let i=0;i<90&&!ready&&!errors.length;i++)await page.waitForTimeout(1000);
+      if(!ready||errors.length)throw Error('Authored preview '+pose+' failed: '+errors.join(' '));
+      await page.screenshot({path:'hud-test-results/authored-'+pose+'.png'});await page.close();
+    }
     const live=await browser.newPage({viewport:{width:1920,height:1080}});
     const runtimeErrors=[];
+    let authoredReady=false;
     let playerReady=false, deongchiReady=false, hookReady=false, lastTutorialRole="", motion=null, classroomReady=false;
-    live.on('console',msg=>{if(msg.text().includes('CLASSROOM_ASSETS_READY count=5'))classroomReady=true;});
+    live.on('console',msg=>{if(msg.text().includes('CLASSROOM_ASSETS_READY count=5'))classroomReady=true;if(msg.text().includes('AUTHORED_PLAYER_READY'))authoredReady=true;});
     live.on('console',msg=>{if(msg.text().includes('HOOK_KICK_START combo=3'))hookReady=true;});
     live.on('console',msg=>{const s=msg.text();if(s.startsWith('MOTION_LIVE '))motion=JSON.parse(s.slice(12));});
     live.on('console',msg=>{if(msg.text().includes('PLAYER_MODEL_READY'))playerReady=true;if(msg.text().includes('DEONGCHI_MODEL_READY'))deongchiReady=true;if(msg.text().includes('TUTORIAL_ROLE')){lastTutorialRole=msg.text();console.log('::notice::'+lastTutorialRole)}if(/Exception|Can't add component/.test(msg.text()))runtimeErrors.push(msg.text())});
@@ -143,12 +173,13 @@ const { PNG } = require('pngjs');
     if(runtimeErrors.length)throw Error('Production scene runtime errors: '+runtimeErrors.join(' '));
     if(!classroomReady)throw Error('Five textured classroom assets were not loaded');
     if(!playerReady)throw Error('Production player model was not loaded');
+    if(!authoredReady)throw Error('Production authored motion library did not load');
     if(!deongchiReady)throw Error('Tutorial Move/Jump/Crouch progression did not load Deongchi: '+lastTutorialRole);
     if(!lastTutorialRole.includes('step=Heavy'))throw Error('Real basic combo did not complete the three-hit tutorial: '+lastTutorialRole);
     if(!hookReady)throw Error('Real third combo hit did not start the spinning hook animation');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
-    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','summary.json'])
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
+    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
     await live.close();

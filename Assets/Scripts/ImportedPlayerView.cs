@@ -104,6 +104,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         foreach (SkinnedMeshRenderer renderer in view.model.GetComponentsInChildren<SkinnedMeshRenderer>())
         renderer.updateWhenOffscreen = true;
         foreach (Animator animator in view.model.GetComponentsInChildren<Animator>()) animator.enabled = false;
+        if (kind == "Player" && owner.UseAuthoredMotion) AuthoredPlayerView.TryBuild(owner, actor, view.model);
         actor.StrikeStarted += view.OnStrike; actor.AttackPrepared += view.OnPrepare; actor.UltimateStarted += view.OnUltimate;
         Debug.Log((kind == "Player" ? "PLAYER_MODEL_READY" : "DEONGCHI_MODEL_READY") + " bones=19 anatomical_skin=true");
         return true;

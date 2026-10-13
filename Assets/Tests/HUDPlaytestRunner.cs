@@ -56,11 +56,13 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Light fixtureLight = new GameObject("Fixture light").AddComponent<Light>();
         fixtureLight.type = LightType.Directional; fixtureLight.intensity = 1.1f;
         fixtureLight.transform.rotation = Quaternion.Euler(50, -30, 0);
+        if (Application.absoluteURL.Contains("authoredReview="))
+        { new GameObject("Authored motion tests").AddComponent<AuthoredMotionPlaytestRunner>(); yield break; }
         CombatActor player=Actor("권민준",0,120),enemy=Actor("불량 학생",1,100);
         GameObject playerVisual = new GameObject("Player model test visual");
         playerVisual.transform.SetParent(player.transform, false);
         PrototypeCharacterView character = playerVisual.AddComponent<PrototypeCharacterView>();
-        character.Build(player);
+        character.Build(player, false);
         ImportedPlayerView imported = playerVisual.GetComponent<ImportedPlayerView>();
         Check(imported != null && imported.IsReady, "imported player rig ready");
         SkinnedMeshRenderer render = playerVisual.GetComponentInChildren<SkinnedMeshRenderer>();

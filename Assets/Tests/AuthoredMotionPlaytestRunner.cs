@@ -1,0 +1,152 @@
+using System;
+using System.Collections;
+using SchoolRuleZero;
+using UnityEngine;
+
+// Separate fixture: every supplied candidate is sampled, then production state wiring is exercised.
+public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
+{
+    private int checks;
+    private void Check(bool value,string message)
+    {
+        if (!value) { Debug.LogError("AUTHORED_TEST_FAIL "+message); throw new Exception(message); }
+        checks++;
+    }
+    private Vector3[] Skin(SkinnedMeshRenderer render)
+    {
+        Mesh mesh=render.sharedMesh;BoneWeight[] weights=mesh.boneWeights;
+        Matrix4x4[] matrices=new Matrix4x4[mesh.bindposes.Length];
+        for(int i=0;i<matrices.Length;i++)matrices[i]=render.bones[i].localToWorldMatrix*mesh.bindposes[i];
+        Vector3[] vertices=mesh.vertices,result=new Vector3[vertices.Length];
+        for(int i=0;i<vertices.Length;i++)
+        {
+            BoneWeight w=weights[i];Vector3 v=vertices[i];
+            result[i]=matrices[w.boneIndex0].MultiplyPoint3x4(v)*w.weight0+
+                matrices[w.boneIndex1].MultiplyPoint3x4(v)*w.weight1+
+                matrices[w.boneIndex2].MultiplyPoint3x4(v)*w.weight2+
+                matrices[w.boneIndex3].MultiplyPoint3x4(v)*w.weight3;
+        }
+        return result;
+    }
+    private Bounds BoundsOf(SkinnedMeshRenderer render)
+    { Vector3[] vs=Skin(render);Bounds b=new Bounds(vs[0],Vector3.zero);foreach(Vector3 v in vs)b.Encapsulate(v);return b; }
+    private void Bounded(SkinnedMeshRenderer render,Vector3 origin,string label)
+    {
+        bool good=true;
+        foreach(Vector3 v in Skin(render))
+            good &= !float.IsNaN(v.x)&&!float.IsNaN(v.y)&&!float.IsNaN(v.z)&&!float.IsInfinity(v.x)&&
+                !float.IsInfinity(v.y)&&!float.IsInfinity(v.z)&&(v-origin).magnitude<3.2f;
+        Check(good,label+" finite skin without escaping vertices");
+    }
+    private CombatActor CreateActor(string name,int team,Vector3 position)
+    {
+        GameObject go=new GameObject(name);go.transform.position=position;
+        CombatActor actor=go.AddComponent<CombatActor>();actor.Configure(team);actor.ConfigureStats(120,12,.12f,.28f);
+        Rigidbody body=go.GetComponent<Rigidbody>();body.useGravity=false;body.constraints=RigidbodyConstraints.FreezeAll;
+        return actor;
+    }
+    private IEnumerator Start()
+    {
+        int review=Application.absoluteURL.Contains("authoredReview=2")?2:1;
+        Application.targetFrameRate=review==1?60:30;
+        CombatActor actor=CreateActor("Authored 권민준",0,Vector3.zero);
+        GameObject visual=new GameObject("Authored test visual");visual.transform.SetParent(actor.transform,false);
+        PrototypeCharacterView character=visual.AddComponent<PrototypeCharacterView>();character.Build(actor);
+        AuthoredPlayerView authored=visual.GetComponent<AuthoredPlayerView>();
+        Check(authored!=null&&authored.IsReady,"all 20 authored clips available");
+        SkinnedMeshRenderer render=authored.ModelRoot.GetComponentInChildren<SkinnedMeshRenderer>();
+        Check(render.sharedMesh.isReadable&&render.sharedMesh.vertexCount<25000,"existing web character skin preserved");
+        Check(render.sharedMaterial.mainTexture!=null,"original player texture preserved");
+        character.CinematicPose=true;
+        Vector3 origin=actor.transform.position;Quaternion physicalRotation=actor.transform.rotation;
+        CapsuleCollider collider=actor.GetComponent<CapsuleCollider>();float colliderHeight=collider.height;
+        foreach(string name in authored.ClipNames)
+        {
+            for(int phase=0;phase<=10;phase++)
+            {
+                authored.Preview(name,phase/10f);Bounded(render,origin,name+" phase "+phase);
+                Check(actor.transform.position==origin&&actor.transform.rotation==physicalRotation&&collider.height==colliderHeight,
+                    name+" does not move actor or change collider");
+            }
+            Debug.Log("AUTHORED_CANDIDATE_PASS review="+review+" name="+name+" samples=11");
+            yield return null;
+        }
+        authored.Preview("FightingIdle",0);
+        Bounds standing=BoundsOf(render);
+        Check(standing.size.y>1.5f&&standing.size.y<2.1f,"authored fighting stance normal character scale");
+        string preview=Application.absoluteURL.Contains("authoredPose=")?
+            Application.absoluteURL.Substring(Application.absoluteURL.IndexOf("authoredPose=",StringComparison.Ordinal)+13).Split('&')[0]:null;
+        if(preview!=null)
+        {
+            float phase=preview=="RoundhouseKick"?.38f:preview=="MmaKick1"?.39f:preview=="MmaKick2"?.33f:.35f;
+            authored.Preview(preview,phase);yield return new WaitForEndOfFrame();
+            Debug.Log("AUTHORED_PREVIEW_READY "+preview);yield break;
+        }
+        ImportedPlayerView legacy=visual.GetComponent<ImportedPlayerView>();
+        for(int phase=0;phase<=10;phase++)
+        {
+            legacy.PreviewHook(phase/10f);authored.PreviewFallback("Spinning hook fallback");
+            Bounded(render,origin,"retained hook phase "+phase);
+            Check(actor.transform.position==origin&&actor.Facing==Vector3.right,"hook presentation preserves combat root and facing");
+        }
+        legacy.PreviewFighting();authored.Preview("FightingIdle",0);
+        character.CinematicPose=false;yield return null;yield return new WaitForEndOfFrame();
+        Check(authored.CurrentMotion=="FightingIdle","idle state uses supplied fighting stance");
+        foreach(bool heavy in new[]{false,true})
+        {
+            Check(actor.TryAttack(heavy),"attack starts heavy="+heavy);
+            yield return new WaitForSeconds(actor.VisualWindup);yield return new WaitForEndOfFrame();
+            Check(authored.CurrentMotion==(heavy?"MmaKick1":"RoundhouseKick"),"attack selects distinct imported motion heavy="+heavy);
+            Check(Mathf.Abs(authored.CurrentSampleTime-(heavy?37/60f:57/60f))<.15f,"visual impact synchronized with unchanged combat clock");
+            Bounded(render,origin,"attack impact");
+            yield return new WaitForSeconds(actor.VisualRecovery+.15f);
+            Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","attack returns to controllable fighting stance");
+        }
+        Check(actor.TryGuard(false),"guard starts");yield return new WaitForSeconds(.15f);
+        Check(authored.CurrentMotion=="CenterBlock","guard uses CenterBlock");
+        actor.ReceiveHit(new HitRequest(null,4,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
+        Check(authored.CurrentMotion=="RightBlock","blocked impact uses RightBlock");actor.ReleaseGuard();
+        yield return new WaitForSeconds(.2f);
+        Check(actor.TryAttack(false),"attack before interruption starts");
+        actor.ReceiveHit(new HitRequest(null,8,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
+        Check(authored.CurrentMotion=="HitReaction"&&actor.State==CombatActor.ActionState.HIT,"damage cancels attack animation");
+        yield return new WaitForSeconds(.45f);
+        Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","hit recovery has no stuck attack state");
+        actor.ReceiveHit(new HitRequest(null,24,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
+        Check(authored.CurrentMotion=="ReceivingABigUppercut","strong hit uses bounded reaction section");
+        yield return new WaitForSeconds(.45f);
+        Check(actor.TryCrouch(),"existing crouch action available");yield return new WaitForSeconds(.2f);yield return new WaitForEndOfFrame();
+        Check(authored.CurrentMotion=="Crouch fallback","missing crouch clip retains procedural action");
+        Bounded(render,origin,"retargeted crouch fallback");
+        Check(BoundsOf(render).size.y<standing.size.y-.2f,"crouch visibly lowers existing character");
+        yield return new WaitForSeconds(.35f);
+        Check(actor.TryDodge(Vector3.right),"dodge action available");yield return null;yield return new WaitForEndOfFrame();
+        Check(authored.CurrentMotion=="Dodge fallback","missing dodge clip retains existing action");
+        Bounded(render,origin,"dodge fallback");yield return new WaitForSeconds(.4f);
+        CombatActor opponent=CreateActor("Grab target",1,Vector3.right);
+        Check(actor.TryGrab(),"grab target acquired");yield return null;yield return new WaitForEndOfFrame();
+        Check(authored.CurrentMotion=="Grab fallback","grab preserves existing presentation fallback");
+        yield return new WaitForSeconds(.5f);Destroy(opponent.gameObject);
+        for(int tier=1;tier<=3;tier++)
+        {
+            actor.RestoreForTutorial();actor.Progress.ConsumeUltimate();actor.Progress.ConfirmHit(Time.time,gain:tier==1?33:tier==2?66:100);
+            Check(actor.TryUltimate(),"ultimate starts tier="+tier);
+            if(tier==2){yield return new WaitForSeconds(.2f);actor.ReceiveHit(new HitRequest(null,8,Vector3.left));}
+            yield return new WaitForSeconds(tier==2?.5f:.15f);yield return new WaitForEndOfFrame();
+            Check(authored.CurrentMotion==(tier==3?"FlyingKick":tier==2?"MmaKick1":"MmaKick2"),"ultimate visual tier="+tier);
+            Bounded(render,origin,"ultimate tier="+tier);
+            yield return new WaitForSeconds(1.2f);
+            Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","ultimate returns to stance tier="+tier);
+        }
+        float sampleBefore=authored.CurrentSampleTime;Time.timeScale=0;
+        yield return new WaitForSecondsRealtime(.12f);
+        Check(authored.CurrentSampleTime==sampleBefore,"pause freezes imported visual playback");Time.timeScale=1;
+        actor.Health.Infinite=false;actor.ReceiveHit(new HitRequest(null,1000,Vector3.left));yield return new WaitForSeconds(1.1f);yield return new WaitForEndOfFrame();
+        Check(authored.CurrentMotion=="Stunned"&&actor.State==CombatActor.ActionState.DEAD,"death holds supplied fall pose");
+        Bounded(render,origin,"death");
+        actor.RestoreForTutorial();yield return new WaitForSeconds(.15f);
+        Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","retry resets death animation");
+        Check(actor.transform.position==origin&&collider.height==colliderHeight,"all actions preserve physical root and collider");
+        Debug.Log("AUTHORED_TEST_PASS review="+review+" checks="+checks+" candidates=20");
+    }
+}
