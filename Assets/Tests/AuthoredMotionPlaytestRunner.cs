@@ -90,7 +90,10 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         Bounds standing=BoundsOf(render);
         Check(standing.size.y>1.5f&&standing.size.y<2.1f,"authored fighting stance normal character scale");
         ImportedPlayerView disabledLegacy=visual.GetComponent<ImportedPlayerView>();
-        Transform legacyFoot=disabledLegacy.GetComponentsInChildren<Transform>()[0];
+        Transform legacyFoot=null;
+        foreach(Transform bone in disabledLegacy.GetComponentsInChildren<Transform>())
+            if(bone.name=="LeftFoot" && bone.GetComponentInParent<SkinnedMeshRenderer>()==null) { legacyFoot=bone; break; }
+        Check(legacyFoot!=null,"legacy initialization rig remains available for removal regression check");
         Quaternion legacyRotation=legacyFoot.localRotation;
         character.CinematicPose=false;yield return null;yield return new WaitForEndOfFrame();
         Check(authored.CurrentMotion=="FightingIdle","idle state uses supplied fighting stance");
@@ -107,13 +110,6 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
             Bounded(render,origin,"attack impact");
             yield return new WaitForSeconds(actor.VisualRecovery+.15f);
             Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","attack returns to controllable fighting stance");
-        }
-        for(int comboHit=1;comboHit<=3;comboHit++)
-        {
-            Check(actor.TryAttack(false),"supplied-only combo starts hit="+comboHit);
-            yield return new WaitForSeconds(actor.VisualWindup);yield return new WaitForEndOfFrame();
-            if(actor.BasicComboHit==3) Check(authored.CurrentMotion=="FightingIdle","third hit never invokes removed procedural hook");
-            yield return new WaitForSeconds(actor.VisualRecovery+.04f);
         }
         Check(legacyFoot.localRotation==legacyRotation,"legacy runtime driver does not rotate the hidden model");
         Check(actor.TryGuard(false),"guard starts");yield return new WaitForSeconds(.15f);

@@ -75,7 +75,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         {
             playerVisual.SetActive(false);
             GameObject model = new GameObject("Deongchi pose preview"); model.transform.SetParent(enemy.transform, false);
-            PrototypeCharacterView previewView = model.AddComponent<PrototypeCharacterView>(); previewView.Build(enemy); previewView.UseDeongchiModel(); previewView.CinematicPose = true;
+            PrototypeCharacterView previewView = model.AddComponent<PrototypeCharacterView>(); previewView.Build(enemy, false); previewView.UseDeongchiModel(); previewView.CinematicPose = true;
             ImportedPlayerView rig = model.GetComponent<ImportedPlayerView>();
             if (Application.absoluteURL.Contains("deongchiPose=stride")) rig.PreviewFighting(1.8f, 1);
             else if (Application.absoluteURL.Contains("deongchiPose=jab")) rig.PreviewPunch(.45f);
@@ -195,7 +195,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         character.SetForcedKick(0);
         GameObject enemyVisual = new GameObject("Deongchi test visual");
         enemyVisual.transform.SetParent(enemy.transform, false);
-        PrototypeCharacterView big = enemyVisual.AddComponent<PrototypeCharacterView>(); big.Build(enemy);
+        PrototypeCharacterView big = enemyVisual.AddComponent<PrototypeCharacterView>(); big.Build(enemy, false);
         Check(big.UseDeongchiModel(), "Deongchi supplied model replaces placeholder");
         Check(enemyVisual.GetComponent<ImportedPlayerView>().IsReady, "Deongchi complete joint rig");
         yield return null;
