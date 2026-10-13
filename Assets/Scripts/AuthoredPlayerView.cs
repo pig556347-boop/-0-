@@ -147,7 +147,8 @@ public sealed class AuthoredPlayerView : MonoBehaviour
             if (actor.State != CombatActor.ActionState.ATTACK && actor.State != CombatActor.ActionState.ULTIMATE)
                 started = Time.time;
         }
-        if ((motor != null && motor.IsCrouching) || actor.State == CombatActor.ActionState.CROUCH) { ApplyBridge("Crouch fallback"); return; }
+        bool passive=actor.State==CombatActor.ActionState.IDLE || actor.State==CombatActor.ActionState.CROUCH;
+        if (passive && ((motor != null && motor.IsCrouching && motor.IsGrounded) || actor.State == CombatActor.ActionState.CROUCH)) { ApplyBridge("Crouch fallback"); return; }
         if (actor.State == CombatActor.ActionState.ATTACK && !actor.HeavyStrike && actor.BasicComboHit == 3)
         { ApplyBridge("Spinning hook fallback"); return; }
         if (actor.State == CombatActor.ActionState.GRAB || actor.State == CombatActor.ActionState.DODGE)

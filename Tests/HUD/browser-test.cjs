@@ -114,7 +114,15 @@ const { PNG } = require('pngjs');
     await live.keyboard.down('Space');await live.waitForTimeout(100);await live.keyboard.up('Space');await live.waitForTimeout(1000);
     await live.keyboard.down('c');await live.waitForTimeout(300);
     await live.screenshot({path:'hud-test-results/motion-crouch.png'});
-    await live.keyboard.up('c');await live.waitForTimeout(300);
+    await live.keyboard.down('k');
+    let crouchedAttack=false;
+    for(let i=0;i<20;i++) {
+      await live.waitForTimeout(30);
+      if(motion&&motion.visualMotion==='MmaKick1'){crouchedAttack=true;break;}
+    }
+    await live.keyboard.up('k');
+    if(!crouchedAttack)throw Error('Held crouch masked the real heavy attack animation: '+JSON.stringify(motion));
+    await live.keyboard.up('c');await live.waitForTimeout(900);
     // A screenshot can take several seconds on software WebGL. Approach using
     // observed world positions, rather than assuming held-key wall time equals distance.
     async function approachTarget() {
@@ -178,7 +186,7 @@ const { PNG } = require('pngjs');
     if(!lastTutorialRole.includes('step=Heavy'))throw Error('Real basic combo did not complete the three-hit tutorial: '+lastTutorialRole);
     if(!hookReady)throw Error('Real third combo hit did not start the spinning hook animation');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,crouchedAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
     for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
