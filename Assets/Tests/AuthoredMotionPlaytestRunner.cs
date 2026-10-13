@@ -36,6 +36,13 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         foreach(Vector3 v in Skin(render))
             good &= !float.IsNaN(v.x)&&!float.IsNaN(v.y)&&!float.IsNaN(v.z)&&!float.IsInfinity(v.x)&&
                 !float.IsInfinity(v.y)&&!float.IsInfinity(v.z)&&(v-origin).magnitude<3.2f;
+        if(!good)
+        {
+            Bounds b=BoundsOf(render);Transform hip=null;
+            foreach(Transform bone in render.bones)if(bone.name.EndsWith("Hips",StringComparison.Ordinal))hip=bone;
+            label+=" bounds="+b+" renderScale="+render.transform.lossyScale+" hip="+(hip==null?"missing":hip.position.ToString())+
+                " hipLocal="+(hip==null?"missing":hip.localPosition.ToString())+" hipScale="+(hip==null?"missing":hip.lossyScale.ToString());
+        }
         Check(good,label+" finite skin without escaping vertices");
     }
     private CombatActor CreateActor(string name,int team,Vector3 position)
@@ -94,9 +101,7 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         Check(authored.CurrentMotion=="FightingIdle","idle state uses supplied fighting stance");
         foreach(bool heavy in new[]{false,true})
         {
-            Transform support=null;
-            foreach(Transform bone in authored.ModelRoot.GetComponentsInChildren<Transform>())
-                if(bone.name=="mixamorig:"+(heavy?"RightFoot":"LeftFoot"))support=bone;
+            Transform support=authored.Bone(heavy?"RightFoot":"LeftFoot");
             Vector3 anchor=support.position;
             Check(actor.TryAttack(heavy),"attack starts heavy="+heavy);
             yield return new WaitForSeconds(actor.VisualWindup);yield return new WaitForEndOfFrame();

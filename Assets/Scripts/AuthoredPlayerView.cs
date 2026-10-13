@@ -47,10 +47,11 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     {
         get { var names = new List<string>(clips.Keys); names.Sort(StringComparer.Ordinal); return names.ToArray(); }
     }
+    public Transform Bone(string name) => bones[name];
     public Transform ModelRoot => model == null ? null : model.transform;
     public static bool TryBuild(PrototypeCharacterView owner, CombatActor actor, Transform legacyModel)
     {
-        GameObject prefab = Resources.Load<GameObject>("Motions/PlayerMotions");
+        GameObject prefab = Resources.Load<GameObject>("Characters/Player/PlayerModel");
         if (prefab == null) return false;
         AuthoredPlayerView view = owner.gameObject.AddComponent<AuthoredPlayerView>();
         view.owner = owner; view.actor = actor; view.motor = actor.GetComponent<PlayerController>();
@@ -63,8 +64,14 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         foreach (Animation animation in view.model.GetComponentsInChildren<Animation>()) animation.enabled = false;
         foreach (Animator animator in view.model.GetComponentsInChildren<Animator>()) animator.enabled = false;
         view.library=AuthoredMotionLibrary.Load();view.clips=view.library.Clips;
+        var aliases=new Dictionary<string,string> { {"Chest","Spine2"}, {"LeftUpperArm","LeftArm"},
+            {"RightUpperArm","RightArm"}, {"LeftForearm","LeftForeArm"}, {"RightForearm","RightForeArm"},
+            {"LeftThigh","LeftUpLeg"}, {"RightThigh","RightUpLeg"}, {"LeftShin","LeftLeg"}, {"RightShin","RightLeg"} };
         foreach (Transform bone in view.model.GetComponentsInChildren<Transform>())
-            if (bone.name.StartsWith("mixamorig:")) view.bones[bone.name.Substring(10)] = bone;
+        {
+            string name=bone.name;if(aliases.ContainsKey(name))name=aliases[name];
+            view.bones[name]=bone;
+        }
         view.bones.TryGetValue("Hips", out view.hips);
         if (!view.IsReady)
         {
