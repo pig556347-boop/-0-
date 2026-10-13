@@ -1,6 +1,7 @@
 """Normalize supplied matching Mixamo rigs and bake source motion, preserving skin/UV.
 Usage: blender -b --python-exit-code 1 --python Tools/Motion/import_mixamo.py
-Original uploads stay outside the checkout. No humanoid approximations or combat edits.
+Analysis stage: run retarget_player.py next to produce the final textured game asset.
+Original uploads stay outside the checkout. No combat edits.
 """
 import bpy,json,math,pathlib
 from mathutils import Vector,Matrix
@@ -102,7 +103,13 @@ for rec in records:
   for point in fc.keyframe_points:point.interpolation='LINEAR'
  rig.animation_data.action=None
 # Clip metrics preserve source data so choices can be reviewed and regenerated.
-(REPORT/'candidate-inventory.json').write_text(json.dumps(records,ensure_ascii=False,indent=2))
+(SOURCE/'reports').mkdir(exist_ok=True)
+(SOURCE/'reports/source-motion-metrics.json').write_text(json.dumps(records))
+public=[]
+for r in records:
+ samples=r['samples']
+ public.append({k:r[k] for k in ['name','source','fps','frames','duration','rootTravel','vertices','bones']}|{'highestFoot':{'left':max(v['LeftFoot'][2] for v in samples),'right':max(v['RightFoot'][2] for v in samples)}})
+(REPORT/'candidate-inventory.json').write_text(json.dumps(public,ensure_ascii=False,indent=2))
 bpy.context.scene.render.fps=60
 rig.animation_data.action=bpy.data.actions.get('FightingIdle')
 bpy.context.scene.frame_set(1)

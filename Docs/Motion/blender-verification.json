@@ -1,0 +1,9 @@
+{
+  "candidates": 20,
+  "framesMatched": 2320,
+  "fps": 60,
+  "bones": 19,
+  "finite": true,
+  "planarRootMotionRemoved": true,
+  "sourceRotationMatchToleranceRadians": 0.002
+}
