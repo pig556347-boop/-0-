@@ -1,5 +1,5 @@
 {
-  "commit": "63d1aa9fe52d7372afd17fa90671b3d5d844174c",
+  "commit": "5a3283e128756992cb653b97f3d04ab380586ae5",
   "executions": [
     {
       "width": 1920,
@@ -22,6 +22,22 @@
       "checks": 398
     }
   ],
+  "authoredReviews": [
+    {
+      "review": 1,
+      "width": 1280,
+      "height": 720,
+      "checks": 512
+    },
+    {
+      "review": 2,
+      "width": 1024,
+      "height": 768,
+      "checks": 512
+    }
+  ],
+  "authoredReady": true,
+  "crouchedAttack": true,
   "visualChecks": {
     "wallLumaRange": 1.3569999999999993,
     "boardGreenFraction": 0.9975
