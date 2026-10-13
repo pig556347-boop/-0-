@@ -1,5 +1,5 @@
 {
-  "commit": "ae7b17ca5e4be0eebd7e10d91c0945d7aeebbbce",
+  "commit": "6e171d8649bba2d8ab530a050bfce183bcd0eeca",
   "executions": [
     {
       "width": 1920,
@@ -27,16 +27,20 @@
       "review": 1,
       "width": 1280,
       "height": 720,
-      "checks": 492
+      "checks": 536
     },
     {
       "review": 2,
       "width": 1024,
       "height": 768,
-      "checks": 492
+      "checks": 536
     }
   ],
   "authoredReady": true,
+  "openingSitting": true,
+  "openingStanding": true,
+  "sittingSeen": true,
+  "standingSeen": true,
   "crouchedAttack": true,
   "visualChecks": {
     "wallLumaRange": 1.3569999999999993,
