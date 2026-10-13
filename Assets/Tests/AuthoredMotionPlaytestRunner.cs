@@ -97,11 +97,14 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         Quaternion legacyRotation=legacyFoot.localRotation;
         foreach(string openingClip in new[]{"Sitting","SitToStand"})
         {
+            authored.PlayCinematic(openingClip,0);
+            yield return new WaitForSeconds(.11f);
             for(int phase=0;phase<=10;phase++)
             {
                 authored.PlayCinematic(openingClip,authored.MotionDuration(openingClip)*phase/10f);
                 Bounded(render,origin,"opening clip="+openingClip+" phase="+phase);
                 Check(actor.transform.position==origin,"opening animation preserves physics root");
+                yield return null;
             }
         }
         authored.PlayCinematic("FightingIdle",0);

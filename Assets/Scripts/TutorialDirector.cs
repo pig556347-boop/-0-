@@ -113,6 +113,7 @@ public sealed class TutorialDirector : MonoBehaviour
         AuthoredPlayerView openingMotion = view.GetComponent<AuthoredPlayerView>();
         if (openingMotion != null)
         {
+            openingMotion.PreviewCinematic("Sitting", 0);
             openingMotion.PlayCinematic("Sitting", 0);
             openingChair = CreateOpeningChair(openingMotion.Bone("Hips").position, player.Facing, player.transform.position.y - .95f);
             Debug.Log("OPENING_MOTION clip=Sitting");
