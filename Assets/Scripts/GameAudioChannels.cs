@@ -4,6 +4,12 @@ using UnityEngine;
 public sealed class GameAudioChannels : MonoBehaviour
 {
     public static GameAudioChannels Instance { get; private set; }
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void KickBackAudio_Music(int battle);
+    [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void KickBackAudio_Play(int id);
+    [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void KickBackAudio_Volumes(float master,float music,float effects);
+    [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void KickBackAudio_Close();
+#endif
     private AudioSource music,effects;
     private AudioClip lobby,battle;
     private readonly System.Collections.Generic.Dictionary<string,AudioClip> clips = new System.Collections.Generic.Dictionary<string,AudioClip>();
@@ -22,25 +28,43 @@ public sealed class GameAudioChannels : MonoBehaviour
     public void SetBattle(bool active)
     {
         battleActive=active;music.Stop();music.clip=active?battle:lobby;
-        if(music.clip!=null){music.clip.LoadAudioData();TryStartMusic();Trace(active?"BattleMusic":"LobbyMusic");}
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        KickBackAudio_Music(active?1:0);
+#else
+        if(music.clip!=null){music.clip.LoadAudioData();TryStartMusic();}
+#endif
+        Trace(active?"BattleMusic":"LobbyMusic");
     }
     public void Play(string id)
     {
         if(!clips.TryGetValue(id,out AudioClip clip)||clip==null)return;
-        ApplyVolumes();effects.PlayOneShot(clip);Trace(id);
+        ApplyVolumes();
+#if UNITY_WEBGL && !UNITY_EDITOR
+        KickBackAudio_Play(System.Array.IndexOf(new[]{"Hit","Whoosh","Block","Parry","Down","Menu","Success"},id));
+#else
+        effects.PlayOneShot(clip);
+#endif
+        Trace(id);
     }
     private void Trace(string id)
     {if(verification)Debug.Log("GAME_AUDIO "+id);}
     private void TryStartMusic()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        return;
+#else
         if(music.clip==null||music.isPlaying||Time.unscaledTime<nextMusicRetry)return;
         nextMusicRetry=Time.unscaledTime+.5f;
         if(music.clip.loadState==AudioDataLoadState.Loaded)music.Play();
+#endif
     }
     private void ApplyVolumes()
     {
         music.volume=.55f*Mathf.Clamp01(PlayerPrefs.GetFloat("KickBack.Music",1));
         effects.volume=.75f*Mathf.Clamp01(PlayerPrefs.GetFloat("KickBack.Effects",1));
+#if UNITY_WEBGL && !UNITY_EDITOR
+        KickBackAudio_Volumes(AudioListener.volume,music.volume,effects.volume);
+#endif
     }
     private void Update()
     {
@@ -61,5 +85,12 @@ public sealed class GameAudioChannels : MonoBehaviour
         foreach(var actor in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
             if(actor.GetComponent<CombatAudioEmitter>()==null)actor.gameObject.AddComponent<CombatAudioEmitter>();
     }
-    private void OnDestroy(){if(Instance==this)Instance=null;}
+    private void OnDestroy()
+    {
+        if(Instance!=this)return;
+#if UNITY_WEBGL && !UNITY_EDITOR
+        KickBackAudio_Close();
+#endif
+        Instance=null;
+    }
 }

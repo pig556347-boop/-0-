@@ -30,6 +30,7 @@ public static class PrototypeMenu
             Directory.GetFiles(binaries, "*.wasm").Length == 0 ||
             Directory.GetFiles(binaries, "*.data").Length == 0)
             throw new System.InvalidOperationException("A complete WebGL build was not produced.");
+        GameAudioBuildFiles.CopyTo(output);
         File.WriteAllText(Path.Combine(output, ".nojekyll"), "");
     }
     [MenuItem("School Rule Zero/Open Prototype")]
@@ -92,6 +93,7 @@ public static class PrototypeMenu
                 EditorUtility.RevealInFinder(output);
                 return;
             }
+            GameAudioBuildFiles.CopyTo(output);
             File.WriteAllText(Path.Combine(output, ".nojekyll"), "");
             string archive = output.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) +
                 "-" + System.DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + ".zip";

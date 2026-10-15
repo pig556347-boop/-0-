@@ -8,14 +8,14 @@ parser = Parser(Language(tree_sitter_c_sharp.language()))
 count = 0
 for path in (root / 'Assets').rglob('*.cs'):
     for unity6 in (False, True):
-        for input_system, editor in product((False, True), repeat=2):
+        for input_system, editor, webgl in product((False, True), repeat=3):
             defines = {'UNITY_6000_0_OR_NEWER': unity6,
-                       'ENABLE_INPUT_SYSTEM': input_system, 'UNITY_EDITOR': editor}
+                       'ENABLE_INPUT_SYSTEM': input_system, 'UNITY_EDITOR': editor, 'UNITY_WEBGL': webgl}
             output, stack, active = [], [], True
             for line in path.read_text().splitlines():
                 directive = line.strip()
                 if directive.startswith('#if '):
-                    condition = defines[directive[4:]]
+                    condition = all((not defines[term[1:]]) if term.startswith('!') else defines[term] for term in directive[4:].split(' && '))
                     stack.append((active, condition))
                     active = active and condition
                 elif directive == '#else':

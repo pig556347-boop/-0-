@@ -131,7 +131,7 @@ const { PNG } = require('pngjs');
     live.on('console',msg=>{if(msg.text().includes('OPENING_MOTION clip=Sitting'))openingSitting=true;if(msg.text().includes('OPENING_MOTION clip=SitToStand'))openingStanding=true;if(msg.text().includes('CLASSROOM_ASSETS_READY count=5'))classroomReady=true;if(msg.text().includes('AUTHORED_PLAYER_READY'))authoredReady=true;});
     live.on('console',msg=>{if(msg.text().includes('SUPPLIED_MOTION_ONLY combo=3 clip=MmaKick1'))hookReady=true;});
     live.on('console',msg=>{const s=msg.text();if(s.startsWith('MOTION_LIVE ')){motion=JSON.parse(s.slice(12));jumpStages.add(motion.jumpStage);sittingSeen ||= motion.visualMotion==='Sitting';standingSeen ||= motion.visualMotion==='SitToStand';}});
-    live.on('console',msg=>{if(msg.text().includes('PLAYER_MODEL_READY'))playerReady=true;if(msg.text().includes('DEONGCHI_MODEL_READY'))deongchiReady=true;if(msg.text().includes('TUTORIAL_ROLE')){lastTutorialRole=msg.text();console.log('::notice::'+lastTutorialRole)}if(/Exception|Can't add component/.test(msg.text()))runtimeErrors.push(msg.text())});
+    live.on('console',msg=>{if(msg.text().includes('PLAYER_MODEL_READY'))playerReady=true;if(msg.text().includes('DEONGCHI_MODEL_READY'))deongchiReady=true;if(msg.text().includes('TUTORIAL_ROLE')){lastTutorialRole=msg.text();console.log('::notice::'+lastTutorialRole)}if(/Exception|Can't add component|KICK_BACK_AUDIO_ERROR/.test(msg.text()))runtimeErrors.push(msg.text())});
     live.on('pageerror',err=>runtimeErrors.push(String(err)));
     live.on('console',msg=>{if(msg.text().startsWith('LOBBY_UI '))lobby=JSON.parse(msg.text().slice(9));});
     await live.goto('http://127.0.0.1:8780/WebGL/?motionVerification=1');
