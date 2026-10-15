@@ -75,6 +75,14 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
             authored.Preview(preview,phase);yield return new WaitForEndOfFrame();
             Debug.Log("AUTHORED_PREVIEW_READY "+preview);yield break;
         }
+        if(Application.absoluteURL.Contains("flurryPose="))
+        {
+            int phase=int.Parse(Application.absoluteURL.Split(new[]{"flurryPose="},StringSplitOptions.None)[1].Split('&')[0]);
+            character.CinematicPose=false;actor.Progress.ConfirmHit(Time.time,gain:100);actor.TryUltimate();
+            while(actor.UltimateStrikeIndex<phase)yield return null;
+            yield return new WaitForEndOfFrame();
+            Time.timeScale=0;Debug.Log("FLURRY_PREVIEW_READY index="+phase+" clip="+authored.CurrentMotion);yield break;
+        }
         foreach(string name in authored.ClipNames)
         {
             for(int phase=0;phase<=10;phase++)
@@ -153,13 +161,31 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         for(int tier=1;tier<=3;tier++)
         {
             actor.RestoreForTutorial();actor.Progress.ConsumeUltimate();actor.Progress.ConfirmHit(Time.time,gain:tier==1?33:tier==2?66:100);
+            CombatActor victim=CreateActor("Flurry target",1,Vector3.right);
+            int hits=0, strikes=0, lastIndex=-1;
+            var selectedClips=new System.Collections.Generic.HashSet<string>();
+            Action<CombatActor,CombatActor,Vector3> recordHit=(source,target,point)=> { if(target==victim)hits++; };
+            Action recordStrike=()=>strikes++;
+            actor.HitConfirmed+=recordHit;actor.StrikeStarted+=recordStrike;
             Check(actor.TryUltimate(),"ultimate starts tier="+tier);
             if(tier==2){yield return new WaitForSeconds(.2f);actor.ReceiveHit(new HitRequest(null,8,Vector3.left));}
-            yield return new WaitForSeconds(tier==2?.5f:.15f);yield return new WaitForEndOfFrame();
-            Check(authored.CurrentMotion==(tier==3?"FlyingKick":tier==2?"MmaKick1":"MmaKick2"),"ultimate visual tier="+tier);
-            Bounded(render,origin,"ultimate tier="+tier);
-            yield return new WaitForSeconds(1.2f);
+            float timeout=Time.time+3;
+            do
+            {
+                yield return null;yield return new WaitForEndOfFrame();
+                selectedClips.Add(authored.CurrentMotion);
+                if(lastIndex!=actor.UltimateStrikeIndex)
+                { lastIndex=actor.UltimateStrikeIndex;Bounded(render,origin,"flurry impact tier="+tier+" index="+lastIndex); }
+            } while(!actor.CanAct && Time.time<timeout);
+            actor.HitConfirmed-=recordHit;actor.StrikeStarted-=recordStrike;
+            Check(strikes==CombatActor.UltimateHitCount(tier),"ultimate spawns correct strike count tier="+tier);
+            Check(hits==CombatActor.UltimateHitCount(tier),"each ultimate strike damages the target exactly once tier="+tier);
+            Check(Mathf.Abs(victim.Health.Current-(120-(tier==3?60:tier==2?48:30)))<.01f,"flurry preserves total damage tier="+tier);
+            Check(selectedClips.Contains("MmaKick1")&&selectedClips.Contains("MmaKick2")&&selectedClips.Contains("RoundhouseKick"),"flurry uses three supplied attack clips tier="+tier);
+            Check(!selectedClips.Contains("FlyingKick"),"ultimate no longer uses airborne single-hit placeholder");
+            yield return new WaitForSeconds(.15f);
             Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","ultimate returns to stance tier="+tier);
+            Destroy(victim.gameObject);yield return null;
         }
         float sampleBefore=authored.CurrentSampleTime;Time.timeScale=0;
         yield return new WaitForSecondsRealtime(.12f);

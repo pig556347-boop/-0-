@@ -24,8 +24,8 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     private GameObject model;
     private Transform hips;
     private Transform[] poseBones;
-    private Quaternion[] transitionRotations;
-    private Vector3[] transitionPositions;
+    private Quaternion[] transitionRotations, recoveryRotations;
+    private Vector3[] transitionPositions, recoveryPositions;
     private Material material;
     private Quaternion visualFacing;
     private Vector3 attackAnchor;
@@ -35,6 +35,8 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     private float gaitTime, jumpAt, landingAt = -10;
     private int ultimateTier;
     private bool airborne;
+    private float jumpLaunchSpeed = 4.4f, jumpPhase;
+    public string JumpStage { get; private set; } = "Grounded";
     private string current = "", attack = "RoundhouseKick", hit = "HitReaction";
     private CombatActor.ActionState previous;
     public bool IsReady => model != null && clips != null && clips.Count == 20 && hips != null;
@@ -87,6 +89,8 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         view.poseBones = view.model.GetComponentsInChildren<Transform>();
         view.transitionRotations = new Quaternion[view.poseBones.Length];
         view.transitionPositions = new Vector3[view.poseBones.Length];
+        view.recoveryRotations = new Quaternion[view.poseBones.Length];
+        view.recoveryPositions = new Vector3[view.poseBones.Length];
         view.soleHeight = view.LowestFoot();
         view.material = new Material(Resources.Load<Shader>("Shaders/SchoolCharacter"));
         view.material.mainTexture = Resources.Load<Texture2D>("Characters/Player/Player_BaseColor");
@@ -107,14 +111,27 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     private void OnAttack()
     {
         started = Time.time; hitAt = -10;
-        attack = actor.HeavyStrike ? "MmaKick1" : actor.BasicComboHit == 2 ? "MmaKick2" : "RoundhouseKick";
+        attack = actor.HeavyStrike ? "MmaKick1" : actor.BasicComboHit == 2 ? "MmaKick2" : actor.BasicComboHit == 3 ? "MmaKick1" : "RoundhouseKick";
         supportName=attack=="MmaKick1"?"RightFoot":"LeftFoot";
         attackAnchor=bones[supportName].position;
-        if (!actor.HeavyStrike && actor.BasicComboHit == 3) Debug.Log("SUPPLIED_MOTION_ONLY combo=3 neutral=true");
+        if (!actor.HeavyStrike && actor.BasicComboHit == 3) Debug.Log("SUPPLIED_MOTION_ONLY combo=3 clip=MmaKick1");
         current = ""; // Even two consecutive instances of one clip get a new blend origin.
     }
-    private void OnStrike() { hitAt = Time.time; }
-    private void OnUltimate(int tier) { ultimateTier = tier; started = Time.time; hitAt = -10; current = ""; }
+    private void OnStrike()
+    {
+        hitAt = Time.time;
+        if (actor.State == CombatActor.ActionState.ULTIMATE)
+        {
+            string clip = FlurryClip(actor.UltimateStrikeIndex);
+            supportName = clip == "MmaKick1" ? "RightFoot" : "LeftFoot";
+            attackAnchor = bones[supportName].position;
+        }
+    }
+    private void OnUltimate(int tier)
+    {
+        ultimateTier = tier; started = Time.time; hitAt = -10; current = "";
+        supportName = "LeftFoot"; attackAnchor = bones[supportName].position;
+    }
     private void OnDamage(DamageResult result)
     {
         if (result.Kind == DamageKind.Guarded || result.Kind == DamageKind.Parried)
@@ -136,22 +153,18 @@ public sealed class AuthoredPlayerView : MonoBehaviour
             Quaternion.Slerp(visualFacing,facing,1-Mathf.Exp(-22*Time.deltaTime)) : facing;
         transform.rotation=visualFacing;
         float elapsed = Time.time - started;
-        // No supplied crouch, dodge, grab or spinning-hook clip: never invent a pose.
+        // Missing crouch, dodge and grab clips keep the supplied neutral stance.
         if (actor.State == CombatActor.ActionState.CROUCH ||
             (actor.State == CombatActor.ActionState.IDLE && motor != null && motor.IsCrouching) ||
-            actor.State == CombatActor.ActionState.DODGE || actor.State == CombatActor.ActionState.GRAB ||
-            (actor.State == CombatActor.ActionState.ATTACK && !actor.HeavyStrike && actor.BasicComboHit == 3))
+            actor.State == CombatActor.ActionState.DODGE || actor.State == CombatActor.ActionState.GRAB)
         { Play("FightingIdle", 0, true); return; }
         if (actor.State == CombatActor.ActionState.ATTACK)
         { PlayAttack(attack, elapsed, actor.VisualWindup, actor.VisualRecovery); return; }
         if (actor.State == CombatActor.ActionState.ULTIMATE)
         {
-            float windup = ultimateTier == 3 ? .4f : ultimateTier == 2 ? .65f : .12f;
-            if (ultimateTier == 2 && hitAt < started) Play("CenterBlock", Mathf.Min(.5f, elapsed), true);
-            else PlayAttack(ultimateTier == 3 ? "FlyingKick" : ultimateTier == 2 ? "MmaKick1" : "MmaKick2",
-                hitAt >= started && ultimateTier != 3 ? Time.time-hitAt+.12f : elapsed,
-                ultimateTier == 3 ? .4f : .12f, ultimateTier == 3 ? .38f : .18f,
-                ultimateTier == 3);
+            if (ultimateTier == 2 && actor.UltimateStrikeIndex < 0)
+                Play("CenterBlock", Mathf.Min(.5f, elapsed), true);
+            else PlayFlurry(elapsed);
             return;
         }
         if (actor.State == CombatActor.ActionState.DEAD)
@@ -170,13 +183,27 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         Vector3 velocity = body == null ? Vector3.zero : body.linearVelocity;
         if (motor != null && !motor.IsGrounded)
         {
-            if (!airborne) { jumpAt = Time.time; airborne = true; current = ""; }
-            float time = velocity.y > .1f ? Mathf.Lerp(.25f,.75f,Mathf.Clamp01((Time.time-jumpAt)/.42f)) : .85f;
-            Play("Jumping1", time, false, true); return;
+            if (!airborne)
+            {
+                jumpAt = Time.time; airborne = true; current = "";
+                jumpLaunchSpeed = Mathf.Max(1, velocity.y); jumpPhase = .22f;
+            }
+            bool rising = velocity.y > .05f;
+            float phase = rising ? Mathf.Lerp(.22f, .75f, 1-Mathf.Clamp01(velocity.y/jumpLaunchSpeed)) :
+                Mathf.Lerp(.75f, 1.22f, Mathf.Clamp01(-velocity.y/jumpLaunchSpeed));
+            jumpPhase = Mathf.Max(jumpPhase, phase);
+            JumpStage = rising ? "Rising" : "Falling";
+            Play("Jumping1", jumpPhase, false, true); return;
         }
         if (airborne) { airborne = false; landingAt = Time.time; current = ""; }
-        if (Time.time - landingAt < .12f)
-        { Play("Jumping1", Mathf.Lerp(1.3f,1.95f,(Time.time-landingAt)/.12f), true, true); return; }
+        if (Time.time - landingAt < .18f)
+        {
+            JumpStage = "Landing";
+            float progress = Mathf.Clamp01((Time.time-landingAt)/.18f);
+            Play("Jumping1", Mathf.Lerp(1.22f, clips["Jumping1"].Length, progress), true, true);
+            RecoverToStance(Mathf.SmoothStep(0,1,progress)); GroundFeet(); return;
+        }
+        JumpStage = "Grounded";
         float speed = new Vector2(velocity.x,velocity.z).magnitude;
         if (speed < .15f) { gaitTime += Time.deltaTime; Play("FightingIdle", gaitTime % clips["FightingIdle"].Length, true); }
         else
@@ -194,16 +221,62 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         float first = name == "RoundhouseKick" ? 15/60f : 1/60f;
         float impact = name == "RoundhouseKick" ? 57/60f : name == "MmaKick1" ? 37/60f : name == "FlyingKick" ? 28/60f : 29/60f;
         float last = name == "RoundhouseKick" ? 115/60f : name == "MmaKick1" ? 85/60f : name == "FlyingKick" ? 85/60f : 75/60f;
-        if(actor.State==CombatActor.ActionState.ATTACK || (actor.State==CombatActor.ActionState.ULTIMATE && ultimateTier==3))
+        if(actor.State==CombatActor.ActionState.ATTACK)
             elapsed=hitAt>=started?windup+Time.time-hitAt:Mathf.Min(elapsed,windup);
         float time = elapsed <= windup ? Mathf.Lerp(first,impact,Mathf.SmoothStep(0,1,Mathf.Clamp01(elapsed/windup))) :
             Mathf.Lerp(impact,last,Mathf.SmoothStep(0,1,Mathf.Clamp01((elapsed-windup)/recovery)));
         Play(name, time, !airborneAttack);
-        if(actor.State==CombatActor.ActionState.ATTACK && supportName!=null)
+        if (elapsed > windup)
+        { RecoverToStance(Mathf.SmoothStep(0,1,Mathf.InverseLerp(.65f,1,(elapsed-windup)/recovery))); GroundFeet(); }
+        if((actor.State==CombatActor.ActionState.ATTACK || actor.State==CombatActor.ActionState.ULTIMATE) && supportName!=null)
         {
             Vector3 correction=attackAnchor-bones[supportName].position;correction.y=0;
             model.transform.position+=Vector3.ClampMagnitude(correction,.45f);
         }
+    }
+    private static string FlurryClip(int index)
+    { return index % 3 == 0 ? "MmaKick2" : index % 3 == 1 ? "RoundhouseKick" : "MmaKick1"; }
+    private static float Impact(string clip)
+    { return clip == "RoundhouseKick" ? 57/60f : clip == "MmaKick1" ? 37/60f : 29/60f; }
+    private void PlayFlurry(float elapsed)
+    {
+        int index = actor.UltimateStrikeIndex;
+        if (index < 0)
+        { PlayAttack(FlurryClip(0), elapsed, ultimateTier == 3 ? .4f : .12f, .18f); return; }
+        float interval = actor.UltimateStrikeInterval, sinceHit = Mathf.Max(0,Time.time-hitAt);
+        bool final = index == CombatActor.UltimateHitCount(ultimateTier)-1;
+        string clip = FlurryClip(index);
+        if (!final && sinceHit > interval*.4f)
+        {
+            clip = FlurryClip(index+1);
+            float progress = Mathf.Clamp01((sinceHit-interval*.4f)/(interval*.6f));
+            Play(clip, Mathf.Lerp(Impact(clip)-.2f, Impact(clip), progress), true);
+        }
+        else
+        {
+            float progress = Mathf.Clamp01(sinceHit/(final ? interval+.2f : interval*.4f));
+            Play(clip, Impact(clip)+Mathf.Lerp(0, final ? .7f : .15f, progress), true);
+            if (final) { RecoverToStance(Mathf.SmoothStep(0,1,progress)); GroundFeet(); }
+        }
+        if (supportName != null)
+        {
+            Vector3 correction = attackAnchor-bones[supportName].position; correction.y=0;
+            model.transform.position += Vector3.ClampMagnitude(correction,.35f);
+        }
+    }
+    private void RecoverToStance(float weight)
+    {
+        if (weight <= 0) return;
+        for(int i=0;i<poseBones.Length;i++)
+        { recoveryRotations[i]=poseBones[i].localRotation; recoveryPositions[i]=poseBones[i].localPosition; }
+        string playing = CurrentMotion; float sampleTime = CurrentSampleTime;
+        Sample("FightingIdle",0);
+        for(int i=0;i<poseBones.Length;i++)
+        {
+            poseBones[i].localRotation=Quaternion.Slerp(recoveryRotations[i],poseBones[i].localRotation,weight);
+            poseBones[i].localPosition=Vector3.Lerp(recoveryPositions[i],poseBones[i].localPosition,weight);
+        }
+        CurrentMotion=playing; CurrentSampleTime=sampleTime;
     }
     private void Switch(string name)
     {
@@ -218,7 +291,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         if (physicalJump)
         {
             // Source vertical flight is removed. Only Rigidbody supplies jump displacement.
-            Vector3 p=model.transform.InverseTransformPoint(hips.position); p.y=.88f; hips.position=model.transform.TransformPoint(p);
+            Vector3 p=model.transform.InverseTransformPoint(hips.position); p.y=restHipModelPosition.y; hips.position=model.transform.TransformPoint(p);
         }
         BlendPose();
         if (ground) GroundFeet(name == "Running");
@@ -254,7 +327,9 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     }
     private void BlendPose()
     {
-        float blend=Mathf.SmoothStep(0,1,Mathf.Clamp01((Time.time-transitionAt)/.09f));
+        float duration = actor.State == CombatActor.ActionState.ULTIMATE ? .035f :
+            actor.State == CombatActor.ActionState.ATTACK ? .055f : .09f;
+        float blend=Mathf.SmoothStep(0,1,Mathf.Clamp01((Time.time-transitionAt)/duration));
         for (int i=0; i<poseBones.Length; i++)
         {
             poseBones[i].localRotation=Quaternion.Slerp(transitionRotations[i],poseBones[i].localRotation,blend);

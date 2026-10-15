@@ -19,6 +19,8 @@ public sealed class MotionVerificationProbe : MonoBehaviour
             px = player.transform.position.x, pz = player.transform.position.z,
             ex = enemy.transform.position.x, ez = enemy.transform.position.z,
             state = player.State.ToString(), combo = player.Progress.Combo,
+            jumpStage = player.GetComponentInChildren<AuthoredPlayerView>() == null ? "Grounded" :
+                player.GetComponentInChildren<AuthoredPlayerView>().JumpStage,
             visualMotion = player.GetComponentInChildren<AuthoredPlayerView>() == null ? "legacy" :
                 player.GetComponentInChildren<AuthoredPlayerView>().CurrentMotion,
             sx = Camera.main.WorldToViewportPoint(player.transform.position).x,
@@ -28,5 +30,5 @@ public sealed class MotionVerificationProbe : MonoBehaviour
         }));
     }
     [System.Serializable] private sealed class Sample
-    { public float px, pz, ex, ez, sx, sy, cameraSize, cameraX, cameraY, cameraZ; public string state, visualMotion; public int combo; }
+    { public float px, pz, ex, ez, sx, sy, cameraSize, cameraX, cameraY, cameraZ; public string state, visualMotion, jumpStage; public int combo; }
 }

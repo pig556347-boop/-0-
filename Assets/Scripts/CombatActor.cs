@@ -17,6 +17,10 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public float VisualWindup => attackWindup * (activeHeavy ? 1.8f : 1);
     public float VisualRecovery => attackRecovery * (activeHeavy ? 1.6f : 1);
     public int BasicComboHit { get; private set; }
+    public int UltimateStrikeIndex { get; private set; } = -1;
+    public float UltimateStrikeInterval => activeUltimate == 3 ? .14f : .18f;
+    public static int UltimateHitCount(int tier) => tier == 3 ? 6 : 3;
+    public bool IsUltimateFinisher => activeUltimate > 0 && UltimateStrikeIndex == UltimateHitCount(activeUltimate)-1;
     private bool crouched;
     [SerializeField, Min(1)] private float maximumHP = 120;
     [SerializeField, Min(0)] private float basicDamage = 12;
@@ -219,7 +223,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     }
     private IEnumerator UltimateRoutine(int tier)
     {
-        State = ActionState.ULTIMATE; activeUltimate = tier; StopPlanarMotion();
+        State = ActionState.ULTIMATE; activeUltimate = tier; UltimateStrikeIndex = -1; StopPlanarMotion();
         UltimateStarted?.Invoke(tier);
         if (tier == 2)
         {
@@ -229,12 +233,14 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         else yield return new WaitForSeconds(tier == 3 ? .4f : .12f);
         if (tier != 2 || counterTriggered)
         {
-            int strikes = tier == 3 ? 1 : 3;
+            int strikes = UltimateHitCount(tier);
             for (int i = 0; i < strikes; i++)
             {
-                SpawnStrike(tier == 3 ? 60 : tier == 2 ? 16 : 10,
-                    tier == 3 ? 9 : 2, tier == 3);
-                yield return new WaitForSeconds(.18f);
+                UltimateStrikeIndex = i;
+                bool finisher = i == strikes - 1;
+                SpawnStrike(tier == 3 ? 10 : tier == 2 ? 16 : 10,
+                    finisher ? (tier == 3 ? 9 : 2) : .25f, tier == 3);
+                yield return new WaitForSeconds(UltimateStrikeInterval);
             }
         }
         yield return new WaitForSeconds(.2f); activeUltimate = 0; State = ActionState.IDLE;
