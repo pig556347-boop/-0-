@@ -86,6 +86,9 @@ public sealed class TutorialDirector : MonoBehaviour
             CrouchPracticeTime=motor.IsCrouching?CrouchPracticeTime+Time.deltaTime:0;
             if(CrouchPracticeTime>=.6f)Signal(TutorialSignal.Crouched);
         }
+        // A missed ultimate must not trap the player behind a Q-only input lesson.
+        if(step==TutorialStep.Ultimate&&player.CanAct&&player.Progress.UltimateTier<3)
+            player.Progress.FillGaugeForPractice();
         if (step == TutorialStep.Charge && player.Progress.UltimateTier == 3) Signal(TutorialSignal.FullyCharged);
         bool training = Progress.Step != TutorialStep.Complete;
         brain.Active = Progress.Step == TutorialStep.Guard || Progress.Step == TutorialStep.Parry || !training;

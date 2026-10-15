@@ -27,6 +27,7 @@ public sealed class GameLanguage : MonoBehaviour
         {"상대 가까이에서 I를 눌러 잡아보세요.","Approach with WASD and press I to grab."},{"거리가 멀다면 WASD로 더 다가가세요.","Move closer if the grab does not connect."},
         {"J 또는 K로 공격해 구슬 3개를 채워보세요.","Land J or K attacks to fill all 3 orbs."},{"WASD로 거리를 맞추고 공격을 적중시켜요.","Adjust your distance with WASD and land hits."},
         {"상대 가까이에서 Q를 눌러보세요.","Approach with WASD and press Q."},{"구슬 3개로 6연타 궁극기를 적중시키세요.","Use all 3 orbs to land the six-hit ultimate."},
+        {"빗나가면 게이지를 다시 채워드려요.","Missed? Your gauge will refill so you can retry."},
         {"모든 조작을 배웠어요. 자유롭게 연습해보세요!","Training complete! All controls are now available."},
         {"잘했어요! 다음 연습으로 넘어갈게요.","Great! On to the next lesson."},{"현재 연습에 필요한 키만 사용할 수 있어요.","Only the keys needed for this lesson are enabled."},
         {"지금은 표시된 키로 먼저 연습해보세요.","Try the highlighted keys for this lesson first."},

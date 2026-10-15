@@ -13,6 +13,7 @@ namespace SchoolRuleZero
             Combo++; ComboExpires = time + comboWindow;
             Gauge = Math.Min(100, Gauge + Math.Max(0, gain));
         }
+        public void FillGaugeForPractice() { Gauge = 100; }
         public void Tick(float time) { if (time > ComboExpires) Combo = 0; }
         public void BreakCombo() { Combo = 0; ComboExpires = 0; }
         public int ConsumeUltimate()

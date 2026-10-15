@@ -65,6 +65,10 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Check(!TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Basic,KeyCode.K),"basic lesson rejects heavy attack");
         Check(TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Complete,KeyCode.Q),"complete tutorial unlocks ultimate");
         Check(TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Jump,KeyCode.Escape),"pause remains available");
+        var practiceGauge=new SchoolRuleZero.CombatProgress();practiceGauge.FillGaugeForPractice();
+        Check(practiceGauge.UltimateTier==3&&practiceGauge.Combo==0,"practice refill grants meter without inventing hits");
+        practiceGauge.ConsumeUltimate();practiceGauge.FillGaugeForPractice();
+        Check(practiceGauge.UltimateTier==3,"missed ultimate can be retried without unrelated attack keys");
         CombatActor player=Actor("권민준",0,120),enemy=Actor("불량 학생",1,100);
         GameObject playerVisual = new GameObject("Player model test visual");
         playerVisual.transform.SetParent(player.transform, false);

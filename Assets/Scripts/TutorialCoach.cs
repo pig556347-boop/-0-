@@ -23,7 +23,7 @@ public sealed class TutorialCoach : MonoBehaviour
         "Shift와 WASD를 함께 눌러 피해보세요.\n방향을 누른 채 Shift를 눌러도 돼요.",
         "상대 가까이에서 I를 눌러 잡아보세요.\n거리가 멀다면 WASD로 더 다가가세요.",
         "J 또는 K로 공격해 구슬 3개를 채워보세요.\nWASD로 거리를 맞추고 공격을 적중시켜요.",
-        "상대 가까이에서 Q를 눌러보세요.\n구슬 3개로 6연타 궁극기를 적중시키세요.",
+        "상대 가까이에서 Q를 눌러보세요.\n구슬 3개로 6연타 궁극기를 적중시키세요.\n빗나가면 게이지를 다시 채워드려요.",
         "모든 조작을 배웠어요. 자유롭게 연습해보세요!"};
     private static readonly KeyCode[] CheckKeys={KeyCode.W,KeyCode.A,KeyCode.S,KeyCode.D,KeyCode.Space,KeyCode.C,
         KeyCode.J,KeyCode.K,KeyCode.L,KeyCode.I,KeyCode.Q,KeyCode.LeftShift,KeyCode.RightShift};
