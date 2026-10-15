@@ -108,6 +108,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         Debug.Log("AUTHORED_PLAYER_READY candidates=20 bones=19 rootMotion=false");
         return true;
     }
+    public float DeathDuration => clips["Stunned"].Length/2.5f;
     private void OnAttack()
     {
         started = Time.time; hitAt = -10;

@@ -266,6 +266,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     }
     public void RestoreForTutorial()
     {
+        GetComponent<DefeatedBody>()?.Restore();
         CancelActions(); Health.Reset(); State = ActionState.IDLE;
         invulnerableUntil = 0; guardStarted = float.NegativeInfinity; StopPlanarMotion();
     }

@@ -5,6 +5,20 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    const corpsePage=await browser.newPage({viewport:{width:1280,height:720}});
+    let corpsePassed=false,corpsePreview=false,corpseChecks=0;const corpseErrors=[];
+    corpsePage.on('console',msg=>{const s=msg.text();if(s.includes('CORPSE_PREVIEW_READY'))corpsePreview=true;
+      if(s.includes('CORPSE_TEST_PASS')){corpsePassed=true;corpseChecks=Number(s.match(/checks=(\d+)/)[1]);}
+      if(/CORPSE_TEST_FAIL|Exception/.test(s))corpseErrors.push(s);});
+    corpsePage.on('pageerror',e=>corpseErrors.push(String(e)));
+    await corpsePage.goto('http://127.0.0.1:8780/HUDTest/?corpseReview=1');
+    for(let i=0;i<180&&!corpsePassed&&!corpseErrors.length;i++){
+      if(corpsePreview){await corpsePage.screenshot({path:'hud-test-results/corpses-grounded.png'});corpsePreview=false;}
+      await corpsePage.waitForTimeout(250);
+    }
+    if(!corpsePassed||corpseErrors.length)throw Error('Corpse grounding test failed: '+corpseErrors.join(' '));
+    fs.writeFileSync('hud-test-results/corpses.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:corpseChecks,passed:true},null,2));
+    await corpsePage.close();
     const executions=[];
     for (const [width,height] of [[1920,1080],[1280,720],[1024,768],[2560,1080]]) {
       const page = await browser.newPage({viewport:{width,height}});

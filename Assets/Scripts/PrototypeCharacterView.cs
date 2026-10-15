@@ -39,6 +39,7 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     {
         UseAuthoredMotion = useAuthoredMotion;
         actor = owner; motor = owner.GetComponent<PlayerController>();
+        owner.gameObject.AddComponent<DefeatedBody>().Initialize(owner,transform);
         actor.StrikeStarted += OnStrike;
         if (owner.Team == 0 && ImportedPlayerView.TryBuild(this, owner)) return;
         Material uniform = MakeMaterial(new Color(.055f, .06f, .075f));
@@ -95,7 +96,7 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     }
     private void Update()
     {
-        if (actor == null || leftLeg == null || CinematicPose || UseAuthoredMotion) return;
+        if (actor == null || !actor.Health.Alive || leftLeg == null || CinematicPose || UseAuthoredMotion) return;
         if (previous != actor.State) { previous = actor.State; actionStarted = Time.time; }
         transform.rotation = Quaternion.LookRotation(actor.Facing);
         float walk = motor != null && motor.CurrentState == PlayerController.PlayerState.MOVE
@@ -117,8 +118,6 @@ public sealed class PrototypeCharacterView : MonoBehaviour
         if (actor.State == CombatActor.ActionState.GUARD)
         { leftArm.localRotation = Quaternion.Euler(-90, 0, -15);
           rightArm.localRotation = Quaternion.Euler(-90, 0, 15); }
-        if (actor.State == CombatActor.ActionState.DEAD)
-            transform.localRotation *= Quaternion.Euler(0, 0, 75);
         // Optional imported character Animator uses the same gameplay state.
         if (animator != null)
         {

@@ -57,9 +57,8 @@ public sealed class EncounterDirector : MonoBehaviour
         {
             CombatActor enemy = enemies[i];
             if (enemy.Health.Alive) continue;
-            wave.Defeat(); enemy.GetComponent<Collider>().enabled = false;
-            Rigidbody body = enemy.GetComponent<Rigidbody>(); body.linearVelocity = Vector3.zero;
-            body.angularVelocity = Vector3.zero; body.isKinematic = true;
+            wave.Defeat();
+            // DefeatedBody settles the visible mesh on the floor and disables collision.
             enemy.GetComponent<EnemyBrain>().Active = false;
             corpses.Add(enemy.gameObject); enemies.RemoveAt(i);
         }

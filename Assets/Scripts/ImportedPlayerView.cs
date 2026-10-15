@@ -144,7 +144,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (actor == null || !IsReady || owner.CinematicPose || owner.UseAuthoredMotion) return;
+        if (actor == null || !actor.Health.Alive || !IsReady || owner.CinematicPose || owner.UseAuthoredMotion) return;
         transform.rotation = Quaternion.LookRotation(actor.Facing);
         if (previous != actor.State) { previous = actor.State; actionStarted = Time.time; }
         bool crouching = motor != null ? motor.IsCrouching : actor.State == CombatActor.ActionState.CROUCH;
@@ -261,8 +261,6 @@ public sealed class ImportedPlayerView : MonoBehaviour
             }
             AimHead();
         }
-        if (actor.State == CombatActor.ActionState.DEAD)
-            transform.localRotation *= Quaternion.Euler(0, 0, Mathf.SmoothStep(0, 75, (Time.time - actionStarted) / .35f));
     }
     private void OnPrepare()
     {
