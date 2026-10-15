@@ -25,7 +25,7 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
     private IEnumerator Start()
     {
         var camera=new GameObject("Minion test camera").AddComponent<Camera>();
-        camera.transform.position=new Vector3(3,3,-6);camera.transform.LookAt(Vector3.up);camera.orthographic=true;camera.orthographicSize=2.8f;
+        camera.transform.position=new Vector3(3,3,6);camera.transform.LookAt(Vector3.up);camera.orthographic=true;camera.orthographicSize=2.8f;
         var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.name="Classroom floor";floor.transform.position=new Vector3(0,-.5f,0);floor.transform.localScale=new Vector3(20,1,12);
         var target=new GameObject("Player target");target.transform.position=new Vector3(-4,1,0);
         var player=target.AddComponent<CombatActor>();player.Configure(0);player.ConfigureStats(500,10,.2f,.3f);

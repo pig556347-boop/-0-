@@ -5,6 +5,21 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    const minionPage=await browser.newPage({viewport:{width:1280,height:720}});
+    let minionPassed=false,minionChecks=0;const minionErrors=[],minionPreviews=[];
+    minionPage.on('console',msg=>{const s=msg.text();
+      if(s.includes('MINION_PREVIEW_READY'))minionPreviews.push(s.match(/clip=(\w+)/)[1]);
+      if(s.includes('MINION_TEST_PASS')){minionPassed=true;minionChecks=Number(s.match(/checks=(\d+)/)[1]);}
+      if(/MINION_TEST_FAIL|Exception/.test(s))minionErrors.push(s);});
+    minionPage.on('pageerror',e=>minionErrors.push(String(e)));
+    await minionPage.goto('http://127.0.0.1:8780/HUDTest/?minionReview=1');
+    for(let i=0;i<320&&!minionPassed&&!minionErrors.length;i++){
+      while(minionPreviews.length)await minionPage.screenshot({path:'hud-test-results/minion-'+minionPreviews.shift()+'.png'});
+      await minionPage.waitForTimeout(150);
+    }
+    if(!minionPassed||minionErrors.length)throw Error('Minion1 test failed: '+minionErrors.join(' '));
+    fs.writeFileSync('hud-test-results/minion1.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:minionChecks,passed:true},null,2));
+    await minionPage.close();
     const punchPage=await browser.newPage({viewport:{width:1280,height:720}});
     let punchPassed=false,punchChecks=0,punchInput=false;const punchErrors=[],punchPreviews=[];
     punchPage.on('console',msg=>{const s=msg.text();
@@ -386,7 +401,7 @@ const { PNG } = require('pngjs');
     audioChecks.resumeRms=await audioPeak();
     if(audioChecks.resumeRms<.0001)throw Error('Resume did not restore music');
     audioChecks.pauseResume=true;
-    await live.keyboard.press('Escape');await waitLobby(x=>x.page==='Paused','pause again');
+    lobby=null;await live.keyboard.press('Escape');await waitLobby(x=>x.page==='Paused','pause again');
     await menuClick('ReturnLobby');await waitLobby(x=>x.page==='Main','return to lobby');
     lobbyChecks.returnToLobby=true;
     fs.writeFileSync('hud-test-results/lobby-tutorial.json',JSON.stringify({commit:process.env.GITHUB_SHA,lobbyChecks,restrictions,errors:runtimeErrors},null,2));
