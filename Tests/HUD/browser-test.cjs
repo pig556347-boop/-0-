@@ -173,7 +173,7 @@ const { PNG } = require('pngjs');
       // Drag the actual handle beyond the track to clamp to zero. Clicking the
       // exact float-valued left border can fall outside Unity's RectTransform.
       await live.mouse.move((b.x-b.w*.5+b.w*lobby.music)*v.width,b.y*v.height);
-      await live.mouse.down();
+      await live.mouse.down();await live.waitForTimeout(250);
       await live.mouse.move((b.x-b.w*.5)*v.width-30,b.y*v.height,{steps:8});
       await live.waitForTimeout(150);await live.mouse.up();
       await waitLobby(x=>x.music<.0001,'music slider clamped to zero');
