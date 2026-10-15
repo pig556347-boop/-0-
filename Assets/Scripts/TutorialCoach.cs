@@ -56,7 +56,11 @@ public sealed class TutorialCoach : MonoBehaviour
         if(director==null)return;var step=director.Progress.Step;
         if(previous!=step)
         {
-            if(previous!=TutorialStep.Opening)successUntil=Time.time+.65f;
+            if(previous!=TutorialStep.Opening)
+            {
+                successUntil=Time.time+.65f;
+                if(GameAudioChannels.Instance!=null)GameAudioChannels.Instance.Play("Success");
+            }
             if(step==TutorialStep.Complete)completeUntil=Time.time+4;
             previous=step;
         }

@@ -61,8 +61,8 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         GameAudioChannels audio=GetComponent<GameAudioChannels>();
         if(audio!=null)
         {
-            audio.SetBattle(true);player.GetComponent<CombatActor>().HitConfirmed+=audio.OnHit;
-            enemy.GetComponent<CombatActor>().HitConfirmed+=audio.OnHit;
+            audio.SetBattle(true);
+            player.AddComponent<CombatAudioEmitter>();enemy.AddComponent<CombatAudioEmitter>();
         }
         player.GetComponent<CombatActor>().HitConfirmed += effects.OnHit;
         enemy.GetComponent<CombatActor>().HitConfirmed += effects.OnHit;

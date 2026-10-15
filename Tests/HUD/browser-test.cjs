@@ -91,6 +91,33 @@ const { PNG } = require('pngjs');
     }
     const live=await browser.newPage({viewport:{width:1920,height:1080}});
     const runtimeErrors=[];
+    const audioEvents=new Set();
+    live.on('console',msg=>{if(msg.text().startsWith('GAME_AUDIO '))audioEvents.add(msg.text().slice(11).trim());});
+    await live.addInitScript(()=>{
+      window.__audioMeters=[];
+      const connect=AudioNode.prototype.connect;
+      AudioNode.prototype.connect=function(destination,...args){
+        if(destination instanceof AudioDestinationNode){
+          const analyser=this.context.createAnalyser();analyser.fftSize=2048;
+          window.__audioMeters.push(analyser);
+          connect.call(analyser,destination);
+          return connect.call(this,analyser,...args);
+        }
+        return connect.call(this,destination,...args);
+      };
+    });
+    async function audioPeak(){
+      let peak=0;
+      for(let i=0;i<12;i++){
+        peak=Math.max(peak,await live.evaluate(()=>Math.max(0,...window.__audioMeters.map(a=>{
+          const b=new Float32Array(a.fftSize);a.getFloatTimeDomainData(b);
+          return Math.sqrt(b.reduce((n,v)=>n+v*v,0)/b.length);
+        }))));
+        await live.waitForTimeout(60);
+      }
+      return peak;
+    }
+    const audioChecks={};
     let authoredReady=false, openingSitting=false, openingStanding=false, sittingSeen=false, standingSeen=false;
     let lobby=null;
     const jumpStages=new Set();
@@ -122,6 +149,8 @@ const { PNG } = require('pngjs');
     await live.setViewportSize({width:1920,height:1080});await live.waitForTimeout(300);
     await menuClick('Language');await waitLobby(x=>x.page==='Language','language page');
     await menuClick('English');await menuClick('Back');
+    audioChecks.lobbyRms=await audioPeak();
+    if(audioChecks.lobbyRms<.0001)throw Error('Lobby music produced no browser audio output');
     await waitLobby(x=>x.english&&x.text.includes('START GAME'),'English UI');
     await live.screenshot({path:'hud-test-results/lobby-english.png'});
     await menuClick('Settings');await waitLobby(x=>x.page==='Settings','settings page');
@@ -131,6 +160,17 @@ const { PNG } = require('pngjs');
       await live.mouse.click((b.x-b.w*.5+b.w*value)*v.width,b.y*v.height,{delay:100});await live.waitForTimeout(300);
     }
     await waitLobby(x=>Math.abs(x.master-.35)<.03&&Math.abs(x.music-.6)<.03&&Math.abs(x.effects-.8)<.03,'volume values');
+    // Mute only music after the menu transient has ended, then restore it.
+    {
+      const b=lobby.buttons.find(b=>b.id==='Music'),v=live.viewportSize();
+      await live.mouse.click((b.x-b.w*.5)*v.width,b.y*v.height,{delay:100});
+      await live.waitForTimeout(500);audioChecks.mutedRms=await audioPeak();
+      if(audioChecks.mutedRms>.00001)throw Error('Music mute did not silence browser output: '+audioChecks.mutedRms);
+      await live.mouse.click((b.x-b.w*.5+b.w*.6)*v.width,b.y*v.height,{delay:100});
+      await live.waitForTimeout(300);
+      if(await audioPeak()<.0001)throw Error('Music did not resume after restoring volume');
+      audioChecks.musicMute=true;
+    }
     await live.screenshot({path:'hud-test-results/lobby-settings.png'});await menuClick('Back');
     await menuClick('Credits');await waitLobby(x=>x.page==='Credits'&&x.text.includes('pig556347-boop'),'credits');
     await live.screenshot({path:'hud-test-results/lobby-credits.png'});await menuClick('Back');
@@ -229,6 +269,12 @@ const { PNG } = require('pngjs');
     for(let i=0;i<40&&!lastTutorialRole.includes('step=Guard');i++)await live.waitForTimeout(100);
     if(!lastTutorialRole.includes('step=Guard'))throw Error('Heavy hit did not advance to Guard');
     restrictions.heavyOnly=true;
+    audioChecks.battleRms=await audioPeak();
+    if(audioChecks.battleRms<.0001)throw Error('Battle produced no browser audio output');
+    for(const id of ['LobbyMusic','BattleMusic','Menu','Whoosh','Hit','Success'])
+      if(!audioEvents.has(id))throw Error('Missing real gameplay audio event '+id);
+    audioChecks.events=[...audioEvents];
+    fs.writeFileSync('hud-test-results/audio.json',JSON.stringify({commit:process.env.GITHUB_SHA,...audioChecks},null,2));
     await live.waitForTimeout(500);
     await live.screenshot({path:'hud-test-results/production-hud.png'});
     const pixels=PNG.sync.read(await live.locator('canvas').screenshot());
@@ -271,7 +317,7 @@ const { PNG } = require('pngjs');
     fs.writeFileSync('hud-test-results/lobby-tutorial.json',JSON.stringify({commit:process.env.GITHUB_SHA,lobbyChecks,restrictions,errors:runtimeErrors},null,2));
     if(runtimeErrors.length)throw Error('Runtime errors after returning to lobby: '+runtimeErrors.join(' '));
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],lobbyChecks,restrictions,heavyAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],lobbyChecks,restrictions,heavyAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,audioChecks,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
     for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');

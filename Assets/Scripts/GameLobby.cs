@@ -148,7 +148,7 @@ public sealed class GameLobby : MonoBehaviour
         var outline=r.gameObject.AddComponent<Outline>();outline.effectColor=new Color(.65f,.62f,.55f,.7f);outline.effectDistance=new Vector2(1,-1);
         var button=r.gameObject.AddComponent<Button>();button.targetGraphic=image;var colors=button.colors;
         colors.normalColor=Color.white;colors.highlightedColor=new Color(1,.82f,.6f);colors.selectedColor=colors.highlightedColor;
-        colors.pressedColor=new Color(.65f,.55f,.43f);button.colors=colors;button.onClick.AddListener(action);
+        colors.pressedColor=new Color(.65f,.55f,.43f);button.colors=colors;button.onClick.AddListener(()=>{if(GameAudioChannels.Instance!=null)GameAudioChannels.Instance.Play("Menu");action();});
         Label(title,r,new Vector2(.08f,.08f),new Vector2(.92f,.92f),30);buttons[id]=button;return button;
     }
     private Text Label(string value,Transform parent,Vector2 min,Vector2 max,int size)
