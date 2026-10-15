@@ -1,5 +1,5 @@
 {
-  "commit": "ee91ff4b1cfc64a2e0e12a97ab46c6eac4d58119",
+  "commit": "f750ce55916485488cb900227e8b10660da15eb4",
   "executions": [
     {
       "width": 1920,
@@ -73,17 +73,17 @@
   "lastTutorialRole": "TUTORIAL_ROLE step=Guard infinite=True\n",
   "runtimeErrors": [],
   "audioChecks": {
-    "lobbyRms": 0.055123568552999956,
+    "lobbyRms": 0.03211699314980406,
     "contexts": {
       "meters": 2,
       "states": [
         {
           "state": "running",
-          "time": 7.842539682539683
+          "time": 9.221224489795919
         },
         {
           "state": "running",
-          "time": 3.6919727891156464
+          "time": 3.9212698412698415
         }
       ],
       "gains": [
@@ -119,7 +119,7 @@
     },
     "mutedRms": 0,
     "musicMute": true,
-    "battleRms": 0.04143005337459985,
+    "battleRms": 0.017028040471442532,
     "events": [
       "LobbyMusic",
       "Menu",
@@ -130,7 +130,7 @@
       "Hit"
     ],
     "pauseRms": 0,
-    "resumeRms": 0.038515814649073075,
+    "resumeRms": 0.017028040471442532,
     "pauseResume": true
   },
   "fullscreen": true,
