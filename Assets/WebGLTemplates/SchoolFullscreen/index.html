@@ -16,6 +16,23 @@ button.addEventListener('click',async()=>{
  catch(e){button.textContent='전체화면 다시 시도 ⛶';}
 });
 document.addEventListener('fullscreenchange',()=>{button.textContent=document.fullscreenElement?'전체화면 해제 ⛶':'전체화면 ⛶';canvas.focus();});
+// Resume Web Audio inside a trusted browser gesture. Unity may request music
+// before the browser permits playback; keep that context instead of dropping it.
+window.kickBackAudioContexts=[];
+function unlockGameAudio(){
+ for(const context of window.kickBackAudioContexts)
+  if(context.state==='suspended')context.resume().catch(()=>{});
+}
+for(const key of ['AudioContext','webkitAudioContext']){
+ const Native=window[key];if(!Native)continue;
+ window[key]=new Proxy(Native,{construct(Target,args){
+  const context=Reflect.construct(Target,args);
+  window.kickBackAudioContexts.push(context);
+  if(navigator.userActivation&&navigator.userActivation.hasBeenActive)unlockGameAudio();
+  return context;
+ }});
+}
+for(const event of ['pointerdown','pointerup','keydown'])document.addEventListener(event,unlockGameAudio,true);
 const script=document.createElement('script');script.src='Build/{{{ LOADER_FILENAME }}}';
 script.onload=()=>createUnityInstance(canvas,{
  dataUrl:'Build/{{{ DATA_FILENAME }}}',frameworkUrl:'Build/{{{ FRAMEWORK_FILENAME }}}',codeUrl:'Build/{{{ CODE_FILENAME }}}',streamingAssetsUrl:'StreamingAssets',companyName:'{{{ COMPANY_NAME }}}',productName:'{{{ PRODUCT_NAME }}}',productVersion:'{{{ PRODUCT_VERSION }}}',matchWebGLToCanvasSize:true
