@@ -170,9 +170,15 @@ const { PNG } = require('pngjs');
     // Mute only music after the menu transient has ended, then restore it.
     {
       const b=lobby.buttons.find(b=>b.id==='Music'),v=live.viewportSize();
-      await live.mouse.click((b.x-b.w*.5)*v.width,b.y*v.height,{delay:100});
+      // Drag the actual handle beyond the track to clamp to zero. Clicking the
+      // exact float-valued left border can fall outside Unity's RectTransform.
+      await live.mouse.move((b.x-b.w*.5+b.w*lobby.music)*v.width,b.y*v.height);
+      await live.mouse.down();
+      await live.mouse.move((b.x-b.w*.5)*v.width-30,b.y*v.height,{steps:8});
+      await live.waitForTimeout(150);await live.mouse.up();
+      await waitLobby(x=>x.music<.0001,'music slider clamped to zero');
       await live.waitForTimeout(500);audioChecks.mutedRms=await audioPeak();
-      if(audioChecks.mutedRms>.00001)throw Error('Music mute did not silence browser output: '+audioChecks.mutedRms);
+      if(audioChecks.mutedRms>.00001)throw Error('Music mute did not silence browser output: '+JSON.stringify({rms:audioChecks.mutedRms,volume:lobby.music,gains:await live.evaluate(()=>window.__audioGains.map(g=>g.gain.value))}));
       await live.mouse.click((b.x-b.w*.5+b.w*.6)*v.width,b.y*v.height,{delay:100});
       await live.waitForTimeout(300);
       if(await audioPeak()<.0001)throw Error('Music did not resume after restoring volume');
