@@ -1,0 +1,4 @@
+{
+  "commit": "a08754fb471c7c682bb0fe51da6f6f21df86342f",
+  "error": "Error: Minion1 test failed: Exception: MINION_TEST_FAIL plausible character size PunchLeft\n  at Minion1PlaytestRunner.Check (System.Boolean value, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
