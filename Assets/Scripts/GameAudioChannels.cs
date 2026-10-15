@@ -8,7 +8,7 @@ public sealed class GameAudioChannels : MonoBehaviour
     private AudioClip lobby,battle;
     private readonly System.Collections.Generic.Dictionary<string,AudioClip> clips = new System.Collections.Generic.Dictionary<string,AudioClip>();
     private bool battleActive,verification;
-    private float nextScan;
+    private float nextScan,nextMusicRetry,nextStatus;
     private void Awake()
     {
         Instance=this;verification=Application.absoluteURL.Contains("motionVerification=1");
@@ -22,7 +22,7 @@ public sealed class GameAudioChannels : MonoBehaviour
     public void SetBattle(bool active)
     {
         battleActive=active;music.Stop();music.clip=active?battle:lobby;
-        if(music.clip!=null){music.Play();Trace(active?"BattleMusic":"LobbyMusic");}
+        if(music.clip!=null){music.clip.LoadAudioData();TryStartMusic();Trace(active?"BattleMusic":"LobbyMusic");}
     }
     public void Play(string id)
     {
@@ -31,6 +31,12 @@ public sealed class GameAudioChannels : MonoBehaviour
     }
     private void Trace(string id)
     {if(verification)Debug.Log("GAME_AUDIO "+id);}
+    private void TryStartMusic()
+    {
+        if(music.clip==null||music.isPlaying||Time.unscaledTime<nextMusicRetry)return;
+        nextMusicRetry=Time.unscaledTime+.5f;
+        if(music.clip.loadState==AudioDataLoadState.Loaded)music.Play();
+    }
     private void ApplyVolumes()
     {
         music.volume=.55f*Mathf.Clamp01(PlayerPrefs.GetFloat("KickBack.Music",1));
@@ -39,8 +45,16 @@ public sealed class GameAudioChannels : MonoBehaviour
     private void Update()
     {
         ApplyVolumes();
-        // Unity WebGL may suspend playback until the first browser gesture.
-        if(!music.isPlaying&&music.clip!=null&&GameKeys.Down(KeyCode.Return))music.Play();
+        // WebGL decodes imported audio asynchronously; do not lose the initial loop
+        // if the clip was still loading or playback was deferred by autoplay policy.
+        TryStartMusic();
+        if(verification&&Time.unscaledTime>=nextStatus)
+        {
+            nextStatus=Time.unscaledTime+2;
+            Debug.Log("GAME_AUDIO_STATE clip="+(music.clip==null?"missing":music.clip.name)+
+                " loaded="+(music.clip==null?"none":music.clip.loadState.ToString())+
+                " playing="+music.isPlaying+" master="+AudioListener.volume+" music="+music.volume);
+        }
         if(!battleActive||Time.unscaledTime<nextScan)return;
         nextScan=Time.unscaledTime+.25f;
         foreach(var actor in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
