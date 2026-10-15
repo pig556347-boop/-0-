@@ -1,5 +1,5 @@
 {
-  "commit": "6e171d8649bba2d8ab530a050bfce183bcd0eeca",
+  "commit": "d1c87637ecd563a95c4a655ac6285f30beab5697",
   "executions": [
     {
       "width": 1920,
@@ -27,13 +27,13 @@
       "review": 1,
       "width": 1280,
       "height": 720,
-      "checks": 536
+      "checks": 557
     },
     {
       "review": 2,
       "width": 1024,
       "height": 768,
-      "checks": 536
+      "checks": 557
     }
   ],
   "authoredReady": true,
@@ -41,6 +41,12 @@
   "openingStanding": true,
   "sittingSeen": true,
   "standingSeen": true,
+  "jumpStages": [
+    "Grounded",
+    "Rising",
+    "Falling",
+    "Landing"
+  ],
   "crouchedAttack": true,
   "visualChecks": {
     "wallLumaRange": 1.3569999999999993,
