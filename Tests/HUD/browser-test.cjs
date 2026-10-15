@@ -201,7 +201,7 @@ const { PNG } = require('pngjs');
         // Keep within real strike bounds and face the target. Exact lane alignment
         // causes oscillation when software WebGL advances several physics steps per frame.
         if(Math.abs(dx)<1.35&&Math.abs(dx)>.45&&Math.abs(dz)<.6&&motion.fx*dx>0&&Math.abs(motion.fx)>.9)return;
-        const key=Math.abs(dz)>.55?(dz>0?'w':'s'):(dx>0?'d':'a');
+        const key=Math.abs(dz)>=.6?(dz>0?'w':'s'):(dx>0?'d':'a');
         const distance=key==='w'||key==='s'?Math.abs(dz):Math.abs(dx);
         const pulse=distance>2?70:30;
         await live.keyboard.down(key);await live.waitForTimeout(pulse);await live.keyboard.up(key);
