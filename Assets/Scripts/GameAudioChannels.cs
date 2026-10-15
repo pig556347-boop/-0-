@@ -53,7 +53,8 @@ public sealed class GameAudioChannels : MonoBehaviour
             nextStatus=Time.unscaledTime+2;
             Debug.Log("GAME_AUDIO_STATE clip="+(music.clip==null?"missing":music.clip.name)+
                 " loaded="+(music.clip==null?"none":music.clip.loadState.ToString())+
-                " playing="+music.isPlaying+" master="+AudioListener.volume+" music="+music.volume);
+                " playing="+music.isPlaying+" virtual="+music.isVirtual+" mute="+music.mute+" time="+music.time+
+                " paused="+AudioListener.pause+" master="+AudioListener.volume+" music="+music.volume);
         }
         if(!battleActive||Time.unscaledTime<nextScan)return;
         nextScan=Time.unscaledTime+.25f;

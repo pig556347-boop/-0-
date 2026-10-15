@@ -95,7 +95,11 @@ const { PNG } = require('pngjs');
     const audioEvents=new Set();
     live.on('console',msg=>{if(msg.text().startsWith('GAME_AUDIO '))audioEvents.add(msg.text().slice(11).trim());if(msg.text().startsWith('GAME_AUDIO_STATE '))audioStatus=msg.text();});
     await live.addInitScript(()=>{
-      window.__audioMeters=[];
+      window.__audioMeters=[];window.__audioSources=[];window.__audioGains=[];
+      const start=AudioBufferSourceNode.prototype.start;
+      AudioBufferSourceNode.prototype.start=function(...args){window.__audioSources.push(this);return start.apply(this,args);};
+      const gain=BaseAudioContext.prototype.createGain;
+      BaseAudioContext.prototype.createGain=function(...args){const g=gain.apply(this,args);window.__audioGains.push(g);return g;};
       const connect=AudioNode.prototype.connect;
       AudioNode.prototype.connect=function(destination,...args){
         if(destination instanceof AudioDestinationNode){
@@ -150,8 +154,9 @@ const { PNG } = require('pngjs');
     await live.setViewportSize({width:1920,height:1080});await live.waitForTimeout(300);
     await menuClick('Language');await waitLobby(x=>x.page==='Language','language page');
     await menuClick('English');await menuClick('Back');
-    audioChecks.lobbyRms=await audioPeak();
-    audioChecks.contexts=await live.evaluate(()=>({meters:window.__audioMeters.length,states:(window.kickBackAudioContexts||[]).map(c=>c.state)}));
+    audioChecks.lobbyRms=0;
+    for(let retry=0;retry<6&&audioChecks.lobbyRms<.0001;retry++)audioChecks.lobbyRms=Math.max(audioChecks.lobbyRms,await audioPeak());
+    audioChecks.contexts=await live.evaluate(()=>({meters:window.__audioMeters.length,states:(window.kickBackAudioContexts||[]).map(c=>({state:c.state,time:c.currentTime})),gains:window.__audioGains.map(g=>g.gain.value),sources:window.__audioSources.map(s=>({loop:s.loop,duration:s.buffer?.duration,rate:s.playbackRate.value,rms:s.buffer?Math.sqrt(s.buffer.getChannelData(0).reduce((n,v)=>n+v*v,0)/s.buffer.length):null}))}));
     if(audioChecks.lobbyRms<.0001)throw Error('Lobby music produced no browser audio output: '+JSON.stringify({...audioChecks.contexts,audioStatus,events:[...audioEvents]}));
     await waitLobby(x=>x.english&&x.text.includes('START GAME'),'English UI');
     await live.screenshot({path:'hud-test-results/lobby-english.png'});
