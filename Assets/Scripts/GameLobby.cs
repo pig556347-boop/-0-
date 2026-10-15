@@ -35,7 +35,7 @@ public sealed class GameLobby : MonoBehaviour
 #if ENABLE_INPUT_SYSTEM
             events.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>().AssignDefaultActions();
 #else
-            events.AddComponent<StandaloneInputModule>();
+            events.AddComponent<StandaloneInputModule>().inputOverride=events.AddComponent<GameMenuInput>();
 #endif
         }
         var bg=Rect("Lobby background",canvas.transform,Vector2.zero,Vector2.one).gameObject.AddComponent<RawImage>();
@@ -71,12 +71,13 @@ public sealed class GameLobby : MonoBehaviour
         {Time.timeScale=1;UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);});
         pauseNavigation.SetActive(false);
         if(bg.texture==null)Debug.LogError("Lobby background missing");
+        if(EventSystem.current!=null)EventSystem.current.SetSelectedGameObject(buttons["Start"].gameObject);
         Debug.Log("LOBBY_READY title=KICK Back");
     }
     private void Open(string page)
     {
         if(modal!=null) { modal.SetActive(false);Destroy(modal); }
-        screen=page;main.SetActive(page=="Main");if(page=="Main"){PlayerPrefs.Save();return;}
+        screen=page;main.SetActive(page=="Main");if(page=="Main"){PlayerPrefs.Save();if(EventSystem.current!=null)EventSystem.current.SetSelectedGameObject(buttons["Start"].gameObject);return;}
         modal=Rect("Lobby "+page,canvas.transform,new Vector2(.075f,.15f),new Vector2(.57f,.68f)).gameObject;
         modal.AddComponent<Image>().color=new Color(.035f,.035f,.04f,.96f);
         Label(page=="Language"?"언어":page=="Settings"?"설정":"제작자",modal.transform,new Vector2(.06f,.80f),new Vector2(.94f,.95f),38);
@@ -92,6 +93,7 @@ public sealed class GameLobby : MonoBehaviour
         }
         else Label("KICK Back\n제작: pig556347-boop\n\n개인 개발 프로젝트",modal.transform,new Vector2(.08f,.26f),new Vector2(.92f,.72f),27);
         Button("Back","뒤로",modal.transform,new Vector2(.66f,.08f),new Vector2(.92f,.20f),()=>Open("Main"));
+        if(EventSystem.current!=null)EventSystem.current.SetSelectedGameObject(buttons[page=="Language"?"Korean":page=="Settings"?"Fullscreen":"Back"].gameObject);
     }
     private void SetLanguage(bool english)
     { GameLanguage.English=english;PlayerPrefs.SetInt("KickBack.English",english?1:0);PlayerPrefs.Save(); }
