@@ -49,3 +49,5 @@ FlyingKick, Jump, Jumping 등 미채택 후보도 원본 검수 대상에 포함
 연타 캡처는 동일한 게임 컴포넌트를 실행한 Unity 검수 장면이다. 실제 교실 장면 캡처와 구분한다. [검수 데이터](verification.json)에 소스 커밋과 결과가 기록되어 있다.
 
 [Blender 편집 파일](../../SourceArt/Motions/PlayerAuthored.blend)은 기존 외형과 20개 후보 액션·텍스처를 포함한다. 새 연타 궁극기는 Unity에서 후보들을 연결한 시퀀스이며, 별도의 540도 원본 클립이나 새 Blender 액션이라고 표시하지 않는다.
+
+최신 추가: 제공된 펀치 2개와 Inward Block을 추가해 현재 23개 클립을 사용한다. I는 펀치이며 이전 I 잡기 과제는 펀치 적중 과제로 교체했다. [추가 모션과 실행 검증](../Punches/README.md).

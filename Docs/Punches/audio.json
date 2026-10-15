@@ -1,0 +1,62 @@
+{
+  "commit": "ee91ff4b1cfc64a2e0e12a97ab46c6eac4d58119",
+  "lobbyRms": 0.055123568552999956,
+  "contexts": {
+    "meters": 2,
+    "states": [
+      {
+        "state": "running",
+        "time": 7.842539682539683
+      },
+      {
+        "state": "running",
+        "time": 3.6919727891156464
+      }
+    ],
+    "gains": [
+      0.550000011920929,
+      0.75
+    ],
+    "sources": [
+      {
+        "loop": true,
+        "duration": 21.333333333333332,
+        "rate": 1,
+        "rms": 0.03975151064228728
+      },
+      {
+        "loop": false,
+        "duration": 0.08997732426303855,
+        "rate": 1,
+        "rms": 0.07360832207302448
+      },
+      {
+        "loop": false,
+        "duration": 0.08997732426303855,
+        "rate": 1,
+        "rms": 0.07360832207302448
+      },
+      {
+        "loop": false,
+        "duration": 0.08997732426303855,
+        "rate": 1,
+        "rms": 0.07360832207302448
+      }
+    ]
+  },
+  "mutedRms": 0,
+  "musicMute": true,
+  "battleRms": 0.04143005337459985,
+  "events": [
+    "LobbyMusic",
+    "Menu",
+    "BattleMusic",
+    "Down",
+    "Success",
+    "Whoosh",
+    "Hit"
+  ],
+  "pauseRms": 0,
+  "resumeRms": 0.038515814649073075,
+  "pauseResume": true
+}
