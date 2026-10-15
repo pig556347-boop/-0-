@@ -1,0 +1,4 @@
+{
+  "commit": "155a27609ceb3a8c1a09746159d2d8bf3ae8d038",
+  "error": "Error: Lobby timeout button Korean: {\"page\":\"Main\",\"text\":\"KICK Back\\nOne classroom. One fight.\\nSTART GAME\\nLANGUAGE\\nSETTINGS\\nCREDITS\\nKICK Back  ·  SCHOOL ACTION\",\"english\":true,\"master\":0.34841158986091614,\"music\":0.5977345108985901,\"effects\":0.7990226745605469,\"buttons\":[{\"id\":\"Start\",\"x\":0.2149999886751175,\"y\":0.48750001192092896,\"w\":0},{\"id\":\"Language\",\"x\":0.2149999886751175,\"y\":0.5774999856948853,\"w\":0},{\"id\":\"Settings\",\"x\":0.2149999886751175,\"y\":0.6675000190734863,\"w\":0},{\"id\":\"Credits\",\"x\":0.2149999886751175,\"y\":0.7575000524520874,\"w\":0}]}"
+}
