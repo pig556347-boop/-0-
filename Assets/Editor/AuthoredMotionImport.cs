@@ -27,10 +27,10 @@ public sealed class AuthoredMotionImport : AssetPostprocessor
         }
         TextAsset data=AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Resources/Motions/PlayerPoseData.bytes");
         if(data==null)throw new InvalidOperationException("Baked pose data missing");
-        AuthoredMotionLibrary library=AuthoredMotionLibrary.Read(data.bytes);
+        AuthoredMotionLibrary library=AuthoredMotionLibrary.Load();
         foreach(string name in AuthoredPlayerView.RequiredClips)
             if(!library.Clips.ContainsKey(name))throw new InvalidOperationException("Baked motion missing: "+name);
-        Debug.Log("AUTHORED_DATA_VALIDATED candidates=20 bones=19 fps=60 bytes="+data.bytes.Length);
+        Debug.Log("AUTHORED_DATA_VALIDATED candidates=23 bones=19 fps=60 bytes="+data.bytes.Length);
     }
 }
 #endif
