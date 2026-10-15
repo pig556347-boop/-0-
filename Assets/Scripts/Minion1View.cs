@@ -49,7 +49,9 @@ public sealed class Minion1View : MonoBehaviour
             if(!view.bones.ContainsKey(name.Substring(10)))throw new InvalidOperationException("Minion1 bone missing: "+name);
         view.locomotion=AuthoredMotionLibrary.Load();
         var material=new Material(Resources.Load<Shader>("Shaders/SchoolCharacter"));
-        material.mainTexture=Resources.Load<Texture2D>("Characters/Minion1/Minion1_BaseColor");
+        var texture=Resources.Load<Texture2D>("Characters/Minion1/Minion1_BaseColor");
+        if(texture==null)throw new InvalidOperationException("Minion1 base color texture resource missing at runtime");
+        material.mainTexture=texture;
         foreach(var renderer in view.model.GetComponentsInChildren<Renderer>())renderer.sharedMaterial=material;
         foreach(var skin in view.model.GetComponentsInChildren<SkinnedMeshRenderer>())skin.updateWhenOffscreen=true;
         actor.AttackPrepared+=view.OnAttack;actor.StrikeStarted+=()=>view.hitAt=Time.time;
