@@ -1,25 +1,25 @@
 {
-  "commit": "d1c87637ecd563a95c4a655ac6285f30beab5697",
+  "commit": "69b812c15b8baac6fd9b7745a2ea0db32c26cf38",
   "executions": [
     {
       "width": 1920,
       "height": 1080,
-      "checks": 398
+      "checks": 412
     },
     {
       "width": 1280,
       "height": 720,
-      "checks": 398
+      "checks": 412
     },
     {
       "width": 1024,
       "height": 768,
-      "checks": 398
+      "checks": 412
     },
     {
       "width": 2560,
       "height": 1080,
-      "checks": 398
+      "checks": 412
     }
   ],
   "authoredReviews": [
@@ -47,7 +47,21 @@
     "Falling",
     "Landing"
   ],
-  "crouchedAttack": true,
+  "lobbyChecks": {
+    "responsive": true,
+    "language": true,
+    "volume": true,
+    "persistence": true,
+    "credits": true,
+    "explicitStart": true,
+    "returnToLobby": true
+  },
+  "restrictions": {
+    "jumpOnly": true,
+    "crouchOnly": true,
+    "heavyOnly": true
+  },
+  "heavyAttack": true,
   "visualChecks": {
     "wallLumaRange": 1.3569999999999993,
     "boardGreenFraction": 0.9975
@@ -56,7 +70,7 @@
   "playerReady": true,
   "deongchiReady": true,
   "hookReady": true,
-  "lastTutorialRole": "TUTORIAL_ROLE step=Heavy infinite=True\n",
+  "lastTutorialRole": "TUTORIAL_ROLE step=Guard infinite=True\n",
   "runtimeErrors": [],
   "fullscreen": true,
   "resize": true,
