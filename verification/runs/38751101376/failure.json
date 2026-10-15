@@ -1,0 +1,4 @@
+{
+  "commit": "23b0253351b2c2338cc4b32de26f01297daa3c82",
+  "error": "Error: Minion1 test failed: Exception: MINION_TEST_FAIL finite weighted skin vertices\n  at Minion1PlaytestRunner.Check (System.Boolean value, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
