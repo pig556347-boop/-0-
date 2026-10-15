@@ -91,7 +91,7 @@ public sealed class TutorialDirector : MonoBehaviour
             player.Progress.FillGaugeForPractice();
         if (step == TutorialStep.Charge && player.Progress.UltimateTier == 3) Signal(TutorialSignal.FullyCharged);
         bool training = Progress.Step != TutorialStep.Complete;
-        brain.Active = Progress.Step == TutorialStep.Guard || Progress.Step == TutorialStep.Parry || !training;
+        brain.Active = Progress.Step == TutorialStep.Guard || Progress.Step == TutorialStep.Parry;
         if (training && !enemy.Health.Alive) enemy.RestoreForTutorial();
         if (training && !player.Health.Alive) player.RestoreForTutorial();
         hud.QuestText = Progress.Step == TutorialStep.Complete ? "" : $"조작 연습  {(int)Progress.Step:00}/12";

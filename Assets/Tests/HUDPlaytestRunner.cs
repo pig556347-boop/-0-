@@ -47,6 +47,8 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
     }
     private IEnumerator Start()
     {
+        if(Application.absoluteURL.Contains("duelReview=1"))
+        {gameObject.AddComponent<DeongchiDuelPlaytestRunner>();yield break;}
         if(Application.absoluteURL.Contains("corpseReview=1"))
         {gameObject.AddComponent<CorpsePlaytestRunner>();yield break;}
         Camera fixtureCamera = new GameObject("Camera").AddComponent<Camera>();

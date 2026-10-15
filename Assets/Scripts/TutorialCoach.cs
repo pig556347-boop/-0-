@@ -53,7 +53,7 @@ public sealed class TutorialCoach : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if(director==null)return;var step=director.Progress.Step;
+        if(director==null||!director.enabled){panel.SetActive(false);return;}var step=director.Progress.Step;
         if(previous!=step)
         {
             if(previous!=TutorialStep.Opening)

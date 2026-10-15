@@ -14,11 +14,13 @@ public sealed class EncounterDirector : MonoBehaviour
     private readonly List<CombatActor> enemies = new List<CombatActor>();
     private readonly List<GameObject> corpses = new List<GameObject>();
     private WaveProgress wave;
-    private bool started, cleared, finished, dead;
+    private bool started, campaignStarted, cleared, finished, dead;
+    private DeongchiDuel duel;
     private float messageUntil;
     public void Initialize(CombatActor protagonist, CombatActor first, TutorialDirector lessons, PrototypeHUD ui)
     {
         player = protagonist; practice = first; tutorial = lessons; hud = ui;
+        duel=gameObject.AddComponent<DeongchiDuel>();duel.Initialize(player,practice,hud);
         impact = GetComponent<HitImpactManager>(); effects = GetComponent<CombatEffects>();
         hud.EncounterText = "학교 1-1 · 교실 튜토리얼";
     }
@@ -36,8 +38,13 @@ public sealed class EncounterDirector : MonoBehaviour
         if (tutorial == null || Time.timeScale == 0) return;
         if (!started)
         {
-            if (tutorial.Progress.Step != TutorialStep.Complete) return;
-            started = true; tutorial.enabled = false;
+            if (tutorial.Progress.Step != TutorialStep.Complete||player.State==CombatActor.ActionState.ULTIMATE) return;
+            started = true; tutorial.enabled = false;duel.Begin();return;
+        }
+        if(!campaignStarted)
+        {
+            if(!duel.ReadyForCampaign)return;
+            campaignStarted=true;
             if (practice != null) { practice.gameObject.SetActive(false); Destroy(practice.gameObject); }
             StartArea(true);
         }

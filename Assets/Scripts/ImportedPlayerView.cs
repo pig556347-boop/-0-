@@ -104,6 +104,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         foreach (SkinnedMeshRenderer renderer in view.model.GetComponentsInChildren<SkinnedMeshRenderer>())
         renderer.updateWhenOffscreen = true;
         foreach (Animator animator in view.model.GetComponentsInChildren<Animator>()) animator.enabled = false;
+        if (kind == "Deongchi") owner.gameObject.AddComponent<DeongchiWalkView>().Initialize(actor,view.model);
         if (kind == "Player" && owner.UseAuthoredMotion) AuthoredPlayerView.TryBuild(owner, actor, view.model);
         if (!owner.UseAuthoredMotion)
         { actor.StrikeStarted += view.OnStrike; actor.AttackPrepared += view.OnPrepare; actor.UltimateStarted += view.OnUltimate; }

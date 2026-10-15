@@ -5,6 +5,25 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    const duelPage=await browser.newPage({viewport:{width:1280,height:720}});
+    let duelPassed=false,duelChecks=0;const duelErrors=[],duelEvents=[];
+    duelPage.on('console',msg=>{const s=msg.text();
+      if(/DUEL_WALK_PREVIEW_READY|DUEL_RETRY_READY|DUEL_VICTORY_READY/.test(s))duelEvents.push(s);
+      if(s.includes('DUEL_TEST_PASS')){duelPassed=true;duelChecks=Number(s.match(/checks=(\d+)/)[1]);}
+      if(/DUEL_TEST_FAIL|Exception/.test(s))duelErrors.push(s);});
+    duelPage.on('pageerror',e=>duelErrors.push(String(e)));
+    await duelPage.goto('http://127.0.0.1:8780/HUDTest/?duelReview=1');
+    for(let i=0;i<400&&!duelPassed&&!duelErrors.length;i++){
+      while(duelEvents.length){const event=duelEvents.shift();
+        if(event.includes('WALK'))await duelPage.screenshot({path:'hud-test-results/deongchi-walking.png'});
+        if(event.includes('RETRY')){await duelPage.screenshot({path:'hud-test-results/deongchi-defeat.png'});await duelPage.keyboard.press('r');}
+        if(event.includes('VICTORY')){await duelPage.screenshot({path:'hud-test-results/deongchi-victory.png'});await duelPage.keyboard.press('Enter');}
+      }
+      await duelPage.waitForTimeout(250);
+    }
+    if(!duelPassed||duelErrors.length)throw Error('Deongchi duel failed: '+duelErrors.join(' '));
+    fs.writeFileSync('hud-test-results/deongchi-duel.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:duelChecks,passed:true},null,2));
+    await duelPage.close();
     const corpsePage=await browser.newPage({viewport:{width:1280,height:720}});
     let corpsePassed=false,corpsePreview=false,corpseChecks=0;const corpseErrors=[];
     corpsePage.on('console',msg=>{const s=msg.text();if(s.includes('CORPSE_PREVIEW_READY'))corpsePreview=true;
