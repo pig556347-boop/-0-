@@ -1,0 +1,4 @@
+{
+  "commit": "2ad25ef1d5cdbeaa1eaaadf431179a7e8fa5d75d",
+  "error": "Error: Lobby music produced no browser audio output: {\"meters\":1,\"states\":[\"running\"],\"audioStatus\":\"GAME_AUDIO_STATE clip=LobbyMusic loaded=Loaded playing=True master=1 music=0.55\\n\",\"events\":[\"LobbyMusic\",\"Menu\"]}"
+}
