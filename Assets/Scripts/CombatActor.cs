@@ -14,6 +14,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public string WarningText { get; private set; } = "";
     public float WarningUntil { get; private set; }
     public bool HeavyStrike => activeHeavy;
+    public bool HeavyUsesKick { get; set; }
     public bool PunchStrike { get; private set; }
     public bool PunchLeft { get; private set; }
     public int PunchCount => punchSequence.Count;
@@ -112,7 +113,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public bool TryAttack(bool heavy)
     {
         if (!CanAct) return false;
-        StartCoroutine(AttackRoutine(heavy,Team!=0)); return true;
+        StartCoroutine(AttackRoutine(heavy,Team!=0&&(!heavy||!HeavyUsesKick))); return true;
     }
     public bool TryPunch()
     {if(!CanAct)return false;StartCoroutine(AttackRoutine(false,true));return true;}

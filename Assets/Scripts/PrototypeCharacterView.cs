@@ -39,6 +39,7 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     {
         if(GetComponent<Minion1View>()!=null)return true;
         if(!Minion1View.TryBuild(this,actor))return false;
+        actor.HeavyUsesKick=true;
         foreach(Transform child in transform)
             if(child.name!="Minion1 skin"){child.gameObject.SetActive(false);Destroy(child.gameObject);}
         leftLeg=rightLeg=leftArm=rightArm=null;return true;

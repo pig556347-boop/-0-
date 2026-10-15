@@ -62,7 +62,8 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
         view.ResumeRuntime();enemy.RestoreForTutorial();
         for(int i=0;i<4;i++)
         {
-            bool heavy=i>=2;Check(enemy.TryAttack(heavy),"real combat attack starts");yield return new WaitForSeconds(.1f);
+            bool heavy=i>=2;Check(enemy.TryAttack(heavy),"real combat attack starts");
+            Check(enemy.PunchStrike!=heavy,"kick heavy does not consume punch sequence");yield return new WaitForSeconds(.1f);
             Check(view.CurrentMotion==(i==0?"PunchLeft":i==1?"PunchRight":i==2?"MmaKick":"Kicking"),"correct runtime attack selection "+i);
             yield return new WaitForSeconds(heavy?1:.6f);Check(enemy.CanAct,"attack returns control");
         }
