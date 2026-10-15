@@ -62,7 +62,7 @@ public sealed class CombatHUDView : MonoBehaviour
         if(arcadeFont!=null) comboCaption.font=arcadeFont;
         RectTransform keys=Panel("Key guide",canvas,new Vector2(.02f,.02f),new Vector2(.98f,.09f));
         Label("Current controls",keys,new Vector2(.015f,.1f),new Vector2(.985f,.9f),22,TextAnchor.MiddleCenter).text=
-            "WASD 이동   Space 점프   C 앉기   Shift+방향 회피\nJ 기본공격   K 강공격   L 가드/타이밍 방어   I 잡기   Q 궁극기   Esc 일시정지";
+            "WASD 이동   Space 점프   C 앉기   Shift+방향 회피\nJ 기본공격   K 강공격   L 가드/타이밍 방어   I 펀치   Q 궁극기   Esc 일시정지";
         RectTransform d=Panel("Dialogue panel",canvas,new Vector2(.23f,.135f),new Vector2(.77f,.29f));
         dialoguePanel=d.gameObject;
         dialogue=Label("Dialogue",d,new Vector2(.035f,.10f),new Vector2(.965f,.90f),28,TextAnchor.MiddleCenter);

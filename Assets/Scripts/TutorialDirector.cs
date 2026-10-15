@@ -39,7 +39,7 @@ public sealed class TutorialDirector : MonoBehaviour
             if (result.Kind == DamageKind.Parried) Signal(TutorialSignal.Parried);
         };
         player.Dodged += () => Signal(TutorialSignal.Dodged);
-        player.Grabbed += () => Signal(TutorialSignal.Grabbed);
+        player.Punched += () => Signal(TutorialSignal.Punched);
         player.UltimateLanded += tier => { if (tier == 3) Signal(TutorialSignal.UltimateTierThreeHit); };
         StartCoroutine(Opening());
     }

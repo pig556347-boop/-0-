@@ -1,9 +1,9 @@
 namespace SchoolRuleZero
 {
     public enum TutorialStep { Opening, Move, Jump, Crouch, Basic, Heavy, Guard,
-        Parry, Dodge, Grab, Charge, Ultimate, Complete }
+        Parry, Dodge, Punch, Charge, Ultimate, Complete }
     public enum TutorialSignal { Moved, Jumped, Crouched, BasicHit, HeavyHit, Guarded,
-        Parried, Dodged, Grabbed, FullyCharged, UltimateTierThreeHit }
+        Parried, Dodged, Punched, FullyCharged, UltimateTierThreeHit }
     public sealed class TutorialProgress
     {
         public TutorialStep Step { get; private set; } = TutorialStep.Opening;

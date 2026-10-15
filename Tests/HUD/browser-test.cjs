@@ -5,6 +5,23 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    const punchPage=await browser.newPage({viewport:{width:1280,height:720}});
+    let punchPassed=false,punchChecks=0,punchInput=false;const punchErrors=[],punchPreviews=[];
+    punchPage.on('console',msg=>{const s=msg.text();
+      if(s.includes('PUNCH_INPUT_READY'))punchInput=true;
+      if(s.includes('PUNCH_PREVIEW_READY'))punchPreviews.push(Number(s.match(/kind=(\d+)/)[1]));
+      if(s.includes('PUNCH_TEST_PASS')){punchPassed=true;punchChecks=Number(s.match(/checks=(\d+)/)[1]);}
+      if(/PUNCH_TEST_FAIL|Exception/.test(s))punchErrors.push(s);});
+    punchPage.on('pageerror',e=>punchErrors.push(String(e)));
+    await punchPage.goto('http://127.0.0.1:8780/HUDTest/?punchReview=1');
+    for(let i=0;i<320&&!punchPassed&&!punchErrors.length;i++){
+      if(punchInput){punchInput=false;await punchPage.keyboard.press('i');}
+      while(punchPreviews.length)await punchPage.screenshot({path:'hud-test-results/punch-kind-'+punchPreviews.shift()+'.png'});
+      await punchPage.waitForTimeout(250);
+    }
+    if(!punchPassed||punchErrors.length)throw Error('Punch test failed: '+punchErrors.join(' '));
+    fs.writeFileSync('hud-test-results/punches.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:punchChecks,passed:true},null,2));
+    await punchPage.close();
     const duelPage=await browser.newPage({viewport:{width:1280,height:720}});
     let duelPassed=false,duelChecks=0;const duelErrors=[],duelEvents=[];
     duelPage.on('console',msg=>{const s=msg.text();
@@ -174,8 +191,13 @@ const { PNG } = require('pngjs');
     }
     async function menuClick(id) {
       await waitLobby(x=>x.buttons.some(b=>b.id===id),'button '+id);
-      const b=lobby.buttons.find(b=>b.id===id),v=live.viewportSize();
-      await live.mouse.click(b.x*v.width,b.y*v.height,{delay:100});await live.waitForTimeout(300);
+      const expected={Language:'Language',Settings:'Settings',Credits:'Credits',Back:'Main'}[id];
+      for(let attempt=0;attempt<3;attempt++) {
+        const b=lobby.buttons.find(b=>b.id===id),v=live.viewportSize();
+        await live.mouse.click(b.x*v.width,b.y*v.height,{delay:100});await live.waitForTimeout(650);
+        if(!expected||lobby.page===expected)return;
+      }
+      throw Error('Menu navigation click did not open '+id);
     }
     await waitLobby(x=>x.page==='Main','initial main menu');
     if(playerReady||openingSitting)throw Error('Gameplay started before clicking Start');
@@ -358,11 +380,19 @@ const { PNG } = require('pngjs');
     if(!lastTutorialRole.includes('step=Guard'))throw Error('Restricted tutorial did not reach Guard: '+lastTutorialRole);
     if(!hookReady)throw Error('Real third combo hit did not use the supplied MmaKick1');
     lobby=null;await live.keyboard.press('Escape');await waitLobby(x=>x.page==='Paused','pause navigation');
+    await live.waitForTimeout(400);audioChecks.pauseRms=await audioPeak();
+    if(audioChecks.pauseRms>.00001)throw Error('Pause did not stop music: '+audioChecks.pauseRms);
+    await live.keyboard.press('Escape');await live.waitForTimeout(500);
+    audioChecks.resumeRms=await audioPeak();
+    if(audioChecks.resumeRms<.0001)throw Error('Resume did not restore music');
+    audioChecks.pauseResume=true;
+    await live.keyboard.press('Escape');await waitLobby(x=>x.page==='Paused','pause again');
     await menuClick('ReturnLobby');await waitLobby(x=>x.page==='Main','return to lobby');
     lobbyChecks.returnToLobby=true;
     fs.writeFileSync('hud-test-results/lobby-tutorial.json',JSON.stringify({commit:process.env.GITHUB_SHA,lobbyChecks,restrictions,errors:runtimeErrors},null,2));
     if(runtimeErrors.length)throw Error('Runtime errors after returning to lobby: '+runtimeErrors.join(' '));
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
+    fs.writeFileSync('hud-test-results/audio.json',JSON.stringify({commit:process.env.GITHUB_SHA,...audioChecks},null,2));
     fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],lobbyChecks,restrictions,heavyAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,audioChecks,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
     for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);

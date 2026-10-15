@@ -1,6 +1,13 @@
 mergeInto(LibraryManager.library, {
   $KickBackAudioState: {
     context: null, buffers: {}, source: null, generation: 0,
+    paused: false, offset: 0, startedAt: 0, musicBuffer: null,
+    startMusic: function() {
+      if (!this.context || this.paused || !this.musicBuffer || this.source) return;
+      this.source=this.context.createBufferSource();this.source.buffer=this.musicBuffer;
+      this.source.loop=true;this.source.connect(this.music);
+      this.startedAt=this.context.currentTime;this.source.start(0,this.offset % this.musicBuffer.duration);this.unlock();
+    },
     init: function() {
       if (this.context) return;
       this.context = new (window.AudioContext || window.webkitAudioContext)();
@@ -24,12 +31,20 @@ mergeInto(LibraryManager.library, {
   KickBackAudio_Music: function(battle) {
     var s = KickBackAudioState; s.init(); var generation = ++s.generation;
     ['Hit','Whoosh','Block','Parry','Down','Menu','Success'].forEach(function(name){s.load(name).catch(s.fail);});
-    if (s.source) { s.source.stop(); s.source = null; }
+    if (s.source) { s.source.stop();s.source.disconnect();s.source = null; }
+    s.offset=0;s.musicBuffer=null;
     s.load(battle ? 'BattleMusic' : 'LobbyMusic').then(function(buffer) {
       if (!s.context || generation !== s.generation) return;
-      s.source = s.context.createBufferSource(); s.source.buffer = buffer;
-      s.source.loop = true; s.source.connect(s.music); s.source.start(); s.unlock();
+      s.musicBuffer=buffer;s.startMusic();
     }).catch(s.fail);
+  },
+  KickBackAudio_Pause__deps: ['$KickBackAudioState'],
+  KickBackAudio_Pause: function(paused) {
+    var s=KickBackAudioState;s.init();s.paused=!!paused;
+    if(s.paused && s.source) {
+      s.offset=(s.offset+s.context.currentTime-s.startedAt)%s.musicBuffer.duration;
+      s.source.stop();s.source.disconnect();s.source=null;
+    } else if(!s.paused)s.startMusic();
   },
   KickBackAudio_Play__deps: ['$KickBackAudioState'],
   KickBackAudio_Play: function(id) {
@@ -54,6 +69,6 @@ mergeInto(LibraryManager.library, {
     document.removeEventListener('pointerdown', s.unlock, true);
     document.removeEventListener('keydown', s.unlock, true);
     if (s.source) s.source.stop();
-    s.context.close().catch(function(){}); s.context = null; s.source = null; s.buffers = {};
+    s.context.close().catch(function(){}); s.context = null; s.source = null; s.buffers = {};s.paused=false;s.offset=0;s.musicBuffer=null;
   }
 });

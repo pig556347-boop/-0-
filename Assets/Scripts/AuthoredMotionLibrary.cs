@@ -35,9 +35,13 @@ public sealed class AuthoredMotionLibrary
         if(cached!=null)return cached;
         TextAsset asset=Resources.Load<TextAsset>("Motions/PlayerPoseData");
         if(asset==null)throw new InvalidDataException("Baked player pose data missing");
-        cached=Read(asset.bytes);return cached;
+        cached=Read(asset.bytes);
+        var punches=Resources.Load<TextAsset>("Motions/PunchPoseData");
+        if(punches==null)throw new InvalidDataException("Supplied punch motions missing");
+        foreach(var clip in Read(punches.bytes,3).Clips)cached.Clips.Add(clip.Key,clip.Value);
+        return cached;
     }
-    public static AuthoredMotionLibrary Read(byte[] bytes)
+    public static AuthoredMotionLibrary Read(byte[] bytes,int expectedCount=20)
     {
         var result=new AuthoredMotionLibrary();
         using(var stream=new MemoryStream(bytes,false))
@@ -49,7 +53,7 @@ public sealed class AuthoredMotionLibrary
             result.BoneNames=new string[bones];
             for(int i=0;i<bones;i++)result.BoneNames[i]=ReadString(reader);
             int count=reader.ReadInt32();
-            if(count!=20)throw new InvalidDataException("Expected twenty supplied motion candidates");
+            if(count!=expectedCount)throw new InvalidDataException("Expected twenty supplied motion candidates");
             for(int clipIndex=0;clipIndex<count;clipIndex++)
             {
                 string name=ReadString(reader);int frames=reader.ReadInt32();

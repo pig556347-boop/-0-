@@ -9,11 +9,12 @@ public sealed class GameAudioChannels : MonoBehaviour
     [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void KickBackAudio_Play(int id);
     [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void KickBackAudio_Volumes(float master,float music,float effects);
     [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void KickBackAudio_Close();
+    [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void KickBackAudio_Pause(int paused);
 #endif
     private AudioSource music,effects;
     private AudioClip lobby,battle;
     private readonly System.Collections.Generic.Dictionary<string,AudioClip> clips = new System.Collections.Generic.Dictionary<string,AudioClip>();
-    private bool battleActive,verification;
+    private bool battleActive,verification,musicPaused;
     private float nextScan,nextMusicRetry,nextStatus;
     private void Awake()
     {
@@ -53,7 +54,7 @@ public sealed class GameAudioChannels : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
         return;
 #else
-        if(music.clip==null||music.isPlaying||Time.unscaledTime<nextMusicRetry)return;
+        if(musicPaused||music.clip==null||music.isPlaying||Time.unscaledTime<nextMusicRetry)return;
         nextMusicRetry=Time.unscaledTime+.5f;
         if(music.clip.loadState==AudioDataLoadState.Loaded)music.Play();
 #endif
@@ -69,6 +70,17 @@ public sealed class GameAudioChannels : MonoBehaviour
     private void Update()
     {
         ApplyVolumes();
+        bool paused=HitImpactManager.Instance!=null&&HitImpactManager.Instance.Paused;
+        if(paused!=musicPaused)
+        {
+            musicPaused=paused;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            KickBackAudio_Pause(paused?1:0);
+#else
+            if(paused)music.Pause();else music.UnPause();
+#endif
+            Trace(paused?"MusicPaused":"MusicResumed");
+        }
         // WebGL decodes imported audio asynchronously; do not lose the initial loop
         // if the clip was still loading or playback was deferred by autoplay policy.
         TryStartMusic();

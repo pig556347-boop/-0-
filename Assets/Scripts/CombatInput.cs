@@ -44,7 +44,7 @@ public sealed class CombatInput : MonoBehaviour
     public bool GuardPressed { get; private set; }
     public bool GuardHeld { get; private set; }
     public bool DodgePressed { get; private set; }
-    public bool GrabPressed { get; private set; }
+    public bool PunchPressed { get; private set; }
     public bool UltimatePressed { get; private set; }
     public bool PausePressed { get; private set; }
     public Vector3 DodgeDirection { get; private set; }
@@ -58,7 +58,7 @@ public sealed class CombatInput : MonoBehaviour
         HeavyPressed = active && GameKeys.Down(KeyCode.K);
         GuardPressed = active && GameKeys.Down(KeyCode.L);
         GuardHeld = active && GameKeys.Held(KeyCode.L);
-        GrabPressed = active && GameKeys.Down(KeyCode.I);
+        PunchPressed = active && GameKeys.Down(KeyCode.I);
         UltimatePressed = active && GameKeys.Down(KeyCode.Q);
         DodgeDirection = active ? GameKeys.Direction : Vector3.zero;
         bool shift = GameKeys.Held(KeyCode.LeftShift) || GameKeys.Held(KeyCode.RightShift);
@@ -71,7 +71,7 @@ public sealed class CombatInput : MonoBehaviour
         {
             AttackPressed &= gate.Allows(KeyCode.J);HeavyPressed &= gate.Allows(KeyCode.K);
             GuardPressed &= gate.Allows(KeyCode.L);GuardHeld &= gate.Allows(KeyCode.L);
-            GrabPressed &= gate.Allows(KeyCode.I);UltimatePressed &= gate.Allows(KeyCode.Q);
+            PunchPressed &= gate.Allows(KeyCode.I);UltimatePressed &= gate.Allows(KeyCode.Q);
             DodgePressed &= gate.Allows(KeyCode.LeftShift);
         }
 

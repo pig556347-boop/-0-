@@ -1,0 +1,23 @@
+[
+  {
+    "clip": "PunchLeft",
+    "source": "Punching.fbx",
+    "fps": 60,
+    "frames": 63,
+    "impactFrame": 34
+  },
+  {
+    "clip": "PunchRight",
+    "source": "Punching (1).fbx",
+    "fps": 60,
+    "frames": 60,
+    "impactFrame": 24
+  },
+  {
+    "clip": "InwardBlock",
+    "source": "Inward Block.fbx",
+    "fps": 60,
+    "frames": 88,
+    "impactFrame": null
+  }
+]

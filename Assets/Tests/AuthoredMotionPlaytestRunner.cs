@@ -60,7 +60,7 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         GameObject visual=new GameObject("Authored test visual");visual.transform.SetParent(actor.transform,false);
         PrototypeCharacterView character=visual.AddComponent<PrototypeCharacterView>();character.Build(actor);
         AuthoredPlayerView authored=visual.GetComponent<AuthoredPlayerView>();
-        Check(authored!=null&&authored.IsReady,"all 20 authored clips available");
+        Check(authored!=null&&authored.IsReady,"all 23 authored clips available");
         SkinnedMeshRenderer render=authored.ModelRoot.GetComponentInChildren<SkinnedMeshRenderer>();
         Check(render.sharedMesh.isReadable&&render.sharedMesh.vertexCount<25000,"existing web character skin preserved");
         Check(render.sharedMaterial.mainTexture!=null,"original player texture preserved");
@@ -136,7 +136,7 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         Check(actor.TryGuard(false),"guard starts");yield return new WaitForSeconds(.15f);
         Check(authored.CurrentMotion=="CenterBlock","guard uses CenterBlock");
         actor.ReceiveHit(new HitRequest(null,4,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
-        Check(authored.CurrentMotion=="RightBlock","blocked impact uses RightBlock");actor.ReleaseGuard();
+        Check(authored.CurrentMotion=="InwardBlock","blocked impact uses supplied InwardBlock");actor.ReleaseGuard();
         yield return new WaitForSeconds(.2f);
         Check(actor.TryAttack(false),"attack before interruption starts");
         actor.ReceiveHit(new HitRequest(null,8,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
@@ -196,6 +196,6 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         actor.RestoreForTutorial();yield return new WaitForSeconds(.15f);
         Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","retry resets death animation");
         Check(actor.transform.position==origin&&collider.height==colliderHeight,"all actions preserve physical root and collider");
-        Debug.Log("AUTHORED_TEST_PASS review="+review+" checks="+checks+" candidates=20");
+        Debug.Log("AUTHORED_TEST_PASS review="+review+" checks="+checks+" candidates=23");
     }
 }

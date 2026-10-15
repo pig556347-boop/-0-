@@ -14,6 +14,11 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public string WarningText { get; private set; } = "";
     public float WarningUntil { get; private set; }
     public bool HeavyStrike => activeHeavy;
+    public bool PunchStrike { get; private set; }
+    public bool PunchLeft { get; private set; }
+    public int PunchCount => punchSequence.Count;
+    private readonly PunchSequence punchSequence=new PunchSequence();
+    public event Action Punched;
     public float VisualWindup => attackWindup * (activeHeavy ? 1.8f : 1);
     public float VisualRecovery => attackRecovery * (activeHeavy ? 1.6f : 1);
     public int BasicComboHit { get; private set; }
@@ -86,7 +91,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         Progress.Tick(Time.time);
         if (State == ActionState.HIT && Time.time >= lockedUntil) State = ActionState.IDLE;
         if (input == null || !input.GameplayEnabled) return;
-        if (State == ActionState.ATTACK && input.AttackPressed) queuedBasic = true;
+        if (State == ActionState.ATTACK && (PunchStrike?input.PunchPressed:input.AttackPressed)) queuedBasic = true;
         if (State == ActionState.GUARD && !input.GuardHeld) State = ActionState.IDLE;
         if (input.GuardPressed && (CanAct || State == ActionState.GUARD))
         { guardStarted = Time.time; State = ActionState.GUARD; StopPlanarMotion(); }
@@ -95,7 +100,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         { State = ActionState.IDLE; TryDodge(input.DodgeDirection); return; }
         if (CanAct && motor != null) Facing = motor.FacingDirection;
         if (CanAct && input.UltimatePressed) { TryUltimate(); return; }
-        if (CanAct && input.GrabPressed) { TryGrab(); return; }
+        if (CanAct && input.PunchPressed) { TryPunch(); return; }
         if (CanAct && input.AttackPressed) TryAttack(false);
         else if (CanAct && input.HeavyPressed) TryAttack(true);
     }
@@ -107,24 +112,27 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public bool TryAttack(bool heavy)
     {
         if (!CanAct) return false;
-        StartCoroutine(AttackRoutine(heavy)); return true;
+        StartCoroutine(AttackRoutine(heavy,Team!=0)); return true;
     }
-    private IEnumerator AttackRoutine(bool heavy)
+    public bool TryPunch()
+    {if(!CanAct)return false;StartCoroutine(AttackRoutine(false,true));return true;}
+    private IEnumerator AttackRoutine(bool heavy,bool punch)
     {
-        State = ActionState.ATTACK; activeHeavy = heavy; StopPlanarMotion();
+        State = ActionState.ATTACK; activeHeavy = heavy; PunchStrike=punch; StopPlanarMotion();
         int chain = 0;
         do
         {
             queuedBasic = false;
             BasicComboHit = heavy ? 0 : chain + 1;
+            if(punch)PunchLeft=punchSequence.Next(Time.time);
             AttackPrepared?.Invoke();
             if (TelegraphEnabled) Warn(heavy ? "강공격!" : "공격!", attackWindup * (heavy ? 1.8f : 1));
             yield return new WaitForSeconds(attackWindup * (heavy ? 1.8f : 1));
-            SpawnStrike(heavy ? heavyDamage : basicDamage + chain * 2,
-                heavy ? 6 : chain == 2 ? 4 : 1.2f, false);
+            SpawnStrike(heavy ? heavyDamage : basicDamage + Mathf.Min(chain,2) * 2,
+                heavy ? 6 : !punch && chain == 2 ? 4 : 1.2f, false);
             yield return new WaitForSeconds(attackRecovery * (heavy ? 1.6f : 1));
             chain++;
-        } while (!heavy && queuedBasic && chain < 3);
+        } while (!heavy && queuedBasic && (punch || chain < 3));
         State = ActionState.IDLE;
     }
     private void Warn(string text, float duration) { WarningText = text; WarningUntil = Time.time + duration; }
@@ -148,7 +156,8 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
             Progress.ConfirmHit(Time.time, gain: State == ActionState.ULTIMATE ? 0 : 12);
             HitConfirmed?.Invoke(this, target, position);
             if (State == ActionState.ULTIMATE) UltimateLanded?.Invoke(activeUltimate);
-            if (State == ActionState.ATTACK) AttackLanded?.Invoke(activeHeavy);
+            if (State == ActionState.ATTACK)
+            {AttackLanded?.Invoke(activeHeavy);if(PunchStrike)Punched?.Invoke();}
         }
     }
     public bool ReceiveHit(HitRequest hit)
@@ -266,6 +275,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     }
     public void RestoreForTutorial()
     {
+        punchSequence.Reset();
         GetComponent<DefeatedBody>()?.Restore();
         CancelActions(); Health.Reset(); State = ActionState.IDLE;
         invulnerableUntil = 0; guardStarted = float.NegativeInfinity; StopPlanarMotion();

@@ -47,6 +47,8 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
     }
     private IEnumerator Start()
     {
+        if(Application.absoluteURL.Contains("punchReview=1"))
+        {gameObject.AddComponent<PunchPlaytestRunner>();yield break;}
         if(Application.absoluteURL.Contains("duelReview=1"))
         {gameObject.AddComponent<DeongchiDuelPlaytestRunner>();yield break;}
         if(Application.absoluteURL.Contains("corpseReview=1"))

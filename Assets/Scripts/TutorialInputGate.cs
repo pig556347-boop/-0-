@@ -20,7 +20,7 @@ public sealed class TutorialInputGate : MonoBehaviour
             case TutorialStep.Heavy:return move||key==KeyCode.K;
             case TutorialStep.Guard:case TutorialStep.Parry:return key==KeyCode.L;
             case TutorialStep.Dodge:return move||key==KeyCode.LeftShift||key==KeyCode.RightShift;
-            case TutorialStep.Grab:return move||key==KeyCode.I;
+            case TutorialStep.Punch:return move||key==KeyCode.I;
             case TutorialStep.Charge:return move||key==KeyCode.J||key==KeyCode.K;
             case TutorialStep.Ultimate:return move||key==KeyCode.Q;
             default:return false;

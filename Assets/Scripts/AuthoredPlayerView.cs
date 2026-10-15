@@ -10,7 +10,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     public static readonly string[] RequiredClips = { "FlyingKick", "MmaKick1", "MmaKick2", "RoundhouseKick",
         "CenterBlock", "RightBlock", "HitReaction", "ReceivingABigUppercut", "Stunned", "FightingIdle",
         "LeftStrafe", "RightStrafe", "Running", "WalkingBackwards", "Walking", "Jump", "Jumping1",
-        "Jumping", "SitToStand", "Sitting" };
+        "Jumping", "SitToStand", "Sitting", "PunchLeft", "PunchRight", "InwardBlock" };
     private AuthoredMotionLibrary library;
     private Dictionary<string,AuthoredMotionLibrary.Clip> clips;
     private Transform[] sampledBones;
@@ -39,7 +39,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     public string JumpStage { get; private set; } = "Grounded";
     private string current = "", attack = "RoundhouseKick", hit = "HitReaction";
     private CombatActor.ActionState previous;
-    public bool IsReady => model != null && clips != null && clips.Count == 20 && hips != null;
+    public bool IsReady => model != null && clips != null && clips.Count == 23 && hips != null;
     public float CurrentSampleTime { get; private set; }
     public string CurrentMotion { get; private set; } = "FightingIdle";
     public string[] ClipNames
@@ -105,14 +105,14 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         view.visualFacing = Quaternion.LookRotation(actor.Facing);
         owner.transform.rotation = view.visualFacing;
         view.Preview("FightingIdle", 0);
-        Debug.Log("AUTHORED_PLAYER_READY candidates=20 bones=19 rootMotion=false");
+        Debug.Log("AUTHORED_PLAYER_READY candidates=23 bones=19 rootMotion=false");
         return true;
     }
     public float DeathDuration => clips["Stunned"].Length/2.5f;
     private void OnAttack()
     {
         started = Time.time; hitAt = -10;
-        attack = actor.HeavyStrike ? "MmaKick1" : actor.BasicComboHit == 2 ? "MmaKick2" : actor.BasicComboHit == 3 ? "MmaKick1" : "RoundhouseKick";
+        attack = actor.PunchStrike ? (actor.PunchLeft ? "PunchLeft" : "PunchRight") : actor.HeavyStrike ? "MmaKick1" : actor.BasicComboHit == 2 ? "MmaKick2" : actor.BasicComboHit == 3 ? "MmaKick1" : "RoundhouseKick";
         supportName=attack=="MmaKick1"?"RightFoot":"LeftFoot";
         attackAnchor=bones[supportName].position;
         if (!actor.HeavyStrike && actor.BasicComboHit == 3) Debug.Log("SUPPLIED_MOTION_ONLY combo=3 clip=MmaKick1");
@@ -179,7 +179,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         if (actor.State == CombatActor.ActionState.GUARD)
         {
             bool struck = Time.time-guardHitAt < .18f;
-            Play(struck ? "RightBlock" : "CenterBlock", struck ? .32f+(Time.time-guardHitAt)*1.5f : .48f, true); return;
+            Play(struck ? "InwardBlock" : "CenterBlock", struck ? .32f+(Time.time-guardHitAt)*1.5f : .48f, true); return;
         }
         Vector3 velocity = body == null ? Vector3.zero : body.linearVelocity;
         if (motor != null && !motor.IsGrounded)
@@ -222,6 +222,8 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         float first = name == "RoundhouseKick" ? 15/60f : 1/60f;
         float impact = name == "RoundhouseKick" ? 57/60f : name == "MmaKick1" ? 37/60f : name == "FlyingKick" ? 28/60f : 29/60f;
         float last = name == "RoundhouseKick" ? 115/60f : name == "MmaKick1" ? 85/60f : name == "FlyingKick" ? 85/60f : 75/60f;
+        if(name=="PunchLeft"||name=="PunchRight")
+        {first=0;impact=name=="PunchLeft"?34/60f:24/60f;last=clips[name].Length;}
         if(actor.State==CombatActor.ActionState.ATTACK)
             elapsed=hitAt>=started?windup+Time.time-hitAt:Mathf.Min(elapsed,windup);
         float time = elapsed <= windup ? Mathf.Lerp(first,impact,Mathf.SmoothStep(0,1,Mathf.Clamp01(elapsed/windup))) :

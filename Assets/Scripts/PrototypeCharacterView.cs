@@ -41,6 +41,7 @@ public sealed class PrototypeCharacterView : MonoBehaviour
         actor = owner; motor = owner.GetComponent<PlayerController>();
         owner.gameObject.AddComponent<DefeatedBody>().Initialize(owner,transform);
         actor.StrikeStarted += OnStrike;
+        actor.AttackPrepared += ()=>actionStarted=Time.time;
         if (owner.Team == 0 && ImportedPlayerView.TryBuild(this, owner)) return;
         Material uniform = MakeMaterial(new Color(.055f, .06f, .075f));
         Material white = MakeMaterial(new Color(.88f, .88f, .85f));
@@ -96,7 +97,26 @@ public sealed class PrototypeCharacterView : MonoBehaviour
     }
     private void Update()
     {
-        if (actor == null || !actor.Health.Alive || leftLeg == null || CinematicPose || UseAuthoredMotion) return;
+        if (actor == null || !actor.Health.Alive || leftLeg == null || CinematicPose) return;
+        if(UseAuthoredMotion)
+        {
+            // Temporary block-character enemies have no skeleton to retarget yet.
+            // Their arm pivots follow the same authoritative left/right punch selection.
+            if(actor.Team==1)
+            {
+                if(previous!=actor.State){previous=actor.State;actionStarted=Time.time;}
+                transform.rotation=Quaternion.LookRotation(actor.Facing);
+                leftArm.localRotation=baseLeftArm;rightArm.localRotation=baseRightArm;
+                if(actor.State==CombatActor.ActionState.ATTACK&&actor.PunchStrike)
+                {
+                    float elapsed=Time.time-actionStarted;
+                    float extension=elapsed<actor.VisualWindup?Mathf.Clamp01(elapsed/actor.VisualWindup):
+                        1-Mathf.Clamp01((elapsed-actor.VisualWindup)/actor.VisualRecovery);
+                    (actor.PunchLeft?leftArm:rightArm).localRotation=Quaternion.Euler(-95*extension,0,0);
+                }
+            }
+            return;
+        }
         if (previous != actor.State) { previous = actor.State; actionStarted = Time.time; }
         transform.rotation = Quaternion.LookRotation(actor.Facing);
         float walk = motor != null && motor.CurrentState == PlayerController.PlayerState.MOVE
