@@ -13,6 +13,9 @@ public static class HUDCIBuild
         CharacterModelImport.PrepareForBuild();
         ClassroomBuildCheck.Validate();
         AuthoredMotionImport.Validate();
+        var minion=Resources.Load<TextAsset>("Characters/Minion1/Minion1PoseData");
+        if(minion==null)throw new System.InvalidOperationException("Minion1 motions missing");
+        AuthoredMotionLibrary.Read(minion.bytes,4,33);
         PrototypeMenu.BuildForCI();
         var test=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
         new GameObject("HUD Playtest").AddComponent<HUDPlaytestRunner>();

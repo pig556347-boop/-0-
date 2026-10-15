@@ -1,0 +1,26 @@
+[
+  {
+    "clip": "PunchRight",
+    "samples": 11,
+    "maxExtent": 1.6829182210494764,
+    "passed": true
+  },
+  {
+    "clip": "PunchLeft",
+    "samples": 11,
+    "maxExtent": 1.713466670771595,
+    "passed": true
+  },
+  {
+    "clip": "MmaKick",
+    "samples": 11,
+    "maxExtent": 1.775756347924471,
+    "passed": true
+  },
+  {
+    "clip": "Kicking",
+    "samples": 11,
+    "maxExtent": 1.7760653086006641,
+    "passed": true
+  }
+]

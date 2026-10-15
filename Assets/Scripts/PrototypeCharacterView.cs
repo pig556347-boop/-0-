@@ -35,6 +35,14 @@ public sealed class PrototypeCharacterView : MonoBehaviour
         return true;
     }
 
+    public bool UseMinion1Model()
+    {
+        if(GetComponent<Minion1View>()!=null)return true;
+        if(!Minion1View.TryBuild(this,actor))return false;
+        foreach(Transform child in transform)
+            if(child.name!="Minion1 skin"){child.gameObject.SetActive(false);Destroy(child.gameObject);}
+        leftLeg=rightLeg=leftArm=rightArm=null;return true;
+    }
     public void Build(CombatActor owner, bool useAuthoredMotion = true)
     {
         UseAuthoredMotion = useAuthoredMotion;

@@ -1,0 +1,38 @@
+[
+  {
+    "clip": "PunchRight",
+    "source": "Punching.fbx",
+    "frames": 52,
+    "fps": 60,
+    "impactFrame": 22,
+    "maxElbowDegrees": 180.0,
+    "weightedVertices": 24996
+  },
+  {
+    "clip": "PunchLeft",
+    "source": "Punching (1).fbx",
+    "frames": 63,
+    "fps": 60,
+    "impactFrame": 34,
+    "maxElbowDegrees": 142.17,
+    "weightedVertices": 24996
+  },
+  {
+    "clip": "MmaKick",
+    "source": "Mma Kick.fbx",
+    "frames": 97,
+    "fps": 60,
+    "impactFrame": 37,
+    "maxElbowDegrees": null,
+    "weightedVertices": 24996
+  },
+  {
+    "clip": "Kicking",
+    "source": "Kicking.fbx",
+    "frames": 130,
+    "fps": 60,
+    "impactFrame": 69,
+    "maxElbowDegrees": null,
+    "weightedVertices": 24996
+  }
+]

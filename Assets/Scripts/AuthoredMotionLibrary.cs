@@ -41,7 +41,7 @@ public sealed class AuthoredMotionLibrary
         foreach(var clip in Read(punches.bytes,3).Clips)cached.Clips.Add(clip.Key,clip.Value);
         return cached;
     }
-    public static AuthoredMotionLibrary Read(byte[] bytes,int expectedCount=20)
+    public static AuthoredMotionLibrary Read(byte[] bytes,int expectedCount=20,int expectedBones=19)
     {
         var result=new AuthoredMotionLibrary();
         using(var stream=new MemoryStream(bytes,false))
@@ -49,11 +49,11 @@ public sealed class AuthoredMotionLibrary
         {
             if(Encoding.ASCII.GetString(reader.ReadBytes(4))!="KMP1")throw new InvalidDataException("Motion format mismatch");
             int fps=reader.ReadInt32(),bones=reader.ReadInt32();
-            if(fps!=60||bones!=19)throw new InvalidDataException("Motion rig/FPS mismatch");
+            if(fps!=60||bones!=expectedBones)throw new InvalidDataException("Motion rig/FPS mismatch");
             result.BoneNames=new string[bones];
             for(int i=0;i<bones;i++)result.BoneNames[i]=ReadString(reader);
             int count=reader.ReadInt32();
-            if(count!=expectedCount)throw new InvalidDataException("Expected twenty supplied motion candidates");
+            if(count!=expectedCount)throw new InvalidDataException("Unexpected supplied motion candidate count");
             for(int clipIndex=0;clipIndex<count;clipIndex++)
             {
                 string name=ReadString(reader);int frames=reader.ReadInt32();

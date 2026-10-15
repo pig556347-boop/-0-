@@ -133,6 +133,7 @@ public sealed class EncounterDirector : MonoBehaviour
                 if (distance > best) { best = distance; spawn = candidate; }
             }
             CombatActor enemy = PrototypeBootstrap.CreateOpponent(name, spawn, player);
+            if(!boss)enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model();
             enemy.ConfigureStats(boss ? SchoolCampaign.HP(Stage, true) : SchoolCampaign.EnemyHP(Stage, index),
                 SchoolCampaign.Damage(Stage, boss), Stage <= 4 ? .65f : .24f, .48f);
             enemy.TelegraphEnabled = SchoolCampaign.Telegraph(Stage);

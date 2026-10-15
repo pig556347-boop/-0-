@@ -71,6 +71,7 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
         int alive=0;foreach(var actor in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
             if(actor.Team==1&&actor.Health.Alive)alive++;
         Check(alive>0,"campaign opponents spawn after duel");
+        Check(FindObjectsByType<Minion1View>(FindObjectsSortMode.None).Length==alive,"campaign ordinary opponents use supplied Minion1 skin");
         Check(player.CanAct,"player controls restored for campaign");
         Debug.Log("DUEL_TEST_PASS checks="+checks);
     }
