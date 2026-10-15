@@ -264,14 +264,15 @@ const { PNG } = require('pngjs');
     if(!deongchiReady)throw Error('Tutorial Move/Jump/Crouch progression did not load Deongchi: '+lastTutorialRole);
     if(!lastTutorialRole.includes('step=Guard'))throw Error('Restricted tutorial did not reach Guard: '+lastTutorialRole);
     if(!hookReady)throw Error('Real third combo hit did not use the supplied MmaKick1');
-    fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],lobbyChecks,restrictions,heavyAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
-    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
-      fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     lobby=null;await live.keyboard.press('Escape');await waitLobby(x=>x.page==='Paused','pause navigation');
     await menuClick('ReturnLobby');await waitLobby(x=>x.page==='Main','return to lobby');
     lobbyChecks.returnToLobby=true;
     fs.writeFileSync('hud-test-results/lobby-tutorial.json',JSON.stringify({commit:process.env.GITHUB_SHA,lobbyChecks,restrictions,errors:runtimeErrors},null,2));
+    if(runtimeErrors.length)throw Error('Runtime errors after returning to lobby: '+runtimeErrors.join(' '));
+    fs.mkdirSync('build/WebGL/verification',{recursive:true});
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],lobbyChecks,restrictions,heavyAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
+    for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
+      fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
     await live.close();
   } finally {await browser.close();}

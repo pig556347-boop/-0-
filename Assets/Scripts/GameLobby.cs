@@ -144,7 +144,7 @@ public sealed class GameLobby : MonoBehaviour
     {
         var r=Rect(id,parent,min,max);var image=r.gameObject.AddComponent<Image>();image.color=new Color(.10f,.10f,.11f,.8f);
         var outline=r.gameObject.AddComponent<Outline>();outline.effectColor=new Color(.65f,.62f,.55f,.7f);outline.effectDistance=new Vector2(1,-1);
-        var button=r.gameObject.AddComponent<Button>();var colors=button.colors;
+        var button=r.gameObject.AddComponent<Button>();button.targetGraphic=image;var colors=button.colors;
         colors.normalColor=Color.white;colors.highlightedColor=new Color(1,.82f,.6f);colors.selectedColor=colors.highlightedColor;
         colors.pressedColor=new Color(.65f,.55f,.43f);button.colors=colors;button.onClick.AddListener(action);
         Label(title,r,new Vector2(.08f,.08f),new Vector2(.92f,.92f),30);buttons[id]=button;return button;
