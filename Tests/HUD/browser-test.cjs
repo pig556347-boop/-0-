@@ -6,8 +6,9 @@ const { PNG } = require('pngjs');
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
     const minionPage=await browser.newPage({viewport:{width:1280,height:720}});
-    let minionPassed=false,minionChecks=0;const minionErrors=[],minionPreviews=[];
+    let minionPassed=false,minionChecks=0;const minionErrors=[],minionPreviews=[],minionMetrics=[];
     minionPage.on('console',msg=>{const s=msg.text();
+      if(s.includes('MINION1_LAYOUT'))minionMetrics.push(s);
       if(s.includes('MINION_PREVIEW_READY'))minionPreviews.push(s.match(/clip=(\w+)/)[1]);
       if(s.includes('MINION_TEST_PASS')){minionPassed=true;minionChecks=Number(s.match(/checks=(\d+)/)[1]);}
       if(/MINION_TEST_FAIL|Exception/.test(s))minionErrors.push(s);});
@@ -17,7 +18,7 @@ const { PNG } = require('pngjs');
       while(minionPreviews.length)await minionPage.screenshot({path:'hud-test-results/minion-'+minionPreviews.shift()+'.png'});
       await minionPage.waitForTimeout(150);
     }
-    if(!minionPassed||minionErrors.length)throw Error('Minion1 test failed: '+minionErrors.join(' '));
+    if(!minionPassed||minionErrors.length){await minionPage.screenshot({path:'hud-test-results/minion-failed.png'});throw Error('Minion1 test failed: '+minionErrors.join(' ')+' '+minionMetrics.join(' '));}
     fs.writeFileSync('hud-test-results/minion1.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:minionChecks,passed:true},null,2));
     await minionPage.close();
     const punchPage=await browser.newPage({viewport:{width:1280,height:720}});

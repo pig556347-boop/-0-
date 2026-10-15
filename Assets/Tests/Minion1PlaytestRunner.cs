@@ -44,7 +44,7 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
             for(int frame=0;frame<=10;frame++)
             {
                 context=clip+" phase="+frame;Vector3 root=enemy.transform.position;view.Preview(clip,frame/10f);
-                var bounds=SkinBounds(skin,root);Check(bounds.size.y<2.3f&&bounds.size.y>.6f,"plausible character size "+clip);
+                var bounds=SkinBounds(skin,root);Check(bounds.size.y<2.3f&&bounds.size.y>.6f,"plausible character size "+context+" bounds="+bounds+" modelScale="+view.ModelRoot.lossyScale+" hip="+view.Bone("Hips").position+" head="+view.Bone("Head").position);
                 Check(enemy.transform.position==root,"preview preserves physics root");
             }
             if(clip=="PunchRight")view.Preview(clip,22/51f);

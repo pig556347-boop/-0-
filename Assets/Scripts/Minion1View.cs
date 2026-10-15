@@ -32,7 +32,7 @@ public sealed class Minion1View : MonoBehaviour
         view.model.localScale=Vector3.one;view.model.localRotation=Quaternion.identity;
         view.home=new Vector3(0,-.95f,0);view.model.localPosition=view.home;
         var importedSkin=view.model.GetComponentInChildren<SkinnedMeshRenderer>();
-        float importedHeight=importedSkin.bounds.size.y;
+        float importedHeight=MeasuredHeight(importedSkin);
         if(importedHeight<=.0001f)throw new InvalidOperationException("Minion1 imported skin bounds invalid");
         view.model.localScale*=1.85f/importedHeight;
         foreach(var animator in view.model.GetComponentsInChildren<Animator>())animator.enabled=false;
@@ -44,7 +44,7 @@ public sealed class Minion1View : MonoBehaviour
             view.bones[name]=b;view.restWorld[name]=Quaternion.Inverse(view.model.rotation)*b.rotation;view.restLocal[i]=b.localRotation;
         }
         view.hips=view.bones["Hips"];view.hipHome=view.model.InverseTransformPoint(view.hips.position);view.sole=view.LowestFoot();
-        Debug.Log("MINION1_LAYOUT scale="+view.model.lossyScale+" hip="+view.hipHome+" skinScale="+view.model.GetComponentInChildren<SkinnedMeshRenderer>().transform.lossyScale);
+        Debug.Log("MINION1_LAYOUT measuredRestHeight="+importedHeight+" scale="+view.model.lossyScale+" hip="+view.hipHome+" skinScale="+view.model.GetComponentInChildren<SkinnedMeshRenderer>().transform.lossyScale);
         if(attacks==null)
         {
             var data=Resources.Load<TextAsset>("Characters/Minion1/Minion1PoseData");
@@ -63,6 +63,20 @@ public sealed class Minion1View : MonoBehaviour
         actor.AttackPrepared+=view.OnAttack;actor.StrikeStarted+=()=>view.hitAt=Time.time;
         actor.Damaged+=result=>{if(result.Kind==SchoolRuleZero.DamageKind.Hit){view.started=Time.time;view.current="";}};
         Debug.Log("MINION1_READY bones=33 weighted=true");return true;
+    }
+    private static float MeasuredHeight(SkinnedMeshRenderer skin)
+    {
+        var mesh=skin.sharedMesh;var vertices=mesh.vertices;var weights=mesh.boneWeights;var bind=mesh.bindposes;
+        var matrices=new Matrix4x4[bind.Length];for(int i=0;i<bind.Length;i++)matrices[i]=skin.bones[i].localToWorldMatrix*bind[i];
+        float lo=float.PositiveInfinity,hi=float.NegativeInfinity;
+        for(int i=0;i<vertices.Length;i++)
+        {
+            var w=weights[i];var v=vertices[i];
+            Vector3 point=matrices[w.boneIndex0].MultiplyPoint3x4(v)*w.weight0+matrices[w.boneIndex1].MultiplyPoint3x4(v)*w.weight1+
+                matrices[w.boneIndex2].MultiplyPoint3x4(v)*w.weight2+matrices[w.boneIndex3].MultiplyPoint3x4(v)*w.weight3;
+            lo=Mathf.Min(lo,point.y);hi=Mathf.Max(hi,point.y);
+        }
+        return hi-lo;
     }
     private void OnAttack()
     {
