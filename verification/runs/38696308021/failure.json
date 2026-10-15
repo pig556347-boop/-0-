@@ -1,0 +1,4 @@
+{
+  "commit": "b1a1f8402256cfcd67de36539336c972c9d14343",
+  "error": "Error: Could not approach tutorial target: {\"px\":1.1520565748214722,\"pz\":-1.953703761100769,\"ex\":-0.49770665168762207,\"ez\":-1.5945696830749512,\"sx\":0.5344697833061218,\"sy\":0.3445354700088501,\"cameraSize\":9.399999618530273,\"cameraX\":0,\"cameraY\":3.200000047683716,\"cameraZ\":0,\"state\":\"IDLE\",\"visualMotion\":\"FightingIdle\",\"jumpStage\":\"Grounded\",\"tutorialStep\":\"Basic\",\"crouching\":false,\"combo\":0}"
+}
