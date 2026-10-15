@@ -22,10 +22,13 @@ public sealed class CorpsePlaytestRunner : MonoBehaviour
             var root=new GameObject(new[]{"Ordinary defeated enemy","Deongchi defeated enemy","Defeated player"}[i]);
             root.transform.position=new Vector3((i-1)*3,3+i*.4f,0);
             root.AddComponent<CapsuleCollider>().height=2;
-            root.AddComponent<Rigidbody>().constraints=RigidbodyConstraints.FreezeRotation;
+            var body=root.AddComponent<Rigidbody>();body.constraints=RigidbodyConstraints.FreezeRotation;
+            body.interpolation=RigidbodyInterpolation.Interpolate;
+            if(i==2)root.AddComponent<PlayerController>();
             var actor=root.AddComponent<CombatActor>();actor.Configure(i==2?0:1);actor.ConfigureStats(20,10,.12f,.28f);
             actor.GameplayEnabled=false;
             var view=new GameObject("Visual");view.transform.SetParent(root.transform,false);
+            if(i==2)root.GetComponent<PlayerController>().SetVisualRoot(view.transform);
             var character=view.AddComponent<PrototypeCharacterView>();character.Build(actor);
             if(i==1)Check(character.UseDeongchiModel(),"supplied Deongchi model ready");
             actors[i]=actor;
@@ -41,6 +44,7 @@ public sealed class CorpsePlaytestRunner : MonoBehaviour
         {
             Check(actor.GetComponent<Rigidbody>().isKinematic,"defeated body frozen after settling");
             Check(!actor.GetComponent<Collider>().enabled,"corpse does not block living actors");
+            if(actor.GetComponent<PlayerController>()!=null)Check(!actor.GetComponent<PlayerController>().enabled,"dead player motor stopped");
         }
         float until=Time.time+12;
         while(Time.time<until&&(!actors[0].GetComponent<DefeatedBody>().Settled||
@@ -63,6 +67,8 @@ public sealed class CorpsePlaytestRunner : MonoBehaviour
             actor.RestoreForTutorial();actor.GameplayEnabled=true;
             Check(actor.Health.Alive&&!actor.GetComponent<Rigidbody>().isKinematic,"retry restores living physics");
             Check(actor.GetComponent<Collider>().enabled&&!corpse.Settled,"retry restores collider and death state");
+            Check(actor.GetComponent<Rigidbody>().interpolation==RigidbodyInterpolation.Interpolate,"retry restores interpolation");
+            if(actor.GetComponent<PlayerController>()!=null)Check(actor.GetComponent<PlayerController>().enabled,"retry restores player motor");
             yield return new WaitForSeconds(.1f);
             Check(actor.TryAttack(false),"revived actor can attack");
             actor.Stagger(.01f);

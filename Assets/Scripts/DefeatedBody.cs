@@ -7,6 +7,7 @@ public sealed class DefeatedBody : MonoBehaviour
 {
     private CombatActor actor;
     private Rigidbody body;
+    private RigidbodyInterpolation initialInterpolation;
     private Transform visual;
     private Vector3 homePosition,homeScale,deathPosition,settledPosition;
     private Quaternion deathRotation;
@@ -31,7 +32,7 @@ public sealed class DefeatedBody : MonoBehaviour
         actor=owner;body=owner.GetComponent<Rigidbody>();visual=view;
         motor=owner.GetComponent<PlayerController>();
         homePosition=view.localPosition;homeScale=view.localScale;
-        initialKinematic=body.isKinematic;initialGravity=body.useGravity;
+        initialKinematic=body.isKinematic;initialGravity=body.useGravity;initialInterpolation=body.interpolation;
         shapes=owner.GetComponents<Collider>();shapeEnabled=new bool[shapes.Length];
         for(int i=0;i<shapes.Length;i++)shapeEnabled[i]=shapes[i].enabled;
         CapsuleCollider capsule=owner.GetComponent<CapsuleCollider>();
@@ -45,7 +46,7 @@ public sealed class DefeatedBody : MonoBehaviour
         var floorShape=floor==null?null:floor.GetComponent<Collider>();
         floorY=floorShape==null?0:floorShape.bounds.max.y;
         body.linearVelocity=Vector3.zero;body.angularVelocity=Vector3.zero;
-        body.isKinematic=true;
+        body.isKinematic=true;body.interpolation=RigidbodyInterpolation.None;
         foreach(var shape in shapes)shape.enabled=false;
         if(motor!=null){motorEnabled=motor.enabled;motor.enabled=false;}
         authored=visual.GetComponent<AuthoredPlayerView>();
@@ -74,7 +75,7 @@ public sealed class DefeatedBody : MonoBehaviour
         float fall=Mathf.SmoothStep(0,1,Mathf.Clamp01(age/.45f));
         Vector3 position=deathPosition;
         position.y=Mathf.Lerp(deathPosition.y,floorY+rootHeight,fall);
-        body.position=position;
+        body.position=position;transform.position=position;
         visual.localScale=homeScale;
         visual.localPosition=homePosition;
         bool supplied=authored!=null&&authored.IsReady;
@@ -114,7 +115,7 @@ public sealed class DefeatedBody : MonoBehaviour
         defeated=false;Settled=false;
         visual.localPosition=homePosition;visual.localScale=homeScale;
         visual.rotation=Quaternion.LookRotation(actor.Facing);
-        body.isKinematic=initialKinematic;body.useGravity=initialGravity;
+        body.isKinematic=initialKinematic;body.useGravity=initialGravity;body.interpolation=initialInterpolation;
         for(int i=0;i<shapes.Length;i++)shapes[i].enabled=shapeEnabled[i];
         if(motor!=null)motor.enabled=motorEnabled;
         skins=null;rigidMeshes=null;
