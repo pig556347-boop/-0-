@@ -18,6 +18,7 @@ public sealed class MotionVerificationProbe : MonoBehaviour
         Debug.Log("MOTION_LIVE " + JsonUtility.ToJson(new Sample {
             px = player.transform.position.x, pz = player.transform.position.z,
             ex = enemy.transform.position.x, ez = enemy.transform.position.z,
+            fx=player.Facing.x,fz=player.Facing.z,
             state = player.State.ToString(), combo = player.Progress.Combo,
             tutorialStep = player.GetComponent<TutorialInputGate>()==null || player.GetComponent<TutorialInputGate>().Director==null ? "None" :
                 player.GetComponent<TutorialInputGate>().Director.Progress.Step.ToString(),
@@ -33,5 +34,5 @@ public sealed class MotionVerificationProbe : MonoBehaviour
         }));
     }
     [System.Serializable] private sealed class Sample
-    { public float px, pz, ex, ez, sx, sy, cameraSize, cameraX, cameraY, cameraZ; public string state, visualMotion, jumpStage, tutorialStep; public bool crouching; public int combo; }
+    { public float px, pz, ex, ez, fx, fz, sx, sy, cameraSize, cameraX, cameraY, cameraZ; public string state, visualMotion, jumpStage, tutorialStep; public bool crouching; public int combo; }
 }

@@ -196,15 +196,16 @@ const { PNG } = require('pngjs');
     // observed world positions, rather than assuming held-key wall time equals distance.
     async function approachTarget() {
       if(!motion)throw Error('Read-only motion telemetry missing');
-      for(let i=0;i<60;i++) {
+      for(let i=0;i<80;i++) {
         const dx=motion.ex-motion.px,dz=motion.ez-motion.pz;
-        const key=Math.abs(dz)>.25?(dz>0?'w':'s'):(dx>0?'d':'a');
-        if(Math.abs(dx)<1.3&&Math.abs(dx)>.8&&Math.abs(dz)<.25) {
-          await live.keyboard.down(key);await live.waitForTimeout(40);await live.keyboard.up(key);
-          await live.waitForTimeout(150);return;
-        }
-        await live.keyboard.down(key);await live.waitForTimeout(80);await live.keyboard.up(key);
-        await live.waitForTimeout(150);
+        // Keep within real strike bounds and face the target. Exact lane alignment
+        // causes oscillation when software WebGL advances several physics steps per frame.
+        if(Math.abs(dx)<1.35&&Math.abs(dx)>.45&&Math.abs(dz)<.6&&motion.fx*dx>0&&Math.abs(motion.fx)>.9)return;
+        const key=Math.abs(dz)>.55?(dz>0?'w':'s'):(dx>0?'d':'a');
+        const distance=key==='w'||key==='s'?Math.abs(dz):Math.abs(dx);
+        const pulse=distance>2?70:30;
+        await live.keyboard.down(key);await live.waitForTimeout(pulse);await live.keyboard.up(key);
+        await live.waitForTimeout(250);
       }
       throw Error('Could not approach tutorial target: '+JSON.stringify(motion));
     }
