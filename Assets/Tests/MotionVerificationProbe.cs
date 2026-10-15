@@ -19,6 +19,9 @@ public sealed class MotionVerificationProbe : MonoBehaviour
             px = player.transform.position.x, pz = player.transform.position.z,
             ex = enemy.transform.position.x, ez = enemy.transform.position.z,
             state = player.State.ToString(), combo = player.Progress.Combo,
+            tutorialStep = player.GetComponent<TutorialInputGate>()==null || player.GetComponent<TutorialInputGate>().Director==null ? "None" :
+                player.GetComponent<TutorialInputGate>().Director.Progress.Step.ToString(),
+            crouching=player.GetComponent<PlayerController>().IsCrouching,
             jumpStage = player.GetComponentInChildren<AuthoredPlayerView>() == null ? "Grounded" :
                 player.GetComponentInChildren<AuthoredPlayerView>().JumpStage,
             visualMotion = player.GetComponentInChildren<AuthoredPlayerView>() == null ? "legacy" :
@@ -30,5 +33,5 @@ public sealed class MotionVerificationProbe : MonoBehaviour
         }));
     }
     [System.Serializable] private sealed class Sample
-    { public float px, pz, ex, ez, sx, sy, cameraSize, cameraX, cameraY, cameraZ; public string state, visualMotion, jumpStage; public int combo; }
+    { public float px, pz, ex, ez, sx, sy, cameraSize, cameraX, cameraY, cameraZ; public string state, visualMotion, jumpStage, tutorialStep; public bool crouching; public int combo; }
 }

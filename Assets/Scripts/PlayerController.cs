@@ -157,6 +157,13 @@ public sealed class PlayerController : MonoBehaviour, IMovementStateContext
         jumpRequested |= Input.GetKeyDown(KeyCode.Space);
         jumpReleased |= Input.GetKeyUp(KeyCode.Space);
 #endif
+        TutorialInputGate lesson=GetComponent<TutorialInputGate>();
+        if(lesson!=null)
+        {
+            if(!lesson.Allows(KeyCode.W))moveInput=Vector2.zero;
+            if(!lesson.Allows(KeyCode.C))crouchHeld=false;
+            if(!lesson.Allows(KeyCode.Space))jumpRequested=false;
+        }
         moveInput = Vector2.ClampMagnitude(moveInput, 1f);
     }
 

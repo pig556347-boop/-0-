@@ -92,14 +92,54 @@ const { PNG } = require('pngjs');
     const live=await browser.newPage({viewport:{width:1920,height:1080}});
     const runtimeErrors=[];
     let authoredReady=false, openingSitting=false, openingStanding=false, sittingSeen=false, standingSeen=false;
+    let lobby=null;
     const jumpStages=new Set();
+    const restrictions={};
     let playerReady=false, deongchiReady=false, hookReady=false, lastTutorialRole="", motion=null, classroomReady=false;
     live.on('console',msg=>{if(msg.text().includes('OPENING_MOTION clip=Sitting'))openingSitting=true;if(msg.text().includes('OPENING_MOTION clip=SitToStand'))openingStanding=true;if(msg.text().includes('CLASSROOM_ASSETS_READY count=5'))classroomReady=true;if(msg.text().includes('AUTHORED_PLAYER_READY'))authoredReady=true;});
     live.on('console',msg=>{if(msg.text().includes('SUPPLIED_MOTION_ONLY combo=3 clip=MmaKick1'))hookReady=true;});
     live.on('console',msg=>{const s=msg.text();if(s.startsWith('MOTION_LIVE ')){motion=JSON.parse(s.slice(12));jumpStages.add(motion.jumpStage);sittingSeen ||= motion.visualMotion==='Sitting';standingSeen ||= motion.visualMotion==='SitToStand';}});
     live.on('console',msg=>{if(msg.text().includes('PLAYER_MODEL_READY'))playerReady=true;if(msg.text().includes('DEONGCHI_MODEL_READY'))deongchiReady=true;if(msg.text().includes('TUTORIAL_ROLE')){lastTutorialRole=msg.text();console.log('::notice::'+lastTutorialRole)}if(/Exception|Can't add component/.test(msg.text()))runtimeErrors.push(msg.text())});
     live.on('pageerror',err=>runtimeErrors.push(String(err)));
+    live.on('console',msg=>{if(msg.text().startsWith('LOBBY_UI '))lobby=JSON.parse(msg.text().slice(9));});
     await live.goto('http://127.0.0.1:8780/WebGL/?motionVerification=1');
+    async function waitLobby(predicate,label) {
+      for(let i=0;i<180;i++){if(lobby&&predicate(lobby))return;await live.waitForTimeout(250);}
+      throw Error('Lobby timeout '+label+': '+JSON.stringify(lobby));
+    }
+    async function menuClick(id) {
+      await waitLobby(x=>x.buttons.some(b=>b.id===id),'button '+id);
+      const b=lobby.buttons.find(b=>b.id===id),v=live.viewportSize();
+      await live.mouse.click(b.x*v.width,b.y*v.height,{delay:100});await live.waitForTimeout(300);
+    }
+    await waitLobby(x=>x.page==='Main','initial main menu');
+    if(playerReady||openingSitting)throw Error('Gameplay started before clicking Start');
+    for(const [width,height] of [[1920,1080],[1280,720],[1024,768],[2560,1080]]) {
+      await live.setViewportSize({width,height});await live.waitForTimeout(450);
+      for(const b of lobby.buttons)if(b.x<0||b.x>1||b.y<0||b.y>1)throw Error('Lobby control outside viewport: '+b.id);
+      await live.screenshot({path:`hud-test-results/lobby-${width}x${height}.png`});
+    }
+    await live.setViewportSize({width:1920,height:1080});await live.waitForTimeout(300);
+    await menuClick('Language');await waitLobby(x=>x.page==='Language','language page');
+    await menuClick('English');await menuClick('Back');
+    await waitLobby(x=>x.english&&x.text.includes('START GAME'),'English UI');
+    await live.screenshot({path:'hud-test-results/lobby-english.png'});
+    await menuClick('Settings');await waitLobby(x=>x.page==='Settings','settings page');
+    for(const [id,value] of [['Master',.35],['Music',.6],['Effects',.8]]) {
+      await waitLobby(x=>x.buttons.some(b=>b.id===id),'slider '+id);
+      const b=lobby.buttons.find(b=>b.id===id),v=live.viewportSize();
+      await live.mouse.click((b.x-b.w*.5+b.w*value)*v.width,b.y*v.height,{delay:100});await live.waitForTimeout(300);
+    }
+    await waitLobby(x=>Math.abs(x.master-.35)<.03&&Math.abs(x.music-.6)<.03&&Math.abs(x.effects-.8)<.03,'volume values');
+    await live.screenshot({path:'hud-test-results/lobby-settings.png'});await menuClick('Back');
+    await menuClick('Credits');await waitLobby(x=>x.page==='Credits'&&x.text.includes('pig556347-boop'),'credits');
+    await live.screenshot({path:'hud-test-results/lobby-credits.png'});await menuClick('Back');
+    lobby=null;await live.reload();await waitLobby(x=>x.page==='Main'&&x.english&&Math.abs(x.master-.35)<.03,'saved preferences');
+    await menuClick('Language');await menuClick('Korean');await menuClick('Back');
+    await waitLobby(x=>!x.english&&x.text.includes('게임시작'),'Korean UI');
+    if(playerReady||openingSitting)throw Error('Lobby navigation initialized gameplay');
+    const lobbyChecks={responsive:true,language:true,volume:true,persistence:true,credits:true,explicitStart:true};
+    await menuClick('Start');
     for(let i=0;i<20&&!openingSitting;i++)await live.waitForTimeout(500);
     await live.waitForTimeout(600);
     if(!motion||motion.visualMotion!=="Sitting")throw Error("Opening did not display the supplied sitting clip");
@@ -130,22 +170,28 @@ const { PNG } = require('pngjs');
     await live.screenshot({path:'hud-test-results/motion-walk.png'});await live.keyboard.up('d');
     if(!motion||Math.abs(motion.cameraSize-9.4)>.01||motion.sx<.1||motion.sx>.9||motion.sy<.15||motion.sy>.8)throw Error('Fixed classroom camera lost player: '+JSON.stringify(motion));
     if([motion.cameraX,motion.cameraY,motion.cameraZ].some((v,i)=>Math.abs(v-cameraOrigin[i])>.001))throw Error('Classroom camera followed player movement');
+    for(let i=0;i<60&&(!motion||motion.tutorialStep!=='Jump');i++)await live.waitForTimeout(100);
+    if(!motion||motion.tutorialStep!=='Jump')throw Error('Move did not advance to Jump lesson');
+    const jumpOrigin=[motion.px,motion.pz];
+    for(const key of ['j','k','l','i','q','c']){await live.keyboard.down(key);await live.waitForTimeout(60);await live.keyboard.up(key);}
+    await live.keyboard.down('d');await live.waitForTimeout(250);await live.keyboard.up('d');await live.waitForTimeout(150);
+    if(motion.state!=='IDLE'||motion.crouching||Math.hypot(motion.px-jumpOrigin[0],motion.pz-jumpOrigin[1])>.08)throw Error('Jump lesson accepted unrelated controls: '+JSON.stringify(motion));
+    restrictions.jumpOnly=true;
+    await live.screenshot({path:'hud-test-results/tutorial-jump-prompt.png'});
     await live.keyboard.down('Space');await live.waitForTimeout(350);
     await live.screenshot({path:'hud-test-results/motion-jump.png'});
     await live.keyboard.up('Space');await live.waitForTimeout(1000);
     for(const stage of ['Rising','Falling','Landing'])if(!jumpStages.has(stage))throw Error('Jump presentation stage missing: '+stage);
     if(!motion||motion.jumpStage!=='Grounded')throw Error('Jump did not recover to grounded presentation');
-    await live.keyboard.down('c');await live.waitForTimeout(300);
+    if(motion.tutorialStep!=='Crouch')throw Error('Jump lesson did not wait for landing then advance');
+    await live.keyboard.down('j');await live.waitForTimeout(100);await live.keyboard.up('j');
+    if(motion.state==='ATTACK')throw Error('Crouch lesson allowed attack');
+    await live.keyboard.down('c');await live.waitForTimeout(250);
+    if(!motion.crouching)throw Error('Crouch lesson did not accept C');
     await live.screenshot({path:'hud-test-results/motion-crouch.png'});
-    await live.keyboard.down('k');
-    let crouchedAttack=false;
-    for(let i=0;i<20;i++) {
-      await live.waitForTimeout(30);
-      if(motion&&motion.visualMotion==='MmaKick1'){crouchedAttack=true;break;}
-    }
-    await live.keyboard.up('k');
-    if(!crouchedAttack)throw Error('Held crouch masked the real heavy attack animation: '+JSON.stringify(motion));
-    await live.keyboard.up('c');await live.waitForTimeout(900);
+    await live.waitForTimeout(700);await live.keyboard.up('c');await live.waitForTimeout(200);
+    if(motion.tutorialStep!=='Basic')throw Error('Crouch hold did not advance to Basic');
+    restrictions.crouchOnly=true;
     // A screenshot can take several seconds on software WebGL. Approach using
     // observed world positions, rather than assuming held-key wall time equals distance.
     async function approachTarget() {
@@ -172,6 +218,16 @@ const { PNG } = require('pngjs');
       await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
       await live.waitForTimeout(140);
     }
+    await live.waitForTimeout(500);
+    if(!lastTutorialRole.includes('step=Heavy'))throw Error('Basic combo did not complete');
+    await approachTarget();await live.keyboard.down('c');await live.keyboard.down('k');
+    let heavyAttack=false;
+    for(let i=0;i<20;i++){await live.waitForTimeout(30);if(motion&&motion.state==='ATTACK'&&motion.visualMotion==='MmaKick1'){heavyAttack=true;break;}}
+    await live.keyboard.up('k');await live.keyboard.up('c');
+    if(!heavyAttack||motion.crouching)throw Error('Heavy lesson did not restrict controls correctly');
+    for(let i=0;i<40&&!lastTutorialRole.includes('step=Guard');i++)await live.waitForTimeout(100);
+    if(!lastTutorialRole.includes('step=Guard'))throw Error('Heavy hit did not advance to Guard');
+    restrictions.heavyOnly=true;
     await live.waitForTimeout(500);
     await live.screenshot({path:'hud-test-results/production-hud.png'});
     const pixels=PNG.sync.read(await live.locator('canvas').screenshot());
@@ -206,12 +262,16 @@ const { PNG } = require('pngjs');
     if(!playerReady)throw Error('Production player model was not loaded');
     if(!authoredReady)throw Error('Production authored motion library did not load');
     if(!deongchiReady)throw Error('Tutorial Move/Jump/Crouch progression did not load Deongchi: '+lastTutorialRole);
-    if(!lastTutorialRole.includes('step=Heavy'))throw Error('Real basic combo did not complete the three-hit tutorial: '+lastTutorialRole);
+    if(!lastTutorialRole.includes('step=Guard'))throw Error('Restricted tutorial did not reach Guard: '+lastTutorialRole);
     if(!hookReady)throw Error('Real third combo hit did not use the supplied MmaKick1');
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],crouchedAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],lobbyChecks,restrictions,heavyAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
     for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
+    lobby=null;await live.keyboard.press('Escape');await waitLobby(x=>x.page==='Paused','pause navigation');
+    await menuClick('ReturnLobby');await waitLobby(x=>x.page==='Main','return to lobby');
+    lobbyChecks.returnToLobby=true;
+    fs.writeFileSync('hud-test-results/lobby-tutorial.json',JSON.stringify({commit:process.env.GITHUB_SHA,lobbyChecks,restrictions,errors:runtimeErrors},null,2));
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
     await live.close();
   } finally {await browser.close();}

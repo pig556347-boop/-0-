@@ -10,6 +10,10 @@ public sealed class TutorialDirector : MonoBehaviour
     private EnemyBrain brain;
     private PrototypeHUD hud;
     private Vector3 moveStart;
+    private bool jumpedForLesson;
+    public float CrouchPracticeTime { get; private set; }
+    public int BasicHits => comboLesson.Hits;
+    public CombatActor TrainingOpponent => enemy;
     private GameObject openingDesk, openingChair;
     private PrototypeCharacterView openingView;
     private Vector3 openingVisualHome;
@@ -30,6 +34,8 @@ public sealed class TutorialDirector : MonoBehaviour
         player = protagonist; enemy = opponent; hud = ui;
         motor = player.GetComponent<PlayerController>(); brain = enemy.GetComponent<EnemyBrain>();
         moveStart = player.transform.position;
+        player.gameObject.AddComponent<TutorialInputGate>().Director=this;
+        gameObject.AddComponent<TutorialCoach>().Initialize(this,player);
         player.AttackLanded += heavy =>
         {
             if (heavy) { comboLesson.Break(); Signal(TutorialSignal.HeavyHit); }
@@ -79,17 +85,23 @@ public sealed class TutorialDirector : MonoBehaviour
         Vector3 moved = player.transform.position - moveStart; moved.y = 0;
         if (step == TutorialStep.Move && moved.magnitude > 2)
             Signal(TutorialSignal.Moved);
-        if (step == TutorialStep.Jump && motor.CurrentState == PlayerController.PlayerState.JUMP)
-            Signal(TutorialSignal.Jumped);
-        if (step == TutorialStep.Crouch && motor.IsCrouching) Signal(TutorialSignal.Crouched);
+        if(step==TutorialStep.Jump)
+        {
+            if(motor.CurrentState==PlayerController.PlayerState.JUMP)jumpedForLesson=true;
+            if(jumpedForLesson&&motor.IsGrounded&&motor.CurrentState!=PlayerController.PlayerState.JUMP)
+                Signal(TutorialSignal.Jumped);
+        }
+        if(step==TutorialStep.Crouch)
+        {
+            CrouchPracticeTime=motor.IsCrouching?CrouchPracticeTime+Time.deltaTime:0;
+            if(CrouchPracticeTime>=.6f)Signal(TutorialSignal.Crouched);
+        }
         if (step == TutorialStep.Charge && player.Progress.UltimateTier == 3) Signal(TutorialSignal.FullyCharged);
         bool training = Progress.Step != TutorialStep.Complete;
         brain.Active = Progress.Step == TutorialStep.Guard || Progress.Step == TutorialStep.Parry || !training;
         if (training && !enemy.Health.Alive) enemy.RestoreForTutorial();
         if (training && !player.Health.Alive) player.RestoreForTutorial();
-        hud.QuestText = Progress.Step == TutorialStep.Complete ? "" :
-            "조작 연습\n" + instructions[(int)Progress.Step] +
-            (Progress.Step == TutorialStep.Basic ? $"\n연속 적중 {Mathf.Min(comboLesson.Hits, 3)}/3" : "");
+        hud.QuestText = Progress.Step == TutorialStep.Complete ? "" : $"조작 연습  {(int)Progress.Step:00}/12";
     }
     private IEnumerator Opening()
     {
@@ -192,6 +204,8 @@ public sealed class TutorialDirector : MonoBehaviour
     {
         if (player == null) return;
         StopAllCoroutines();
+        TutorialInputGate gate=player.GetComponent<TutorialInputGate>();
+        if(gate!=null)gate.Director=null;
         if (openingDesk != null) Destroy(openingDesk);
         if (openingChair != null) Destroy(openingChair);
         if (openingView != null)

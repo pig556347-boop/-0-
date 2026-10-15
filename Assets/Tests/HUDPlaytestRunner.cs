@@ -58,6 +58,13 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         fixtureLight.transform.rotation = Quaternion.Euler(50, -30, 0);
         if (Application.absoluteURL.Contains("authoredReview="))
         { new GameObject("Authored motion tests").AddComponent<AuthoredMotionPlaytestRunner>(); yield break; }
+        Check(TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Jump,KeyCode.Space),"jump lesson accepts Space");
+        foreach(var blocked in new[]{KeyCode.W,KeyCode.J,KeyCode.K,KeyCode.L,KeyCode.C,KeyCode.I,KeyCode.Q})
+            Check(!TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Jump,blocked),"jump lesson rejects "+blocked);
+        Check(!TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Move,KeyCode.Space),"move lesson rejects jump");
+        Check(!TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Basic,KeyCode.K),"basic lesson rejects heavy attack");
+        Check(TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Complete,KeyCode.Q),"complete tutorial unlocks ultimate");
+        Check(TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Jump,KeyCode.Escape),"pause remains available");
         CombatActor player=Actor("권민준",0,120),enemy=Actor("불량 학생",1,100);
         GameObject playerVisual = new GameObject("Player model test visual");
         playerVisual.transform.SetParent(player.transform, false);

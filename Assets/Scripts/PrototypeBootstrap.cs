@@ -4,6 +4,7 @@ public sealed class PrototypeBootstrap : MonoBehaviour
 {
     public static bool RunSmokeChecks;
     private static Transform scenery;
+    private bool gameStarted;
     private void Start()
     {
 #if UNITY_EDITOR
@@ -12,6 +13,12 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         RunSmokeChecks = UnityEditor.SessionState.GetBool("SchoolRuleZero.RunSmoke", RunSmokeChecks);
         UnityEditor.SessionState.EraseBool("SchoolRuleZero.RunSmoke");
 #endif
+        if(RunSmokeChecks) BeginGame();
+        else gameObject.AddComponent<GameLobby>().Initialize(this);
+    }
+    public void BeginGame()
+    {
+        if(gameStarted)return;gameStarted=true;
         CreateBox("Classroom floor", new Vector3(0, -.5f, 0),
             new Vector3(28, 1, 18), new Color(.55f, .55f, .53f));
         GameObject.Find("Classroom floor").GetComponent<Renderer>().enabled = false;
@@ -51,6 +58,12 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         player.GetComponent<CombatActor>().HitConfirmed += impact.OnHit;
         enemy.GetComponent<CombatActor>().HitConfirmed += impact.OnHit;
         CombatEffects effects = gameObject.AddComponent<CombatEffects>();
+        GameAudioChannels audio=GetComponent<GameAudioChannels>();
+        if(audio!=null)
+        {
+            audio.SetBattle(true);player.GetComponent<CombatActor>().HitConfirmed+=audio.OnHit;
+            enemy.GetComponent<CombatActor>().HitConfirmed+=audio.OnHit;
+        }
         player.GetComponent<CombatActor>().HitConfirmed += effects.OnHit;
         enemy.GetComponent<CombatActor>().HitConfirmed += effects.OnHit;
         player.GetComponent<CombatActor>().Dodged += () => effects.DodgeTrail(player.GetComponent<CombatActor>());

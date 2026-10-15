@@ -66,6 +66,15 @@ public sealed class CombatInput : MonoBehaviour
             GameKeys.Down(KeyCode.S) || GameKeys.Down(KeyCode.D);
         DodgePressed = active && DodgeDirection.sqrMagnitude > .01f && shift &&
             (GameKeys.Down(KeyCode.LeftShift) || GameKeys.Down(KeyCode.RightShift) || directionDown);
+        TutorialInputGate gate=GetComponent<TutorialInputGate>();
+        if(gate!=null)
+        {
+            AttackPressed &= gate.Allows(KeyCode.J);HeavyPressed &= gate.Allows(KeyCode.K);
+            GuardPressed &= gate.Allows(KeyCode.L);GuardHeld &= gate.Allows(KeyCode.L);
+            GrabPressed &= gate.Allows(KeyCode.I);UltimatePressed &= gate.Allows(KeyCode.Q);
+            DodgePressed &= gate.Allows(KeyCode.LeftShift);
+        }
+
     }
     private void OnApplicationFocus(bool focus) => focused = focus;
 }
