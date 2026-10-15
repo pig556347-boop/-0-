@@ -23,7 +23,7 @@ public sealed class HitImpactManager : MonoBehaviour
     { targetCamera = camera; cameraHome = camera.transform.localPosition; }
     public void OnHit(CombatActor source, CombatActor target, Vector3 point)
     {
-        float stop = source.State == CombatActor.ActionState.ULTIMATE && !source.IsUltimateFinisher
+        float stop = source.Team == 0 && source.State == CombatActor.ActionState.ULTIMATE && !source.IsUltimateFinisher
             ? Mathf.Min(hitStopSeconds, .018f) : hitStopSeconds;
         freezeUntil = Mathf.Max(freezeUntil, Time.unscaledTime + stop);
         shakeUntil = Time.unscaledTime + shakeDuration;
