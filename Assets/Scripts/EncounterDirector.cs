@@ -69,6 +69,7 @@ public sealed class EncounterDirector : MonoBehaviour
             enemy.GetComponent<EnemyBrain>().Active = false;
             corpses.Add(enemy.gameObject); enemies.RemoveAt(i);
         }
+        corpses.RemoveAll(corpse=>corpse==null);
         SpawnAvailable();
         hud.SetEnemyTarget(enemies.Count > 0 ? enemies[0] : null);
         hud.EncounterText = $"학교 1-{Stage} · {SchoolCampaign.AreaName(Stage, Area)}\n" +
@@ -133,6 +134,7 @@ public sealed class EncounterDirector : MonoBehaviour
                 if (distance > best) { best = distance; spawn = candidate; }
             }
             CombatActor enemy = PrototypeBootstrap.CreateOpponent(name, spawn, player);
+            enemy.GetComponent<DefeatedBody>().LifetimeAfterSettled=1.25f;
             if(!boss)enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model();
             enemy.ConfigureStats(boss ? SchoolCampaign.HP(Stage, true) : SchoolCampaign.EnemyHP(Stage, index),
                 SchoolCampaign.Damage(Stage, boss), Stage <= 4 ? .65f : .24f, .48f);

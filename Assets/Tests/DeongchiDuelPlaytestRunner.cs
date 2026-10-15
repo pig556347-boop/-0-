@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using SchoolRuleZero;
 using UnityEngine;
 
@@ -73,6 +75,50 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
         Check(alive>0,"campaign opponents spawn after duel");
         Check(FindObjectsByType<Minion1View>(FindObjectsSortMode.None).Length==alive,"campaign ordinary opponents use supplied Minion1 skin");
         Check(player.CanAct,"player controls restored for campaign");
+        Debug.Log("CAMPAIGN_MINION_PREVIEW_READY");yield return new WaitForSeconds(.5f);
+        var encounter=GetComponent<EncounterDirector>();player.Health.Infinite=true;
+        foreach(int stage in new[]{5,6,10,11})
+        {
+            // Jump only in this fixture to real production late-stage spawning/cleanup.
+            typeof(EncounterDirector).GetProperty("Stage").SetValue(encounter,stage);
+            typeof(EncounterDirector).GetProperty("Area").SetValue(encounter,SchoolCampaign.IsBoss(stage)?SchoolCampaign.AreaCount(stage):1);
+            typeof(EncounterDirector).GetMethod("StartArea",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(encounter,new object[]{true});
+            var defeated=new List<CombatActor>();int expected=SchoolCampaign.EnemyCount(stage,encounter.Area);
+            float until=Time.time+5;
+            while(defeated.Count<expected&&Time.time<until)
+            {
+                foreach(var foe in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
+                {
+                    if(foe.Team!=1||!foe.Health.Alive)continue;
+                    Check(foe.GetComponent<DefeatedBody>().LifetimeAfterSettled>0,"late-stage corpse cleanup configured stage="+stage);
+                    foe.GetComponent<EnemyBrain>().Active=false;
+                    Check(foe.ReceiveHit(new HitRequest(player.gameObject,99999,Vector3.right,true,0)),"late-stage lethal hit stage="+stage);
+                    defeated.Add(foe);
+                }
+                yield return null;yield return null;
+            }
+            Check(defeated.Count==expected,"all late-stage wave enemies defeated stage="+stage);
+            yield return new WaitForSeconds(.65f);
+            int shown=0;foreach(var foe in defeated)if(foe!=null){shown++;Check(foe.GetComponent<DefeatedBody>().Settled,"death settles before cleanup stage="+stage);}
+            Check(shown>0,"death shown before cleanup stage="+stage);
+            if(stage==5)
+            {
+                GetComponent<HitImpactManager>().SetPaused(true);yield return new WaitForSecondsRealtime(.4f);
+                foreach(var foe in defeated)Check(foe!=null,"paused corpse lifetime suspended");
+                GetComponent<HitImpactManager>().SetPaused(false);
+            }
+            yield return new WaitForSeconds(1.5f);
+            foreach(var foe in defeated)Check(foe==null,"corpse removed without changing area stage="+stage);
+            Check(player.Health.Alive,"living player survives cleanup stage="+stage);
+            Debug.Log("CAMPAIGN_CLEANUP_PASS stage="+stage+" count="+expected);
+            if(stage==5)
+            {
+                Debug.Log("CLEANUP_ADVANCE_READY");until=Time.time+15;
+                while(encounter.Stage==5&&Time.time<until)yield return null;
+                Check(encounter.Stage==6,"1-5 victory still advances to 1-6 after corpse removal");
+            }
+        }
+        Debug.Log("CAMPAIGN_CLEANUP_PREVIEW_READY");yield return new WaitForSeconds(.5f);
         Debug.Log("DUEL_TEST_PASS checks="+checks);
     }
 }

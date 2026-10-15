@@ -40,13 +40,16 @@ const { PNG } = require('pngjs');
     const duelPage=await browser.newPage({viewport:{width:1280,height:720}});
     let duelPassed=false,duelChecks=0;const duelErrors=[],duelEvents=[];
     duelPage.on('console',msg=>{const s=msg.text();
-      if(/DUEL_WALK_PREVIEW_READY|DUEL_RETRY_READY|DUEL_VICTORY_READY/.test(s))duelEvents.push(s);
+      if(/DUEL_WALK_PREVIEW_READY|DUEL_RETRY_READY|DUEL_VICTORY_READY|CAMPAIGN_MINION_PREVIEW_READY|CAMPAIGN_CLEANUP_PREVIEW_READY|CLEANUP_ADVANCE_READY/.test(s))duelEvents.push(s);
       if(s.includes('DUEL_TEST_PASS')){duelPassed=true;duelChecks=Number(s.match(/checks=(\d+)/)[1]);}
       if(/DUEL_TEST_FAIL|Exception/.test(s))duelErrors.push(s);});
     duelPage.on('pageerror',e=>duelErrors.push(String(e)));
     await duelPage.goto('http://127.0.0.1:8780/HUDTest/?duelReview=1');
     for(let i=0;i<400&&!duelPassed&&!duelErrors.length;i++){
       while(duelEvents.length){const event=duelEvents.shift();
+        if(event.includes('CAMPAIGN_MINION'))await duelPage.screenshot({path:'hud-test-results/campaign-minions.png'});
+        if(event.includes('CAMPAIGN_CLEANUP'))await duelPage.screenshot({path:'hud-test-results/campaign-cleaned.png'});
+        if(event.includes('CLEANUP_ADVANCE'))await duelPage.keyboard.press('Enter');
         if(event.includes('WALK'))await duelPage.screenshot({path:'hud-test-results/deongchi-walking.png'});
         if(event.includes('RETRY')){await duelPage.screenshot({path:'hud-test-results/deongchi-defeat.png'});await duelPage.keyboard.press('r');}
         if(event.includes('VICTORY')){await duelPage.screenshot({path:'hud-test-results/deongchi-victory.png'});await duelPage.keyboard.press('Enter');}

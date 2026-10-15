@@ -5,6 +5,9 @@ using UnityEngine;
 [DefaultExecutionOrder(10000)]
 public sealed class DefeatedBody : MonoBehaviour
 {
+    // Campaign opts in; tutorial opponents remain available for retry/revival.
+    public float LifetimeAfterSettled { get; set; }=-1;
+    private float settledAt;
     private CombatActor actor;
     private Rigidbody body;
     private RigidbodyInterpolation initialInterpolation;
@@ -66,6 +69,8 @@ public sealed class DefeatedBody : MonoBehaviour
         if(!defeated)Begin();
         if(Settled)
         {
+            if(LifetimeAfterSettled>=0&&Time.time-settledAt>=LifetimeAfterSettled)
+            {gameObject.SetActive(false);Destroy(gameObject);return;}
             visual.localPosition=settledPosition;visual.localScale=homeScale;
             if(authored==null||!authored.IsReady)visual.rotation=deathRotation*Quaternion.Euler(90,0,0);
             return;
@@ -83,7 +88,7 @@ public sealed class DefeatedBody : MonoBehaviour
         if(TryBounds(out Bounds bounds))
             visual.position+=Vector3.up*(Mathf.Lerp(initialBottom,floorY+.015f,fall)-bounds.min.y);
         Settled=age>=(supplied?Mathf.Max(.45f,authored.DeathDuration+.1f):.45f);
-        if(Settled)settledPosition=visual.localPosition;
+        if(Settled){settledPosition=visual.localPosition;settledAt=Time.time;}
     }
     public bool TryBounds(out Bounds bounds)
     {

@@ -6,6 +6,7 @@ using UnityEngine;
 public sealed class Minion1PlaytestRunner : MonoBehaviour
 {
     private int checks;
+    private string context="initial";
     private void Check(bool value,string label){if(!value)throw new Exception("MINION_TEST_FAIL "+label);checks++;}
     private Bounds SkinBounds(SkinnedMeshRenderer skin,Vector3 origin)
     {
@@ -20,7 +21,7 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
             good&=!float.IsNaN(p.x)&&!float.IsNaN(p.y)&&!float.IsNaN(p.z)&&(p-origin).magnitude<3.5f;
             if(i==0)bounds=new Bounds(p,Vector3.zero);else bounds.Encapsulate(p);
         }
-        Check(good,"finite weighted skin vertices");return bounds;
+        Check(good,"finite weighted skin vertices "+context+" bounds="+bounds+" root="+origin+" skinScale="+skin.transform.lossyScale);return bounds;
     }
     private IEnumerator Start()
     {
@@ -42,7 +43,7 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
         {
             for(int frame=0;frame<=10;frame++)
             {
-                Vector3 root=enemy.transform.position;view.Preview(clip,frame/10f);
+                context=clip+" phase="+frame;Vector3 root=enemy.transform.position;view.Preview(clip,frame/10f);
                 var bounds=SkinBounds(skin,root);Check(bounds.size.y<2.3f&&bounds.size.y>.6f,"plausible character size "+clip);
                 Check(enemy.transform.position==root,"preview preserves physics root");
             }

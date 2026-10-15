@@ -29,7 +29,12 @@ public sealed class Minion1View : MonoBehaviour
         if(prefab==null)throw new InvalidOperationException("Supplied Minion1 model missing");
         var view=owner.gameObject.AddComponent<Minion1View>();view.actor=actor;view.body=actor.GetComponent<Rigidbody>();
         view.model=Instantiate(prefab,owner.transform,false).transform;view.model.name="Minion1 skin";
+        view.model.localScale=Vector3.one;view.model.localRotation=Quaternion.identity;
         view.home=new Vector3(0,-.95f,0);view.model.localPosition=view.home;
+        var importedSkin=view.model.GetComponentInChildren<SkinnedMeshRenderer>();
+        float importedHeight=importedSkin.bounds.size.y;
+        if(importedHeight<=.0001f)throw new InvalidOperationException("Minion1 imported skin bounds invalid");
+        view.model.localScale*=1.85f/importedHeight;
         foreach(var animator in view.model.GetComponentsInChildren<Animator>())animator.enabled=false;
         foreach(var animation in view.model.GetComponentsInChildren<Animation>())animation.enabled=false;
         view.all=view.model.GetComponentsInChildren<Transform>();view.restLocal=new Quaternion[view.all.Length];view.blendFrom=new Quaternion[view.all.Length];
@@ -39,6 +44,7 @@ public sealed class Minion1View : MonoBehaviour
             view.bones[name]=b;view.restWorld[name]=Quaternion.Inverse(view.model.rotation)*b.rotation;view.restLocal[i]=b.localRotation;
         }
         view.hips=view.bones["Hips"];view.hipHome=view.model.InverseTransformPoint(view.hips.position);view.sole=view.LowestFoot();
+        Debug.Log("MINION1_LAYOUT scale="+view.model.lossyScale+" hip="+view.hipHome+" skinScale="+view.model.GetComponentInChildren<SkinnedMeshRenderer>().transform.lossyScale);
         if(attacks==null)
         {
             var data=Resources.Load<TextAsset>("Characters/Minion1/Minion1PoseData");
@@ -117,10 +123,10 @@ public sealed class Minion1View : MonoBehaviour
             Quaternion delta=Quaternion.Slerp(clip.Frames[a].Rotations[i],clip.Frames[b].Rotations[i],t);
             bone.rotation=model.rotation*delta*restWorld[key];
         }
-        hips.position=model.TransformPoint(hipHome+Vector3.Lerp(clip.Frames[a].HipDelta,clip.Frames[b].HipDelta,t));
+        hips.position=model.TransformPoint(hipHome)+model.rotation*Vector3.Lerp(clip.Frames[a].HipDelta,clip.Frames[b].HipDelta,t);
         float mix=Mathf.SmoothStep(0,1,Mathf.Clamp01((Time.time-transition)/.07f));
         for(int i=0;i<all.Length;i++)all[i].localRotation=Quaternion.Slerp(blendFrom[i],all[i].localRotation,mix);
         hips.position=model.TransformPoint(Vector3.Lerp(blendHip,model.InverseTransformPoint(hips.position),mix));
-        model.localPosition=home+Vector3.up*(sole-LowestFoot());
+        model.position+=Vector3.up*((sole-LowestFoot())*model.lossyScale.y);
     }
 }
