@@ -15,7 +15,7 @@ public sealed class DefeatedBody : MonoBehaviour
     private bool[] shapeEnabled;
     private bool initialKinematic,initialGravity,defeated,motorEnabled;
     private PlayerController motor;
-    private float started,floorY,rootHeight;
+    private float started,floorY,initialBottom;
     private AuthoredPlayerView authored;
     private Skin[] skins;
     private MeshRenderer[] rigidMeshes;
@@ -35,8 +35,6 @@ public sealed class DefeatedBody : MonoBehaviour
         initialKinematic=body.isKinematic;initialGravity=body.useGravity;initialInterpolation=body.interpolation;
         shapes=owner.GetComponents<Collider>();shapeEnabled=new bool[shapes.Length];
         for(int i=0;i<shapes.Length;i++)shapeEnabled[i]=shapes[i].enabled;
-        CapsuleCollider capsule=owner.GetComponent<CapsuleCollider>();
-        rootHeight=capsule==null?1:capsule.height*.5f-capsule.center.y;
     }
     private void Begin()
     {
@@ -59,6 +57,7 @@ public sealed class DefeatedBody : MonoBehaviour
                 Bind=mesh.bindposes,Matrices=new Matrix4x4[mesh.bindposes.Length]};
         }
         rigidMeshes=visual.GetComponentsInChildren<MeshRenderer>();
+        initialBottom=TryBounds(out Bounds initial)?initial.min.y:floorY;
     }
     private void LateUpdate()
     {
@@ -73,9 +72,8 @@ public sealed class DefeatedBody : MonoBehaviour
         }
         float age=Time.time-started;
         float fall=Mathf.SmoothStep(0,1,Mathf.Clamp01(age/.45f));
-        Vector3 position=deathPosition;
-        position.y=Mathf.Lerp(deathPosition.y,floorY+rootHeight,fall);
-        body.position=position;transform.position=position;
+        // Keep the gameplay root unchanged; only the visible body falls to the floor.
+        body.position=deathPosition;transform.position=deathPosition;
         visual.localScale=homeScale;
         visual.localPosition=homePosition;
         bool supplied=authored!=null&&authored.IsReady;
@@ -83,7 +81,7 @@ public sealed class DefeatedBody : MonoBehaviour
         // A fixed capsule centre or bind-pose bounds cannot ground a rotated corpse.
         // Skin the actual pose rather than relying on the renderer's culling bounds.
         if(TryBounds(out Bounds bounds))
-            visual.position+=Vector3.up*(floorY+.015f-bounds.min.y);
+            visual.position+=Vector3.up*(Mathf.Lerp(initialBottom,floorY+.015f,fall)-bounds.min.y);
         Settled=age>=(supplied?Mathf.Max(.45f,authored.DeathDuration+.1f):.45f);
         if(Settled)settledPosition=visual.localPosition;
     }
