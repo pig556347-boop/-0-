@@ -1,0 +1,4 @@
+{
+  "commit": "d7f159570a936e74b8d96a541804969209123540",
+  "error": "Error: Minion1 test failed: Exception: MINION_TEST_FAIL supplied texture loaded\n  at Minion1PlaytestRunner.Check (System.Boolean value, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
