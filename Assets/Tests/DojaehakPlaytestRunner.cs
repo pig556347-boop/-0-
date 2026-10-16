@@ -17,7 +17,7 @@ public sealed class DojaehakPlaytestRunner : MonoBehaviour
     private void Check(bool value,string label){if(!value)throw new Exception("DOJAEHAK_TEST_FAIL "+label);checks++;}
     private void ResetPair(float distance=1.3f)
     {
-        owner.Active=false;brain.CancelPattern();boss.RestoreForTutorial();player.RestoreForTutorial();brain.ResetForEncounter();
+        owner.Active=false;owner.enabled=false;brain.CancelPattern();boss.RestoreForTutorial();player.RestoreForTutorial();brain.ResetForEncounter();
         boss.transform.position=new Vector3(0,1.05f,0);player.transform.position=new Vector3(distance,1.05f,0);
         bossBody.useGravity=playerBody.useGravity=false;bossBody.constraints=playerBody.constraints=RigidbodyConstraints.FreezeAll;
         bossBody.linearVelocity=playerBody.linearVelocity=Vector3.zero;boss.SetFacing(Vector3.right);player.SetFacing(Vector3.left);
@@ -144,10 +144,10 @@ public sealed class DojaehakPlaytestRunner : MonoBehaviour
         Debug.Log("DOJAEHAK_INPUT_READY");float inputTimeout=Time.time+12;
         while(boss.State==CombatActor.ActionState.ATTACK&&Time.time<inputTimeout)yield return null;
         input.GameplayEnabled=false;Check(Time.time<inputTimeout&&boss.State==CombatActor.ActionState.HIT,"browser K interrupts boss windup");yield return new WaitForSeconds(.5f);
-        ResetPair(4.5f);bossBody.useGravity=true;bossBody.constraints=RigidbodyConstraints.FreezeRotation;yield return new WaitForSeconds(.85f);owner.Active=true;
+        ResetPair(4.5f);bossBody.useGravity=true;bossBody.constraints=RigidbodyConstraints.FreezeRotation;yield return new WaitForSeconds(.85f);int startedBefore=brain.PatternsStarted;owner.enabled=true;owner.Active=true;
         hp=player.Health.Current;float aiTimeout=Time.time+14;
         while(player.Health.Current>=hp&&Time.time<aiTimeout)yield return null;
-        Check(player.Health.Current<hp&&brain.PatternsStarted>0,"autonomous boss closes and lands real damage");
+        Check(player.Health.Current<hp&&brain.PatternsStarted>startedBefore,"autonomous boss closes and lands real damage");
         owner.Active=false;brain.CancelPattern();yield return new WaitForSeconds(.3f);
         Check(boss.ReceiveHit(new HitRequest(player.gameObject,9999,Vector3.left,true,0)),"boss remains defeatable");yield return new WaitForSeconds(.8f);
         var dead=boss.GetComponent<DefeatedBody>();Check(dead.Settled&&dead.TryBounds(out Bounds bounds)&&Mathf.Abs(bounds.min.y-.015f)<.025f,"new boss corpse grounds correctly");
