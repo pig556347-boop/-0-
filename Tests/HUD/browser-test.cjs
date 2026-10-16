@@ -5,6 +5,24 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    const bossPage=await browser.newPage({viewport:{width:1280,height:720}});
+    let bossPassed=false,bossChecks=0,bossInput=false;const bossErrors=[],bossPreviews=[],bossMetrics=[];
+    bossPage.on('console',msg=>{const line=msg.text();
+      if(line.includes('DOJAEHAK_PREVIEW_READY'))bossPreviews.push(line.match(/clip=(\w+)/)[1]);
+      if(line.includes('DOJAEHAK_INPUT_READY'))bossInput=true;
+      if(line.includes('DOJAEHAK_LAYOUT'))bossMetrics.push(line);
+      if(line.includes('DOJAEHAK_TEST_PASS')){bossPassed=true;bossChecks=Number(line.match(/checks=(\d+)/)[1]);}
+      if(/DOJAEHAK_TEST_FAIL|Exception/.test(line))bossErrors.push(line);});
+    bossPage.on('pageerror',e=>bossErrors.push(String(e)));
+    await bossPage.goto('http://127.0.0.1:8780/HUDTest/?dojaehakReview=1');
+    for(let i=0;i<3600&&!bossPassed&&!bossErrors.length;i++){
+      if(bossInput){bossInput=false;await bossPage.keyboard.press('k',{delay:80});}
+      while(bossPreviews.length){const clip=bossPreviews.shift();await bossPage.screenshot({path:'hud-test-results/dojaehak-'+clip+'.png'});await bossPage.keyboard.press('Enter',{delay:80});}
+      await bossPage.waitForTimeout(50);
+    }
+    if(!bossPassed||bossErrors.length){await bossPage.screenshot({path:'hud-test-results/dojaehak-failed.png'});throw Error('Dojaehak test failed: '+bossErrors.join(' ')+' '+bossMetrics.join(' '));}
+    fs.writeFileSync('hud-test-results/dojaehak.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:bossChecks,passed:true},null,2));
+    await bossPage.close();
     for(const variant of [1,2,3,4]){
     const minionPage=await browser.newPage({viewport:{width:1280,height:720}});
     let minionPassed=false,minionChecks=0;const minionErrors=[],minionPreviews=[],minionMetrics=[];

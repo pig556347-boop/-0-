@@ -146,6 +146,7 @@ public sealed class EncounterDirector : MonoBehaviour
             brain.ThinkInterval = SchoolCampaign.ThinkInterval(Stage);
             brain.AttackInterval = Stage <= 4 ? 2.4f : Stage == 11 && boss ? .9f : 1.6f;
             brain.MoveSpeed = Stage == 11 && boss ? 3.6f : Stage >= 5 ? 2.3f : 1.6f;
+            if(boss&&Stage==5)DojaehakBrain.Install(enemy);
             enemy.HitConfirmed += impact.OnHit; enemy.HitConfirmed += effects.OnHit;
             enemies.Add(enemy);
         }

@@ -86,6 +86,13 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
             typeof(EncounterDirector).GetProperty("Stage").SetValue(encounter,stage);
             typeof(EncounterDirector).GetProperty("Area").SetValue(encounter,SchoolCampaign.IsBoss(stage)?SchoolCampaign.AreaCount(stage):1);
             typeof(EncounterDirector).GetMethod("StartArea",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(encounter,new object[]{true});
+            if(stage==5)
+            {
+                var firstBoss=FindObjectsByType<DojaehakBrain>(FindObjectsSortMode.None);
+                Check(firstBoss.Length==1,"stage 1-5 creates real Dojaehak boss controller");
+                Check(firstBoss[0].GetComponentInChildren<Minion1View>().ModelKind=="Dojaehak","stage 1-5 uses supplied boss skin");
+                Check(!firstBoss[0].GetComponent<CombatActor>().Health.Infinite,"mid-boss is finite after tutorial");
+            }
             if(stage==2)
             {
                 bool fourthSeen=false;foreach(var skin in FindObjectsByType<Minion1View>(FindObjectsSortMode.None))fourthSeen|=skin.ModelKind=="Minion4";

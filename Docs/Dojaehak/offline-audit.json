@@ -1,0 +1,148 @@
+{
+  "reviews": [
+    {
+      "review": 1,
+      "clip": "PunchLeft",
+      "samples": 11,
+      "maxExtent": 1.776408207933855,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "PunchRight",
+      "samples": 11,
+      "maxExtent": 1.7377184960059822,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "HookPunch",
+      "samples": 11,
+      "maxExtent": 1.7741158898679714,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "QuadPunch",
+      "samples": 11,
+      "maxExtent": 1.7593709804641549,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "Kicking",
+      "samples": 11,
+      "maxExtent": 1.8249202240258455,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "MmaKick",
+      "samples": 11,
+      "maxExtent": 1.803782849397976,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "SideKick",
+      "samples": 11,
+      "maxExtent": 1.7947406768798828,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "RoundhouseKick",
+      "samples": 11,
+      "maxExtent": 1.842959305504337,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "Walking",
+      "samples": 11,
+      "maxExtent": 1.878129915567115,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "RunForward",
+      "samples": 11,
+      "maxExtent": 1.8395219184458256,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "PunchLeft",
+      "samples": 21,
+      "maxExtent": 1.776408207933855,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "PunchRight",
+      "samples": 21,
+      "maxExtent": 1.7384568228162607,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "HookPunch",
+      "samples": 21,
+      "maxExtent": 1.7772741187509382,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "QuadPunch",
+      "samples": 21,
+      "maxExtent": 1.7593709804641549,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "Kicking",
+      "samples": 21,
+      "maxExtent": 1.8249202240258455,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "MmaKick",
+      "samples": 21,
+      "maxExtent": 1.8423001570627093,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "SideKick",
+      "samples": 21,
+      "maxExtent": 1.810698390007019,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "RoundhouseKick",
+      "samples": 21,
+      "maxExtent": 1.842959305504337,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "Walking",
+      "samples": 21,
+      "maxExtent": 1.886212768848054,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "RunForward",
+      "samples": 21,
+      "maxExtent": 1.843981088604778,
+      "passed": true
+    }
+  ],
+  "elbows": {
+    "PunchLeft": 142.1686117246312,
+    "PunchRight": 180.00000500895632
+  }
+}

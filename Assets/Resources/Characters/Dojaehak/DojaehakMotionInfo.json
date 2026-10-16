@@ -1,0 +1,100 @@
+{
+  "clips": [
+    {
+      "clip": "PunchLeft",
+      "source": "Punching/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Punching.fbx",
+      "frames": 63,
+      "fps": 60,
+      "impactFrame": 34,
+      "maxElbowDegrees": 142.17,
+      "weightedVertices": 24996
+    },
+    {
+      "clip": "PunchRight",
+      "source": "Punching (1)/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Punching (1).fbx",
+      "frames": 52,
+      "fps": 60,
+      "impactFrame": 22,
+      "maxElbowDegrees": 180.0,
+      "weightedVertices": 24996
+    },
+    {
+      "clip": "HookPunch",
+      "source": "Hook Punch/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Hook Punch.fbx",
+      "frames": 131,
+      "fps": 60,
+      "impactFrame": 68,
+      "maxElbowDegrees": null,
+      "weightedVertices": 24996
+    },
+    {
+      "clip": "QuadPunch",
+      "source": "Quad Punch/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Quad Punch.fbx",
+      "frames": 131,
+      "fps": 60,
+      "impactFrame": 30,
+      "maxElbowDegrees": null,
+      "weightedVertices": 24996,
+      "contactFrames": [
+        30,
+        42,
+        56,
+        70
+      ]
+    },
+    {
+      "clip": "Kicking",
+      "source": "Kicking/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Kicking.fbx",
+      "frames": 130,
+      "fps": 60,
+      "impactFrame": 69,
+      "maxElbowDegrees": null,
+      "weightedVertices": 24996
+    },
+    {
+      "clip": "MmaKick",
+      "source": "Mma Kick/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Mma Kick.fbx",
+      "frames": 123,
+      "fps": 60,
+      "impactFrame": 58,
+      "maxElbowDegrees": null,
+      "weightedVertices": 24996
+    },
+    {
+      "clip": "SideKick",
+      "source": "Side Kick/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Side Kick.fbx",
+      "frames": 121,
+      "fps": 60,
+      "impactFrame": 49,
+      "maxElbowDegrees": null,
+      "weightedVertices": 24996
+    },
+    {
+      "clip": "RoundhouseKick",
+      "source": "Roundhouse Kick/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Roundhouse Kick.fbx",
+      "frames": 151,
+      "fps": 60,
+      "impactFrame": 57,
+      "maxElbowDegrees": null,
+      "weightedVertices": 24996
+    },
+    {
+      "clip": "Walking",
+      "source": "Walking/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Walking.fbx",
+      "frames": 62,
+      "fps": 60,
+      "impactFrame": 55,
+      "maxElbowDegrees": null,
+      "weightedVertices": 24996
+    },
+    {
+      "clip": "RunForward",
+      "source": "Run Forward/tripo_convert_fc55764c-b907-4ec8-91b7-cbc064c0e095@Run Forward.fbx",
+      "frames": 54,
+      "fps": 60,
+      "impactFrame": 44,
+      "maxElbowDegrees": null,
+      "weightedVertices": 24996
+    }
+  ]
+}

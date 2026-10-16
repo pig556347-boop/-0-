@@ -8,12 +8,14 @@ public sealed class EnemyBrain : MonoBehaviour
     public bool IsBoss;
     public int Difficulty = 1;
     public EncounterDirector Director;
+    public DojaehakBrain BossDriver;
     private CombatActor actor;
     private Rigidbody body;
     private float nextAttack, nextThink, guardUntil, ultimateReady;
     private void Awake() { actor = GetComponent<CombatActor>(); body = GetComponent<Rigidbody>(); ultimateReady = Time.time + 10; }
     private void FixedUpdate()
     {
+        if(BossDriver!=null){BossDriver.Tick();return;}
         if (Target == null || !Target.Health.Alive || !Active || !actor.GameplayEnabled)
         { if (actor.CanAct) StopMotion(); return; }
         if (actor.State == CombatActor.ActionState.GUARD)

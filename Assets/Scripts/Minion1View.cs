@@ -29,7 +29,7 @@ public sealed class Minion1View : MonoBehaviour
     public Transform Bone(string name)=>bones[name];
     public static bool TryBuild(PrototypeCharacterView owner,CombatActor actor,string modelKind="Minion1")
     {
-        if(modelKind!="Minion1"&&modelKind!="Minion2"&&modelKind!="Minion3"&&modelKind!="Minion4")throw new ArgumentException("Unknown supplied minion model");
+        if(modelKind!="Minion1"&&modelKind!="Minion2"&&modelKind!="Minion3"&&modelKind!="Minion4"&&modelKind!="Dojaehak")throw new ArgumentException("Unknown supplied minion model");
         var prefab=Resources.Load<GameObject>("Characters/"+modelKind+"/"+modelKind+"Model");
         if(prefab==null)throw new InvalidOperationException("Supplied "+modelKind+" model missing");
         var view=owner.gameObject.AddComponent<Minion1View>();view.ModelKind=modelKind;view.actor=actor;view.body=actor.GetComponent<Rigidbody>();
@@ -39,7 +39,7 @@ public sealed class Minion1View : MonoBehaviour
         var importedSkin=view.model.GetComponentInChildren<SkinnedMeshRenderer>();
         float importedHeight=MeasuredHeight(importedSkin);
         if(importedHeight<=.0001f)throw new InvalidOperationException(modelKind+" imported skin bounds invalid");
-        view.model.localScale*=1.85f/importedHeight;
+        view.model.localScale*=(modelKind=="Dojaehak"?1.9f:1.85f)/importedHeight;
         foreach(var animator in view.model.GetComponentsInChildren<Animator>())animator.enabled=false;
         foreach(var animation in view.model.GetComponentsInChildren<Animation>())animation.enabled=false;
         view.all=view.model.GetComponentsInChildren<Transform>();view.restLocal=new Quaternion[view.all.Length];view.blendFrom=new Quaternion[view.all.Length];
@@ -54,7 +54,7 @@ public sealed class Minion1View : MonoBehaviour
         {
             var data=Resources.Load<TextAsset>("Characters/"+modelKind+"/"+modelKind+"PoseData");
             if(data==null)throw new InvalidOperationException(modelKind+" authored attack data missing");
-            view.attacks=AuthoredMotionLibrary.Read(data.bytes,modelKind=="Minion2"?5:4,modelKind=="Minion1"||modelKind=="Minion4"?33:41);
+            view.attacks=AuthoredMotionLibrary.Read(data.bytes,modelKind=="Dojaehak"?10:modelKind=="Minion2"?5:4,modelKind=="Dojaehak"?65:modelKind=="Minion1"||modelKind=="Minion4"?33:41);
             attackLibraries.Add(modelKind,view.attacks);
         }
         foreach(string name in view.attacks.BoneNames)
@@ -88,6 +88,7 @@ public sealed class Minion1View : MonoBehaviour
     private void OnAttack()
     {
         started=Time.time;hitAt=-100;
+        if(actor.CurrentBossMove!=null){attack=actor.CurrentBossMove.Clip;current="";return;}
         if(actor.HeavyStrike)
         {
             if(ModelKind=="Minion3")attack="Kicking";
@@ -113,6 +114,8 @@ public sealed class Minion1View : MonoBehaviour
         transform.rotation=Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(actor.Facing),1-Mathf.Exp(-18*Time.deltaTime));
         if(actor.State==CombatActor.ActionState.ATTACK)
         {
+            if(actor.CurrentBossMove!=null)
+            {Play(attacks,actor.CurrentBossMove.Clip,actor.CurrentBossMove.SampleTime(actor.BossMoveElapsed));return;}
             var clip=attacks.Clips[attack];float impact=Impact(attack);
             float elapsed=hitAt>=started?actor.VisualWindup+Time.time-hitAt:Mathf.Min(Time.time-started,actor.VisualWindup);
             float t=elapsed<=actor.VisualWindup?Mathf.Lerp(0,impact,Mathf.Clamp01(elapsed/actor.VisualWindup)):
@@ -126,8 +129,10 @@ public sealed class Minion1View : MonoBehaviour
         float speed=new Vector2(body.linearVelocity.x,body.linearVelocity.z).magnitude;
         if(speed>.15f&&actor.State==CombatActor.ActionState.IDLE)
         {
-            var walking=attacks.Clips.ContainsKey("Walking")?attacks:locomotion;
-            gait+=Time.deltaTime*Mathf.Clamp(speed/1.8f,.3f,2.2f);Play(walking,"Walking",gait%walking.Clips["Walking"].Length);
+            string clip=ModelKind=="Dojaehak"&&speed>2.8f?"RunForward":"Walking";
+            var walking=attacks.Clips.ContainsKey(clip)?attacks:locomotion;
+            float sign=ModelKind=="Dojaehak"&&Vector3.Dot(new Vector3(body.linearVelocity.x,0,body.linearVelocity.z),actor.Facing)<0?-1:1;
+            gait+=sign*Time.deltaTime*Mathf.Clamp(speed/(clip=="RunForward"?3.8f:1.8f),.3f,2.2f);Play(walking,clip,Mathf.Repeat(gait,walking.Clips[clip].Length));
         }
         else {gait+=Time.deltaTime;Play(locomotion,"FightingIdle",gait%locomotion.Clips["FightingIdle"].Length);}
     }

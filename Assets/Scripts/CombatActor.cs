@@ -13,6 +13,11 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public float GrabCounterChance { get; set; }
     public string WarningText { get; private set; } = "";
     public float WarningUntil { get; private set; }
+    public BossMove CurrentBossMove { get; private set; }
+    public float BossMoveElapsed => CurrentBossMove==null?0:Time.time-bossMoveStarted;
+    public int BossMoveStrikeIndex { get; private set; }=-1;
+    private float bossMoveStarted;
+    public bool BossMoveEarlyArmor { get; private set; }
     public bool HeavyStrike => activeHeavy;
     public bool HeavyUsesKick { get; set; }
     public bool PunchStrike { get; private set; }
@@ -20,8 +25,8 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public int PunchCount => punchSequence.Count;
     private readonly PunchSequence punchSequence=new PunchSequence();
     public event Action Punched;
-    public float VisualWindup => attackWindup * (activeHeavy ? 1.8f : 1);
-    public float VisualRecovery => attackRecovery * (activeHeavy ? 1.6f : 1);
+    public float VisualWindup => CurrentBossMove!=null?CurrentBossMove.Windup:attackWindup * (activeHeavy ? 1.8f : 1);
+    public float VisualRecovery => CurrentBossMove!=null?CurrentBossMove.Duration-CurrentBossMove.StrikeTimes[CurrentBossMove.StrikeTimes.Length-1]:attackRecovery * (activeHeavy ? 1.6f : 1);
     public int BasicComboHit { get; private set; }
     public int UltimateStrikeIndex { get; private set; } = -1;
     public float UltimateStrikeInterval => activeUltimate == 3 ? .14f : .18f;
@@ -56,6 +61,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public event Action<bool> AttackLanded;
     public event Action StrikeStarted;
     public event Action AttackPrepared;
+    public event Action BossMoveInterrupted;
     private readonly List<AttackHitbox> boxes = new List<AttackHitbox>();
     private Rigidbody body;
     private CombatInput input;
@@ -114,6 +120,31 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     {
         if (!CanAct) return false;
         StartCoroutine(AttackRoutine(heavy,Team!=0&&(!heavy||!HeavyUsesKick))); return true;
+    }
+    public bool TryBossMove(BossMove move,bool earlyArmor=false)
+    {
+        if(!CanAct||Team==0||!BossUltimateEnabled||move==null)return false;
+        StartCoroutine(BossMoveRoutine(move,earlyArmor));return true;
+    }
+    public void CancelBossMove()
+    {if(CurrentBossMove==null)return;CancelActions();if(Health.Alive){State=ActionState.IDLE;StopPlanarMotion();}}
+    public void ShowBossCue(string text,float duration)
+    {if(Team!=0&&Health.Alive)Warn(text,duration);}
+    private IEnumerator BossMoveRoutine(BossMove move,bool earlyArmor)
+    {
+        CurrentBossMove=move;BossMoveEarlyArmor=earlyArmor&&move.Armor;bossMoveStarted=Time.time;BossMoveStrikeIndex=-1;
+        State=ActionState.ATTACK;activeHeavy=!move.Punch;PunchStrike=move.Punch;PunchLeft=move.Clip=="PunchLeft";
+        StopPlanarMotion();AttackPrepared?.Invoke();Warn(BossMoveEarlyArmor?"버티고 "+move.Warning:move.Warning,move.Windup);
+        for(int i=0;i<move.StrikeTimes.Length;i++)
+        {
+            while(BossMoveElapsed<move.StrikeTimes[i])yield return null;
+            BossMoveStrikeIndex=i;
+            SpawnStrike(basicDamage*move.DamageRatio,move.Knockback,false,move.Reach);
+            // Parry callbacks can synchronously stagger/cancel the source during SpawnStrike.
+            if(CurrentBossMove!=move||State!=ActionState.ATTACK)yield break;
+        }
+        while(BossMoveElapsed<move.Duration)yield return null;
+        CurrentBossMove=null;BossMoveEarlyArmor=false;BossMoveStrikeIndex=-1;State=ActionState.IDLE;
     }
     public bool TryPunch()
     {if(!CanAct)return false;StartCoroutine(AttackRoutine(false,true));return true;}
@@ -182,6 +213,9 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         }
         if (result.Kind == DamageKind.Guarded && Health.Alive)
         { Damaged?.Invoke(result); return false; }
+        if(Health.Alive&&CurrentBossMove!=null&&(CurrentBossMove.ArmoredAt(BossMoveElapsed)||BossMoveEarlyArmor&&BossMoveElapsed<=CurrentBossMove.StrikeTimes[CurrentBossMove.StrikeTimes.Length-1]+.1f)&&!hit.Unblockable&&hit.Knockback<4&&
+            (hit.Source==null||hit.Source.GetComponent<CombatActor>()?.State!=ActionState.ULTIMATE))
+        {Damaged?.Invoke(result);return true;}
         CancelActions(); State = Health.Alive ? ActionState.HIT : ActionState.DEAD;
         Progress.BreakCombo();
         lockedUntil = Time.time + hitStun;
@@ -257,7 +291,9 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     }
     private void CancelActions()
     {
-        StopAllCoroutines();
+        bool interruptedBossMove=CurrentBossMove!=null;
+        StopAllCoroutines();CurrentBossMove=null;BossMoveEarlyArmor=false;BossMoveStrikeIndex=-1;
+        if(interruptedBossMove)BossMoveInterrupted?.Invoke();
         WarningText = ""; SetEnemyCrouch(false);
         queuedBasic = false;
         activeUltimate = 0; counterWindowUntil = 0;
