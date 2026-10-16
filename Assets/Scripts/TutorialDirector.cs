@@ -193,6 +193,12 @@ public sealed class TutorialDirector : MonoBehaviour
         Collider shape = part.GetComponent<Collider>();
         if (shape != null) { shape.enabled = false; Destroy(shape); }
     }
+    public void SkipForTesting()
+    {
+        Progress.FinishOpening();
+        foreach(TutorialSignal signal in System.Enum.GetValues(typeof(TutorialSignal)))Progress.Accept(signal);
+        enabled=false;
+    }
     private void OnDisable()
     {
         if (player == null) return;

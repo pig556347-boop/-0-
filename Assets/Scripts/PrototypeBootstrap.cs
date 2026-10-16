@@ -77,6 +77,7 @@ public sealed class PrototypeBootstrap : MonoBehaviour
             gameObject.AddComponent<EncounterDirector>().Initialize(player.GetComponent<CombatActor>(),
                 enemy.GetComponent<CombatActor>(), lessons, hud);
         }
+        if(!RunSmokeChecks&&TestCombatShortcuts.Enabled)gameObject.AddComponent<TestCombatShortcuts>();
         RunSmokeChecks = false;
         Light light = new GameObject("Key light").AddComponent<Light>();
         light.type = LightType.Directional; light.intensity = 1.1f;

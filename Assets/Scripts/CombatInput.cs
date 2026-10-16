@@ -10,6 +10,8 @@ public static class GameKeys
     {
         switch (code)
         {
+            case KeyCode.Alpha1: return Key.Digit1; case KeyCode.Alpha2: return Key.Digit2;
+            case KeyCode.Alpha3: return Key.Digit3; case KeyCode.Alpha4: return Key.Digit4;
             case KeyCode.W: return Key.W; case KeyCode.A: return Key.A;
             case KeyCode.S: return Key.S; case KeyCode.D: return Key.D;
             case KeyCode.R: return Key.R; case KeyCode.Return: return Key.Enter;

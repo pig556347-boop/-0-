@@ -5,6 +5,22 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    const shortcutPage=await browser.newPage({viewport:{width:1280,height:720}});
+    let shortcutPassed=false,shortcutChecks=0;const shortcutErrors=[],shortcutKeys=[];
+    shortcutPage.on('console',msg=>{const line=msg.text();
+      if(line.includes('SHORTCUT_INPUT_READY'))shortcutKeys.push(line.match(/key=(\d)/)[1]);
+      if(line.includes('SHORTCUT_TEST_PASS')){shortcutPassed=true;shortcutChecks=Number(line.match(/checks=(\d+)/)[1]);}
+      if(/SHORTCUT_TEST_FAIL|Exception/.test(line))shortcutErrors.push(line);});
+    shortcutPage.on('pageerror',e=>shortcutErrors.push(String(e)));
+    await shortcutPage.goto('http://127.0.0.1:8780/HUDTest/?shortcutReview=1');
+    for(let i=0;i<1200&&!shortcutPassed&&!shortcutErrors.length;i++){
+      while(shortcutKeys.length)await shortcutPage.keyboard.press(shortcutKeys.shift(),{delay:80});
+      await shortcutPage.waitForTimeout(50);
+    }
+    await shortcutPage.screenshot({path:'hud-test-results/test-shortcuts.png'});
+    if(!shortcutPassed||shortcutErrors.length)throw Error('Temporary shortcut test failed: '+shortcutErrors.join(' '));
+    fs.writeFileSync('hud-test-results/shortcuts.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:shortcutChecks,passed:true},null,2));
+    await shortcutPage.close();
     const bossPage=await browser.newPage({viewport:{width:1280,height:720}});
     let bossPassed=false,bossChecks=0,bossInput=false;const bossErrors=[],bossPreviews=[],bossMetrics=[];
     bossPage.on('console',msg=>{const line=msg.text();

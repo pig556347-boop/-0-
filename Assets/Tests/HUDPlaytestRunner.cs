@@ -47,6 +47,8 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
     }
     private IEnumerator Start()
     {
+        if(Application.absoluteURL.Contains("shortcutReview=1"))
+        {gameObject.AddComponent<ShortcutPlaytestRunner>();yield break;}
         if(Application.absoluteURL.Contains("dojaehakReview=1"))
         {gameObject.AddComponent<DojaehakPlaytestRunner>();yield break;}
         if(Application.absoluteURL.Contains("minionReview="))

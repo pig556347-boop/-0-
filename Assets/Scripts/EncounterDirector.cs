@@ -92,6 +92,21 @@ public sealed class EncounterDirector : MonoBehaviour
         }
         if (!cleared && Time.time > messageUntil) hud.StoryMessage = "";
     }
+    // Temporary test navigation; release builds reject this entry point.
+    public bool JumpForTesting(int stage)
+    {
+        if(!TestCombatShortcuts.Enabled||tutorial==null||player==null||
+            (stage!=1&&stage!=5&&stage!=10&&stage!=11))return false;
+        duel.enabled=false;tutorial.SkipForTesting();
+        if(practice!=null){practice.gameObject.SetActive(false);Destroy(practice.gameObject);practice=null;}
+        started=campaignStarted=true;
+        player.GameplayEnabled=true;player.Health.Infinite=false;
+        player.GetComponent<CombatInput>().GameplayEnabled=true;
+        player.GetComponent<PlayerController>().GameplayEnabled=true;
+        Stage=stage;Area=stage==1?1:SchoolCampaign.AreaCount(stage);
+        StartArea(true);
+        Debug.Log("TEST_SHORTCUT_STARTED stage="+stage+" area="+Area);return true;
+    }
     private void StartArea(bool retry)
     {
         cleared = finished = dead = false;

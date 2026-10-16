@@ -8,9 +8,9 @@ parser = Parser(Language(tree_sitter_c_sharp.language()))
 count = 0
 for path in (root / 'Assets').rglob('*.cs'):
     for unity6 in (False, True):
-        for input_system, editor, webgl in product((False, True), repeat=3):
+        for input_system, editor, webgl, release in product((False, True), repeat=4):
             defines = {'UNITY_6000_0_OR_NEWER': unity6,
-                       'ENABLE_INPUT_SYSTEM': input_system, 'UNITY_EDITOR': editor, 'UNITY_WEBGL': webgl}
+                       'KICKBACK_RELEASE': release, 'ENABLE_INPUT_SYSTEM': input_system, 'UNITY_EDITOR': editor, 'UNITY_WEBGL': webgl}
             output, stack, active = [], [], True
             for line in path.read_text().splitlines():
                 directive = line.strip()
