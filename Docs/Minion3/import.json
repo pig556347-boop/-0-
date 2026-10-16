@@ -1,0 +1,39 @@
+[
+  {
+    "clip": "PunchLeft",
+    "source": "Punching (1)/tripo_convert_7dd7057a-c5b4-42ab-b8cb-977d21149d8f@Punching (1).fbx",
+    "frames": 63,
+    "fps": 60,
+    "impactFrame": 34,
+    "maxElbowDegrees": 142.17,
+    "weightedVertices": 24992
+  },
+  {
+    "clip": "PunchRight",
+    "source": "Punching/tripo_convert_7dd7057a-c5b4-42ab-b8cb-977d21149d8f@Punching.fbx",
+    "frames": 63,
+    "fps": 60,
+    "impactFrame": 34,
+    "maxElbowDegrees": 142.17,
+    "weightedVertices": 24992,
+    "conversion": "Mirrored supplied duplicate left punch with anatomical bone swaps"
+  },
+  {
+    "clip": "Kicking",
+    "source": "Kicking/tripo_convert_7dd7057a-c5b4-42ab-b8cb-977d21149d8f@Kicking.fbx",
+    "frames": 130,
+    "fps": 60,
+    "impactFrame": 69,
+    "maxElbowDegrees": null,
+    "weightedVertices": 24992
+  },
+  {
+    "clip": "Walking",
+    "source": "Walking/tripo_convert_7dd7057a-c5b4-42ab-b8cb-977d21149d8f@Walking.fbx",
+    "frames": 62,
+    "fps": 60,
+    "impactFrame": 57,
+    "maxElbowDegrees": null,
+    "weightedVertices": 24992
+  }
+]

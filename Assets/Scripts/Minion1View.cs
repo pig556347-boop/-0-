@@ -25,10 +25,11 @@ public sealed class Minion1View : MonoBehaviour
     public bool PreviewMode { get; set; }
     public string CurrentMotion { get; private set; }
     public Transform ModelRoot => model;
+    public bool UsesSuppliedWalk => attacks.Clips.ContainsKey("Walking");
     public Transform Bone(string name)=>bones[name];
     public static bool TryBuild(PrototypeCharacterView owner,CombatActor actor,string modelKind="Minion1")
     {
-        if(modelKind!="Minion1"&&modelKind!="Minion2")throw new ArgumentException("Unknown supplied minion model");
+        if(modelKind!="Minion1"&&modelKind!="Minion2"&&modelKind!="Minion3")throw new ArgumentException("Unknown supplied minion model");
         var prefab=Resources.Load<GameObject>("Characters/"+modelKind+"/"+modelKind+"Model");
         if(prefab==null)throw new InvalidOperationException("Supplied "+modelKind+" model missing");
         var view=owner.gameObject.AddComponent<Minion1View>();view.ModelKind=modelKind;view.actor=actor;view.body=actor.GetComponent<Rigidbody>();
@@ -53,7 +54,7 @@ public sealed class Minion1View : MonoBehaviour
         {
             var data=Resources.Load<TextAsset>("Characters/"+modelKind+"/"+modelKind+"PoseData");
             if(data==null)throw new InvalidOperationException(modelKind+" authored attack data missing");
-            view.attacks=AuthoredMotionLibrary.Read(data.bytes,modelKind=="Minion2"?5:4,modelKind=="Minion2"?41:33);
+            view.attacks=AuthoredMotionLibrary.Read(data.bytes,modelKind=="Minion2"?5:4,modelKind=="Minion1"?33:41);
             attackLibraries.Add(modelKind,view.attacks);
         }
         foreach(string name in view.attacks.BoneNames)
@@ -89,8 +90,12 @@ public sealed class Minion1View : MonoBehaviour
         started=Time.time;hitAt=-100;
         if(actor.HeavyStrike)
         {
-            int index=heavyIndex++%(ModelKind=="Minion2"?3:2);
-            attack=index==0?"MmaKick":index==1?"Kicking":"SideKick";
+            if(ModelKind=="Minion3")attack="Kicking";
+            else
+            {
+                int index=heavyIndex++%(ModelKind=="Minion2"?3:2);
+                attack=index==0?"MmaKick":index==1?"Kicking":"SideKick";
+            }
         }
         else attack=actor.PunchLeft?"PunchLeft":"PunchRight";
         current="";
@@ -119,11 +124,14 @@ public sealed class Minion1View : MonoBehaviour
         {Play(locomotion,"InwardBlock",.5f);return;}
         float speed=new Vector2(body.linearVelocity.x,body.linearVelocity.z).magnitude;
         if(speed>.15f&&actor.State==CombatActor.ActionState.IDLE)
-        {gait+=Time.deltaTime*Mathf.Clamp(speed/1.8f,.3f,2.2f);Play(locomotion,"Walking",gait%locomotion.Clips["Walking"].Length);}
+        {
+            var walking=attacks.Clips.ContainsKey("Walking")?attacks:locomotion;
+            gait+=Time.deltaTime*Mathf.Clamp(speed/1.8f,.3f,2.2f);Play(walking,"Walking",gait%walking.Clips["Walking"].Length);
+        }
         else {gait+=Time.deltaTime;Play(locomotion,"FightingIdle",gait%locomotion.Clips["FightingIdle"].Length);}
     }
     private float Impact(string name)
-    {return name=="PunchLeft"?34/60f:name=="PunchRight"?22/60f:name=="SideKick"?49/60f:name=="MmaKick"?(ModelKind=="Minion2"?39:37)/60f:69/60f;}
+    {return name=="PunchLeft"?34/60f:name=="PunchRight"?(ModelKind=="Minion3"?34:22)/60f:name=="SideKick"?49/60f:name=="MmaKick"?(ModelKind=="Minion2"?39:37)/60f:69/60f;}
     public void Preview(string name,float phase)
     {
         PreviewMode=true;current=name;transition=Time.time-1;

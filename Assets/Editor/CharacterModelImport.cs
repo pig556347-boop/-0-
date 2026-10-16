@@ -15,7 +15,7 @@ public sealed class CharacterModelImport : AssetPostprocessor
     }
     private void OnPreprocessTexture()
     {
-        if(!assetPath.StartsWith("Assets/Resources/Characters/Minion1/")&&!assetPath.StartsWith("Assets/Resources/Characters/Minion2/"))return;
+        if(!assetPath.StartsWith("Assets/Resources/Characters/Minion1/")&&!assetPath.StartsWith("Assets/Resources/Characters/Minion2/")&&!assetPath.StartsWith("Assets/Resources/Characters/Minion3/"))return;
         var importer=(TextureImporter)assetImporter;
         importer.textureType=TextureImporterType.Default;importer.maxTextureSize=2048;
         importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;
@@ -23,7 +23,7 @@ public sealed class CharacterModelImport : AssetPostprocessor
     }
     public static void PrepareForBuild()
     {
-        foreach(string kind in new[]{"Minion1","Minion2"})
+        foreach(string kind in new[]{"Minion1","Minion2","Minion3"})
         {
             string texturePath="Assets/Resources/Characters/"+kind+"/"+kind+"_BaseColor.png";
             var textureImporter=AssetImporter.GetAtPath(texturePath) as TextureImporter;
@@ -39,7 +39,8 @@ public sealed class CharacterModelImport : AssetPostprocessor
         foreach (string path in new[] { "Assets/Resources/Characters/Player/PlayerModel.fbx",
             "Assets/Resources/Characters/Deongchi/DeongchiModel.fbx",
             "Assets/Resources/Characters/Minion1/Minion1Model.fbx",
-            "Assets/Resources/Characters/Minion2/Minion2Model.fbx" })
+            "Assets/Resources/Characters/Minion2/Minion2Model.fbx",
+            "Assets/Resources/Characters/Minion3/Minion3Model.fbx" })
         {
             ModelImporter importer = (ModelImporter)AssetImporter.GetAtPath(path);
             if (importer == null) throw new System.InvalidOperationException("Character FBX missing: " + path);

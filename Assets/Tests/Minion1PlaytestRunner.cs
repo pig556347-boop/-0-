@@ -26,7 +26,8 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
     private IEnumerator Start()
     {
         bool second=Application.absoluteURL.Contains("minionReview=2");
-        string kind=second?"Minion2":"Minion1";
+        bool third=Application.absoluteURL.Contains("minionReview=3");
+        string kind=third?"Minion3":second?"Minion2":"Minion1";
         var camera=new GameObject("Minion test camera").AddComponent<Camera>();
         camera.transform.position=new Vector3(3,3,6);camera.transform.LookAt(Vector3.up);camera.orthographic=true;camera.orthographicSize=2.8f;
         var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.name="Classroom floor";floor.transform.position=new Vector3(0,-.5f,0);floor.transform.localScale=new Vector3(20,1,12);
@@ -41,9 +42,10 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
         Check(enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model(kind),"supplied skin installed");
         Check(enemy.VisualWindup==windup&&enemy.VisualRecovery==recovery,"skin attachment preserves attack timing");
         var view=enemy.GetComponentInChildren<Minion1View>();var skin=view.GetComponentInChildren<SkinnedMeshRenderer>();
+        Check(view.UsesSuppliedWalk==third,"native walking resource selection");
         Check(skin.sharedMesh.triangles.Length==150000,"all 50000 source triangles retained");Check(skin.sharedMaterial.mainTexture!=null,"supplied texture loaded");
         foreach(var weight in skin.sharedMesh.boneWeights)Check(Mathf.Abs(weight.weight0+weight.weight1+weight.weight2+weight.weight3-1)<.005f,"normalized skin weights");
-        foreach(string clip in second?new[]{"PunchLeft","PunchRight","MmaKick","Kicking","SideKick","Walking","FightingIdle","HitReaction","InwardBlock"}:new[]{"PunchLeft","PunchRight","MmaKick","Kicking","Walking","FightingIdle","HitReaction","InwardBlock"})
+        foreach(string clip in third?new[]{"PunchLeft","PunchRight","Kicking","Walking","FightingIdle","HitReaction","InwardBlock"}:second?new[]{"PunchLeft","PunchRight","MmaKick","Kicking","SideKick","Walking","FightingIdle","HitReaction","InwardBlock"}:new[]{"PunchLeft","PunchRight","MmaKick","Kicking","Walking","FightingIdle","HitReaction","InwardBlock"})
         {
             for(int frame=0;frame<=10;frame++)
             {
@@ -51,14 +53,14 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
                 var bounds=SkinBounds(skin,root);Check(bounds.size.y<2.3f&&bounds.size.y>.6f,"plausible character size "+context+" bounds="+bounds+" modelScale="+view.ModelRoot.lossyScale+" hip="+view.Bone("Hips").position+" head="+view.Bone("Head").position);
                 Check(enemy.transform.position==root,"preview preserves physics root");
             }
-            if(clip=="PunchRight")view.Preview(clip,22/51f);
+            if(clip=="PunchRight")view.Preview(clip,third?34/62f:22/51f);
             if(clip=="PunchLeft")view.Preview(clip,34/62f);
             if(clip.StartsWith("Punch"))
             {
                 string side=clip=="PunchRight"?"Right":"Left";
                 Vector3 upper=view.Bone(side+"Arm").position,elbow=view.Bone(side+"ForeArm").position,hand=view.Bone(side+"Hand").position;
                 float angle=Vector3.Angle(upper-elbow,hand-elbow);
-                Check(angle>(side=="Right"?165:125),"source elbow extension preserved "+clip+" "+angle);
+                Check(angle>(third?135:side=="Right"?165:125),"source elbow extension preserved "+clip+" "+angle);
             }
             else if(clip=="MmaKick")view.Preview(clip,(second?39/95f:37/96f));
             else if(clip=="Kicking")view.Preview(clip,69/129f);
@@ -70,12 +72,19 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
             while(Input.GetKey(KeyCode.Return))yield return null;
             yield return null;
         }
+        if(third)
+        {
+            view.Preview("PunchLeft",34/62f);
+            Check(Vector3.Dot(view.Bone("LeftHand").position-view.Bone("RightHand").position,view.ModelRoot.forward)>.15f,"left punch reaches with left hand");
+            view.Preview("PunchRight",34/62f);
+            Check(Vector3.Dot(view.Bone("RightHand").position-view.Bone("LeftHand").position,view.ModelRoot.forward)>.15f,"mirrored punch reaches with right hand");
+        }
         view.ResumeRuntime();enemy.RestoreForTutorial();
         for(int i=0;i<(second?5:4);i++)
         {
             bool heavy=i>=2;Check(enemy.TryAttack(heavy),"real combat attack starts");
             Check(enemy.PunchStrike!=heavy,"kick heavy does not consume punch sequence");yield return new WaitForSeconds(.1f);
-            Check(view.CurrentMotion==(i==0?"PunchLeft":i==1?"PunchRight":i==2?"MmaKick":i==3?"Kicking":"SideKick"),"correct runtime attack selection "+i);
+            Check(view.CurrentMotion==(i==0?"PunchLeft":i==1?"PunchRight":third?"Kicking":i==2?"MmaKick":i==3?"Kicking":"SideKick"),"correct runtime attack selection "+i);
             yield return new WaitForSeconds(heavy?1:.6f);Check(enemy.CanAct,"attack returns control");
         }
         body.useGravity=true;body.constraints=RigidbodyConstraints.FreezeRotation;brain.MoveSpeed=1.6f;brain.ThinkInterval=.25f;brain.Active=true;
