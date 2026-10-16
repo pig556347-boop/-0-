@@ -12,6 +12,7 @@ public sealed class Minion1View : MonoBehaviour
     private AuthoredMotionLibrary locomotion;
     private CombatActor actor;
     private Rigidbody body;
+    private Material skinMaterial;
     private Transform model,hips;
     private readonly Dictionary<string,Transform> bones=new Dictionary<string,Transform>();
     private readonly Dictionary<string,Quaternion> restWorld=new Dictionary<string,Quaternion>();
@@ -61,13 +62,14 @@ public sealed class Minion1View : MonoBehaviour
         var material=new Material(Resources.Load<Shader>("Shaders/SchoolCharacter"));
         var texture=Resources.Load<Texture2D>("Characters/"+modelKind+"/"+modelKind+"_BaseColor");
         if(texture==null)throw new InvalidOperationException(modelKind+" base color texture resource missing at runtime");
-        material.mainTexture=texture;
+        view.skinMaterial=material;material.mainTexture=texture;
         foreach(var renderer in view.model.GetComponentsInChildren<Renderer>())renderer.sharedMaterial=material;
         foreach(var skin in view.model.GetComponentsInChildren<SkinnedMeshRenderer>())skin.updateWhenOffscreen=true;
         actor.AttackPrepared+=view.OnAttack;actor.StrikeStarted+=()=>view.hitAt=Time.time;
         actor.Damaged+=result=>{if(result.Kind==SchoolRuleZero.DamageKind.Hit){view.started=Time.time;view.current="";}};
         Debug.Log(modelKind.ToUpperInvariant()+"_READY bones="+view.attacks.BoneNames.Length+" weighted=true");return true;
     }
+    private void OnDestroy(){if(skinMaterial!=null)Destroy(skinMaterial);}
     private static float MeasuredHeight(SkinnedMeshRenderer skin)
     {
         var mesh=skin.sharedMesh;var vertices=mesh.vertices;var weights=mesh.boneWeights;var bind=mesh.bindposes;

@@ -67,6 +67,8 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
             Debug.Log("MINION_PREVIEW_READY clip="+clip);float previewTimeout=Time.time+12;
             while(!Input.GetKeyDown(KeyCode.Return)&&Time.time<previewTimeout)yield return null;
             Check(Time.time<previewTimeout,"browser captured exact preview "+clip);
+            while(Input.GetKey(KeyCode.Return))yield return null;
+            yield return null;
         }
         view.ResumeRuntime();enemy.RestoreForTutorial();
         for(int i=0;i<(second?5:4);i++)
