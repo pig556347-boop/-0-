@@ -87,19 +87,19 @@ public sealed class DojaehakPlaytestRunner : MonoBehaviour
         ResetPair();Check(boss.TryBossMove(quad),"mid-quad interrupt starts");yield return new WaitForSeconds(.73f);
         Check(strikes==1,"first quad contact happened before interruption");boss.ReceiveHit(new HitRequest(player.gameObject,12,Vector3.left,false,6));
         yield return new WaitForSeconds(1.9f);Check(strikes==1,"mid-quad interruption removes remaining three contacts");
-        ResetPair();Check(boss.TryBossMove(quad),"ultimate interrupt starts");yield return new WaitForSeconds(.45f);
+        ResetPair();Time.timeScale=.25f;Check(boss.TryBossMove(quad),"ultimate interrupt starts");yield return new WaitForSeconds(.36f);
         player.Progress.ConsumeUltimate();player.Progress.ConfirmHit(Time.time,gain:33);Check(player.TryUltimate(),"tier-one ultimate starts against armor");
-        yield return new WaitForSeconds(.2f);Check(boss.State==CombatActor.ActionState.HIT&&boss.CurrentBossMove==null,"ultimate also breaks limited commitment");
+        yield return new WaitForSeconds(.2f);Check(boss.State==CombatActor.ActionState.HIT&&boss.CurrentBossMove==null,"ultimate also breaks limited commitment boss="+boss.State+" player="+player.State+" hp="+boss.Health.Current+" tier="+player.Progress.UltimateTier);Time.timeScale=1;
         yield return new WaitForSeconds(.8f);
         // Source-facing is locked during a strike: no turn-in-place tracking after a side dodge.
         ResetPair();Check(boss.TryBossMove(DojaehakMoves.Get("SideKick")),"facing lock move starts");yield return new WaitForSeconds(.3f);
         player.transform.position=new Vector3(-1.3f,1.05f,0);Physics.SyncTransforms();hp=player.Health.Current;yield return new WaitForSeconds(.5f);
         Check(Mathf.Approximately(hp,player.Health.Current)&&boss.Facing.x>.9f,"moving behind avoids locked strike");
         // A real timing defense stops the attack source, including the rest of a chain.
-        ResetPair();yield return new WaitForSeconds(.85f);owner.Active=true;Check(brain.TryPattern(DojaehakPattern.OneTwoKick),"parry chain starts");
+        ResetPair();yield return new WaitForSeconds(.85f);Time.timeScale=.25f;owner.Active=true;Check(brain.TryPattern(DojaehakPattern.OneTwoKick),"parry chain starts");
         yield return new WaitForSeconds(.37f);Check(player.TryGuard(true),"timed parry starts");hp=player.Health.Current;
         yield return new WaitForSeconds(.12f);Check(boss.State==CombatActor.ActionState.HIT&&boss.CurrentBossMove==null,"parry staggers boss and clears move");
-        owner.Active=false;yield return new WaitForSeconds(.8f);Check(prepared.Count==1&&Mathf.Approximately(hp,player.Health.Current),"parry cancels follow-up without damage");
+        Time.timeScale=1;owner.Active=false;yield return new WaitForSeconds(.8f);Check(prepared.Count==1&&Mathf.Approximately(hp,player.Health.Current),"parry cancels follow-up without damage");
         var expected=new Dictionary<DojaehakPattern,string[]>{
             {DojaehakPattern.OneTwoKick,new[]{"PunchLeft","PunchRight","MmaKick"}},
             {DojaehakPattern.SideHook,new[]{"SideKick","HookPunch"}},
@@ -140,10 +140,10 @@ public sealed class DojaehakPlaytestRunner : MonoBehaviour
         ResetPair();Check(boss.TryBossMove(quad),"pause move starts");yield return new WaitForSeconds(.2f);float elapsed=boss.BossMoveElapsed;Time.timeScale=0;
         yield return new WaitForSecondsRealtime(.3f);Check(Mathf.Abs(boss.BossMoveElapsed-elapsed)<.001f&&strikes==0,"pause freezes timeline and hits");Time.timeScale=1;boss.Stagger(.3f);
         // Exercise the real browser K key against an armored tell.
-        ResetPair();Check(boss.TryBossMove(DojaehakMoves.Get("SideKick")),"browser heavy interrupt starts");input.GameplayEnabled=true;
+        ResetPair();Time.timeScale=.25f;Check(boss.TryBossMove(DojaehakMoves.Get("SideKick")),"browser heavy interrupt starts");input.GameplayEnabled=true;
         Debug.Log("DOJAEHAK_INPUT_READY");float inputTimeout=Time.time+12;
         while(boss.State==CombatActor.ActionState.ATTACK&&Time.time<inputTimeout)yield return null;
-        input.GameplayEnabled=false;Check(Time.time<inputTimeout&&boss.State==CombatActor.ActionState.HIT,"browser K interrupts boss windup");yield return new WaitForSeconds(.5f);
+        input.GameplayEnabled=false;Time.timeScale=1;Check(Time.time<inputTimeout&&boss.State==CombatActor.ActionState.HIT,"browser K interrupts boss windup");yield return new WaitForSeconds(.5f);
         ResetPair(4.5f);bossBody.useGravity=true;bossBody.constraints=RigidbodyConstraints.FreezeRotation;yield return new WaitForSeconds(.85f);int startedBefore=brain.PatternsStarted;owner.enabled=true;owner.Active=true;
         hp=player.Health.Current;float aiTimeout=Time.time+14;
         while(player.Health.Current>=hp&&Time.time<aiTimeout)yield return null;
