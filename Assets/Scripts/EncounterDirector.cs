@@ -135,7 +135,7 @@ public sealed class EncounterDirector : MonoBehaviour
             }
             CombatActor enemy = PrototypeBootstrap.CreateOpponent(name, spawn, player);
             enemy.GetComponent<DefeatedBody>().LifetimeAfterSettled=1.25f;
-            if(!boss)enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model("Minion"+((index+Area-1)%4+1));
+            if(!boss)enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model("Minion"+((index+Stage+Area-2)%4+1));
             enemy.ConfigureStats(boss ? SchoolCampaign.HP(Stage, true) : SchoolCampaign.EnemyHP(Stage, index),
                 SchoolCampaign.Damage(Stage, boss), Stage <= 4 ? .65f : .24f, .48f);
             enemy.TelegraphEnabled = SchoolCampaign.Telegraph(Stage);

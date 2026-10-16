@@ -80,12 +80,17 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
         Check(player.CanAct,"player controls restored for campaign");
         Debug.Log("CAMPAIGN_MINION_PREVIEW_READY");yield return new WaitForSeconds(.5f);
         var encounter=GetComponent<EncounterDirector>();player.Health.Infinite=true;
-        foreach(int stage in new[]{5,6,10,11})
+        foreach(int stage in new[]{2,5,6,10,11})
         {
             // Jump only in this fixture to real production late-stage spawning/cleanup.
             typeof(EncounterDirector).GetProperty("Stage").SetValue(encounter,stage);
             typeof(EncounterDirector).GetProperty("Area").SetValue(encounter,SchoolCampaign.IsBoss(stage)?SchoolCampaign.AreaCount(stage):1);
             typeof(EncounterDirector).GetMethod("StartArea",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(encounter,new object[]{true});
+            if(stage==2)
+            {
+                bool fourthSeen=false;foreach(var skin in FindObjectsByType<Minion1View>(FindObjectsSortMode.None))fourthSeen|=skin.ModelKind=="Minion4";
+                Check(fourthSeen,"fourth student appears by stage 1-2 despite three-enemy limit");
+            }
             if(stage==6)
             {
                 var kinds=new HashSet<string>();
