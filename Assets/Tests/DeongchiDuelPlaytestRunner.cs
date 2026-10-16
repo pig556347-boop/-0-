@@ -73,7 +73,10 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
         int alive=0;foreach(var actor in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
             if(actor.Team==1&&actor.Health.Alive)alive++;
         Check(alive>0,"campaign opponents spawn after duel");
-        Check(FindObjectsByType<Minion1View>(FindObjectsSortMode.None).Length==alive,"campaign ordinary opponents use supplied Minion1 skin");
+        Check(FindObjectsByType<Minion1View>(FindObjectsSortMode.None).Length==alive,"campaign ordinary opponents use supplied student skins");
+        bool firstSkin=false,secondSkin=false;foreach(var v in FindObjectsByType<Minion1View>(FindObjectsSortMode.None))
+        {firstSkin|=v.ModelKind=="Minion1";secondSkin|=v.ModelKind=="Minion2";}
+        Check(firstSkin&&secondSkin,"both supplied student variants spawn in real campaign");
         Check(player.CanAct,"player controls restored for campaign");
         Debug.Log("CAMPAIGN_MINION_PREVIEW_READY");yield return new WaitForSeconds(.5f);
         var encounter=GetComponent<EncounterDirector>();player.Health.Infinite=true;

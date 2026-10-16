@@ -25,6 +25,8 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
     }
     private IEnumerator Start()
     {
+        bool second=Application.absoluteURL.Contains("minionReview=2");
+        string kind=second?"Minion2":"Minion1";
         var camera=new GameObject("Minion test camera").AddComponent<Camera>();
         camera.transform.position=new Vector3(3,3,6);camera.transform.LookAt(Vector3.up);camera.orthographic=true;camera.orthographicSize=2.8f;
         var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.name="Classroom floor";floor.transform.position=new Vector3(0,-.5f,0);floor.transform.localScale=new Vector3(20,1,12);
@@ -35,11 +37,13 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
         var brain=enemy.GetComponent<EnemyBrain>();brain.Active=false;
         var body=enemy.GetComponent<Rigidbody>();body.useGravity=false;body.constraints=RigidbodyConstraints.FreezeAll;
         enemy.ConfigureStats(100,8,.2f,.3f);enemy.SetFacing(Vector3.back);
-        Check(enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model(),"supplied skin installed");
+        float windup=enemy.VisualWindup,recovery=enemy.VisualRecovery;
+        Check(enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model(kind),"supplied skin installed");
+        Check(enemy.VisualWindup==windup&&enemy.VisualRecovery==recovery,"skin attachment preserves attack timing");
         var view=enemy.GetComponentInChildren<Minion1View>();var skin=view.GetComponentInChildren<SkinnedMeshRenderer>();
         Check(skin.sharedMesh.triangles.Length==150000,"all 50000 source triangles retained");Check(skin.sharedMaterial.mainTexture!=null,"supplied texture loaded");
         foreach(var weight in skin.sharedMesh.boneWeights)Check(Mathf.Abs(weight.weight0+weight.weight1+weight.weight2+weight.weight3-1)<.005f,"normalized skin weights");
-        foreach(string clip in new[]{"PunchLeft","PunchRight","MmaKick","Kicking","Walking","FightingIdle","HitReaction","InwardBlock"})
+        foreach(string clip in second?new[]{"PunchLeft","PunchRight","MmaKick","Kicking","SideKick","Walking","FightingIdle","HitReaction","InwardBlock"}:new[]{"PunchLeft","PunchRight","MmaKick","Kicking","Walking","FightingIdle","HitReaction","InwardBlock"})
         {
             for(int frame=0;frame<=10;frame++)
             {
@@ -56,16 +60,20 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
                 float angle=Vector3.Angle(upper-elbow,hand-elbow);
                 Check(angle>(side=="Right"?165:125),"source elbow extension preserved "+clip+" "+angle);
             }
-            else if(clip=="MmaKick")view.Preview(clip,37/96f);
+            else if(clip=="MmaKick")view.Preview(clip,(second?39/95f:37/96f));
             else if(clip=="Kicking")view.Preview(clip,69/129f);
-            Debug.Log("MINION_PREVIEW_READY clip="+clip);yield return new WaitForSeconds(.4f);
+            else if(clip=="SideKick")view.Preview(clip,49/120f);
+            yield return new WaitForEndOfFrame();
+            Debug.Log("MINION_PREVIEW_READY clip="+clip);float previewTimeout=Time.time+12;
+            while(!Input.GetKeyDown(KeyCode.Return)&&Time.time<previewTimeout)yield return null;
+            Check(Time.time<previewTimeout,"browser captured exact preview "+clip);
         }
         view.ResumeRuntime();enemy.RestoreForTutorial();
-        for(int i=0;i<4;i++)
+        for(int i=0;i<(second?5:4);i++)
         {
             bool heavy=i>=2;Check(enemy.TryAttack(heavy),"real combat attack starts");
             Check(enemy.PunchStrike!=heavy,"kick heavy does not consume punch sequence");yield return new WaitForSeconds(.1f);
-            Check(view.CurrentMotion==(i==0?"PunchLeft":i==1?"PunchRight":i==2?"MmaKick":"Kicking"),"correct runtime attack selection "+i);
+            Check(view.CurrentMotion==(i==0?"PunchLeft":i==1?"PunchRight":i==2?"MmaKick":i==3?"Kicking":"SideKick"),"correct runtime attack selection "+i);
             yield return new WaitForSeconds(heavy?1:.6f);Check(enemy.CanAct,"attack returns control");
         }
         body.useGravity=true;body.constraints=RigidbodyConstraints.FreezeRotation;brain.MoveSpeed=1.6f;brain.ThinkInterval=.25f;brain.Active=true;
@@ -81,6 +89,26 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
         var corpse=enemy.GetComponent<DefeatedBody>();Check(corpse.Settled,"corpse settles");Check(corpse.TryBounds(out Bounds dead),"corpse actual mesh measured");
         Check(Mathf.Abs(dead.min.y-.015f)<.025f,"corpse rests on floor");Check(!enemy.GetComponent<Collider>().enabled,"corpse collision disabled");
         enemy.RestoreForTutorial();yield return new WaitForSeconds(.2f);Check(enemy.Health.Alive&&enemy.GetComponent<Collider>().enabled,"revival restores actor");
+        if(second)
+        {
+            // Exercise the real closer camera at both aspect ratios and room corners.
+            var rig=new GameObject("Close camera test rig");camera.transform.SetParent(rig.transform,false);
+            camera.transform.localRotation=Quaternion.Euler(35,0,0);
+            camera.transform.localPosition=Quaternion.Euler(35,0,0)*Vector3.back*20;
+            rig.AddComponent<ClassroomCameraFrame>().Initialize(camera,player);
+            foreach(float aspect in new[]{16/9f,4/3f})
+            {
+                camera.aspect=aspect;
+                foreach(Vector3 point in new[]{new Vector3(-12,1.05f,-7),new Vector3(12,1.05f,7),new Vector3(-12,1.05f,7),new Vector3(12,1.05f,-7)})
+                {
+                    player.transform.position=point;yield return new WaitForSeconds(1);
+                    Vector3 screen=camera.WorldToViewportPoint(point);
+                    Check(screen.x>.1f&&screen.x<.9f&&screen.y>.15f&&screen.y<.8f,"zoomed camera keeps player visible at corner "+point+" screen="+screen);
+                    Check(Mathf.Abs(rig.transform.position.x)<=4.01f&&Mathf.Abs(rig.transform.position.z)<=2.01f,"camera remains bounded to classroom");
+                }
+                Check(camera.orthographicSize<(aspect>1.5f?9.4f:11.25f),"zoom is closer than previous camera");
+            }
+        }
         Debug.Log("MINION_TEST_PASS checks="+checks);
     }
 }

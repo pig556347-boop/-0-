@@ -6,7 +6,9 @@ using UnityEngine;
 [DefaultExecutionOrder(210)]
 public sealed class Minion1View : MonoBehaviour
 {
-    private static AuthoredMotionLibrary attacks;
+    private static readonly Dictionary<string,AuthoredMotionLibrary> attackLibraries=new Dictionary<string,AuthoredMotionLibrary>();
+    private AuthoredMotionLibrary attacks;
+    public string ModelKind { get; private set; }="Minion1";
     private AuthoredMotionLibrary locomotion;
     private CombatActor actor;
     private Rigidbody body;
@@ -23,17 +25,18 @@ public sealed class Minion1View : MonoBehaviour
     public string CurrentMotion { get; private set; }
     public Transform ModelRoot => model;
     public Transform Bone(string name)=>bones[name];
-    public static bool TryBuild(PrototypeCharacterView owner,CombatActor actor)
+    public static bool TryBuild(PrototypeCharacterView owner,CombatActor actor,string modelKind="Minion1")
     {
-        var prefab=Resources.Load<GameObject>("Characters/Minion1/Minion1Model");
-        if(prefab==null)throw new InvalidOperationException("Supplied Minion1 model missing");
-        var view=owner.gameObject.AddComponent<Minion1View>();view.actor=actor;view.body=actor.GetComponent<Rigidbody>();
-        view.model=Instantiate(prefab,owner.transform,false).transform;view.model.name="Minion1 skin";
+        if(modelKind!="Minion1"&&modelKind!="Minion2")throw new ArgumentException("Unknown supplied minion model");
+        var prefab=Resources.Load<GameObject>("Characters/"+modelKind+"/"+modelKind+"Model");
+        if(prefab==null)throw new InvalidOperationException("Supplied "+modelKind+" model missing");
+        var view=owner.gameObject.AddComponent<Minion1View>();view.ModelKind=modelKind;view.actor=actor;view.body=actor.GetComponent<Rigidbody>();
+        view.model=Instantiate(prefab,owner.transform,false).transform;view.model.name=modelKind+" skin";
         view.model.localScale=Vector3.one;view.model.localRotation=Quaternion.identity;
         view.home=new Vector3(0,-.95f,0);view.model.localPosition=view.home;
         var importedSkin=view.model.GetComponentInChildren<SkinnedMeshRenderer>();
         float importedHeight=MeasuredHeight(importedSkin);
-        if(importedHeight<=.0001f)throw new InvalidOperationException("Minion1 imported skin bounds invalid");
+        if(importedHeight<=.0001f)throw new InvalidOperationException(modelKind+" imported skin bounds invalid");
         view.model.localScale*=1.85f/importedHeight;
         foreach(var animator in view.model.GetComponentsInChildren<Animator>())animator.enabled=false;
         foreach(var animation in view.model.GetComponentsInChildren<Animation>())animation.enabled=false;
@@ -44,25 +47,26 @@ public sealed class Minion1View : MonoBehaviour
             view.bones[name]=b;view.restWorld[name]=Quaternion.Inverse(view.model.rotation)*b.rotation;view.restLocal[i]=b.localRotation;
         }
         view.hips=view.bones["Hips"];view.hipHome=view.model.InverseTransformPoint(view.hips.position);view.sole=view.LowestFoot();
-        Debug.Log("MINION1_LAYOUT measuredRestHeight="+importedHeight+" scale="+view.model.lossyScale+" hip="+view.hipHome+" skinScale="+view.model.GetComponentInChildren<SkinnedMeshRenderer>().transform.lossyScale);
-        if(attacks==null)
+        Debug.Log(modelKind.ToUpperInvariant()+"_LAYOUT measuredRestHeight="+importedHeight+" scale="+view.model.lossyScale+" hip="+view.hipHome+" skinScale="+view.model.GetComponentInChildren<SkinnedMeshRenderer>().transform.lossyScale);
+        if(!attackLibraries.TryGetValue(modelKind,out view.attacks))
         {
-            var data=Resources.Load<TextAsset>("Characters/Minion1/Minion1PoseData");
-            if(data==null)throw new InvalidOperationException("Minion1 authored attack data missing");
-            attacks=AuthoredMotionLibrary.Read(data.bytes,4,33);
+            var data=Resources.Load<TextAsset>("Characters/"+modelKind+"/"+modelKind+"PoseData");
+            if(data==null)throw new InvalidOperationException(modelKind+" authored attack data missing");
+            view.attacks=AuthoredMotionLibrary.Read(data.bytes,modelKind=="Minion2"?5:4,modelKind=="Minion2"?41:33);
+            attackLibraries.Add(modelKind,view.attacks);
         }
-        foreach(string name in attacks.BoneNames)
-            if(!view.bones.ContainsKey(name.Substring(10)))throw new InvalidOperationException("Minion1 bone missing: "+name);
+        foreach(string name in view.attacks.BoneNames)
+            if(!view.bones.ContainsKey(name.Substring(10)))throw new InvalidOperationException(modelKind+" bone missing: "+name);
         view.locomotion=AuthoredMotionLibrary.Load();
         var material=new Material(Resources.Load<Shader>("Shaders/SchoolCharacter"));
-        var texture=Resources.Load<Texture2D>("Characters/Minion1/Minion1_BaseColor");
-        if(texture==null)throw new InvalidOperationException("Minion1 base color texture resource missing at runtime");
+        var texture=Resources.Load<Texture2D>("Characters/"+modelKind+"/"+modelKind+"_BaseColor");
+        if(texture==null)throw new InvalidOperationException(modelKind+" base color texture resource missing at runtime");
         material.mainTexture=texture;
         foreach(var renderer in view.model.GetComponentsInChildren<Renderer>())renderer.sharedMaterial=material;
         foreach(var skin in view.model.GetComponentsInChildren<SkinnedMeshRenderer>())skin.updateWhenOffscreen=true;
         actor.AttackPrepared+=view.OnAttack;actor.StrikeStarted+=()=>view.hitAt=Time.time;
         actor.Damaged+=result=>{if(result.Kind==SchoolRuleZero.DamageKind.Hit){view.started=Time.time;view.current="";}};
-        Debug.Log("MINION1_READY bones=33 weighted=true");return true;
+        Debug.Log(modelKind.ToUpperInvariant()+"_READY bones="+view.attacks.BoneNames.Length+" weighted=true");return true;
     }
     private static float MeasuredHeight(SkinnedMeshRenderer skin)
     {
@@ -81,7 +85,12 @@ public sealed class Minion1View : MonoBehaviour
     private void OnAttack()
     {
         started=Time.time;hitAt=-100;
-        attack=actor.HeavyStrike?(heavyIndex++%2==0?"MmaKick":"Kicking"):actor.PunchLeft?"PunchLeft":"PunchRight";
+        if(actor.HeavyStrike)
+        {
+            int index=heavyIndex++%(ModelKind=="Minion2"?3:2);
+            attack=index==0?"MmaKick":index==1?"Kicking":"SideKick";
+        }
+        else attack=actor.PunchLeft?"PunchLeft":"PunchRight";
         current="";
     }
     private float LowestFoot()
@@ -111,8 +120,8 @@ public sealed class Minion1View : MonoBehaviour
         {gait+=Time.deltaTime*Mathf.Clamp(speed/1.8f,.3f,2.2f);Play(locomotion,"Walking",gait%locomotion.Clips["Walking"].Length);}
         else {gait+=Time.deltaTime;Play(locomotion,"FightingIdle",gait%locomotion.Clips["FightingIdle"].Length);}
     }
-    private static float Impact(string name)
-    {return name=="PunchLeft"?34/60f:name=="PunchRight"?22/60f:name=="MmaKick"?37/60f:69/60f;}
+    private float Impact(string name)
+    {return name=="PunchLeft"?34/60f:name=="PunchRight"?22/60f:name=="SideKick"?49/60f:name=="MmaKick"?(ModelKind=="Minion2"?39:37)/60f:69/60f;}
     public void Preview(string name,float phase)
     {
         PreviewMode=true;current=name;transition=Time.time-1;

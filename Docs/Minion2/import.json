@@ -1,0 +1,47 @@
+[
+  {
+    "clip": "MmaKick",
+    "source": "20/tripo_convert_d62c748a-82c0-4a28-89a3-5286d3a04c66@Mma Kick.fbx",
+    "frames": 96,
+    "fps": 60,
+    "impactFrame": 39,
+    "maxElbowDegrees": null,
+    "weightedVertices": 24962
+  },
+  {
+    "clip": "SideKick",
+    "source": "SideKick/tripo_convert_d62c748a-82c0-4a28-89a3-5286d3a04c66@Side Kick.fbx",
+    "frames": 121,
+    "fps": 60,
+    "impactFrame": 49,
+    "maxElbowDegrees": null,
+    "weightedVertices": 24962
+  },
+  {
+    "clip": "PunchRight",
+    "source": "Punching/Punching.fbx",
+    "frames": 52,
+    "fps": 60,
+    "impactFrame": 22,
+    "maxElbowDegrees": 180.0,
+    "weightedVertices": 24996
+  },
+  {
+    "clip": "PunchLeft",
+    "source": "Punching (1)/Punching (1).fbx",
+    "frames": 63,
+    "fps": 60,
+    "impactFrame": 34,
+    "maxElbowDegrees": 142.17,
+    "weightedVertices": 24996
+  },
+  {
+    "clip": "Kicking",
+    "source": "Kicking/Kicking.fbx",
+    "frames": 130,
+    "fps": 60,
+    "impactFrame": 69,
+    "maxElbowDegrees": null,
+    "weightedVertices": 24996
+  }
+]

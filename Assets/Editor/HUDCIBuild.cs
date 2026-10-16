@@ -16,6 +16,9 @@ public static class HUDCIBuild
         var minion=Resources.Load<TextAsset>("Characters/Minion1/Minion1PoseData");
         if(minion==null)throw new System.InvalidOperationException("Minion1 motions missing");
         AuthoredMotionLibrary.Read(minion.bytes,4,33);
+        var minion2=Resources.Load<TextAsset>("Characters/Minion2/Minion2PoseData");
+        if(minion2==null)throw new System.InvalidOperationException("Minion2 motions missing");
+        AuthoredMotionLibrary.Read(minion2.bytes,5,41);
         PrototypeMenu.BuildForCI();
         var test=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);
         new GameObject("HUD Playtest").AddComponent<HUDPlaytestRunner>();

@@ -15,7 +15,7 @@ public sealed class CharacterModelImport : AssetPostprocessor
     }
     private void OnPreprocessTexture()
     {
-        if(!assetPath.StartsWith("Assets/Resources/Characters/Minion1/"))return;
+        if(!assetPath.StartsWith("Assets/Resources/Characters/Minion1/")&&!assetPath.StartsWith("Assets/Resources/Characters/Minion2/"))return;
         var importer=(TextureImporter)assetImporter;
         importer.textureType=TextureImporterType.Default;importer.maxTextureSize=2048;
         importer.mipmapEnabled=false;importer.textureCompression=TextureImporterCompression.Uncompressed;
@@ -23,19 +23,23 @@ public sealed class CharacterModelImport : AssetPostprocessor
     }
     public static void PrepareForBuild()
     {
-        const string texturePath="Assets/Resources/Characters/Minion1/Minion1_BaseColor.png";
-        var textureImporter=AssetImporter.GetAtPath(texturePath) as TextureImporter;
-        if(textureImporter==null)throw new System.InvalidOperationException("Minion1 texture importer missing");
-        textureImporter.textureType=TextureImporterType.Default;textureImporter.maxTextureSize=2048;
-        textureImporter.mipmapEnabled=false;textureImporter.textureCompression=TextureImporterCompression.Uncompressed;
-        textureImporter.sRGBTexture=true;textureImporter.alphaSource=TextureImporterAlphaSource.None;textureImporter.SaveAndReimport();
-        var texture=Resources.Load<Texture2D>("Characters/Minion1/Minion1_BaseColor");
-        if(texture==null)throw new System.InvalidOperationException("Minion1 texture resource missing before build");
-        Debug.Log("MINION1_TEXTURE_VALIDATED size="+texture.width+"x"+texture.height);
+        foreach(string kind in new[]{"Minion1","Minion2"})
+        {
+            string texturePath="Assets/Resources/Characters/"+kind+"/"+kind+"_BaseColor.png";
+            var textureImporter=AssetImporter.GetAtPath(texturePath) as TextureImporter;
+            if(textureImporter==null)throw new System.InvalidOperationException(kind+" texture importer missing");
+            textureImporter.textureType=TextureImporterType.Default;textureImporter.maxTextureSize=2048;
+            textureImporter.mipmapEnabled=false;textureImporter.textureCompression=TextureImporterCompression.Uncompressed;
+            textureImporter.sRGBTexture=true;textureImporter.alphaSource=TextureImporterAlphaSource.None;textureImporter.SaveAndReimport();
+            var texture=Resources.Load<Texture2D>("Characters/"+kind+"/"+kind+"_BaseColor");
+            if(texture==null)throw new System.InvalidOperationException(kind+" texture resource missing before build");
+            Debug.Log(kind.ToUpperInvariant()+"_TEXTURE_VALIDATED size="+texture.width+"x"+texture.height);
+        }
 
         foreach (string path in new[] { "Assets/Resources/Characters/Player/PlayerModel.fbx",
             "Assets/Resources/Characters/Deongchi/DeongchiModel.fbx",
-            "Assets/Resources/Characters/Minion1/Minion1Model.fbx" })
+            "Assets/Resources/Characters/Minion1/Minion1Model.fbx",
+            "Assets/Resources/Characters/Minion2/Minion2Model.fbx" })
         {
             ModelImporter importer = (ModelImporter)AssetImporter.GetAtPath(path);
             if (importer == null) throw new System.InvalidOperationException("Character FBX missing: " + path);
