@@ -1,0 +1,18 @@
+{
+  "commit": "ef1a250ace5a4eab82d990dcfc5628d6b672b71c",
+  "lobbyChecks": {
+    "responsive": true,
+    "language": true,
+    "volume": true,
+    "persistence": true,
+    "credits": true,
+    "explicitStart": true,
+    "returnToLobby": true
+  },
+  "restrictions": {
+    "jumpOnly": true,
+    "crouchOnly": true,
+    "heavyOnly": true
+  },
+  "errors": []
+}

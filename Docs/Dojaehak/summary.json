@@ -1,0 +1,139 @@
+{
+  "commit": "ef1a250ace5a4eab82d990dcfc5628d6b672b71c",
+  "executions": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "checks": 412
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "checks": 412
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "checks": 412
+    },
+    {
+      "width": 2560,
+      "height": 1080,
+      "checks": 412
+    }
+  ],
+  "authoredReviews": [
+    {
+      "review": 1,
+      "width": 1280,
+      "height": 720,
+      "checks": 623
+    },
+    {
+      "review": 2,
+      "width": 1024,
+      "height": 768,
+      "checks": 623
+    }
+  ],
+  "authoredReady": true,
+  "openingSitting": true,
+  "openingStanding": true,
+  "sittingSeen": true,
+  "standingSeen": true,
+  "jumpStages": [
+    "Grounded",
+    "Rising",
+    "Falling",
+    "Landing"
+  ],
+  "lobbyChecks": {
+    "responsive": true,
+    "language": true,
+    "volume": true,
+    "persistence": true,
+    "credits": true,
+    "explicitStart": true,
+    "returnToLobby": true
+  },
+  "restrictions": {
+    "jumpOnly": true,
+    "crouchOnly": true,
+    "heavyOnly": true
+  },
+  "heavyAttack": true,
+  "visualChecks": {
+    "wallLumaRange": 1.3569999999999993,
+    "boardGreenFraction": 1
+  },
+  "classroomReady": true,
+  "playerReady": true,
+  "deongchiReady": true,
+  "hookReady": true,
+  "lastTutorialRole": "TUTORIAL_ROLE step=Guard infinite=True\n",
+  "runtimeErrors": [],
+  "audioChecks": {
+    "lobbyRms": 0.05169210139511993,
+    "contexts": {
+      "meters": 2,
+      "states": [
+        {
+          "state": "running",
+          "time": 8.991927437641724
+        },
+        {
+          "state": "running",
+          "time": 3.9415873015873015
+        }
+      ],
+      "gains": [
+        0.550000011920929,
+        0.75
+      ],
+      "sources": [
+        {
+          "loop": true,
+          "duration": 21.333333333333332,
+          "rate": 1,
+          "rms": 0.03975151064228728
+        },
+        {
+          "loop": false,
+          "duration": 0.08997732426303855,
+          "rate": 1,
+          "rms": 0.07360832207302448
+        },
+        {
+          "loop": false,
+          "duration": 0.08997732426303855,
+          "rate": 1,
+          "rms": 0.07360832207302448
+        },
+        {
+          "loop": false,
+          "duration": 0.08997732426303855,
+          "rate": 1,
+          "rms": 0.07360832207302448
+        }
+      ]
+    },
+    "mutedRms": 0,
+    "musicMute": true,
+    "battleRms": 0.01355607858019752,
+    "events": [
+      "LobbyMusic",
+      "Menu",
+      "BattleMusic",
+      "Down",
+      "Success",
+      "Whoosh",
+      "Hit"
+    ],
+    "pauseRms": 0,
+    "resumeRms": 0.012847787431674224,
+    "pauseResume": true
+  },
+  "fullscreen": true,
+  "resize": true,
+  "closeClassroomCamera": true
+}
