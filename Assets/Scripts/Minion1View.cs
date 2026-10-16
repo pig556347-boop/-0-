@@ -29,7 +29,7 @@ public sealed class Minion1View : MonoBehaviour
     public Transform Bone(string name)=>bones[name];
     public static bool TryBuild(PrototypeCharacterView owner,CombatActor actor,string modelKind="Minion1")
     {
-        if(modelKind!="Minion1"&&modelKind!="Minion2"&&modelKind!="Minion3")throw new ArgumentException("Unknown supplied minion model");
+        if(modelKind!="Minion1"&&modelKind!="Minion2"&&modelKind!="Minion3"&&modelKind!="Minion4")throw new ArgumentException("Unknown supplied minion model");
         var prefab=Resources.Load<GameObject>("Characters/"+modelKind+"/"+modelKind+"Model");
         if(prefab==null)throw new InvalidOperationException("Supplied "+modelKind+" model missing");
         var view=owner.gameObject.AddComponent<Minion1View>();view.ModelKind=modelKind;view.actor=actor;view.body=actor.GetComponent<Rigidbody>();
@@ -54,7 +54,7 @@ public sealed class Minion1View : MonoBehaviour
         {
             var data=Resources.Load<TextAsset>("Characters/"+modelKind+"/"+modelKind+"PoseData");
             if(data==null)throw new InvalidOperationException(modelKind+" authored attack data missing");
-            view.attacks=AuthoredMotionLibrary.Read(data.bytes,modelKind=="Minion2"?5:4,modelKind=="Minion1"?33:41);
+            view.attacks=AuthoredMotionLibrary.Read(data.bytes,modelKind=="Minion2"?5:4,modelKind=="Minion1"||modelKind=="Minion4"?33:41);
             attackLibraries.Add(modelKind,view.attacks);
         }
         foreach(string name in view.attacks.BoneNames)
@@ -91,6 +91,7 @@ public sealed class Minion1View : MonoBehaviour
         if(actor.HeavyStrike)
         {
             if(ModelKind=="Minion3")attack="Kicking";
+            else if(ModelKind=="Minion4")attack="MmaKick";
             else
             {
                 int index=heavyIndex++%(ModelKind=="Minion2"?3:2);
@@ -131,7 +132,7 @@ public sealed class Minion1View : MonoBehaviour
         else {gait+=Time.deltaTime;Play(locomotion,"FightingIdle",gait%locomotion.Clips["FightingIdle"].Length);}
     }
     private float Impact(string name)
-    {return name=="PunchLeft"?34/60f:name=="PunchRight"?(ModelKind=="Minion3"?34:22)/60f:name=="SideKick"?49/60f:name=="MmaKick"?(ModelKind=="Minion2"?39:37)/60f:69/60f;}
+    {return name=="PunchLeft"?34/60f:name=="PunchRight"?(ModelKind=="Minion3"?34:22)/60f:name=="SideKick"?49/60f:name=="MmaKick"?(ModelKind=="Minion2"?39:ModelKind=="Minion4"?38:37)/60f:69/60f;}
     public void Preview(string name,float phase)
     {
         PreviewMode=true;current=name;transition=Time.time-1;

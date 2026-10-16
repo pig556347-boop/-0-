@@ -86,6 +86,12 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
             typeof(EncounterDirector).GetProperty("Stage").SetValue(encounter,stage);
             typeof(EncounterDirector).GetProperty("Area").SetValue(encounter,SchoolCampaign.IsBoss(stage)?SchoolCampaign.AreaCount(stage):1);
             typeof(EncounterDirector).GetMethod("StartArea",BindingFlags.Instance|BindingFlags.NonPublic).Invoke(encounter,new object[]{true});
+            if(stage==6)
+            {
+                var kinds=new HashSet<string>();
+                foreach(var skin in FindObjectsByType<Minion1View>(FindObjectsSortMode.None))kinds.Add(skin.ModelKind);
+                Check(kinds.SetEquals(new[]{"Minion1","Minion2","Minion3","Minion4"}),"all four supplied student skins coexist in real campaign");
+            }
             var defeated=new List<CombatActor>();int expected=SchoolCampaign.EnemyCount(stage,encounter.Area);
             float until=Time.time+5;
             while(defeated.Count<expected&&Time.time<until)

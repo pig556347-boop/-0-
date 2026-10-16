@@ -1,0 +1,64 @@
+{
+  "reviews": [
+    {
+      "review": 1,
+      "clip": "PunchRight",
+      "samples": 11,
+      "maxExtent": 1.7031900063157082,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "PunchLeft",
+      "samples": 11,
+      "maxExtent": 1.7298952981363982,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "MmaKick",
+      "samples": 11,
+      "maxExtent": 1.7377424528822303,
+      "passed": true
+    },
+    {
+      "review": 1,
+      "clip": "Walking",
+      "samples": 11,
+      "maxExtent": 1.83781004184857,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "PunchRight",
+      "samples": 21,
+      "maxExtent": 1.7031900063157082,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "PunchLeft",
+      "samples": 21,
+      "maxExtent": 1.73007417737972,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "MmaKick",
+      "samples": 21,
+      "maxExtent": 1.7487347916467115,
+      "passed": true
+    },
+    {
+      "review": 2,
+      "clip": "Walking",
+      "samples": 21,
+      "maxExtent": 1.8436245541088283,
+      "passed": true
+    }
+  ],
+  "elbows": {
+    "PunchLeft": 142.16865270576622,
+    "PunchRight": 180.00000500895632
+  }
+}

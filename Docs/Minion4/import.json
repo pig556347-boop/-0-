@@ -1,0 +1,38 @@
+[
+  {
+    "clip": "PunchRight",
+    "source": "Punching/tripo_convert_c00cfc1e-4466-42b7-90cf-97b1dd027d3f@Punching.fbx",
+    "frames": 52,
+    "fps": 60,
+    "impactFrame": 22,
+    "maxElbowDegrees": 180.0,
+    "weightedVertices": 25000
+  },
+  {
+    "clip": "PunchLeft",
+    "source": "Punching (1)/tripo_convert_c00cfc1e-4466-42b7-90cf-97b1dd027d3f@Punching (1).fbx",
+    "frames": 63,
+    "fps": 60,
+    "impactFrame": 34,
+    "maxElbowDegrees": 142.17,
+    "weightedVertices": 25000
+  },
+  {
+    "clip": "MmaKick",
+    "source": "Mma Kick/tripo_convert_c00cfc1e-4466-42b7-90cf-97b1dd027d3f@Mma Kick.fbx",
+    "frames": 121,
+    "fps": 60,
+    "impactFrame": 38,
+    "maxElbowDegrees": null,
+    "weightedVertices": 25000
+  },
+  {
+    "clip": "Walking",
+    "source": "Walking/tripo_convert_c00cfc1e-4466-42b7-90cf-97b1dd027d3f@Walking.fbx",
+    "frames": 62,
+    "fps": 60,
+    "impactFrame": 56,
+    "maxElbowDegrees": null,
+    "weightedVertices": 25000
+  }
+]

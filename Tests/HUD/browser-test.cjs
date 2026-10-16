@@ -5,11 +5,11 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
-    for(const variant of [1,2,3]){
+    for(const variant of [1,2,3,4]){
     const minionPage=await browser.newPage({viewport:{width:1280,height:720}});
     let minionPassed=false,minionChecks=0;const minionErrors=[],minionPreviews=[],minionMetrics=[];
     minionPage.on('console',msg=>{const s=msg.text();
-      if(/MINION[123]_LAYOUT/.test(s))minionMetrics.push(s);
+      if(/MINION[1234]_LAYOUT/.test(s))minionMetrics.push(s);
       if(s.includes('MINION_PREVIEW_READY'))minionPreviews.push(s.match(/clip=(\w+)/)[1]);
       if(s.includes('MINION_TEST_PASS')){minionPassed=true;minionChecks=Number(s.match(/checks=(\d+)/)[1]);}
       if(/MINION_TEST_FAIL|Exception/.test(s))minionErrors.push(s);});
