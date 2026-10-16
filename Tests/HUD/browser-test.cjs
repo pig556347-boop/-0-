@@ -5,22 +5,24 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    for(const variant of [1,2]){
     const minionPage=await browser.newPage({viewport:{width:1280,height:720}});
     let minionPassed=false,minionChecks=0;const minionErrors=[],minionPreviews=[],minionMetrics=[];
     minionPage.on('console',msg=>{const s=msg.text();
-      if(s.includes('MINION1_LAYOUT'))minionMetrics.push(s);
+      if(/MINION[12]_LAYOUT/.test(s))minionMetrics.push(s);
       if(s.includes('MINION_PREVIEW_READY'))minionPreviews.push(s.match(/clip=(\w+)/)[1]);
       if(s.includes('MINION_TEST_PASS')){minionPassed=true;minionChecks=Number(s.match(/checks=(\d+)/)[1]);}
       if(/MINION_TEST_FAIL|Exception/.test(s))minionErrors.push(s);});
     minionPage.on('pageerror',e=>minionErrors.push(String(e)));
-    await minionPage.goto('http://127.0.0.1:8780/HUDTest/?minionReview=1');
-    for(let i=0;i<320&&!minionPassed&&!minionErrors.length;i++){
-      while(minionPreviews.length)await minionPage.screenshot({path:'hud-test-results/minion-'+minionPreviews.shift()+'.png'});
+    await minionPage.goto('http://127.0.0.1:8780/HUDTest/?minionReview='+variant);
+    for(let i=0;i<800&&!minionPassed&&!minionErrors.length;i++){
+      while(minionPreviews.length){const clip=minionPreviews.shift();await minionPage.screenshot({path:'hud-test-results/minion'+variant+'-'+clip+'.png'});await minionPage.keyboard.press('Enter',{delay:80});}
       await minionPage.waitForTimeout(150);
     }
-    if(!minionPassed||minionErrors.length){await minionPage.screenshot({path:'hud-test-results/minion-failed.png'});throw Error('Minion1 test failed: '+minionErrors.join(' ')+' '+minionMetrics.join(' '));}
-    fs.writeFileSync('hud-test-results/minion1.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:minionChecks,passed:true},null,2));
+    if(!minionPassed||minionErrors.length){await minionPage.screenshot({path:'hud-test-results/minion'+variant+'-failed.png'});throw Error('Minion'+variant+' test failed: '+minionErrors.join(' ')+' '+minionMetrics.join(' '));}
+    fs.writeFileSync('hud-test-results/minion'+variant+'.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:minionChecks,passed:true},null,2));
     await minionPage.close();
+    }
     const punchPage=await browser.newPage({viewport:{width:1280,height:720}});
     let punchPassed=false,punchChecks=0,punchInput=false;const punchErrors=[],punchPreviews=[];
     punchPage.on('console',msg=>{const s=msg.text();
@@ -287,7 +289,7 @@ const { PNG } = require('pngjs');
     if(Math.abs(resized.width-1280)>1||Math.abs(resized.height-720)>1)throw Error('Game canvas does not resize with viewport');
     await live.setViewportSize({width:1024,height:768});
     await live.waitForTimeout(500);
-    if(!motion||Math.abs(motion.cameraSize-11.25)>.01)throw Error('Fixed room does not fit a 4:3 viewport');
+    if(!motion||Math.abs(motion.cameraSize-9.375)>.01)throw Error('Close room framing does not fit a 4:3 viewport');
     await live.setViewportSize({width:1920,height:1080});
     await live.waitForTimeout(500);
     await live.locator('canvas').click();
@@ -295,8 +297,8 @@ const { PNG } = require('pngjs');
     const cameraOrigin=[motion.cameraX,motion.cameraY,motion.cameraZ];
     await live.keyboard.down('d');await live.waitForTimeout(800);
     await live.screenshot({path:'hud-test-results/motion-walk.png'});await live.keyboard.up('d');
-    if(!motion||Math.abs(motion.cameraSize-9.4)>.01||motion.sx<.1||motion.sx>.9||motion.sy<.15||motion.sy>.8)throw Error('Fixed classroom camera lost player: '+JSON.stringify(motion));
-    if([motion.cameraX,motion.cameraY,motion.cameraZ].some((v,i)=>Math.abs(v-cameraOrigin[i])>.001))throw Error('Classroom camera followed player movement');
+    if(!motion||Math.abs(motion.cameraSize-7.5)>.01||motion.sx<.1||motion.sx>.9||motion.sy<.15||motion.sy>.8)throw Error('Close classroom camera lost player: '+JSON.stringify(motion));
+    if([motion.cameraX,motion.cameraY,motion.cameraZ].some((v,i)=>Math.abs(v-cameraOrigin[i])>.001))throw Error('Camera moved inside the central dead zone');
     for(let i=0;i<60&&(!motion||motion.tutorialStep!=='Jump');i++)await live.waitForTimeout(100);
     if(!motion||motion.tutorialStep!=='Jump')throw Error('Move did not advance to Jump lesson');
     const jumpOrigin=[motion.px,motion.pz];
@@ -368,8 +370,8 @@ const { PNG } = require('pngjs');
     // Probe unobstructed wall/board interiors in the fixed room view. This catches
     // the large triangle patches and white texture contamination seen previously.
     function roomPixel(x,y,z) {
-      const sx=Math.round((.5+x/(2*9.4*(pixels.width/pixels.height)))*pixels.width);
-      const sy=Math.round((.5-((y-3.2)*Math.cos(35*Math.PI/180)+z*Math.sin(35*Math.PI/180))/(2*9.4))*pixels.height);
+      const sx=Math.round((.5+(x-motion.cameraX)/(2*motion.cameraSize*(pixels.width/pixels.height)))*pixels.width);
+      const sy=Math.round((.5-((y-motion.cameraY)*Math.cos(35*Math.PI/180)+(z-motion.cameraZ)*Math.sin(35*Math.PI/180))/(2*motion.cameraSize))*pixels.height);
       const i=(sy*pixels.width+sx)*4;return [...pixels.data.slice(i,i+3)];
     }
     const wallLuma=[],boardColors=[];
@@ -412,7 +414,7 @@ const { PNG } = require('pngjs');
     if(runtimeErrors.length)throw Error('Runtime errors after returning to lobby: '+runtimeErrors.join(' '));
     fs.mkdirSync('build/WebGL/verification',{recursive:true});
     fs.writeFileSync('hud-test-results/audio.json',JSON.stringify({commit:process.env.GITHUB_SHA,...audioChecks},null,2));
-    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],lobbyChecks,restrictions,heavyAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,audioChecks,fullscreen:true,resize:true,fixedClassroomCamera:true},null,2));
+    fs.writeFileSync('hud-test-results/summary.json',JSON.stringify({commit:process.env.GITHUB_SHA,executions,authoredReviews,authoredReady,openingSitting,openingStanding,sittingSeen,standingSeen,jumpStages:[...jumpStages],lobbyChecks,restrictions,heavyAttack,visualChecks,classroomReady,playerReady,deongchiReady,hookReady,lastTutorialRole,runtimeErrors,audioChecks,fullscreen:true,resize:true,closeClassroomCamera:true},null,2));
     for(const name of ['production-hud.png','motion-walk.png','motion-crouch.png','motion-kick.png','hook-turn.png','hook-impact.png','hook-ready.png','fight-ready.png','fight-stride.png','fight-roundhouse.png','deongchi-ready.png','deongchi-stride.png','deongchi-jab.png','deongchi-cross.png','authored-review-1.png','authored-review-2.png','authored-FightingIdle.png','authored-RoundhouseKick.png','authored-MmaKick1.png','authored-CenterBlock.png','authored-Jumping1.png','authored-Sitting.png','authored-Stunned.png','summary.json'])
       fs.copyFileSync('hud-test-results/'+name,'build/WebGL/verification/'+name);
     console.log('::notice::Production player model loaded; move/crouch/jump/attack input exercised with no runtime exceptions');
