@@ -20,7 +20,7 @@
 
 검사 기록:
 
-- `node Tools/test_audio_mixer.cjs` 통과: 곡 중복 재시작 방지, 보스 곡 선택, 6개 보이스 제한, 우선순위, Esc 정지·위치 보존 재개, 독립 음소거, 종료 중 디코드 취소.
+- `node Tools/test_audio_mixer.cjs` 통과: 곡 중복 재시작 방지, 보스 곡 선택, 6개 보이스 제한, 우선순위, Esc 정지·위치 보존 재개, 곡 전환 페이드 중 즉시 정지, 독립 음소거, 종료 중 디코드 취소.
 - `node --check < Assets/Plugins/WebGL/KickBackAudio.jslib` 통과.
 - WAV 18개 전체 32 kHz / 16-bit PCM 검사 통과. 음악은 스테레오, 효과음은 모노. 최대 원본 피크 0.61, 잘린 샘플 0개, 끝과 시작 간 샘플 차이 0.
 - 음악 RMS: 로비 0.05197, 일반전 0.05805, 도재학 0.06491. 파일별 수치는 `Assets/Resources/Audio/audit.json`에 기록.
