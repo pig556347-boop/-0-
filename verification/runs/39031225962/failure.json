@@ -1,0 +1,4 @@
+{
+  "commit": "efe14727f7016b2242f5ae2a6d523b55a00364a0",
+  "error": "Error: HUD runtime test failed 2560x1080: HUD_TEST_FAIL real kick extends chambered knee at impact\n\nException: real kick extends chambered knee at impact\n  at HUDPlaytestRunner.Check (System.Boolean pass, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
