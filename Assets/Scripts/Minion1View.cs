@@ -126,13 +126,17 @@ public sealed class Minion1View : MonoBehaviour
         {Play(locomotion,"HitReaction",Mathf.Clamp01((Time.time-started)/.25f)*.6f);return;}
         if(actor.State==CombatActor.ActionState.GUARD)
         {Play(locomotion,"InwardBlock",.5f);return;}
-        float speed=new Vector2(body.linearVelocity.x,body.linearVelocity.z).magnitude;
-        if(speed>.15f&&actor.State==CombatActor.ActionState.IDLE)
+        Vector3 planar=new Vector3(body.linearVelocity.x,0,body.linearVelocity.z);float speed=planar.magnitude;
+        if(speed>.15f&&(actor.State==CombatActor.ActionState.IDLE||actor.State==CombatActor.ActionState.DODGE))
         {
-            string clip=ModelKind=="Dojaehak"&&speed>2.8f?"RunForward":"Walking";
+            // Facing stays on the target while feet use the supplied side/back steps instead of sliding a forward walk.
+            Vector3 local=Quaternion.Inverse(Quaternion.LookRotation(actor.Facing))*planar;
+            string clip=Mathf.Abs(local.x)>Mathf.Abs(local.z)*1.3f?(local.x<0?"LeftStrafe":"RightStrafe"):
+                local.z<-.15f?"WalkingBackwards":ModelKind=="Dojaehak"&&speed>2.8f?"RunForward":"Walking";
             var walking=attacks.Clips.ContainsKey(clip)?attacks:locomotion;
-            float sign=ModelKind=="Dojaehak"&&Vector3.Dot(new Vector3(body.linearVelocity.x,0,body.linearVelocity.z),actor.Facing)<0?-1:1;
-            gait+=sign*Time.deltaTime*Mathf.Clamp(speed/(clip=="RunForward"?3.8f:1.8f),.3f,2.2f);Play(walking,clip,Mathf.Repeat(gait,walking.Clips[clip].Length));
+            float sourceSpeed=clip=="RunForward"?3.8f:clip=="Walking"?1.8f:clip=="WalkingBackwards"?1.11f:3.5f;
+            gait+=Time.deltaTime*Mathf.Clamp(speed/sourceSpeed,0,2.5f);
+            Play(walking,clip,Mathf.Repeat(gait,walking.Clips[clip].Length));
         }
         else {gait+=Time.deltaTime;Play(locomotion,"FightingIdle",gait%locomotion.Clips["FightingIdle"].Length);}
     }

@@ -83,6 +83,31 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
             Check(Vector3.Dot(view.Bone("RightHand").position-view.Bone("LeftHand").position,view.ModelRoot.forward)>.15f,"mirrored punch reaches with right hand");
         }
         view.ResumeRuntime();enemy.RestoreForTutorial();
+        // Exercise target-facing locomotion on each actual supplied skin, including blends into side/back steps.
+        Vector3 locomotionOrigin=enemy.transform.position;Quaternion locomotionFacing=Quaternion.LookRotation(enemy.Facing);
+        body.constraints=RigidbodyConstraints.FreezeRotation;
+        string[] directions={"LeftStrafe","RightStrafe","WalkingBackwards"};
+        Vector3[] localVelocities={Vector3.left*3.5f,Vector3.right*3.5f,Vector3.back*1.11f};
+        for(int direction=0;direction<directions.Length;direction++)
+        {
+            for(int sample=0;sample<=10;sample++)
+            {
+                body.linearVelocity=locomotionFacing*localVelocities[direction];Vector3 poseRoot=enemy.transform.position;
+                // Invoke the real selector before a physics step so root preservation is measured independently from translation.
+                view.SendMessage("LateUpdate",SendMessageOptions.RequireReceiver);context=directions[direction]+" runtime="+sample;
+                Check(view.CurrentMotion==directions[direction],"target-facing movement selects supplied direction "+context);
+                var bounds=SkinBounds(skin,poseRoot);Check(bounds.size.y>.6f&&bounds.size.y<2.3f,"directional locomotion keeps human proportions "+context);
+                Check(enemy.transform.position==poseRoot,"directional pose never moves physics root "+context);yield return null;
+            }
+        }
+        body.linearVelocity=Vector3.zero;
+        Check(enemy.TryDodge(locomotionFacing*Vector3.right),"real lateral dodge starts on supplied skin");yield return new WaitForSeconds(.06f);
+        Check(view.CurrentMotion=="RightStrafe","lateral dodge uses supplied side step instead of forward walking");
+        Vector3 dodgeRoot=enemy.transform.position;view.SendMessage("LateUpdate",SendMessageOptions.RequireReceiver);context="lateral dodge";SkinBounds(skin,dodgeRoot);
+        Check(enemy.transform.position==dodgeRoot,"lateral dodge pose preserves its physics root");yield return new WaitForSeconds(.32f);
+        Check(enemy.CanAct,"lateral dodge returns control");
+        body.linearVelocity=Vector3.zero;body.position=locomotionOrigin;enemy.transform.position=locomotionOrigin;body.constraints=RigidbodyConstraints.FreezeAll;
+        Physics.SyncTransforms();enemy.RestoreForTutorial();Debug.Log("MINION_LOCOMOTION_PASS kind="+kind+" directions=LeftStrafe,RightStrafe,WalkingBackwards dodge=RightStrafe");
         for(int i=0;i<(second?5:4);i++)
         {
             bool heavy=i>=2;Check(enemy.TryAttack(heavy),"real combat attack starts");float attackDuration=enemy.VisualWindup+enemy.VisualRecovery;

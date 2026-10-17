@@ -10,27 +10,43 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
     private CombatActor player,target,extraA,extraB;
     private CombatInput input;
     private int checks,strikes,hits;
+    private string phase="startup",lastPassed="none";
+    private bool reportingException;
     private readonly List<float> preparedTimes=new List<float>();
     private readonly List<int> preparedCombo=new List<int>();
     private void Check(bool value,string label)
     {
         if(!value){Debug.LogError("BALANCE_TEST_FAIL "+label);throw new Exception(label);}
-        checks++;
+        checks++;lastPassed=label;Debug.Log("BALANCE_CHECK n="+checks+" "+label);
+    }
+    private void Trace(string label){phase=label;Debug.Log("BALANCE_STEP "+label);}
+    private void OnEnable(){Application.logMessageReceived+=ReportException;}
+    private void OnDisable(){Application.logMessageReceived-=ReportException;}
+    private void ReportException(string message,string stack,LogType kind)
+    {
+        if(kind!=LogType.Exception||reportingException)return;
+        reportingException=true;
+        Debug.LogError("BALANCE_TEST_FAIL exception phase="+phase+" passedChecks="+checks+" last="+lastPassed+" exception="+message);
+        reportingException=false;
     }
     private CombatActor Actor(string name,int team,Vector3 point,bool visual)
     {
+        Trace("create "+name);
         var root=new GameObject(name);root.transform.position=point;
         if(team==0)input=root.AddComponent<CombatInput>();
         CombatActor actor=root.AddComponent<CombatActor>();actor.Configure(team);actor.ConfigureStats(500,12,.52f,.52f);
         Rigidbody body=actor.GetComponent<Rigidbody>();body.useGravity=false;body.constraints=RigidbodyConstraints.FreezeAll;
         if(visual)
         {
+            Trace("build model "+name);
             var model=new GameObject("Visual");model.transform.SetParent(root.transform,false);
             var view=model.AddComponent<PrototypeCharacterView>();view.Build(actor);
             if(team!=0)view.UseDeongchiModel();
-            root.AddComponent<CombatVisualFeedback>();root.AddComponent<CombatAudioEmitter>();
+            Trace("attach contact feedback "+name);root.AddComponent<CombatVisualFeedback>();
+            Trace("attach audio emitter "+name);root.AddComponent<CombatAudioEmitter>();
             actor.HitConfirmed+=CombatEffects.Instance.OnHit;
         }
+        Trace("created "+name);
         return actor;
     }
     private void Place(CombatActor actor,Vector3 point)
@@ -67,6 +83,7 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
     private IEnumerator Start()
     {
         // Keep sub-frame startup assertions meaningful on software-rendered CI.
+        Trace("camera and fixture scenery");
         float previousMaximumDelta=Time.maximumDeltaTime;Time.maximumDeltaTime=.05f;
         var camera=new GameObject("Balance camera").AddComponent<Camera>();camera.tag="MainCamera";
         camera.transform.position=new Vector3(3.6f,4.1f,-7);camera.transform.LookAt(new Vector3(.6f,1.2f,0));
@@ -76,14 +93,16 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
         light.transform.rotation=Quaternion.Euler(45,-35,0);light.intensity=1.1f;
         var floor=GameObject.CreatePrimitive(PrimitiveType.Cube);floor.name="Classroom floor";
         floor.transform.position=new Vector3(0,-.5f,0);floor.transform.localScale=new Vector3(24,1,12);
-        gameObject.AddComponent<CombatEffects>();gameObject.AddComponent<GameAudioChannels>();
+        Trace("contact effects");gameObject.AddComponent<CombatEffects>();
+        Trace("audio channels");gameObject.AddComponent<GameAudioChannels>();
         player=Actor("Balance player",0,Vector3.up,true);target=Actor("Balance target",1,new Vector3(1.3f,1,0),true);
         extraA=Actor("Second target",1,new Vector3(8,1,0),false);extraB=Actor("Third target",1,new Vector3(10,1,0),false);
         player.StrikeStarted+=()=>strikes++;
         player.HitConfirmed+=(source,victim,point)=>hits++;
         player.AttackPrepared+=()=>{preparedTimes.Add(Time.time);preparedCombo.Add(player.BasicComboHit);};
-        ResetPair();yield return null;
+        Trace("first fixture reset");ResetPair();yield return null;
 
+        Trace("J and I shared recovery");
         Check(player.TryAttack(false),"J starts");RejectOtherOffense("J windup cannot be cancelled by J K I Q");
         yield return new WaitForSeconds(.12f);Check(target.Health.Current==500,"J startup cannot hit early");
         yield return new WaitForSeconds(.15f);Check(target.Health.Current==490&&hits==1,"J first kick deals ten exactly once");
@@ -94,7 +113,7 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
         yield return new WaitForSeconds(.20f);Check(target.Health.Current==483,"I first punch deals seven");
         while(!player.CanAct)yield return null;RejectOtherOffense("I end gap covers every offensive key");yield return Ready();
 
-        ResetPair();Check(player.TryAttack(true),"K starts");float heavyStarted=Time.time;
+        Trace("K startup and reuse");ResetPair();Check(player.TryAttack(true),"K starts");float heavyStarted=Time.time;
         yield return new WaitForSeconds(.32f);Check(target.Health.Current==500,"K gives a readable startup");
         RejectOtherOffense("K startup cannot be cancelled into a faster attack");
         yield return new WaitForSeconds(.15f);Check(target.Health.Current==470&&strikes==1,"K deals thirty with one strike");
@@ -106,12 +125,12 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
         while(player.HeavyRemaining>0)yield return null;
         Check(player.TryAttack(true),"K becomes usable after reuse deadline");yield return Ready();
 
-        ResetPair();Place(extraA,new Vector3(1.3f,1,.35f));Place(extraB,new Vector3(1.3f,1,-.35f));Physics.SyncTransforms();
+        Trace("multi target meter");ResetPair();Place(extraA,new Vector3(1.3f,1,.35f));Place(extraB,new Vector3(1.3f,1,-.35f));Physics.SyncTransforms();
         Check(player.TryAttack(false),"multi target J starts");yield return new WaitForSeconds(.28f);
         Check(hits==3&&target.Health.Current==490&&extraA.Health.Current==490&&extraB.Health.Current==490,"one real hitbox damages all three once");
         Check(Mathf.Abs(player.Progress.Gauge-8)<.01f,"three targets cannot multiply meter gain");yield return Ready();
 
-        ResetPair();Place(extraA,new Vector3(1.3f,1,.35f));Place(extraB,new Vector3(1.3f,1,-.35f));Physics.SyncTransforms();
+        Trace("same frame parry cancellation");ResetPair();Place(extraA,new Vector3(1.3f,1,.35f));Place(extraB,new Vector3(1.3f,1,-.35f));Physics.SyncTransforms();
         int simultaneousParries=0;Action countParry=()=>simultaneousParries++;
         target.Parried+=countParry;extraA.Parried+=countParry;extraB.Parried+=countParry;
         Check(player.TryAttack(false),"crowd parry cancellation starts");yield return new WaitForSeconds(.12f);
@@ -122,6 +141,7 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
 
         for(int tier=1;tier<=3;tier++)
         {
+            Trace("Q tier "+tier);
             ResetPair();player.Progress.ConfirmHit(Time.time,gain:tier==1?33:tier==2?66:100);
             Check(player.TryUltimate(),"Q starts tier="+tier);
             if(tier==2){yield return new WaitForSeconds(.2f);player.ReceiveHit(new HitRequest(target.gameObject,8,Vector3.left));}
@@ -138,10 +158,10 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
             Check(!player.TryUltimate(),"refilling meter does not bypass Q reuse tier="+tier);
             Check(player.Progress.Gauge==100,"blocked test attempts do not spend prefilled meter");
         }
-        ResetPair();player.Progress.ConfirmHit(Time.time,gain:66);Check(player.TryUltimate(),"counter Q miss starts");
+        Trace("counter Q miss");ResetPair();player.Progress.ConfirmHit(Time.time,gain:66);Check(player.TryUltimate(),"counter Q miss starts");
         yield return Ready();Check(strikes==0&&target.Health.Current==500&&player.Progress.Gauge==0,"untriggered counter Q spends meter without free damage");
 
-        ResetPair();Check(player.TryDodge(Vector3.back),"dodge starts");
+        Trace("dodge timing");ResetPair();Check(player.TryDodge(Vector3.back),"dodge starts");
         Check(!player.ReceiveHit(new HitRequest(target.gameObject,10,Vector3.left))&&player.Health.Current==500,"dodge avoids hit during short invulnerability");
         yield return new WaitForSeconds(.19f);
         Check(player.ReceiveHit(new HitRequest(target.gameObject,10,Vector3.left))&&player.Health.Current==490,"dodge animation is not invulnerable throughout");
@@ -149,7 +169,7 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
         while(player.DodgeRemaining>0)yield return null;Check(player.TryDodge(Vector3.back),"dodge returns after reuse");
         yield return new WaitForSeconds(.32f);
 
-        ResetPair();Check(player.TryGuard(false),"held guard starts without fresh parry");
+        Trace("guard pressure and regeneration");ResetPair();Check(player.TryGuard(false),"held guard starts without fresh parry");
         int breaks=0;player.GuardBroken+=()=>breaks++;
         for(int i=0;i<4;i++)player.ReceiveHit(new HitRequest(target.gameObject,10,Vector3.left,false,0));
         Check(breaks==1&&player.State==CombatActor.ActionState.HIT&&player.Health.Current==496,"sustained frontal guard chips health and breaks after pressure");
@@ -159,7 +179,7 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
         float integrity=player.GuardIntegrity;yield return new WaitForSeconds(1.10f);
         Check(player.GuardIntegrity>integrity&&player.GuardIntegrity<=100,"guard integrity regenerates after pressure ends");
 
-        ResetPair();Check(player.TryGuard(true),"fresh parry starts");
+        Trace("parry reuse and punish window");ResetPair();Check(player.TryGuard(true),"fresh parry starts");
         Check(!player.ReceiveHit(new HitRequest(target.gameObject,10,Vector3.left,false,0))&&player.Health.Current==500&&target.State==CombatActor.ActionState.HIT,"timed parry negates hit and staggers attacker");
         yield return Preview("parry");player.ReleaseGuard();yield return new WaitForSeconds(.15f);
         Check(player.TryGuard(true),"rapid repress still allows ordinary guard");
@@ -170,7 +190,7 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
         player.ReleaseGuard();yield return new WaitForSeconds(.20f);
         Check(target.State==CombatActor.ActionState.HIT,"successful parry leaves enough attacker stun to punish");
 
-        ResetPair();Check(player.TryAttack(true),"pause case K starts");yield return new WaitForSeconds(.1f);
+        Trace("pause death retry");ResetPair();Check(player.TryAttack(true),"pause case K starts");yield return new WaitForSeconds(.1f);
         float elapsed=player.AttackElapsed,reuse=player.HeavyRemaining;Time.timeScale=0;
         yield return new WaitForSecondsRealtime(.20f);
         Check(strikes==0&&Mathf.Abs(player.AttackElapsed-elapsed)<.001f&&Mathf.Abs(player.HeavyRemaining-reuse)<.001f,"pause freezes startup and reuse together");
@@ -178,14 +198,14 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
         yield return new WaitForSeconds(.55f);Check(strikes==0&&target.Health.Current==500&&!player.TryAttack(false),"death cancels delayed K damage and rejects further offense");
         player.RestoreForTutorial();Check(player.CanStartOffense&&player.HeavyRemaining==0&&player.DodgeRemaining==0&&player.GuardIntegrity==100,"retry restores every action gate and defense resource");
 
-        ResetPair();input.GameplayEnabled=true;
+        Trace("real K repeated input");ResetPair();input.GameplayEnabled=true;
         Debug.Log("BALANCE_INPUT_READY key=k duration=3.2");float until=Time.time+3.2f;
         while(Time.time<until)yield return null;
         input.GameplayEnabled=false;Debug.Log("BALANCE_INPUT_DONE key=k");
         yield return Ready();Check(preparedTimes.Count==2&&strikes==2&&target.Health.Current==440,"real K spam permits only two thirty-damage attacks in 3.2 seconds");
         Check(preparedTimes[1]-preparedTimes[0]>=1.84f,"real K presses cannot bypass reuse");
 
-        ResetPair();input.GameplayEnabled=true;
+        Trace("real J repeated input");ResetPair();input.GameplayEnabled=true;
         Debug.Log("BALANCE_INPUT_READY key=j duration=3.4");until=Time.time+3.4f;
         while(Time.time<until)yield return null;
         input.GameplayEnabled=false;Debug.Log("BALANCE_INPUT_DONE key=j");yield return Ready();

@@ -5,9 +5,11 @@ using UnityEngine;
 public sealed class ClassroomAtmosphere : MonoBehaviour
 {
     private readonly List<Material> materials=new List<Material>();
+    private Mesh quadMesh;
     public static void Build(Transform parent)
     {
         var atmosphere=parent.gameObject.AddComponent<ClassroomAtmosphere>();
+        atmosphere.quadMesh=PresentationGeometry.Quad();
         Material trim=atmosphere.Surface(new Color(.23f,.26f,.27f));
         Material pale=atmosphere.Surface(new Color(.72f,.72f,.66f));
         Material metal=atmosphere.Surface(new Color(.31f,.37f,.39f));
@@ -31,11 +33,9 @@ public sealed class ClassroomAtmosphere : MonoBehaviour
             var sunlight=new Material(lightShader);sunlight.color=new Color(1,.85f,.60f,.075f);atmosphere.materials.Add(sunlight);
             for(int side=-1;side<=1;side+=2)for(int pane=0;pane<3;pane++)
             {
-                GameObject patch=GameObject.CreatePrimitive(PrimitiveType.Quad);patch.name="Window light on floor";
-                patch.transform.SetParent(parent,false);patch.transform.localPosition=new Vector3(side*9.4f+pane*.68f,.012f,6.85f-pane*.13f);
+                GameObject patch=PresentationGeometry.Create("Window light on floor",atmosphere.quadMesh,sunlight,parent);
+                patch.transform.localPosition=new Vector3(side*9.4f+pane*.68f,.012f,6.85f-pane*.13f);
                 patch.transform.localRotation=Quaternion.Euler(90,0,-18);patch.transform.localScale=new Vector3(.57f,2.2f,1);
-                var collider=patch.GetComponent<Collider>();collider.enabled=false;Destroy(collider);
-                patch.GetComponent<Renderer>().sharedMaterial=sunlight;
             }
         }
     }
@@ -64,5 +64,9 @@ public sealed class ClassroomAtmosphere : MonoBehaviour
         Box("Clock minute hand",position+new Vector3(0,.065f,-.073f),new Vector3(.016f,.15f,.015f),frame);
         Box("Clock hour hand",position+new Vector3(.045f,0,-.077f),new Vector3(.10f,.020f,.016f),frame);
     }
-    private void OnDestroy(){foreach(Material material in materials)if(material!=null)Destroy(material);}
+    private void OnDestroy()
+    {
+        foreach(Material material in materials)if(material!=null)Destroy(material);
+        if(quadMesh!=null)Destroy(quadMesh);
+    }
 }

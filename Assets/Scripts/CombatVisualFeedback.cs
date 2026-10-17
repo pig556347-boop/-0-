@@ -8,6 +8,7 @@ public sealed class CombatVisualFeedback : MonoBehaviour
     private CombatActor actor;
     private Transform contact;
     private Material contactMaterial;
+    private Mesh contactMesh;
     private MaterialPropertyBlock block;
     private Renderer[] flashRenderers;
     private float flashUntil;
@@ -20,11 +21,9 @@ public sealed class CombatVisualFeedback : MonoBehaviour
         if(shader!=null)
         {
             contactMaterial=new Material(shader);
-            GameObject shadow=GameObject.CreatePrimitive(PrimitiveType.Quad);shadow.name="Soft contact shadow";
-            Collider collider=shadow.GetComponent<Collider>();collider.enabled=false;Destroy(collider);
-            contact=shadow.transform;contact.SetParent(transform,false);
-            MeshRenderer renderer=shadow.GetComponent<MeshRenderer>();renderer.sharedMaterial=contactMaterial;
-            renderer.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;renderer.receiveShadows=false;
+            contactMesh=PresentationGeometry.Quad();
+            GameObject shadow=PresentationGeometry.Create("Soft contact shadow",contactMesh,contactMaterial,transform);
+            contact=shadow.transform;
         }
         actor.Damaged+=Damage;actor.GuardBroken+=GuardBroken;actor.Dodged+=Dodge;
     }
@@ -72,5 +71,6 @@ public sealed class CombatVisualFeedback : MonoBehaviour
     {
         if(actor!=null){actor.Damaged-=Damage;actor.GuardBroken-=GuardBroken;actor.Dodged-=Dodge;}
         if(contactMaterial!=null)Destroy(contactMaterial);
+        if(contactMesh!=null)Destroy(contactMesh);
     }
 }

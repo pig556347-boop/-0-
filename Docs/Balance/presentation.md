@@ -14,3 +14,7 @@
 ## 검증
 
 로컬 C# 문법 검사: `PYTHONPATH=/tmp/kickback-tools python Tools/check_syntax.py` 통과(2,176개 파일/설정 조합, 통합 작업 중 기준). `git diff --check` 통과. Unity 실제 컴파일·실전 프레임/스크린샷 검증은 통합 CI에서 수행하며, 이 문서는 그 완료를 대신 주장하지 않는다.
+
+## WebGL 최초 실행 예외 수정
+
+CI 39028358344에서 최초 시각 피드백 두 개의 초기화 중 네이티브 null 예외가 발생했다. 접지 그림자와 창가 채광은 `CreatePrimitive(Quad)`가 만드는 MeshCollider를 요구하지 않는 시각 메시이므로, 명시적 MeshFilter/MeshRenderer+4정점 UV 메시로 대체했다. 해당 경로는 이제 Collider 조회·생성에 의존하지 않는다. 메시 크기·UV·재질·기존 화면 배치는 동일하며, 각 소유 컴포넌트가 동적 메시도 해제한다. Cube/Cylinder 장식은 기존 경로를 유지한다.
