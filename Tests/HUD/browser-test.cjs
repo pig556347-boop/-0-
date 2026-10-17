@@ -416,6 +416,10 @@ const { PNG } = require('pngjs');
     fs.writeFileSync('hud-test-results/production-combat.json',JSON.stringify({commit:process.env.GITHUB_SHA,demonstrationEnds,hookReady,events:productionCombat},null,2));
     await live.waitForTimeout(500);
     if(!lastTutorialRole.includes('step=Heavy'))throw Error('Basic combo did not complete');
+    // The lesson changes on contact, while kick 3 still owes its .46 s recovery
+    // and .18 s shared gap. Do not mistake that MmaKick1 for a new K attack.
+    for(let i=0;i<600&&!motion.canStartOffense;i++)await live.waitForTimeout(50);
+    if(!motion.canStartOffense)throw Error('Third kick did not release the next offensive action');
     await approachTarget();await live.keyboard.down('c');await live.keyboard.down('k');
     let heavyAttack=false;
     for(let i=0;i<20;i++){await live.waitForTimeout(30);if(motion&&motion.state==='ATTACK'&&motion.visualMotion==='MmaKick1'){heavyAttack=true;break;}}
