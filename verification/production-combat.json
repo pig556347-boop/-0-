@@ -1,0 +1,350 @@
+{
+  "commit": "a03b818f091e78c121b1cb859c324d7bbe88578a",
+  "demonstrationEnds": 52.21833190917969,
+  "hookReady": true,
+  "events": [
+    {
+      "time": 47.307334899902344,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 47.473331451416016,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 47.615333557128906,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 47.75133514404297,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 47.88533401489258,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 48.01933288574219,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 48.1533317565918,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 48.28733444213867,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 48.422332763671875,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 48.557334899902344,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 48.69233322143555,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 48.8303337097168,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "Running"
+    },
+    {
+      "time": 48.964332580566406,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 49.099334716796875,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 49.233333587646484,
+      "state": "IDLE",
+      "chain": 0,
+      "hits": 0,
+      "clip": "Running"
+    },
+    {
+      "time": 49.3663330078125,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 49.50233459472656,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 0,
+      "clip": "RoundhouseKick"
+    },
+    {
+      "time": 49.63633346557617,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 0,
+      "clip": "RoundhouseKick"
+    },
+    {
+      "time": 49.784332275390625,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 1,
+      "clip": "RoundhouseKick"
+    },
+    {
+      "time": 49.9183349609375,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 1,
+      "clip": "RoundhouseKick"
+    },
+    {
+      "time": 50.05033493041992,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 1,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 50.18633270263672,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 1,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 50.32133483886719,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 1,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 50.4543342590332,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 1,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 50.61833190917969,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 1,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 50.753334045410156,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 1,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 50.887332916259766,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 1,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 51.022335052490234,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 51.15733337402344,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 51.29133224487305,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 51.42533493041992,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 51.55833435058594,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 51.69233322143555,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 51.82433319091797,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 51.95833206176758,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 52.091331481933594,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 52.23833465576172,
+      "state": "IDLE",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 52.374332427978516,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 0,
+      "clip": "FightingIdle"
+    },
+    {
+      "time": 52.5273323059082,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 0,
+      "clip": "RoundhouseKick"
+    },
+    {
+      "time": 52.6683349609375,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 0,
+      "clip": "RoundhouseKick"
+    },
+    {
+      "time": 52.8033332824707,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 1,
+      "clip": "RoundhouseKick"
+    },
+    {
+      "time": 52.94033432006836,
+      "state": "ATTACK",
+      "chain": 1,
+      "hits": 1,
+      "clip": "RoundhouseKick"
+    },
+    {
+      "time": 53.076332092285156,
+      "state": "ATTACK",
+      "chain": 2,
+      "hits": 1,
+      "clip": "MmaKick2"
+    },
+    {
+      "time": 53.211334228515625,
+      "state": "ATTACK",
+      "chain": 2,
+      "hits": 1,
+      "clip": "MmaKick2"
+    },
+    {
+      "time": 53.34633255004883,
+      "state": "ATTACK",
+      "chain": 2,
+      "hits": 2,
+      "clip": "MmaKick2"
+    },
+    {
+      "time": 53.492332458496094,
+      "state": "ATTACK",
+      "chain": 2,
+      "hits": 2,
+      "clip": "MmaKick2"
+    },
+    {
+      "time": 53.62533187866211,
+      "state": "ATTACK",
+      "chain": 3,
+      "hits": 2,
+      "clip": "MmaKick1"
+    },
+    {
+      "time": 53.75733184814453,
+      "state": "ATTACK",
+      "chain": 3,
+      "hits": 2,
+      "clip": "MmaKick1"
+    },
+    {
+      "time": 53.892333984375,
+      "state": "ATTACK",
+      "chain": 3,
+      "hits": 3,
+      "clip": "MmaKick1"
+    }
+  ]
+}
