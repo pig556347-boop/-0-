@@ -72,6 +72,10 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         fixtureLight.transform.rotation = Quaternion.Euler(50, -30, 0);
         if (Application.absoluteURL.Contains("authoredReview="))
         { new GameObject("Authored motion tests").AddComponent<AuthoredMotionPlaytestRunner>(); yield break; }
+        // These legacy-rig geometry checks inspect short contact poses. Keep a
+        // software-rendered wide frame from advancing through the entire pose.
+        // Production gameplay and the separate authored-motion reviews keep their clocks.
+        float previousMaximumDelta=Time.maximumDeltaTime;Time.maximumDeltaTime=.05f;
         Check(TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Jump,KeyCode.Space),"jump lesson accepts Space");
         foreach(var blocked in new[]{KeyCode.W,KeyCode.J,KeyCode.K,KeyCode.L,KeyCode.C,KeyCode.I,KeyCode.Q})
             Check(!TutorialInputGate.Allows(SchoolRuleZero.TutorialStep.Jump,blocked),"jump lesson rejects "+blocked);
@@ -308,11 +312,15 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         player.StrikeStarted += observeStrike;
         enemy.Health.Infinite = true;
         Check(player.TryAttack(false), "player real attack starts");
-        yield return new WaitForSeconds(player.VisualWindup + .06f);
-        yield return new WaitForEndOfFrame();
+        // Sample after the pose driver's LateUpdate on the actual contact frame,
+        // rather than after a wait that can overshoot into the new faster recovery.
+        float contactDeadline=Time.time+3;
+        do { yield return new WaitForEndOfFrame(); } while(!strikeObserved&&Time.time<contactDeadline);
         Check(strikeObserved, "real gameplay strike event fired");
         Check(Quaternion.Angle(thighBefore, kickBone.localRotation) > 40, "real strike drives extended kick thigh");
-        Check(Vector3.Angle(kneeBone.position - kickBone.position, hookFoot.position - kneeBone.position) < 40, "real kick extends chambered knee at impact");
+        float contactKnee=Vector3.Angle(kneeBone.position-kickBone.position,hookFoot.position-kneeBone.position);
+        Debug.Log("MOTION_METRICS real kick knee="+contactKnee+" elapsed="+player.AttackElapsed+" windup="+player.VisualWindup);
+        Check(contactKnee < 40, "real kick extends chambered knee at impact");
         Check(enemy.Health.Current == enemy.Health.Maximum, "real hitbox preserves infinite tutorial HP");
         Check(player.Progress.Combo > 0, "real hitbox still confirms combo against infinite HP");
         player.StrikeStarted -= observeStrike;
@@ -412,6 +420,7 @@ public sealed class HUDPlaytestRunner : MonoBehaviour
         Check(a.anchorMax.x<b.anchorMin.x&&b.anchorMax.x<c.anchorMin.x,"top panels never overlap");
         Check(player.Health.Current==120&&boss.Health.Current==180,"presentation does not modify health");
         hud.SetEnemyTarget(boss);
+        Time.maximumDeltaTime=previousMaximumDelta;
         Debug.Log("HUD_TEST_PASS checks="+checks+" resolution="+Screen.width+"x"+Screen.height);
     }
 }
