@@ -55,6 +55,9 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
     private IEnumerator Start()
     {
         int review=Application.absoluteURL.Contains("authoredReview=2")?2:1;
+        // Pose assertions require observing short reaction/contact intervals even
+        // when the CI software renderer misses its requested 30/60 Hz schedule.
+        float previousMaximumDelta=Time.maximumDeltaTime;Time.maximumDeltaTime=.05f;
         Application.targetFrameRate=review==1?60:30;
         CombatActor actor=CreateActor("Authored 권민준",0,Vector3.zero);
         GameObject visual=new GameObject("Authored test visual");visual.transform.SetParent(actor.transform,false);
@@ -122,8 +125,13 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         {
             Transform support=authored.Bone(heavy?"RightFoot":"LeftFoot");
             Vector3 anchor=support.position;
+            bool strikeObserved=false;Action observeStrike=()=>strikeObserved=true;
+            actor.StrikeStarted+=observeStrike;
             Check(actor.TryAttack(heavy),"attack starts heavy="+heavy);
-            yield return new WaitForSeconds(actor.VisualWindup);yield return new WaitForEndOfFrame();
+            float contactDeadline=Time.time+3;
+            do { yield return new WaitForEndOfFrame(); } while(!strikeObserved&&Time.time<contactDeadline);
+            actor.StrikeStarted-=observeStrike;
+            Check(strikeObserved,"real contact observed heavy="+heavy);
             Check(authored.CurrentMotion==(heavy?"MmaKick1":"RoundhouseKick"),"attack selects distinct imported motion heavy="+heavy);
             Check(Mathf.Abs(authored.CurrentSampleTime-(heavy?37/60f:57/60f))<.15f,"visual impact synchronized with unchanged combat clock");
             Vector3 drift=support.position-anchor;drift.y=0;
@@ -135,15 +143,15 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         Check(legacyFoot.localRotation==legacyRotation,"legacy runtime driver does not rotate the hidden model");
         Check(actor.TryGuard(false),"guard starts");yield return new WaitForSeconds(.15f);
         Check(authored.CurrentMotion=="CenterBlock","guard uses CenterBlock");
-        actor.ReceiveHit(new HitRequest(null,4,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
+        actor.ReceiveHit(new HitRequest(null,4,Vector3.left));yield return new WaitForEndOfFrame();
         Check(authored.CurrentMotion=="InwardBlock","blocked impact uses supplied InwardBlock");actor.ReleaseGuard();
         yield return new WaitForSeconds(.2f);
         Check(actor.TryAttack(false),"attack before interruption starts");
-        actor.ReceiveHit(new HitRequest(null,8,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
+        actor.ReceiveHit(new HitRequest(null,8,Vector3.left));yield return new WaitForEndOfFrame();
         Check(authored.CurrentMotion=="HitReaction"&&actor.State==CombatActor.ActionState.HIT,"damage cancels attack animation");
         yield return new WaitForSeconds(.45f);
         Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","hit recovery has no stuck attack state");
-        actor.ReceiveHit(new HitRequest(null,24,Vector3.left));yield return null;yield return new WaitForEndOfFrame();
+        actor.ReceiveHit(new HitRequest(null,24,Vector3.left));yield return new WaitForEndOfFrame();
         Check(authored.CurrentMotion=="ReceivingABigUppercut","strong hit uses bounded reaction section");
         yield return new WaitForSeconds(.45f);
         Check(actor.TryCrouch(),"existing crouch action available");yield return new WaitForSeconds(.2f);yield return new WaitForEndOfFrame();
@@ -196,6 +204,7 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
         actor.RestoreForTutorial();yield return new WaitForSeconds(.15f);
         Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","retry resets death animation");
         Check(actor.transform.position==origin&&collider.height==colliderHeight,"all actions preserve physical root and collider");
+        Time.maximumDeltaTime=previousMaximumDelta;
         Debug.Log("AUTHORED_TEST_PASS review="+review+" checks="+checks+" candidates=23");
     }
 }
