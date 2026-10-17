@@ -1,6 +1,6 @@
 mergeInto(LibraryManager.library, {
   $KickBackAudioState: {
-    context:null,buffers:{},source:null,musicVoice:null,generation:0,voices:[],
+    context:null,buffers:{},source:null,musicVoice:null,generation:0,voices:[],retiringMusic:[],
     paused:false,offset:0,startedAt:0,musicBuffer:null,mode:-1,duckUntil:0,closed:false,
     names:['Hit','Whoosh','Block','Parry','Down','Menu','Success','PunchHit','KickHit','HeavyHit','UltimateHit','KickWhoosh','HeavyWhoosh','DodgeWhoosh','UltimateRise'],
     init:function(){
@@ -30,9 +30,14 @@ mergeInto(LibraryManager.library, {
       return this.buffers[name];
     },
     stopVoice:function(voice){
-      if(!voice)return;
+      if(!voice||voice.stopped)return;
+      voice.stopped=true;
+      var retired=this.retiringMusic.indexOf(voice);if(retired>=0)this.retiringMusic.splice(retired,1);
       try{voice.source.stop();}catch(_){}
       voice.source.disconnect();if(voice.envelope)voice.envelope.disconnect();
+    },
+    stopRetiringMusic:function(){
+      var self=this;this.retiringMusic.slice().forEach(function(voice){self.stopVoice(voice);});
     },
     stopMusic:function(fade){
       var voice=this.musicVoice;this.musicVoice=null;this.source=null;
@@ -41,6 +46,7 @@ mergeInto(LibraryManager.library, {
         var now=this.context.currentTime;voice.envelope.gain.cancelScheduledValues(now);
         voice.envelope.gain.setValueAtTime(voice.envelope.gain.value,now);
         voice.envelope.gain.linearRampToValueAtTime(0,now+.1);
+        this.retiringMusic.push(voice);
         var self=this;setTimeout(function(){self.stopVoice(voice);},110);
       }else this.stopVoice(voice);
     },
@@ -74,7 +80,7 @@ mergeInto(LibraryManager.library, {
     var s=KickBackAudioState;s.init();s.paused=!!paused;
     if(s.paused){
       if(s.source&&s.musicBuffer)s.offset=(s.offset+s.context.currentTime-s.startedAt)%s.musicBuffer.duration;
-      s.stopMusic(false);s.voices.slice().forEach(function(v){s.stopVoice(v);});s.voices=[];
+      s.stopMusic(false);s.stopRetiringMusic();s.voices.slice().forEach(function(v){s.stopVoice(v);});s.voices=[];
     }else s.startMusic();
   },
   KickBackAudio_Play__deps:['$KickBackAudioState'],
@@ -108,7 +114,7 @@ mergeInto(LibraryManager.library, {
   KickBackAudio_Close:function(){
     var s=KickBackAudioState;++s.generation;if(!s.context)return;
     document.removeEventListener('pointerdown',s.unlock,true);document.removeEventListener('keydown',s.unlock,true);
-    s.stopMusic(false);s.voices.slice().forEach(function(v){s.stopVoice(v);});s.voices=[];
+    s.stopMusic(false);s.stopRetiringMusic();s.voices.slice().forEach(function(v){s.stopVoice(v);});s.voices=[];
     s.context.close().catch(function(){});s.context=null;s.source=null;s.buffers={};
     s.paused=false;s.offset=0;s.musicBuffer=null;s.mode=-1;s.closed=true;
   }

@@ -20,6 +20,9 @@ public sealed class MotionVerificationProbe : MonoBehaviour
             ex = enemy.transform.position.x, ez = enemy.transform.position.z,
             fx=player.Facing.x,fz=player.Facing.z,
             state = player.State.ToString(), combo = player.Progress.Combo,
+            gameTime = Time.time, canStartOffense = player.CanStartOffense,
+            basicComboHit = player.BasicComboHit, attackElapsed = player.AttackElapsed,
+            attackWindup = player.VisualWindup, attackRecovery = player.VisualRecovery,
             tutorialStep = player.GetComponent<TutorialInputGate>()==null || player.GetComponent<TutorialInputGate>().Director==null ? "None" :
                 player.GetComponent<TutorialInputGate>().Director.Progress.Step.ToString(),
             crouching=player.GetComponent<PlayerController>().IsCrouching,
@@ -34,5 +37,5 @@ public sealed class MotionVerificationProbe : MonoBehaviour
         }));
     }
     [System.Serializable] private sealed class Sample
-    { public float px, pz, ex, ez, fx, fz, sx, sy, cameraSize, cameraX, cameraY, cameraZ; public string state, visualMotion, jumpStage, tutorialStep; public bool crouching; public int combo; }
+    { public float px, pz, ex, ez, fx, fz, sx, sy, cameraSize, cameraX, cameraY, cameraZ, gameTime, attackElapsed, attackWindup, attackRecovery; public string state, visualMotion, jumpStage, tutorialStep; public bool crouching, canStartOffense; public int combo, basicComboHit; }
 }

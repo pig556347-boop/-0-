@@ -255,9 +255,11 @@ const { PNG } = require('pngjs');
     const jumpStages=new Set();
     const restrictions={};
     let playerReady=false, deongchiReady=false, hookReady=false, lastTutorialRole="", motion=null, classroomReady=false;
+    const productionCombat=[];
     live.on('console',msg=>{if(msg.text().includes('OPENING_MOTION clip=Sitting'))openingSitting=true;if(msg.text().includes('OPENING_MOTION clip=SitToStand'))openingStanding=true;if(msg.text().includes('CLASSROOM_ASSETS_READY count=5'))classroomReady=true;if(msg.text().includes('AUTHORED_PLAYER_READY'))authoredReady=true;});
     live.on('console',msg=>{if(msg.text().includes('SUPPLIED_MOTION_ONLY combo=3 clip=MmaKick1'))hookReady=true;});
-    live.on('console',msg=>{const s=msg.text();if(s.startsWith('MOTION_LIVE ')){motion=JSON.parse(s.slice(12));jumpStages.add(motion.jumpStage);sittingSeen ||= motion.visualMotion==='Sitting';standingSeen ||= motion.visualMotion==='SitToStand';}});
+    live.on('console',msg=>{const s=msg.text();if(s.startsWith('MOTION_LIVE ')){motion=JSON.parse(s.slice(12));jumpStages.add(motion.jumpStage);sittingSeen ||= motion.visualMotion==='Sitting';standingSeen ||= motion.visualMotion==='SitToStand';
+      if(motion.tutorialStep==='Basic'||motion.tutorialStep==='Heavy')productionCombat.push({time:motion.gameTime,state:motion.state,chain:motion.basicComboHit,hits:motion.combo,clip:motion.visualMotion});}});
     live.on('console',msg=>{if(msg.text().includes('PLAYER_MODEL_READY'))playerReady=true;if(msg.text().includes('DEONGCHI_MODEL_READY'))deongchiReady=true;if(msg.text().includes('TUTORIAL_ROLE')){lastTutorialRole=msg.text();console.log('::notice::'+lastTutorialRole)}if(/Exception|Can't add component|KICK_BACK_AUDIO_ERROR/.test(msg.text()))runtimeErrors.push(msg.text())});
     live.on('pageerror',err=>runtimeErrors.push(String(err)));
     live.on('console',msg=>{if(msg.text().startsWith('LOBBY_UI '))lobby=JSON.parse(msg.text().slice(9));});
@@ -395,15 +397,23 @@ const { PNG } = require('pngjs');
       throw Error('Could not approach tutorial target: '+JSON.stringify(motion));
     }
     await approachTarget();
+    const demonstrationHits=motion.combo;
     await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
+    for(let i=0;i<600&&motion.combo<=demonstrationHits;i++)await live.waitForTimeout(50);
+    if(motion.combo<=demonstrationHits)throw Error('Demonstration kick did not actually hit the tutorial target');
     await live.waitForTimeout(100);await live.screenshot({path:'hud-test-results/motion-kick.png'});
-    // Re-enter a real three-hit sequence after the evidence capture delay.
-    await live.waitForTimeout(2000);
+    // Let the demonstration hit expire in GAME time. On software WebGL a fixed
+    // wall-clock delay can leave that first hit in the lesson's 1.3 s combo window,
+    // advancing the lesson after only two new kicks and disabling J before kick 3.
+    const demonstrationEnds=(motion?.gameTime||0)+1.6;
+    for(let i=0;i<600&&(!motion||motion.gameTime<demonstrationEnds||!motion.canStartOffense);i++)await live.waitForTimeout(50);
+    if(!motion||motion.gameTime<demonstrationEnds||!motion.canStartOffense)throw Error('Demonstration kick did not finish its game-time recovery');
     await approachTarget();
-    for(let i=0;i<12&&!lastTutorialRole.includes('step=Heavy');i++) {
-      await live.keyboard.down('j');await live.waitForTimeout(80);await live.keyboard.up('j');
-      await live.waitForTimeout(140);
+    const comboDeadline=Date.now()+45000;
+    while(!lastTutorialRole.includes('step=Heavy')&&Date.now()<comboDeadline) {
+      await live.keyboard.press('j',{delay:70});await live.waitForTimeout(35);
     }
+    fs.writeFileSync('hud-test-results/production-combat.json',JSON.stringify({commit:process.env.GITHUB_SHA,demonstrationEnds,hookReady,events:productionCombat},null,2));
     await live.waitForTimeout(500);
     if(!lastTutorialRole.includes('step=Heavy'))throw Error('Basic combo did not complete');
     await approachTarget();await live.keyboard.down('c');await live.keyboard.down('k');
@@ -455,7 +465,7 @@ const { PNG } = require('pngjs');
     if(!authoredReady)throw Error('Production authored motion library did not load');
     if(!deongchiReady)throw Error('Tutorial Move/Jump/Crouch progression did not load Deongchi: '+lastTutorialRole);
     if(!lastTutorialRole.includes('step=Guard'))throw Error('Restricted tutorial did not reach Guard: '+lastTutorialRole);
-    if(!hookReady)throw Error('Real third combo hit did not use the supplied MmaKick1');
+    if(!hookReady)throw Error('Real third combo hit did not use the supplied MmaKick1: '+JSON.stringify(productionCombat.slice(-25)));
     lobby=null;await live.keyboard.press('Escape');await waitLobby(x=>x.page==='Paused','pause navigation');
     await live.waitForTimeout(400);audioChecks.pauseRms=await audioPeak();
     if(audioChecks.pauseRms>.00001)throw Error('Pause did not stop music: '+audioChecks.pauseRms);

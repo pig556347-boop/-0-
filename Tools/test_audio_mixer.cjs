@@ -56,6 +56,14 @@ async function flush(){await settle();while(timers.length)timers.shift()();await
   api.KickBackAudio_Pause(0);assert.equal(s.source.offset,3.75,'resume preserves music position');
   api.KickBackAudio_Volumes(.3,.6,.8);assert(Math.abs(s.music.gain.value-.18)<1e-9);assert(Math.abs(s.effects.gain.value-.24)<1e-9);
   api.KickBackAudio_Volumes(1,0,0);assert.equal(s.music.gain.value,0);assert.equal(s.effects.gain.value,0);
+  const fadingBoss=s.source;api.KickBackAudio_Music(1);
+  assert.equal(s.retiringMusic.length,1,'a fading outgoing track stays tracked');
+  assert(!fadingBoss.stopped,'ordinary track changes keep the short crossfade');
+  api.KickBackAudio_Pause(1);
+  assert(fadingBoss.stopped,'pause immediately stops the outgoing track during its fade');
+  assert.equal(s.retiringMusic.length,0);
+  await flush();assert.equal(s.source,null,'pending music loads cannot play while paused');
+  api.KickBackAudio_Pause(0);assert(s.source.started,'resuming starts the newly selected track');
   api.KickBackAudio_Close();assert.equal(s.context,null);assert.equal(listeners.size,0);assert.equal(s.voices.length,0);
   api.KickBackAudio_Music(1);api.KickBackAudio_Close();await flush();assert.equal(errors.length,0,'closing during decode must not produce runtime errors');
   console.log('Audio bridge: behavioral checks passed (music selection, bounded voices, priorities, pause/resume, independent mute, teardown).');
