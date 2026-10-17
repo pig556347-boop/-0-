@@ -7,7 +7,8 @@ public static class GameAudioBuildFiles
     public static void CopyTo(string output)
     {
         string target=Path.Combine(output,"Audio");Directory.CreateDirectory(target);
-        foreach(string name in new[]{"LobbyMusic","BattleMusic","Hit","Whoosh","Block","Parry","Down","Menu","Success"})
+        foreach(string name in new[]{"LobbyMusic","BattleMusic","BossMusic","Hit","Whoosh","Block","Parry","Down","Menu","Success",
+            "PunchHit","KickHit","HeavyHit","UltimateHit","KickWhoosh","HeavyWhoosh","DodgeWhoosh","UltimateRise"})
         {
             string source=Path.Combine(Application.dataPath,"Resources/Audio/"+name+".wav");
             if(!File.Exists(source))throw new FileNotFoundException("Required game audio missing",source);

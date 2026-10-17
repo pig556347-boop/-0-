@@ -16,7 +16,7 @@ public sealed class EncounterDirector : MonoBehaviour
     private WaveProgress wave;
     private bool started, campaignStarted, cleared, finished, dead;
     private DeongchiDuel duel;
-    private float messageUntil;
+    private float messageUntil,nextSpawnAt;
     public void Initialize(CombatActor protagonist, CombatActor first, TutorialDirector lessons, PrototypeHUD ui)
     {
         player = protagonist; practice = first; tutorial = lessons; hud = ui;
@@ -32,6 +32,18 @@ public sealed class EncounterDirector : MonoBehaviour
                 (enemy.State == CombatActor.ActionState.ATTACK || enemy.State == CombatActor.ActionState.GRAB ||
                  enemy.State == CombatActor.ActionState.ULTIMATE)) attacking++;
         return attacking < SchoolCampaign.AttackLimit(Stage);
+    }
+    public Vector3 Separation(CombatActor requester)
+    {
+        Vector3 result=Vector3.zero;
+        foreach(CombatActor other in enemies)
+        {
+            if(other==null||other==requester||!other.Health.Alive)continue;
+            Vector3 away=requester.transform.position-other.transform.position;away.y=0;
+            float distance=away.magnitude;
+            if(distance>.01f&&distance<1.35f)result+=away/distance*(1-distance/1.35f);
+        }
+        return Vector3.ClampMagnitude(result,1);
     }
     private void Update()
     {
@@ -74,7 +86,7 @@ public sealed class EncounterDirector : MonoBehaviour
         hud.SetEnemyTarget(enemies.Count > 0 ? enemies[0] : null);
         hud.EncounterText = $"학교 1-{Stage} · {SchoolCampaign.AreaName(Stage, Area)}\n" +
             $"라운드 {Area}/{SchoolCampaign.AreaCount(Stage)} · 남은 적 {wave.Remaining}" +
-            (Stage <= 4 ? "\n매우쉬움" : "\n보통");
+            (Stage <= 2 ? "\n기초 전투" : Stage <= 5 ? "\n압박과 반격" : "\n보통");
         if (!cleared && wave.Complete)
         {
             cleared = true;
@@ -125,7 +137,7 @@ public sealed class EncounterDirector : MonoBehaviour
         Rigidbody body = player.GetComponent<Rigidbody>();
         body.position = new Vector3(-7, 1.05f, -2); body.linearVelocity = Vector3.zero;
         PrototypeBootstrap.SetArena(Stage, Area, boss);
-        wave = new WaveProgress(SchoolCampaign.EnemyCount(Stage, Area));
+        wave = new WaveProgress(SchoolCampaign.EnemyCount(Stage, Area));nextSpawnAt=Time.time;
         SpawnAvailable();
         hud.SetEnemyTarget(enemies[0]); hud.QuestText = "";
         hud.StoryMessage = boss ? SchoolCampaign.BossName(Stage) + " 등장" : "잔몹 라운드 시작";
@@ -134,6 +146,7 @@ public sealed class EncounterDirector : MonoBehaviour
     private void SpawnAvailable()
     {
         bool boss = SchoolCampaign.IsBossRound(Stage, Area);
+        if(Stage<=5&&Time.time<nextSpawnAt)return;
         while (wave.Spawn(SchoolCampaign.VisibleLimit(Stage)))
         {
             int index = wave.Spawned - 1;
@@ -152,18 +165,21 @@ public sealed class EncounterDirector : MonoBehaviour
             enemy.GetComponent<DefeatedBody>().LifetimeAfterSettled=1.25f;
             if(!boss)enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model("Minion"+((index+Stage+Area-2)%4+1));
             enemy.ConfigureStats(boss ? SchoolCampaign.HP(Stage, true) : SchoolCampaign.EnemyHP(Stage, index),
-                SchoolCampaign.Damage(Stage, boss), Stage <= 4 ? .65f : .24f, .48f);
+                SchoolCampaign.Damage(Stage, boss), SchoolCampaign.Windup(Stage,boss),SchoolCampaign.Recovery(Stage));
             enemy.TelegraphEnabled = SchoolCampaign.Telegraph(Stage);
             enemy.BossUltimateEnabled = boss;
             enemy.GrabCounterChance = boss && Stage == 11 ? .4f : 0;
             EnemyBrain brain = enemy.GetComponent<EnemyBrain>();
             brain.Director = this; brain.Difficulty = Stage; brain.IsBoss = boss;
             brain.ThinkInterval = SchoolCampaign.ThinkInterval(Stage);
-            brain.AttackInterval = Stage <= 4 ? 2.4f : Stage == 11 && boss ? .9f : 1.6f;
-            brain.MoveSpeed = Stage == 11 && boss ? 3.6f : Stage >= 5 ? 2.3f : 1.6f;
+            brain.AttackInterval = SchoolCampaign.AttackInterval(Stage,boss);
+            brain.MoveSpeed = SchoolCampaign.MoveSpeed(Stage,boss);
+            if(Stage<=5&&!boss){enemy.HeavyUsesKick=true;brain.DelayFirstAction(.85f);}
             if(boss&&Stage==5)DojaehakBrain.Install(enemy);
             enemy.HitConfirmed += impact.OnHit; enemy.HitConfirmed += effects.OnHit;
             enemies.Add(enemy);
+            // Join the fight at separate beats instead of all spawning/attacking in the same frame.
+            if(Stage<=5){nextSpawnAt=Time.time+.85f;break;}
         }
     }
 }

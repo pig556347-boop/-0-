@@ -46,6 +46,11 @@ public sealed class AttackHitbox : MonoBehaviour
         Physics.SyncTransforms();
         ScanOverlaps();
     }
+    public void Cancel()
+    {
+        owner=null;expires=float.NegativeInfinity;
+        var shape=GetComponent<Collider>();if(shape!=null)shape.enabled=false;
+    }
     private void FixedUpdate()
     {
         if (owner == null || Time.time >= expires) { Destroy(gameObject); return; }

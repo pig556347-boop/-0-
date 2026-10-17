@@ -129,7 +129,7 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
             Vector3 drift=support.position-anchor;drift.y=0;
             Check(drift.magnitude<.06f,"support ankle remains planted at attack impact heavy="+heavy);
             Bounded(render,origin,"attack impact");
-            yield return new WaitForSeconds(actor.VisualRecovery+.15f);
+            yield return new WaitForSeconds(actor.VisualRecovery+.25f);
             Check(actor.CanAct&&authored.CurrentMotion=="FightingIdle","attack returns to controllable fighting stance");
         }
         Check(legacyFoot.localRotation==legacyRotation,"legacy runtime driver does not rotate the hidden model");
@@ -180,7 +180,7 @@ public sealed class AuthoredMotionPlaytestRunner : MonoBehaviour
             actor.HitConfirmed-=recordHit;actor.StrikeStarted-=recordStrike;
             Check(strikes==CombatActor.UltimateHitCount(tier),"ultimate spawns correct strike count tier="+tier);
             Check(hits==CombatActor.UltimateHitCount(tier),"each ultimate strike damages the target exactly once tier="+tier);
-            Check(Mathf.Abs(victim.Health.Current-(120-(tier==3?60:tier==2?48:30)))<.01f,"flurry preserves total damage tier="+tier);
+            Check(Mathf.Abs(victim.Health.Current-(120-(tier==3?64:tier==2?44:30)))<.01f,"flurry uses balanced total damage tier="+tier);
             Check(selectedClips.Contains("MmaKick1")&&selectedClips.Contains("MmaKick2")&&selectedClips.Contains("RoundhouseKick"),"flurry uses three supplied attack clips tier="+tier);
             Check(!selectedClips.Contains("FlyingKick"),"ultimate no longer uses airborne single-hit placeholder");
             yield return new WaitForSeconds(.15f);

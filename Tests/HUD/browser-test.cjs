@@ -5,21 +5,43 @@ const { PNG } = require('pngjs');
   const browser = await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
   try {
     fs.mkdirSync('hud-test-results',{recursive:true});
+    const balancePage=await browser.newPage({viewport:{width:1280,height:720}});
+    let balancePassed=false,balanceChecks=0;const balanceErrors=[],balanceInputs=[],balancePreviews=[],balanceDone=new Set();
+    balancePage.on('console',msg=>{const line=msg.text();
+      if(line.includes('BALANCE_INPUT_READY')){const m=line.match(/key=([a-z]) duration=([\d.]+)/);balanceInputs.push({key:m[1],duration:Number(m[2])});}
+      if(line.includes('BALANCE_INPUT_DONE'))balanceDone.add(line.match(/key=([a-z])/)[1]);
+      if(line.includes('BALANCE_PREVIEW_READY'))balancePreviews.push(line.match(/kind=(\w+)/)[1]);
+      if(line.includes('BALANCE_TEST_PASS')){balancePassed=true;balanceChecks=Number(line.match(/checks=(\d+)/)[1]);}
+      if(/BALANCE_TEST_FAIL|Exception/.test(line))balanceErrors.push(line);});
+    balancePage.on('pageerror',e=>balanceErrors.push(String(e)));
+    await balancePage.goto('http://127.0.0.1:8780/HUDTest/?balanceReview=1');
+    for(let i=0;i<6000&&!balancePassed&&!balanceErrors.length;i++){
+      while(balanceInputs.length){const input=balanceInputs.shift(),end=Date.now()+45000;
+        while(!balanceDone.has(input.key)&&!balanceErrors.length&&Date.now()<end){await balancePage.keyboard.press(input.key,{delay:70});await balancePage.waitForTimeout(35);}
+        if(!balanceDone.has(input.key))throw Error("Balanced input simulation timed out: "+input.key+" "+balanceErrors.join(" "));}
+      while(balancePreviews.length){const kind=balancePreviews.shift();await balancePage.screenshot({path:'hud-test-results/balance-'+kind+'.png'});await balancePage.keyboard.press('Enter',{delay:80});}
+      await balancePage.waitForTimeout(50);
+    }
+    if(!balancePassed||balanceErrors.length){await balancePage.screenshot({path:'hud-test-results/balance-failed.png'});throw Error('Player balance failed: '+balanceErrors.join(' '));}
+    fs.writeFileSync('hud-test-results/balance.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:balanceChecks,passed:true},null,2));
+    await balancePage.close();
     const shortcutPage=await browser.newPage({viewport:{width:1280,height:720}});
-    let shortcutPassed=false,shortcutChecks=0;const shortcutErrors=[],shortcutKeys=[];
+    let shortcutPassed=false,shortcutChecks=0;const shortcutErrors=[],shortcutKeys=[],shortcutMusic=[];
     shortcutPage.on('console',msg=>{const line=msg.text();
+      if(line.startsWith('GAME_AUDIO '))shortcutMusic.push(line.slice(11).trim());
       if(line.includes('SHORTCUT_INPUT_READY'))shortcutKeys.push(line.match(/key=(\d)/)[1]);
       if(line.includes('SHORTCUT_TEST_PASS')){shortcutPassed=true;shortcutChecks=Number(line.match(/checks=(\d+)/)[1]);}
       if(/SHORTCUT_TEST_FAIL|Exception/.test(line))shortcutErrors.push(line);});
     shortcutPage.on('pageerror',e=>shortcutErrors.push(String(e)));
-    await shortcutPage.goto('http://127.0.0.1:8780/HUDTest/?shortcutReview=1');
+    await shortcutPage.goto('http://127.0.0.1:8780/HUDTest/?shortcutReview=1&motionVerification=1');
     for(let i=0;i<1200&&!shortcutPassed&&!shortcutErrors.length;i++){
       while(shortcutKeys.length)await shortcutPage.keyboard.press(shortcutKeys.shift(),{delay:80});
       await shortcutPage.waitForTimeout(50);
     }
     await shortcutPage.screenshot({path:'hud-test-results/test-shortcuts.png'});
     if(!shortcutPassed||shortcutErrors.length)throw Error('Temporary shortcut test failed: '+shortcutErrors.join(' '));
-    fs.writeFileSync('hud-test-results/shortcuts.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:shortcutChecks,passed:true},null,2));
+    if(!shortcutMusic.includes('BossMusic')||!shortcutMusic.includes('BattleMusic'))throw Error('Boss music did not follow stage navigation: '+shortcutMusic.join(','));
+    fs.writeFileSync('hud-test-results/shortcuts.json',JSON.stringify({commit:process.env.GITHUB_SHA,checks:shortcutChecks,passed:true,musicEvents:shortcutMusic},null,2));
     await shortcutPage.close();
     const bossPage=await browser.newPage({viewport:{width:1280,height:720}});
     let bossPassed=false,bossChecks=0,bossInput=false;const bossErrors=[],bossPreviews=[],bossMetrics=[];

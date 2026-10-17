@@ -1,0 +1,182 @@
+{
+  "Hit": {
+    "seconds": 0.24,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.54,
+    "rms": 0.09481,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "PunchHit": {
+    "seconds": 0.24,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.54,
+    "rms": 0.0922,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "KickHit": {
+    "seconds": 0.31,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.54,
+    "rms": 0.08372,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "HeavyHit": {
+    "seconds": 0.4,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.61,
+    "rms": 0.09907,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "UltimateHit": {
+    "seconds": 0.47,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.61,
+    "rms": 0.09169,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "Down": {
+    "seconds": 0.6,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.61,
+    "rms": 0.08117,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "Whoosh": {
+    "seconds": 0.17,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.34,
+    "rms": 0.06258,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "KickWhoosh": {
+    "seconds": 0.23,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.39,
+    "rms": 0.06977,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "HeavyWhoosh": {
+    "seconds": 0.29,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.43,
+    "rms": 0.07838,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "DodgeWhoosh": {
+    "seconds": 0.22,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.25,
+    "rms": 0.0426,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "Block": {
+    "seconds": 0.18,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.35,
+    "rms": 0.04072,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "Parry": {
+    "seconds": 0.35,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.42,
+    "rms": 0.04661,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "Menu": {
+    "seconds": 0.09,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.35,
+    "rms": 0.11254,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "Success": {
+    "seconds": 0.43,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.35,
+    "rms": 0.11183,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "UltimateRise": {
+    "seconds": 0.38,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.35,
+    "rms": 0.06737,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": false
+  },
+  "LobbyMusic": {
+    "seconds": 21.33334,
+    "channels": 2,
+    "sampleRate": 32000,
+    "peak": 0.37174,
+    "rms": 0.05197,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": true
+  },
+  "BattleMusic": {
+    "seconds": 16.55172,
+    "channels": 2,
+    "sampleRate": 32000,
+    "peak": 0.30259,
+    "rms": 0.05805,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": true
+  },
+  "BossMusic": {
+    "seconds": 29.09091,
+    "channels": 2,
+    "sampleRate": 32000,
+    "peak": 0.36105,
+    "rms": 0.06491,
+    "seamStep": 0.0,
+    "clippedSamples": 0,
+    "music": true
+  }
+}

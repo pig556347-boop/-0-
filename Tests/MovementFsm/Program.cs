@@ -230,7 +230,7 @@ internal static class Program
         });
         Test("campaign matches all eleven approved stage populations and boss placement", () =>
         {
-            int[] expected = { 3, 3, 4, 4, 9, 10, 10, 12, 12, 11, 16 };
+            int[] expected = { 3, 4, 4, 5, 8, 10, 10, 12, 12, 11, 16 };
             int total = 0, areas = 0, bosses = 0;
             for (int stage = 1; stage <= SchoolCampaign.LastStage; stage++)
             {
@@ -245,21 +245,21 @@ internal static class Program
                 Assert(stageTotal == expected[stage-1], "Wrong population for stage " + stage);
                 total += stageTotal;
             }
-            Assert(total == 94 && areas == 22 && bosses == 3, "Campaign totals");
+            Assert(total == 95 && areas == 22 && bosses == 3, "Campaign totals");
             Assert(SchoolCampaign.BossName(5) == "도재학" && SchoolCampaign.BossName(10) == "한승빈" &&
                 SchoolCampaign.BossName(11) == "황빈", "Boss order");
-            Assert(SchoolCampaign.HP(5, true) == 240 && SchoolCampaign.HP(10, true) == 300 &&
+            Assert(SchoolCampaign.HP(5, true) == 300 && SchoolCampaign.HP(10, true) == 300 &&
                 SchoolCampaign.HP(11, true) == 360, "Boss HP");
         });
-        Test("difficulty and attack telegraphs change only after stage four", () =>
+        Test("opening five stages introduce pressure with readable warnings and live caps", () =>
         {
             for (int stage = 1; stage <= 11; stage++)
             {
-                Assert(SchoolCampaign.Telegraph(stage) == (stage <= 4), "Wrong telegraph stage");
-                Assert(SchoolCampaign.VisibleLimit(stage) == (stage <= 4 ? 3 : 4), "Visible cap");
-                Assert(SchoolCampaign.AttackLimit(stage) == (stage <= 4 ? 1 : 2), "Attack cap");
+                Assert(SchoolCampaign.Telegraph(stage) == (stage <= 5), "Wrong telegraph stage");
+                Assert(SchoolCampaign.VisibleLimit(stage) == (stage <= 2 ? 2 : stage <= 5 ? 3 : 4), "Visible cap");
+                Assert(SchoolCampaign.AttackLimit(stage) == (stage <= 3 ? 1 : 2), "Attack cap");
                 if (stage >= 6 && stage <= 9)
-                    Assert(SchoolCampaign.Damage(stage, false) == SchoolCampaign.Damage(5, true), "Officer stats not inherited");
+                    Assert(SchoolCampaign.Damage(stage, false) == 10, "Later officer damage changed");
             }
         });
         Test("reinforcements do not prematurely finish a wave or exceed live limits", () =>

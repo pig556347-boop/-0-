@@ -225,6 +225,15 @@ public sealed class AuthoredPlayerView : MonoBehaviour
         if(name=="PunchLeft"||name=="PunchRight")
         {first=0;impact=name=="PunchLeft"?34/60f:24/60f;last=clips[name].Length;}
         if(actor.State==CombatActor.ActionState.ATTACK)
+        {
+            // Keep the useful chamber/contact/retraction instead of accelerating a long setup/settle.
+            if(name=="RoundhouseKick"){first=37/60f;last=82/60f;}
+            else if(name=="MmaKick1"){first=(actor.HeavyStrike?8:15)/60f;last=(actor.HeavyStrike?79:61)/60f;}
+            else if(name=="MmaKick2"){first=14/60f;last=54/60f;}
+            else if(name=="PunchLeft"){first=22/60f;last=46/60f;}
+            else if(name=="PunchRight"){first=14/60f;last=38/60f;}
+        }
+        if(actor.State==CombatActor.ActionState.ATTACK)
             elapsed=hitAt>=started?windup+Time.time-hitAt:Mathf.Min(elapsed,windup);
         float time = elapsed <= windup ? Mathf.Lerp(first,impact,Mathf.SmoothStep(0,1,Mathf.Clamp01(elapsed/windup))) :
             Mathf.Lerp(impact,last,Mathf.SmoothStep(0,1,Mathf.Clamp01((elapsed-windup)/recovery)));
@@ -245,7 +254,7 @@ public sealed class AuthoredPlayerView : MonoBehaviour
     {
         int index = actor.UltimateStrikeIndex;
         if (index < 0)
-        { PlayAttack(FlurryClip(0), elapsed, ultimateTier == 3 ? .4f : .12f, .18f); return; }
+        { PlayAttack(FlurryClip(0), elapsed, actor.UltimateWindup, .18f); return; }
         float interval = actor.UltimateStrikeInterval, sinceHit = Mathf.Max(0,Time.time-hitAt);
         bool final = index == CombatActor.UltimateHitCount(ultimateTier)-1;
         string clip = FlurryClip(index);

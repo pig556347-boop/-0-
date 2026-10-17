@@ -14,7 +14,8 @@ public sealed class CombatHUDView : MonoBehaviour
     private Image stateAction;
     private HUDHealthMeter playerMeter, enemyMeter;
     private Text playerName, enemyName, enemyRole, quest, combo, dialogue, modalTitle, modalBody;
-    private Image gauge;
+    private Image gauge,guardFill;
+    private Text recoveryText;
     private readonly Image[] orbs = new Image[3];
     private GameObject dialoguePanel, modal, comboPanel;
     public HUDHealthMeter PlayerMeter => playerMeter;
@@ -47,6 +48,10 @@ public sealed class CombatHUDView : MonoBehaviour
         for(int i=0;i<3;i++) orbs[i]=MakeImage("Ultimate charge "+(i+1),p,
             new Vector2(.8f+i*.05f,.09f),new Vector2(.83f+i*.05f,.19f),new Color(1,1,1,.2f));
         for(int i=0;i<3;i++) {orbs[i].sprite=skin.Load("Diamond");orbs[i].preserveAspect=true;}
+        recoveryText=Label("Guard and recovery",p,new Vector2(.04f,.27f),new Vector2(.96f,.39f),16,TextAnchor.MiddleLeft);
+        var guardTrack=MakeImage("Guard integrity track",p,new Vector2(.04f,.235f),new Vector2(.96f,.255f),new Color(1,1,1,.10f));
+        guardFill=MakeImage("Guard integrity fill",guardTrack.rectTransform,Vector2.zero,Vector2.one,new Color(.38f,.78f,.95f));
+        guardFill.type=Image.Type.Filled;guardFill.fillMethod=Image.FillMethod.Horizontal;
         RectTransform e = Panel("Enemy panel",canvas,new Vector2(.365f,.85f),new Vector2(.655f,.98f));
         enemyRole = Label("Enemy role",e,new Vector2(.04f,.73f),new Vector2(.96f,.96f),17,TextAnchor.MiddleLeft);
         enemyName = Label("Enemy name",e,new Vector2(.04f,.46f),new Vector2(.96f,.75f),28,TextAnchor.MiddleLeft);
@@ -62,7 +67,7 @@ public sealed class CombatHUDView : MonoBehaviour
         if(arcadeFont!=null) comboCaption.font=arcadeFont;
         RectTransform keys=Panel("Key guide",canvas,new Vector2(.02f,.02f),new Vector2(.98f,.09f));
         Label("Current controls",keys,new Vector2(.015f,.1f),new Vector2(.985f,.9f),22,TextAnchor.MiddleCenter).text=
-            "WASD 이동   Space 점프   C 앉기   Shift+방향 회피\nJ 기본공격   K 강공격   L 가드/타이밍 방어   I 펀치   Q 궁극기   Esc 일시정지";
+            "WASD 이동   Space 점프   C 앉기   Shift+방향 회피\nJ 3연차기   K 강공격   L 가드/패링   I 3연펀치   Q 궁극기   Esc 일시정지";
         RectTransform d=Panel("Dialogue panel",canvas,new Vector2(.23f,.135f),new Vector2(.77f,.29f));
         dialoguePanel=d.gameObject;
         dialogue=Label("Dialogue",d,new Vector2(.035f,.10f),new Vector2(.965f,.90f),28,TextAnchor.MiddleCenter);
@@ -87,6 +92,8 @@ public sealed class CombatHUDView : MonoBehaviour
         enemyRole.color=boss ? new Color(.96f,.62f,.59f) : new Color(.72f,.74f,.75f);
         enemyName.text=enemy==null ? "—" : enemy.name;
         gauge.fillAmount=Mathf.Clamp01(player.Progress.Gauge/100);
+        guardFill.fillAmount=player.GuardIntegrity/100;guardFill.color=player.GuardIntegrity<35?new Color(1,.55f,.3f):new Color(.38f,.78f,.95f);
+        recoveryText.text="가드 "+Mathf.CeilToInt(player.GuardIntegrity)+"  |  K "+(player.HeavyRemaining>0?player.HeavyRemaining.ToString("0.0")+"s":"준비")+"  |  회피 "+(player.DodgeRemaining>0?player.DodgeRemaining.ToString("0.0")+"s":"준비");
         for(int i=0;i<3;i++) orbs[i].color=player.Progress.UltimateTier>i ? new Color(1,.85f,.3f) : new Color(1,1,1,.18f);
         quest.text=encounter+(string.IsNullOrEmpty(tutorial)?"":"\n\n"+tutorial);
         int hits=player.Progress.Combo;

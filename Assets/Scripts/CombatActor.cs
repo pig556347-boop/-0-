@@ -25,10 +25,18 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public int PunchCount => punchSequence.Count;
     private readonly PunchSequence punchSequence=new PunchSequence();
     public event Action Punched;
-    public float VisualWindup => CurrentBossMove!=null?CurrentBossMove.Windup:attackWindup * (activeHeavy ? 1.8f : 1);
-    public float VisualRecovery => CurrentBossMove!=null?CurrentBossMove.Duration-CurrentBossMove.StrikeTimes[CurrentBossMove.StrikeTimes.Length-1]:attackRecovery * (activeHeavy ? 1.6f : 1);
+    public float VisualWindup => CurrentBossMove!=null?CurrentBossMove.Windup:Team==0&&playerStrike!=null?playerStrike.Windup:attackWindup * (activeHeavy ? 1.8f : 1);
+    public float VisualRecovery => CurrentBossMove!=null?CurrentBossMove.Duration-CurrentBossMove.StrikeTimes[CurrentBossMove.StrikeTimes.Length-1]:Team==0&&playerStrike!=null?playerStrike.Recovery:attackRecovery * (activeHeavy ? 1.6f : 1);
+    public float AttackElapsed => CurrentBossMove!=null?BossMoveElapsed:Time.time-attackStarted;
+    public float ActionRecoveryRemaining => Mathf.Max(0,State==ActionState.ATTACK?attackEnds-Time.time:offenseReadyAt-Time.time);
+    public bool IsRecovering => State==ActionState.ATTACK&&AttackElapsed>=VisualWindup||Time.time<offenseReadyAt;
+    public float HeavyRemaining => Mathf.Max(0,heavyReadyAt-Time.time);
+    public float DodgeRemaining => Mathf.Max(0,dodgeReadyAt-Time.time);
+    public float GuardIntegrity { get; private set; }=100;
+    public bool CanStartOffense => CanAct&&(Team!=0||Time.time>=offenseReadyAt);
     public int BasicComboHit { get; private set; }
     public int UltimateStrikeIndex { get; private set; } = -1;
+    public float UltimateWindup => activeUltimate==2?.50f:activeUltimate==3?.36f:.24f;
     public float UltimateStrikeInterval => activeUltimate == 3 ? .14f : .18f;
     public static int UltimateHitCount(int tier) => tier == 3 ? 6 : 3;
     public bool IsUltimateFinisher => activeUltimate > 0 && UltimateStrikeIndex == UltimateHitCount(activeUltimate)-1;
@@ -62,6 +70,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public event Action StrikeStarted;
     public event Action AttackPrepared;
     public event Action BossMoveInterrupted;
+    public event Action GuardBroken;
     private readonly List<AttackHitbox> boxes = new List<AttackHitbox>();
     private Rigidbody body;
     private CombatInput input;
@@ -76,6 +85,10 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     private float counterWindowUntil;
     private bool counterTriggered;
     private bool activeHeavy;
+    private PlayerCombatRules.Strike playerStrike=PlayerCombatRules.Kick(0);
+    private float attackStarted,attackEnds,offenseReadyAt,heavyReadyAt,dodgeReadyAt,parryReadyAt,ultimateReadyAt,guardDamagedAt;
+    private float bufferedAt=float.NegativeInfinity;
+    private bool gaugeAwarded;
 
     private void Awake()
     {
@@ -91,20 +104,27 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         attackWindup = windup; attackRecovery = recovery;
     }
     public void ReleaseGuard() { if (State == ActionState.GUARD) State = ActionState.IDLE; }
-    public void Configure(int team) { Team = team; Facing = team == 0 ? Vector3.right : Vector3.left; }
+    public void Configure(int team)
+    {
+        Team=team;Facing=team==0?Vector3.right:Vector3.left;
+        if(team==0){parryWindow=.10f;guardDamageMultiplier=.10f;dodgeDuration=.28f;dodgeInvulnerability=.14f;dodgeSpeed=8;}
+    }
     private void Update()
     {
         if (Time.timeScale == 0 || !GameplayEnabled || Health == null || !Health.Alive) return;
         Progress.Tick(Time.time);
+        if(Team==0&&Time.time>guardDamagedAt+.9f)GuardIntegrity=Mathf.Min(100,GuardIntegrity+Time.deltaTime*(State==ActionState.GUARD?10:24));
         if (State == ActionState.HIT && Time.time >= lockedUntil) State = ActionState.IDLE;
         if (input == null || !input.GameplayEnabled) return;
-        if (State == ActionState.ATTACK && (PunchStrike?input.PunchPressed:input.AttackPressed)) queuedBasic = true;
+        if(State==ActionState.ATTACK&&!activeHeavy&&(PunchStrike?input.PunchPressed:input.AttackPressed)&&
+            (Team!=0||Time.time>=attackEnds-PlayerCombatRules.InputBuffer))
+        {queuedBasic=true;bufferedAt=Time.time;}
         if (State == ActionState.GUARD && !input.GuardHeld) State = ActionState.IDLE;
         if (input.GuardPressed && (CanAct || State == ActionState.GUARD))
-        { guardStarted = Time.time; State = ActionState.GUARD; StopPlanarMotion(); }
-        else if (CanAct && input.GuardHeld) { State = ActionState.GUARD; StopPlanarMotion(); }
+        { TryGuard(true); }
+        else if (CanAct && input.GuardHeld) { TryGuard(false); }
         if ((CanAct || State == ActionState.GUARD) && input.DodgePressed)
-        { State = ActionState.IDLE; TryDodge(input.DodgeDirection); return; }
+        { TryDodge(input.DodgeDirection); return; }
         if (CanAct && motor != null) Facing = motor.FacingDirection;
         if (CanAct && input.UltimatePressed) { TryUltimate(); return; }
         if (CanAct && input.PunchPressed) { TryPunch(); return; }
@@ -118,12 +138,13 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     }
     public bool TryAttack(bool heavy)
     {
-        if (!CanAct) return false;
-        StartCoroutine(AttackRoutine(heavy,Team!=0&&(!heavy||!HeavyUsesKick))); return true;
+        if(!CanStartOffense||Team==0&&heavy&&Time.time<heavyReadyAt)return false;
+        if(Team==0&&heavy)heavyReadyAt=Time.time+PlayerCombatRules.HeavyReuse;
+        StartCoroutine(AttackRoutine(heavy,Team!=0&&(!heavy||!HeavyUsesKick)));return true;
     }
     public bool TryBossMove(BossMove move,bool earlyArmor=false)
     {
-        if(!CanAct||Team==0||!BossUltimateEnabled||move==null)return false;
+        if(!CanAct||Team==0||!BossUltimateEnabled||move==null||!DojaehakMoves.CanUseInCombat(move.Clip))return false;
         StartCoroutine(BossMoveRoutine(move,earlyArmor));return true;
     }
     public void CancelBossMove()
@@ -134,6 +155,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     {
         CurrentBossMove=move;BossMoveEarlyArmor=earlyArmor&&move.Armor;bossMoveStarted=Time.time;BossMoveStrikeIndex=-1;
         State=ActionState.ATTACK;activeHeavy=!move.Punch;PunchStrike=move.Punch;PunchLeft=move.Clip=="PunchLeft";
+        attackStarted=Time.time;attackEnds=Time.time+move.Duration;
         StopPlanarMotion();AttackPrepared?.Invoke();Warn(BossMoveEarlyArmor?"버티고 "+move.Warning:move.Warning,move.Windup);
         for(int i=0;i<move.StrikeTimes.Length;i++)
         {
@@ -147,32 +169,32 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         CurrentBossMove=null;BossMoveEarlyArmor=false;BossMoveStrikeIndex=-1;State=ActionState.IDLE;
     }
     public bool TryPunch()
-    {if(!CanAct)return false;StartCoroutine(AttackRoutine(false,true));return true;}
+    {if(!CanStartOffense)return false;StartCoroutine(AttackRoutine(false,true));return true;}
     private IEnumerator AttackRoutine(bool heavy,bool punch)
     {
-        State = ActionState.ATTACK; activeHeavy = heavy; PunchStrike=punch; StopPlanarMotion();
-        int chain = 0;
+        State=ActionState.ATTACK;activeHeavy=heavy;PunchStrike=punch;StopPlanarMotion();int chain=0;
         do
         {
-            queuedBasic = false;
-            BasicComboHit = heavy ? 0 : chain + 1;
+            queuedBasic=false;bufferedAt=float.NegativeInfinity;BasicComboHit=heavy?0:chain+1;
             if(punch)PunchLeft=punchSequence.Next(Time.time);
-            AttackPrepared?.Invoke();
-            if (TelegraphEnabled) Warn(heavy ? "강공격!" : "공격!", attackWindup * (heavy ? 1.8f : 1));
-            yield return new WaitForSeconds(attackWindup * (heavy ? 1.8f : 1));
-            SpawnStrike(heavy ? heavyDamage : basicDamage + Mathf.Min(chain,2) * 2,
-                heavy ? 6 : !punch && chain == 2 ? 4 : 1.2f, false);
-            yield return new WaitForSeconds(attackRecovery * (heavy ? 1.6f : 1));
-            chain++;
-        } while (!heavy && queuedBasic && (punch || chain < 3));
-        State = ActionState.IDLE;
+            if(Team==0)playerStrike=heavy?PlayerCombatRules.Heavy:punch?PlayerCombatRules.Punch(chain):PlayerCombatRules.Kick(chain);
+            attackStarted=Time.time;attackEnds=Time.time+VisualWindup+VisualRecovery;
+            AttackPrepared?.Invoke();if(TelegraphEnabled)Warn(heavy?"강공격!":"공격!",VisualWindup);
+            float impactAt=attackStarted+VisualWindup;
+            while(Time.time<impactAt)yield return null;
+            float damage=Team==0?playerStrike.Damage*(basicDamage/12f):heavy?heavyDamage:basicDamage;
+            SpawnStrike(damage,Team==0?playerStrike.Knockback:heavy?6:1.2f,false,Team==0?playerStrike.Reach:1.3f);
+            while(Time.time<attackEnds)yield return null;chain++;
+        }while(!heavy&&queuedBasic&&chain<3&&(Team!=0||Time.time-bufferedAt<=PlayerCombatRules.InputBuffer+.06f));
+        if(Team==0)offenseReadyAt=Time.time+(heavy?.20f:punch?.22f:.18f);
+        State=ActionState.IDLE;
     }
     private void Warn(string text, float duration) { WarningText = text; WarningUntil = Time.time + duration; }
     private void SpawnStrike(float damage, float knockback, bool unblockable, float reach = 1.3f)
     {
         WarningText = "";
         boxes.RemoveAll(box => box == null);
-        StrikeStarted?.Invoke();
+        gaugeAwarded=false;StrikeStarted?.Invoke();
         GameObject box = new GameObject("Attack Hitbox");
         box.transform.position = transform.position + Facing * (.95f + (reach - 1.3f) * .5f);
         box.transform.rotation = Quaternion.LookRotation(Facing);
@@ -185,7 +207,8 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         CombatActor target = receiver as CombatActor;
         if (target != null)
         {
-            Progress.ConfirmHit(Time.time, gain: State == ActionState.ULTIMATE ? 0 : 12);
+            float gain=State==ActionState.ULTIMATE||gaugeAwarded?0:Team==0&&playerStrike!=null?playerStrike.Gain:12;
+            Progress.ConfirmHit(Time.time,gain:gain);gaugeAwarded=true;
             HitConfirmed?.Invoke(this, target, position);
             if (State == ActionState.ULTIMATE) UltimateLanded?.Invoke(activeUltimate);
             if (State == ActionState.ATTACK)
@@ -208,11 +231,22 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         if (result.Kind == DamageKind.Parried)
         {
             CombatActor source = hit.Source == null ? null : hit.Source.GetComponent<CombatActor>();
-            if (source != null) source.Stagger(.4f);
+            if(source!=null)source.Stagger(Team==0?.70f:.4f);
+            if(Team==0){GuardIntegrity=Mathf.Min(100,GuardIntegrity+12);Progress.ConfirmHit(Time.time,gain:10);}
             Damaged?.Invoke(result); Parried?.Invoke(); return false;
         }
         if (result.Kind == DamageKind.Guarded && Health.Alive)
-        { Damaged?.Invoke(result); return false; }
+        {
+            if(Team==0)
+            {
+                GuardIntegrity=Mathf.Max(0,GuardIntegrity-(8+hit.Damage*2));guardDamagedAt=Time.time;offenseReadyAt=Mathf.Max(offenseReadyAt,Time.time+.16f);
+                if(GuardIntegrity<=0)
+                {CancelActions();State=ActionState.HIT;lockedUntil=Time.time+.60f;GuardIntegrity=30;StopPlanarMotion();Damaged?.Invoke(result);GuardBroken?.Invoke();return false;}
+            }
+            Damaged?.Invoke(result);return false;
+        }
+        if(Health.Alive&&Team==0&&State==ActionState.ULTIMATE&&activeUltimate==3&&!hit.Unblockable&&hit.Knockback<4)
+        {Damaged?.Invoke(result);return true;}
         if(Health.Alive&&CurrentBossMove!=null&&(CurrentBossMove.ArmoredAt(BossMoveElapsed)||BossMoveEarlyArmor&&BossMoveElapsed<=CurrentBossMove.StrikeTimes[CurrentBossMove.StrikeTimes.Length-1]+.1f)&&!hit.Unblockable&&hit.Knockback<4&&
             (hit.Source==null||hit.Source.GetComponent<CombatActor>()?.State!=ActionState.ULTIMATE))
         {Damaged?.Invoke(result);return true;}
@@ -226,13 +260,18 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     }
     public bool TryDodge(Vector3 direction)
     {
-        if (!CanAct || direction.sqrMagnitude < .01f) return false;
+        if((!CanAct&&State!=ActionState.GUARD)||!GameplayEnabled||!Health.Alive||direction.sqrMagnitude<.01f||Team==0&&Time.time<dodgeReadyAt)return false;
+        if(Team==0)dodgeReadyAt=Time.time+PlayerCombatRules.DodgeReuse;
         StartCoroutine(DodgeRoutine(direction.normalized)); return true;
     }
     public bool TryGuard(bool freshPress)
     {
         if (!CanAct && State != ActionState.GUARD) return false;
-        if (freshPress) guardStarted = Time.time;
+        if(freshPress)
+        {
+            if(Team!=0||Time.time>=parryReadyAt){guardStarted=Time.time;if(Team==0)parryReadyAt=Time.time+PlayerCombatRules.ParryReuse;}
+            else guardStarted=float.NegativeInfinity;
+        }
         State = ActionState.GUARD; StopPlanarMotion(); return true;
     }
     private IEnumerator DodgeRoutine(Vector3 direction)
@@ -262,7 +301,8 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     }
     public bool TryUltimate()
     {
-        if (!CanAct || Team != 0 || Progress.UltimateTier == 0) return false;
+        if(!CanStartOffense||Team!=0||Progress.UltimateTier==0||Time.time<ultimateReadyAt)return false;
+        ultimateReadyAt=Time.time+3;
         int tier = Progress.ConsumeUltimate(); StartCoroutine(UltimateRoutine(tier)); return true;
     }
     private IEnumerator UltimateRoutine(int tier)
@@ -271,10 +311,10 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         UltimateStarted?.Invoke(tier);
         if (tier == 2)
         {
-            counterTriggered = false; counterWindowUntil = Time.time + .65f;
-            yield return new WaitForSeconds(.65f);
+            counterTriggered = false; counterWindowUntil = Time.time + .50f;
+            yield return new WaitForSeconds(.50f);
         }
-        else yield return new WaitForSeconds(tier == 3 ? .4f : .12f);
+        else yield return new WaitForSeconds(tier == 3 ? .36f : .24f);
         if (tier != 2 || counterTriggered)
         {
             int strikes = UltimateHitCount(tier);
@@ -282,12 +322,12 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
             {
                 UltimateStrikeIndex = i;
                 bool finisher = i == strikes - 1;
-                SpawnStrike(tier == 3 ? 10 : tier == 2 ? 16 : 10,
-                    finisher ? (tier == 3 ? 9 : 2) : .25f, tier == 3);
+                SpawnStrike(PlayerCombatRules.UltimateDamage(tier,i),
+                    finisher?(tier==3?7:2):.25f,tier==3,tier==3?2.1f:1.6f);
                 yield return new WaitForSeconds(UltimateStrikeInterval);
             }
         }
-        yield return new WaitForSeconds(.2f); activeUltimate = 0; State = ActionState.IDLE;
+        yield return new WaitForSeconds(activeUltimate==3?.52f:.38f);activeUltimate=0;offenseReadyAt=Time.time+.35f;State=ActionState.IDLE;
     }
     private void CancelActions()
     {
@@ -307,7 +347,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
             CombatActor holder = heldBy; heldBy = null; holder.heldTarget = null;
             if (holder.State == ActionState.GRAB) holder.State = ActionState.IDLE;
         }
-        foreach (AttackHitbox box in boxes) if (box != null) Destroy(box.gameObject);
+        foreach(AttackHitbox box in boxes)if(box!=null){box.Cancel();Destroy(box.gameObject);}
         boxes.Clear();
     }
     public void RestoreForTutorial()
@@ -315,11 +355,11 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         punchSequence.Reset();
         GetComponent<DefeatedBody>()?.Restore();
         CancelActions(); Health.Reset(); State = ActionState.IDLE;
-        invulnerableUntil = 0; guardStarted = float.NegativeInfinity; StopPlanarMotion();
+        invulnerableUntil=0;guardStarted=float.NegativeInfinity;offenseReadyAt=heavyReadyAt=dodgeReadyAt=parryReadyAt=ultimateReadyAt=0;GuardIntegrity=100;guardDamagedAt=Time.time;StopPlanarMotion();
     }
     public bool TryGrab()
     {
-        if (!CanAct) return false;
+        if(!CanStartOffense)return false;
         CombatActor nearest = null; float distance = 1.6f;
         foreach (Collider collider in Physics.OverlapSphere(transform.position, distance,
             ~0, QueryTriggerInteraction.Ignore))

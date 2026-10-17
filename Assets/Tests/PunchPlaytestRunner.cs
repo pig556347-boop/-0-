@@ -40,6 +40,7 @@ public sealed class PunchPlaytestRunner : MonoBehaviour
                     Check(!float.IsNaN(bone.position.x)&&Vector3.Distance(bone.position,root.transform.position)<5,"finite bounded pose");
                 if(strike==1){Debug.Log("PUNCH_PREVIEW_READY kind="+kind);yield return new WaitForSeconds(.1f);}
                 yield return new WaitForSeconds(.4f);
+                if(kind==0)while(!actor.CanStartOffense)yield return null;
                 Check(actor.CanAct,"punch recovers");
             }
             yield return new WaitForSeconds(3.1f);

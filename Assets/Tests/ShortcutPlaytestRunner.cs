@@ -19,6 +19,7 @@ public sealed class ShortcutPlaytestRunner : MonoBehaviour
     }
     private IEnumerator Start()
     {
+        var audio=gameObject.AddComponent<GameAudioChannels>();
         var boot=gameObject.AddComponent<PrototypeBootstrap>();boot.enabled=false;boot.BeginGame();
         encounter=GetComponent<EncounterDirector>();var lesson=GetComponent<TutorialDirector>();
         CombatActor player=null;foreach(var actor in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))if(actor.Team==0)player=actor;
@@ -34,9 +35,12 @@ public sealed class ShortcutPlaytestRunner : MonoBehaviour
         player.Progress.FillGaugeForPractice();Check(player.TryUltimate(),"navigation during ultimate");
         yield return Key("2",5);
         Check(player.State==CombatActor.ActionState.IDLE&&player.Health.Current==player.Health.Maximum&&!player.Health.Infinite,"boss entry cancels ultimate and restores finite health");
+        yield return new WaitForSecondsRealtime(.40f);Check(audio.CurrentMusic=="BossMusic","dedicated Dojaehak music selected");
+        Debug.Log("BOSS_MUSIC_READY");
         var old=FindFirstObjectByType<DojaehakBrain>();Check(old!=null,"real authored Dojaehak spawned");
-        old.GetComponent<EnemyBrain>().enabled=false;Check(old.GetComponent<CombatActor>().TryBossMove(DojaehakMoves.Get("QuadPunch")),"boss attack active before navigation");
+        old.GetComponent<EnemyBrain>().enabled=false;Check(old.GetComponent<CombatActor>().TryBossMove(DojaehakMoves.Get("SideKick")),"boss attack active before navigation");
         yield return Key("3",10);Check(old==null,"attacking old boss removed");
+        yield return new WaitForSecondsRealtime(.40f);Check(audio.CurrentMusic=="BattleMusic","leaving Dojaehak restores regular battle music");
         CombatActor boss=null;int count=0;foreach(var actor in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))if(actor.Team==1){boss=actor;count++;}
         Check(count==1&&boss.name=="한승빈","only requested 1-10 boss remains");
         boss.GetComponent<EnemyBrain>().Active=false;boss.ReceiveHit(new HitRequest(player.gameObject,99999,Vector3.right,true,0));

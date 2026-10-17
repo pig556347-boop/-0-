@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using SchoolRuleZero;
 
 // Tests the supplied skin in the real enemy factory and combat state machine.
 public sealed class Minion1PlaytestRunner : MonoBehaviour
@@ -38,8 +39,9 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
         var enemy=PrototypeBootstrap.CreateOpponent("잔몹1",new Vector3(0,1,0),player);
         var brain=enemy.GetComponent<EnemyBrain>();brain.Active=false;
         var body=enemy.GetComponent<Rigidbody>();body.useGravity=false;body.constraints=RigidbodyConstraints.FreezeAll;
-        enemy.ConfigureStats(100,8,.2f,.3f);enemy.SetFacing(Vector3.back);
+        enemy.ConfigureStats(100,SchoolCampaign.Damage(3,false),SchoolCampaign.Windup(3,false),SchoolCampaign.Recovery(3));enemy.SetFacing(Vector3.back);
         float windup=enemy.VisualWindup,recovery=enemy.VisualRecovery;
+        Check(windup>=.5f&&recovery>=.5f,"each supplied skin is exercised with readable production student timing");
         Check(enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model(kind),"supplied skin installed");
         Check(enemy.VisualWindup==windup&&enemy.VisualRecovery==recovery,"skin attachment preserves attack timing");
         var view=enemy.GetComponentInChildren<Minion1View>();var skin=view.GetComponentInChildren<SkinnedMeshRenderer>();
@@ -83,10 +85,10 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
         view.ResumeRuntime();enemy.RestoreForTutorial();
         for(int i=0;i<(second?5:4);i++)
         {
-            bool heavy=i>=2;Check(enemy.TryAttack(heavy),"real combat attack starts");
+            bool heavy=i>=2;Check(enemy.TryAttack(heavy),"real combat attack starts");float attackDuration=enemy.VisualWindup+enemy.VisualRecovery;
             Check(enemy.PunchStrike!=heavy,"kick heavy does not consume punch sequence");yield return new WaitForSeconds(.1f);
             Check(view.CurrentMotion==(i==0?"PunchLeft":i==1?"PunchRight":third?"Kicking":fourth?"MmaKick":i==2?"MmaKick":i==3?"Kicking":"SideKick"),"correct runtime attack selection "+i);
-            yield return new WaitForSeconds(heavy?1:.6f);Check(enemy.CanAct,"attack returns control");
+            yield return new WaitForSeconds(Mathf.Max(0,attackDuration-.1f)+.08f);Check(enemy.CanAct,"attack returns control after its full production recovery");
         }
         body.useGravity=true;body.constraints=RigidbodyConstraints.FreezeRotation;brain.MoveSpeed=1.6f;brain.ThinkInterval=.25f;brain.Active=true;
         Vector3 before=enemy.transform.position;yield return new WaitForSeconds(.6f);

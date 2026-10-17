@@ -38,6 +38,7 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         player.AddComponent<CombatActor>().Configure(0);
         player.AddComponent<ActorSeparation>();
         visual.AddComponent<PrototypeCharacterView>().Build(player.GetComponent<CombatActor>());
+        player.AddComponent<CombatVisualFeedback>();
         GameObject enemy = CreateOpponent("Enemy", new Vector3(1, 1.05f, -2),
             player.GetComponent<CombatActor>()).gameObject;
         MotionVerificationProbe.Install(player.GetComponent<CombatActor>(), enemy.GetComponent<CombatActor>());
@@ -66,7 +67,6 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         }
         player.GetComponent<CombatActor>().HitConfirmed += effects.OnHit;
         enemy.GetComponent<CombatActor>().HitConfirmed += effects.OnHit;
-        player.GetComponent<CombatActor>().Dodged += () => effects.DodgeTrail(player.GetComponent<CombatActor>());
         PrototypeHUD hud = gameObject.AddComponent<PrototypeHUD>();
         hud.Initialize(player.GetComponent<CombatActor>(), enemy.GetComponent<CombatActor>());
         if (RunSmokeChecks) gameObject.AddComponent<PrototypeSmokeTest>();
@@ -80,7 +80,12 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         if(!RunSmokeChecks&&TestCombatShortcuts.Enabled)gameObject.AddComponent<TestCombatShortcuts>();
         RunSmokeChecks = false;
         Light light = new GameObject("Key light").AddComponent<Light>();
-        light.type = LightType.Directional; light.intensity = 1.1f;
+        light.type = LightType.Directional; light.intensity = 1.05f;
+        light.color = new Color(1,.96f,.89f);
+        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+        RenderSettings.ambientLight = new Color(.64f,.69f,.74f);
+        QualitySettings.antiAliasing = 2;
+        camera.allowMSAA = true;
         light.transform.rotation = Quaternion.Euler(50, -30, 0);
     }
 
@@ -115,6 +120,7 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         enemy.AddComponent<EnemyBrain>().Target = player;
         enemy.AddComponent<ActorSeparation>();
         enemy.AddComponent<EnemyHealthBar>();
+        enemy.AddComponent<CombatVisualFeedback>();
         return actor;
     }
     private static void CreateClassroom()
@@ -132,6 +138,7 @@ public sealed class PrototypeBootstrap : MonoBehaviour
             if (boundaryRenderer != null) boundaryRenderer.enabled = false;
         }
         ClassroomAssetBuilder.Build(scenery);
+        ClassroomAtmosphere.Build(scenery);
     }
     public static void SetArena(int stage, int area, bool boss)
     {
@@ -153,9 +160,15 @@ public sealed class PrototypeBootstrap : MonoBehaviour
         if (boss)
         {
             CreateBox("Fight mat", new Vector3(0,.015f,0), new Vector3(19,.02f,12),
-                new Color(.24f,.32f,.34f));
+                new Color(.28f,.30f,.30f));
             for (int i = -1; i <= 1; i++)
-                CreateBox("Mat stripe", new Vector3(i*8,.03f,0), new Vector3(.08f,.01f,12), Color.white);
+                CreateBox("Mat stripe", new Vector3(i*8,.035f,0), new Vector3(.045f,.01f,12), new Color(.69f,.68f,.60f));
+            for(int side=-1;side<=1;side+=2)
+            {
+                CreateBox("Arena edge",new Vector3(0,.035f,side*5.2f),new Vector3(16,.01f,.045f),new Color(.69f,.68f,.60f));
+                for(int corner=-1;corner<=1;corner+=2)
+                    CreateBox("Arena corner",new Vector3(corner*8,.037f,side*4.7f),new Vector3(.16f,.012f,.95f),new Color(.65f,.22f,.14f));
+            }
         }
     }
     private static void CreateBoundary(string name, Vector3 position, Vector3 scale, Color color)

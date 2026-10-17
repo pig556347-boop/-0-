@@ -11,6 +11,11 @@ public static class HUDCIBuild
     public static void Build()
     {
         CharacterModelImport.PrepareForBuild();
+        foreach(string guid in AssetDatabase.FindAssets("t:Shader",new[]{"Assets/Resources/Shaders"}))
+        {
+            string path=AssetDatabase.GUIDToAssetPath(guid);var shader=AssetDatabase.LoadAssetAtPath<Shader>(path);
+            if(shader==null||ShaderUtil.ShaderHasError(shader))throw new System.InvalidOperationException("Rendering shader failed: "+path);
+        }
         ClassroomBuildCheck.Validate();
         AuthoredMotionImport.Validate();
         var minion=Resources.Load<TextAsset>("Characters/Minion1/Minion1PoseData");

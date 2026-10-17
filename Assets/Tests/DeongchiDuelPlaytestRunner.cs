@@ -70,16 +70,23 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
         yield return null;yield return null;
         Check(duel.ReadyForCampaign,"Enter completes duel");
         Check(enemy==null||!enemy.gameObject.activeSelf,"training opponent removed after victory");
-        int alive=0;foreach(var actor in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
-            if(actor.Team==1&&actor.Health.Alive)alive++;
-        Check(alive>0,"campaign opponents spawn after duel");
+        var encounter=GetComponent<EncounterDirector>();player.Health.Infinite=true;
+        int alive=0;float firstJoinTimeout=Time.time+1.4f;
+        do
+        {
+            alive=0;foreach(var actor in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
+                if(actor.Team==1&&actor.Health.Alive)alive++;
+            Check(alive<=SchoolCampaign.VisibleLimit(1),"opening campaign respects two-student on-screen budget");
+            if(alive>=SchoolCampaign.VisibleLimit(1))break;
+            yield return null;
+        }while(Time.time<firstJoinTimeout);
+        Check(alive==2,"opening campaign joins two opponents at separate beats");
         Check(FindObjectsByType<Minion1View>(FindObjectsSortMode.None).Length==alive,"campaign ordinary opponents use supplied student skins");
-        bool firstSkin=false,secondSkin=false,thirdSkin=false;foreach(var v in FindObjectsByType<Minion1View>(FindObjectsSortMode.None))
-        {firstSkin|=v.ModelKind=="Minion1";secondSkin|=v.ModelKind=="Minion2";thirdSkin|=v.ModelKind=="Minion3";}
-        Check(firstSkin&&secondSkin&&thirdSkin,"all three supplied student variants spawn in real campaign");
+        bool firstSkin=false,secondSkin=false;foreach(var v in FindObjectsByType<Minion1View>(FindObjectsSortMode.None))
+        {firstSkin|=v.ModelKind=="Minion1";secondSkin|=v.ModelKind=="Minion2";}
+        Check(firstSkin&&secondSkin,"opening campaign uses first two supplied student variants");
         Check(player.CanAct,"player controls restored for campaign");
         Debug.Log("CAMPAIGN_MINION_PREVIEW_READY");yield return new WaitForSeconds(.5f);
-        var encounter=GetComponent<EncounterDirector>();player.Health.Infinite=true;
         foreach(int stage in new[]{2,5,6,10,11})
         {
             // Jump only in this fixture to real production late-stage spawning/cleanup.
@@ -91,12 +98,10 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
                 var firstBoss=FindObjectsByType<DojaehakBrain>(FindObjectsSortMode.None);
                 Check(firstBoss.Length==1,"stage 1-5 creates real Dojaehak boss controller");
                 Check(firstBoss[0].GetComponentInChildren<Minion1View>().ModelKind=="Dojaehak","stage 1-5 uses supplied boss skin");
-                Check(!firstBoss[0].GetComponent<CombatActor>().Health.Infinite,"mid-boss is finite after tutorial");
-            }
-            if(stage==2)
-            {
-                bool fourthSeen=false;foreach(var skin in FindObjectsByType<Minion1View>(FindObjectsSortMode.None))fourthSeen|=skin.ModelKind=="Minion4";
-                Check(fourthSeen,"fourth student appears by stage 1-2 despite three-enemy limit");
+                var midBoss=firstBoss[0].GetComponent<CombatActor>();
+                Check(!midBoss.Health.Infinite,"mid-boss is finite after tutorial");
+                Check(midBoss.Health.Maximum==SchoolCampaign.HP(5,true)&&midBoss.Health.Current==300,"campaign boss uses the balanced health budget");
+                Check(firstBoss[0].ReadyAt>Time.time+.85f,"boss arrival gives time to orient before its first pattern");
             }
             if(stage==6)
             {
@@ -104,13 +109,23 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
                 foreach(var skin in FindObjectsByType<Minion1View>(FindObjectsSortMode.None))kinds.Add(skin.ModelKind);
                 Check(kinds.SetEquals(new[]{"Minion1","Minion2","Minion3","Minion4"}),"all four supplied student skins coexist in real campaign");
             }
-            var defeated=new List<CombatActor>();int expected=SchoolCampaign.EnemyCount(stage,encounter.Area);
+            var defeated=new List<CombatActor>();var observedKinds=new HashSet<string>();
+            int expected=SchoolCampaign.EnemyCount(stage,encounter.Area);
             float until=Time.time+5;
             while(defeated.Count<expected&&Time.time<until)
             {
+                int visible=0;foreach(var foe in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
+                    if(foe.Team==1&&foe.Health.Alive)visible++;
+                Check(visible<=SchoolCampaign.VisibleLimit(stage),"real wave never exceeds concurrent student budget stage="+stage);
                 foreach(var foe in FindObjectsByType<CombatActor>(FindObjectsSortMode.None))
                 {
                     if(foe.Team!=1||!foe.Health.Alive)continue;
+                    var supplied=foe.GetComponentInChildren<Minion1View>();if(supplied!=null)observedKinds.Add(supplied.ModelKind);
+                    if(stage<=5&&!SchoolCampaign.IsBossRound(stage,encounter.Area))
+                    {
+                        Check(foe.VisualWindup>=.48f&&foe.VisualRecovery>=.5f,"early student attack has readable startup and recovery");
+                        Check(foe.GetComponent<EnemyBrain>().AttackInterval>=1.9f,"early student has a real attack cadence");
+                    }
                     Check(foe.GetComponent<DefeatedBody>().LifetimeAfterSettled>0,"late-stage corpse cleanup configured stage="+stage);
                     foe.GetComponent<EnemyBrain>().Active=false;
                     Check(foe.ReceiveHit(new HitRequest(player.gameObject,99999,Vector3.right,true,0)),"late-stage lethal hit stage="+stage);
@@ -119,6 +134,7 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
                 yield return null;yield return null;
             }
             Check(defeated.Count==expected,"all late-stage wave enemies defeated stage="+stage);
+            if(stage==2)Check(observedKinds.Contains("Minion3")&&observedKinds.Contains("Minion4"),"later supplied variants arrive through staggered stage 1-2 reinforcements");
             yield return new WaitForSeconds(.65f);
             int shown=0;foreach(var foe in defeated)if(foe!=null){shown++;Check(foe.GetComponent<DefeatedBody>().Settled,"death settles before cleanup stage="+stage);}
             Check(shown>0,"death shown before cleanup stage="+stage);

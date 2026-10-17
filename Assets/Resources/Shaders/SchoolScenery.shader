@@ -26,8 +26,10 @@ Shader "SchoolRuleZero/Scenery"
                 // Continuous lighting prevents small normal variations on flat
                 // imported walls from becoming large contrasting triangle patches.
                 float light=abs(dot(normalize(i.normal),normalize(float3(-.3,.8,-.5))));
-                float tone=.88+.12*saturate(light*.5+.5);
-                return fixed4(tex2D(_MainTex,i.uv).rgb*tone,1);
+                float tone=.94+.06*saturate(light);
+                // Keep the original UV/texture detail and a narrow lighting range;
+                // the reduced wall and desk meshes must not regain triangle stains.
+                return fixed4(tex2D(_MainTex,i.uv).rgb*tone*float3(1.015,1,.98),1);
             }
             ENDCG
         }
