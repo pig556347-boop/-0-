@@ -202,7 +202,7 @@ internal static class Program
             var signals = new[] { TutorialSignal.Moved, TutorialSignal.Jumped,
                 TutorialSignal.Crouched, TutorialSignal.BasicHit, TutorialSignal.HeavyHit,
                 TutorialSignal.Guarded, TutorialSignal.Parried, TutorialSignal.Dodged,
-                TutorialSignal.Grabbed, TutorialSignal.FullyCharged, TutorialSignal.UltimateTierThreeHit };
+                TutorialSignal.Punched, TutorialSignal.FullyCharged, TutorialSignal.UltimateTierThreeHit };
             foreach (var signal in signals) Assert(tutorial.Accept(signal), "Valid action not accepted");
             Assert(tutorial.Step == TutorialStep.Complete, "Tutorial did not finish");
             Assert(!tutorial.Accept(TutorialSignal.Moved), "Completed tutorial advanced again");
