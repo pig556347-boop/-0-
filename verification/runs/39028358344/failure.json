@@ -1,0 +1,4 @@
+{
+  "commit": "53623d56120f7c29336de71824137ef1c6cfe7d9",
+  "error": "Error: Player balance failed: NullReferenceException: Object reference not set to an instance of an object.\n  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00000] in <00000000000000000000000000000000>:0 \n\n NullReferenceException: Object reference not set to an instance of an object.\n  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00000] in <00000000000000000000000000000000>:0 \n\n"
+}
