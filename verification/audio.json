@@ -1,62 +1,72 @@
 {
-  "commit": "af4630b987b7008fe9a612be8f8023937df4950f",
-  "lobbyRms": 0.05963874325155537,
+  "commit": "a03b818f091e78c121b1cb859c324d7bbe88578a",
+  "lobbyRms": 0.053661555833836826,
   "contexts": {
     "meters": 2,
     "states": [
       {
         "state": "running",
-        "time": 8.341768707482993
+        "time": 7.85124716553288
       },
       {
         "state": "running",
-        "time": 3.7209977324263037
+        "time": 3.770340136054422
       }
     ],
     "gains": [
-      0.550000011920929,
-      0.75
+      0.47999998927116394,
+      0.6399999856948853,
+      1,
+      1,
+      1,
+      1,
+      1
     ],
     "sources": [
       {
         "loop": true,
         "duration": 21.333333333333332,
         "rate": 1,
-        "rms": 0.03975151064228728
+        "rms": 0.05206118946674605
       },
       {
         "loop": false,
-        "duration": 0.08997732426303855,
+        "duration": 0.09,
         "rate": 1,
-        "rms": 0.07360832207302448
+        "rms": 0.11253600648843542
       },
       {
         "loop": false,
-        "duration": 0.08997732426303855,
+        "duration": 0.09,
         "rate": 1,
-        "rms": 0.07360832207302448
+        "rms": 0.11253600648843542
       },
       {
         "loop": false,
-        "duration": 0.08997732426303855,
+        "duration": 0.09,
         "rate": 1,
-        "rms": 0.07360832207302448
+        "rms": 0.11253600648843542
       }
     ]
   },
   "mutedRms": 0,
   "musicMute": true,
-  "battleRms": 0.026063837864501165,
+  "battleRms": 0.044984365140965515,
   "events": [
     "LobbyMusic",
     "Menu",
     "BattleMusic",
     "Down",
     "Success",
+    "KickWhoosh",
     "Whoosh",
-    "Hit"
+    "KickHit",
+    "Hit",
+    "HeavyWhoosh",
+    "HeavyHit",
+    "PunchHit"
   ],
   "pauseRms": 0,
-  "resumeRms": 0.026063837864501165,
+  "resumeRms": 0.023901495206351243,
   "pauseResume": true
 }
