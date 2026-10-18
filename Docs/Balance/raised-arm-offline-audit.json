@@ -1,0 +1,29 @@
+{
+  "scope": "Offline Blender reconstruction of Dojaehak bind and shared pose deltas; runtime tests reported separately",
+  "idleFrames": 199,
+  "idleBothHandsAboveHeadBefore": 199,
+  "idleBothHandsAboveHeadAfter": 0,
+  "nativeMmaKickBothHandsAboveHead": [
+    102,
+    103
+  ],
+  "runtimeSource": "376169fe",
+  "studentIdleSamples": {
+    "Minion1": {
+      "samples": 20,
+      "maximumHandHeightRelativeToHead": -0.124
+    },
+    "Minion2": {
+      "samples": 20,
+      "maximumHandHeightRelativeToHead": -0.062
+    },
+    "Minion3": {
+      "samples": 20,
+      "maximumHandHeightRelativeToHead": -0.124
+    },
+    "Minion4": {
+      "samples": 20,
+      "maximumHandHeightRelativeToHead": -0.089
+    }
+  }
+}
