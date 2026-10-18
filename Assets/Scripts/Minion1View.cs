@@ -33,6 +33,7 @@ public sealed class Minion1View : MonoBehaviour
         var prefab=Resources.Load<GameObject>("Characters/"+modelKind+"/"+modelKind+"Model");
         if(prefab==null)throw new InvalidOperationException("Supplied "+modelKind+" model missing");
         var view=owner.gameObject.AddComponent<Minion1View>();view.ModelKind=modelKind;view.actor=actor;view.body=actor.GetComponent<Rigidbody>();
+        actor.GetComponent<CombatHurtbox>().SetBuild(modelKind=="Minion1"?.46f:modelKind=="Minion3"?.48f:.40f,modelKind=="Minion2"||modelKind=="Minion4"?.33f:modelKind=="Minion3"?.38f:.36f,modelKind=="Dojaehak"?1.90f:1.85f);
         view.model=Instantiate(prefab,owner.transform,false).transform;view.model.name=modelKind+" skin";
         view.model.localScale=Vector3.one;view.model.localRotation=Quaternion.identity;
         view.home=new Vector3(0,-.95f,0);view.model.localPosition=view.home;
@@ -89,6 +90,8 @@ public sealed class Minion1View : MonoBehaviour
     {
         started=Time.time;hitAt=-100;
         if(actor.CurrentBossMove!=null){attack=actor.CurrentBossMove.Clip;current="";return;}
+        // Never sample a full kick/flourish via a generic boss fallback.
+        if(ModelKind=="Dojaehak"){attack=actor.PunchLeft?"PunchLeft":"PunchRight";current="";return;}
         if(actor.HeavyStrike)
         {
             if(ModelKind=="Minion3")attack="Kicking";

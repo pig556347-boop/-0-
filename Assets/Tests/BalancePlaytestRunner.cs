@@ -102,6 +102,26 @@ public sealed class BalancePlaytestRunner : MonoBehaviour
         player.AttackPrepared+=()=>{preparedTimes.Add(Time.time);preparedCombo.Add(player.BasicComboHit);};
         Trace("first fixture reset");ResetPair();yield return null;
 
+        Trace("body-sized contact boundaries");
+        // Real physics capsule overlaps, but the visible slim torso is outside the punch lane.
+        ResetPair();target.GetComponent<CombatHurtbox>().SetBuild(.48f,.34f,1.85f);
+        Place(target,new Vector3(1.3f,1,.62f));Physics.SyncTransforms();
+        Check(player.TryPunch(),"near-miss punch starts");yield return new WaitForSeconds(.25f);
+        Check(target.Health.Current==500&&hits==0,"punch beside slim body does not hit the movement capsule");
+        ResetPair();Place(target,new Vector3(1.3f,1,.48f));Physics.SyncTransforms();
+        Check(player.TryPunch(),"slim body edge punch starts");yield return new WaitForSeconds(.25f);
+        Check(target.Health.Current==493&&hits==1,"punch inside slim body edge hits once");
+        ResetPair();target.GetComponent<CombatHurtbox>().SetBuild(.70f,.48f,1.90f);
+        Place(target,new Vector3(1.3f,1,.62f));Physics.SyncTransforms();
+        Check(player.TryPunch(),"large body edge punch starts");yield return new WaitForSeconds(.25f);
+        Check(target.Health.Current==493&&hits==1,"same lane contacts a genuinely wider body");
+        ResetPair();Place(target,new Vector3(2.0f,1,0));Physics.SyncTransforms();
+        Check(player.TryPunch(),"out-of-reach punch starts");yield return new WaitForSeconds(.25f);
+        Check(target.Health.Current==500,"punch no longer reaches through distant air");
+        var hurt=player.GetComponent<CombatHurtbox>();
+        Check(Mathf.Approximately(hurt.Width,.46f)&&Mathf.Approximately(hurt.Depth,.32f),"player uses own slim body dimensions");
+        ResetPair();
+
         Trace("J and I shared recovery");
         Check(player.TryAttack(false),"J starts");RejectOtherOffense("J windup cannot be cancelled by J K I Q");
         yield return new WaitForSeconds(.12f);Check(target.Health.Current==500,"J startup cannot hit early");

@@ -46,7 +46,7 @@ public static class DojaehakMoves
     [Serializable] private sealed class Info { public Row[] clips; }
     private static Dictionary<string,BossMove> cached;
     // Keep the source clips available for inspection, but exclude their flourish/spin tails from combat.
-    public static bool CanUseInCombat(string name)=>name=="PunchLeft"||name=="PunchRight"||name=="HookPunch"||name=="MmaKick"||name=="SideKick";
+    public static bool CanUseInCombat(string name)=>name=="PunchLeft"||name=="PunchRight"||name=="HookPunch"||name=="SideKick";
     public static BossMove Get(string name)
     {
         if(cached==null)Load();
@@ -60,12 +60,12 @@ public static class DojaehakMoves
         var info=JsonUtility.FromJson<Info>(asset.text);if(info.clips==null||info.clips.Length!=10)throw new InvalidOperationException("Dojaehak motion metadata incomplete");
         var rows=new Dictionary<string,Row>();foreach(var row in info.clips)rows.Add(row.clip,row);
         cached=new Dictionary<string,BossMove>();
-        // The five combat slices remain close to their source playback speed; preparation/flourishes are not compressed into a short hit.
+        // The four combat slices remain close to their source playback speed; preparation/flourishes are not compressed into a short hit.
         Add(rows,"PunchLeft","왼손!",.42f,.30f,2f/3,1.42f,.45f,false,12,52);
         Add(rows,"PunchRight","오른손!",.32f,.34f,5f/6,1.48f,.65f,false,3,43);
         Add(rows,"HookPunch","훅!",.55f,.48f,1,1.62f,1.0f,false,35,96);
         Add(rows,"MmaKick","발차기!",.58f,.72f,4f/3,1.86f,2.7f,true,28,98);
-        Add(rows,"SideKick","옆차기!",.62f,.74f,1.5f,2.0f,2.4f,true,18,90);
+        Add(rows,"SideKick","옆차기!",.62f,.74f,1.5f,2.0f,2.4f,true,28,90);
         // Source preview compatibility only. CombatActor rejects these clips through CanUseInCombat.
         Add(rows,"QuadPunch","미사용",.65f,.90f,.45f,1.6f,.25f,true);
         Add(rows,"RoundhouseKick","미사용",.64f,.95f,1.25f,2.05f,4.0f,true);
@@ -74,6 +74,7 @@ public static class DojaehakMoves
     private static void Add(Dictionary<string,Row> rows,string name,string warning,float windup,float recovery,float damage,float reach,float knockback,bool armor,int start=0,int end=-1)
     {
         Row row=rows[name];int[] contacts=row.contactFrames!=null&&row.contactFrames.Length>0?row.contactFrames:new[]{row.impactFrame};
+        if(CanUseInCombat(name)){windup*=.92f;recovery*=.92f;}
         cached.Add(name,new BossMove(name,warning,windup,recovery,damage,reach,knockback,armor,contacts,end<0?row.frames-1:end,
             name=="QuadPunch"?new[]{.30f,.30f,.34f}:null,start));
     }

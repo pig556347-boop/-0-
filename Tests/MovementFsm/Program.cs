@@ -258,6 +258,9 @@ internal static class Program
                 Assert(SchoolCampaign.Telegraph(stage) == (stage <= 5), "Wrong telegraph stage");
                 Assert(SchoolCampaign.VisibleLimit(stage) == (stage <= 2 ? 2 : stage <= 5 ? 3 : 4), "Visible cap");
                 Assert(SchoolCampaign.AttackLimit(stage) == (stage <= 3 ? 1 : 2), "Attack cap");
+                float oldInterval=stage<=2?2.25f:stage<=4?2.05f:stage==5?1.90f:1.6f;
+                Assert(SchoolCampaign.AttackInterval(stage,false)<oldInterval&&SchoolCampaign.AttackInterval(stage,false)>=oldInterval*.85f,"Moderate student tempo increase");
+                Assert(SchoolCampaign.Windup(stage,false)>=.23f&&SchoolCampaign.Recovery(stage)>=.44f,"Readable attacks retain a response window");
                 if (stage >= 6 && stage <= 9)
                     Assert(SchoolCampaign.Damage(stage, false) == 10, "Later officer damage changed");
             }

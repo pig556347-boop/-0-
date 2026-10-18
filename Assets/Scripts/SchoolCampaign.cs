@@ -25,11 +25,11 @@ namespace SchoolRuleZero
             return stage<=9&&index==EnemyCount(stage,1)-1?84:index%2==0?36:60;
         }
         public static float Damage(int stage, bool boss) => stage <= 5 ? boss ? 12 : 4+stage : boss ? stage == 10 ? 12 : 14 : stage >= 6 && stage <= 9 ? 10 : 7;
-        public static float ThinkInterval(int stage) => stage<=5?stage<=2?.30f:.24f:stage==11?.3f:.55f;
-        public static float AttackInterval(int stage,bool boss)=>stage<=5?stage<=2?2.25f:stage<=4?2.05f:1.90f:stage==11&&boss?.9f:1.6f;
-        public static float Windup(int stage,bool boss)=>stage<=5?stage<=2?.58f:stage<=4?.52f:.48f:.24f;
-        public static float Recovery(int stage)=>stage<=5?.52f:.48f;
-        public static float MoveSpeed(int stage,bool boss)=>stage<=5?stage<=2?1.65f:stage<=4?1.85f:2.05f:stage==11&&boss?3.6f:2.3f;
+        public static float ThinkInterval(int stage) => stage<=5?stage<=2?.26f:.21f:stage==11?.26f:.48f;
+        public static float AttackInterval(int stage,bool boss)=>stage<=5?stage<=2?1.98f:stage<=4?1.80f:1.67f:stage==11&&boss?.80f:1.41f;
+        public static float Windup(int stage,bool boss)=>stage<=5?stage<=2?.54f:stage<=4?.48f:.44f:.23f;
+        public static float Recovery(int stage)=>stage<=5?.48f:.44f;
+        public static float MoveSpeed(int stage,bool boss)=>stage<=5?stage<=2?1.78f:stage<=4?2.0f:2.21f:stage==11&&boss?3.88f:2.48f;
         public static int AttackLimit(int stage) => stage <= 3 ? 1 : 2;
         public static int VisibleLimit(int stage) => stage <= 2 ? 2 : stage <= 5 ? 3 : 4;
         public static bool Telegraph(int stage) => stage <= 5;

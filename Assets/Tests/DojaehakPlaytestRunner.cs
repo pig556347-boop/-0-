@@ -74,13 +74,13 @@ public sealed class DojaehakPlaytestRunner : MonoBehaviour
         Check(boss.Health.Maximum==300&&SchoolCampaign.Damage(5,true)==12,"production mid-boss health and damage budget");
         Check(DojaehakBrain.MinimumReactionDelay>=.2f,"boss defense has an observation delay");
         // Source clips remain inspectable, but the removed flourishes can never enter combat.
-        foreach(string removed in new[]{"QuadPunch","Kicking","RoundhouseKick"})
+        foreach(string removed in new[]{"QuadPunch","Kicking","RoundhouseKick","MmaKick"})
         {
             ResetPair();Check(!DojaehakMoves.CanUseInCombat(removed),"removed source clip excluded from combat "+removed);
             Check(!boss.TryBossMove(DojaehakMoves.Get(removed))&&boss.CanAct&&strikes==0,"removed source clip cannot start "+removed);
         }
         // Every permitted contact causes exactly one physical hit and remains normally blockable.
-        foreach(string clip in new[]{"PunchLeft","PunchRight","HookPunch","MmaKick","SideKick"})
+        foreach(string clip in new[]{"PunchLeft","PunchRight","HookPunch","SideKick"})
         {
             ResetPair();var move=DojaehakMoves.Get(clip);float before=player.Health.Current;
             Check(boss.TryBossMove(move),"allowed move starts "+clip);yield return new WaitForSeconds(move.Duration+.1f);
@@ -130,7 +130,7 @@ public sealed class DojaehakPlaytestRunner : MonoBehaviour
         yield return new WaitForSeconds(.10f);Check(boss.State==CombatActor.ActionState.HIT&&boss.CurrentBossMove==null,"parry staggers boss and clears move");
         Time.timeScale=1;owner.Active=false;yield return new WaitForSeconds(.8f);Check(prepared.Count==1&&Mathf.Approximately(hp,player.Health.Current),"parry cancels follow-up without damage");
         var expected=new Dictionary<DojaehakPattern,string[]>{
-            {DojaehakPattern.OneTwoKick,new[]{"PunchLeft","PunchRight","MmaKick"}},
+            {DojaehakPattern.OneTwoKick,new[]{"PunchLeft","PunchRight","SideKick"}},
             {DojaehakPattern.SideHook,new[]{"SideKick","HookPunch"}},
             {DojaehakPattern.ChaseSideKick,new[]{"SideKick"}},
             {DojaehakPattern.HookOneTwo,new[]{"HookPunch","PunchLeft","PunchRight"}}};
@@ -139,7 +139,14 @@ public sealed class DojaehakPlaytestRunner : MonoBehaviour
             ResetPair(pair.Key==DojaehakPattern.ChaseSideKick?5.5f:1.3f);yield return new WaitForSeconds(1.05f);
             bossBody.constraints=RigidbodyConstraints.FreezeRotation;bossBody.useGravity=true;owner.Active=true;
             Check(brain.TryPattern(pair.Key),"pattern starts "+pair.Key);float timeout=Time.time+10;bool runSeen=false;
-            while(brain.Running&&Time.time<timeout){runSeen|=view.CurrentMotion=="RunForward";yield return null;}
+            while(brain.Running&&Time.time<timeout)
+            {
+                runSeen|=view.CurrentMotion=="RunForward";
+                yield return new WaitForEndOfFrame();
+                float head=view.Bone("Head").position.y;
+                Check(Mathf.Min(view.Bone("LeftHand").position.y,view.Bone("RightHand").position.y)<head+.06f,"no arms-up flourish in live chain "+pair.Key);
+                yield return null;
+            }
             owner.Active=false;Check(Time.time<timeout,"pattern finishes "+pair.Key);
             Check(prepared.Count==pair.Value.Length,"complete authored chain "+pair.Key+" got="+string.Join(",",prepared));
             for(int i=0;i<pair.Value.Length;i++)Check(prepared[i]==pair.Value[i],"chain order "+pair.Key+" "+i);

@@ -70,6 +70,9 @@ public sealed class AttackHitbox : MonoBehaviour
         {
             IHitReceiver receiver = component as IHitReceiver;
             if (receiver == null || receiver.Team == team || struck.Contains(receiver)) continue;
+            var actor=receiver as CombatActor;
+            var hurt=actor==null?null:actor.GetComponent<CombatHurtbox>();
+            if(hurt!=null&&!hurt.Intersects(transform.position,transform.rotation,halfExtents))break;
             struck.Add(receiver);
             if (receiver.ReceiveHit(request))
                 confirmedHit?.Invoke(receiver, other.ClosestPoint(transform.position));

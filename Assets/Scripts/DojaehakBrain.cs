@@ -48,12 +48,12 @@ public sealed class DojaehakBrain : MonoBehaviour
         if(Time.time<readyAt)
         {Reposition(delta,distance);return;}
         if(Time.time<nextThink)return;
-        nextThink=Time.time+(PhaseTwo?.16f:.21f);
+        nextThink=Time.time+(PhaseTwo?.14f:.18f);
         if(TryDefense(distance))return;
         if(owner.Director!=null&&!owner.Director.CanAttack(actor)){Reposition(delta,distance);return;}
         var selected=ChoosePattern(distance,target.State==CombatActor.ActionState.GUARD,Random.value);
         if(TryPattern(selected))return;
-        if(distance>2.05f)Move(delta.normalized*(distance>6.2f?2.7f:2.1f));
+        if(distance>2.05f)Move(delta.normalized*(distance>6.2f?2.92f:2.27f));
         else Reposition(delta,distance);
     }
     private void ObserveAttack(CombatActor target)
@@ -87,7 +87,7 @@ public sealed class DojaehakBrain : MonoBehaviour
     private void Reposition(Vector3 delta,float distance)
     {
         Vector3 side=Vector3.Cross(Vector3.up,delta.normalized)*((GetInstanceID()&1)==0?1:-1);
-        Vector3 velocity=distance<1.25f?-delta.normalized*1.1f:distance>3?delta.normalized*1.45f:side*.48f;
+        Vector3 velocity=distance<1.25f?-delta.normalized*1.1f:distance>3?delta.normalized*1.57f:side*.52f;
         Move(velocity);
     }
     public DojaehakPattern ChoosePattern(float distance,bool guarding,float roll)
@@ -131,10 +131,10 @@ public sealed class DojaehakBrain : MonoBehaviour
             Vector3 rushDirection=Delta().normalized;
             Rushing=true;float end=Time.time+1.05f;
             while(Valid()&&actor.CanAct&&Delta().magnitude>1.82f&&Time.time<end)
-            {actor.SetFacing(rushDirection);Move(rushDirection*3.8f);yield return new WaitForFixedUpdate();}
+            {actor.SetFacing(rushDirection);Move(rushDirection*4.1f);yield return new WaitForFixedUpdate();}
             Rushing=false;StopMotion();
         }
-        string[] chain=pattern==DojaehakPattern.OneTwoKick?new[]{"PunchLeft","PunchRight","MmaKick"}:
+        string[] chain=pattern==DojaehakPattern.OneTwoKick?new[]{"PunchLeft","PunchRight","SideKick"}:
             pattern==DojaehakPattern.SideHook?new[]{"SideKick","HookPunch"}:
             pattern==DojaehakPattern.ChaseSideKick?new[]{"SideKick"}:new[]{"HookPunch","PunchLeft","PunchRight"};
         foreach(string clip in chain)
@@ -151,7 +151,7 @@ public sealed class DojaehakBrain : MonoBehaviour
             if(!Valid()||!actor.CanAct)break;
         }
         Rushing=false;Running=false;sequence=null;
-        if(actor.CanAct)StopMotion();readyAt=Time.time+(PhaseTwo?1.05f:1.40f);
+        if(actor.CanAct)StopMotion();readyAt=Time.time+(PhaseTwo?.90f:1.20f);
     }
     private bool Valid()=>owner.Active&&actor.GameplayEnabled&&actor.Health.Alive&&owner.Target!=null&&owner.Target.Health.Alive&&actor.State!=CombatActor.ActionState.HIT;
     private Vector3 Delta(){Vector3 delta=owner.Target.transform.position-transform.position;delta.y=0;return delta;}

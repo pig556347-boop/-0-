@@ -41,7 +41,7 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
         var body=enemy.GetComponent<Rigidbody>();body.useGravity=false;body.constraints=RigidbodyConstraints.FreezeAll;
         enemy.ConfigureStats(100,SchoolCampaign.Damage(3,false),SchoolCampaign.Windup(3,false),SchoolCampaign.Recovery(3));enemy.SetFacing(Vector3.back);
         float windup=enemy.VisualWindup,recovery=enemy.VisualRecovery;
-        Check(windup>=.5f&&recovery>=.5f,"each supplied skin is exercised with readable production student timing");
+        Check(Mathf.Approximately(windup,.48f)&&Mathf.Approximately(recovery,.48f),"each supplied skin is exercised with readable production student timing");
         Check(enemy.GetComponentInChildren<PrototypeCharacterView>().UseMinion1Model(kind),"supplied skin installed");
         Check(enemy.VisualWindup==windup&&enemy.VisualRecovery==recovery,"skin attachment preserves attack timing");
         var view=enemy.GetComponentInChildren<Minion1View>();var skin=view.GetComponentInChildren<SkinnedMeshRenderer>();

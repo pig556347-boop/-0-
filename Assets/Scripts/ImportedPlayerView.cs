@@ -50,6 +50,7 @@ public sealed class ImportedPlayerView : MonoBehaviour
         GameObject source = Resources.Load<GameObject>("Characters/" + kind + "/" + kind + "Model");
         if (source == null) { Debug.LogError("Character model missing: " + kind); return false; }
         ImportedPlayerView view = owner.gameObject.AddComponent<ImportedPlayerView>();
+        if(kind=="Deongchi")actor.GetComponent<CombatHurtbox>().SetBuild(.70f,.48f,1.90f);
         view.owner = owner; view.actor = actor; view.motor = actor.GetComponent<PlayerController>();
         view.body = actor.GetComponent<Rigidbody>(); view.ModelKind = kind;
         view.model = Instantiate(source, owner.transform, false).transform;

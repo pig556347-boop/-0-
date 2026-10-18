@@ -93,6 +93,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     private void Awake()
     {
         Health = new CombatHealth(maximumHP);
+        if(GetComponent<CombatHurtbox>()==null)gameObject.AddComponent<CombatHurtbox>();
         body = GetComponent<Rigidbody>(); input = GetComponent<CombatInput>();
         motor = GetComponent<PlayerController>();
         if (motor != null) motor.MovementSuppressed = () => State != ActionState.IDLE;
@@ -106,6 +107,7 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
     public void ReleaseGuard() { if (State == ActionState.GUARD) State = ActionState.IDLE; }
     public void Configure(int team)
     {
+        GetComponent<CombatHurtbox>().SetBuild(team==0?.46f:.50f,team==0?.32f:.34f,1.80f);
         Team=team;Facing=team==0?Vector3.right:Vector3.left;
         if(team==0){parryWindow=.10f;guardDamageMultiplier=.10f;dodgeDuration=.28f;dodgeInvulnerability=.14f;dodgeSpeed=8;}
     }
@@ -196,11 +198,11 @@ public sealed class CombatActor : MonoBehaviour, IHitReceiver
         boxes.RemoveAll(box => box == null);
         gaugeAwarded=false;StrikeStarted?.Invoke();
         GameObject box = new GameObject("Attack Hitbox");
-        box.transform.position = transform.position + Facing * (.95f + (reach - 1.3f) * .5f);
+        box.transform.position = transform.position + Facing * ((reach+.25f)*.5f);
         box.transform.rotation = Quaternion.LookRotation(Facing);
         AttackHitbox hitbox = box.AddComponent<AttackHitbox>(); boxes.Add(hitbox);
         hitbox.Configure(gameObject, Team, new HitRequest(gameObject, damage, Facing,
-            unblockable, knockback), new Vector3(1.2f, 1.5f, reach), .10f, OnConfirmedHit);
+            unblockable, knockback), new Vector3(PunchStrike?.64f:.82f, 1.10f, reach-.25f), .10f, OnConfirmedHit);
     }
     private void OnConfirmedHit(IHitReceiver receiver, Vector3 position)
     {
