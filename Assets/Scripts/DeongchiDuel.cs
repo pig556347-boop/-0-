@@ -17,12 +17,12 @@ public sealed class DeongchiDuel : MonoBehaviour
         enemy.GetComponentInChildren<PrototypeCharacterView>().UseDeongchiModel();
         enemy.name="덩치";enemy.Health.Infinite=false;player.Health.Infinite=false;
         player.RestoreForTutorial();enemy.RestoreForTutorial();
-        enemy.ConfigureStats(160,8,.55f,.5f);enemy.TelegraphEnabled=true;enemy.BossUltimateEnabled=false;
+        enemy.ConfigureStats(160,8,.50f,.46f);enemy.TelegraphEnabled=true;enemy.BossUltimateEnabled=false;
         player.Progress.BreakCombo();
         Place(player,new Vector3(-3,1.05f,-2),Vector3.right);
         Place(enemy,new Vector3(3,1.05f,-2),Vector3.left);
         brain.Target=player;brain.Active=false;brain.Director=null;brain.Difficulty=1;brain.IsBoss=false;
-        brain.MoveSpeed=1.6f;brain.ThinkInterval=.35f;brain.AttackInterval=1.8f;
+        brain.MoveSpeed=1.73f;brain.ThinkInterval=.30f;brain.AttackInterval=1.58f;
         enemy.GameplayEnabled=false;SetPlayerControls(false);
         hud.SetEnemyTarget(enemy);hud.QuestText="";hud.EncounterText="튜토리얼 실전 · 덩치와 1대1";
         hud.StoryMessage="연습은 끝났다. 이제 덩치를 쓰러뜨려 보세요!";

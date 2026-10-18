@@ -123,7 +123,7 @@ public sealed class DeongchiDuelPlaytestRunner : MonoBehaviour
                     var supplied=foe.GetComponentInChildren<Minion1View>();if(supplied!=null)observedKinds.Add(supplied.ModelKind);
                     if(stage<=5&&!SchoolCampaign.IsBossRound(stage,encounter.Area))
                     {
-                        Check(foe.VisualWindup>=.48f&&foe.VisualRecovery>=.5f,"early student attack has readable startup and recovery");
+                        Check(Mathf.Approximately(foe.VisualWindup,SchoolCampaign.Windup(encounter.Stage,false))&&Mathf.Approximately(foe.VisualRecovery,SchoolCampaign.Recovery(encounter.Stage)),"early student attack has readable startup and recovery");
                         Check(foe.GetComponent<EnemyBrain>().AttackInterval>=1.9f,"early student has a real attack cadence");
                     }
                     Check(foe.GetComponent<DefeatedBody>().LifetimeAfterSettled>0,"late-stage corpse cleanup configured stage="+stage);

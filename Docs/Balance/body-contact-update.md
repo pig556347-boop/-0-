@@ -2,7 +2,7 @@
 
 Dojaehak MMA kick removed from the combat whitelist entirely. Native source audit found both hands above the head at frames 102–103, with a rising two-hand tail already at 90–98. One-two finishing kick now uses SideKick; SideKick begins at frame 28 to skip the high-hand preparation. QuadPunch, Kicking and RoundhouseKick remain excluded. Source clips remain available in isolated review only. Live chain tests inspect both hand heights throughout every pattern.
 
-All campaign enemy start intervals shortened about 12%, movement about 8%; startup/recovery modestly shortened. Dojaehak legal attacks run 8% shorter with the contact frame still mapped to the exact damage event; pattern rests 1.20 / .90 seconds. Damage, enemy counts and simultaneous attack caps retained.
+All campaign enemy start intervals shortened about 12%, movement about 8%; startup/recovery modestly shortened. Dojaehak legal attacks run 8% shorter with the contact frame still mapped to the exact damage event; pattern rests 1.20 / .90 seconds. The post-tutorial Deongchi duel also uses a 1.58s interval, .50/.46s startup/recovery and 1.73m/s approach. Guided lesson demonstrations remain deliberately slower. Damage, enemy counts and simultaneous attack caps retained.
 
 Attack lanes: punches .64m, kicks .82m (was 1.20m); height 1.10m (was 1.50m). The far edge now stops at configured reach instead of reach + .30m. Physical overlap is a broad phase only; oriented body rectangles perform an independent narrow-phase check. Hurt regions ignore extended arms and accessories, shrink during crouch, move with jumps and reject dead actors. Movement/grounding capsules remain separate. AI approaches to the new punch range before starting, avoiding stationary out-of-range punching.
 
