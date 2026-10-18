@@ -1,346 +1,283 @@
 {
-  "commit": "a03b818f091e78c121b1cb859c324d7bbe88578a",
-  "demonstrationEnds": 52.21833190917969,
+  "commit": "376169fec9006eb44e0367bfca92c6105e7df646",
+  "demonstrationEnds": 59.12633285522461,
   "hookReady": true,
   "events": [
     {
-      "time": 47.307334899902344,
+      "time": 53.14433288574219,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 47.473331451416016,
+      "time": 53.361331939697266,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 47.615333557128906,
+      "time": 53.56833267211914,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 47.75133514404297,
+      "time": 53.80833435058594,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 47.88533401489258,
+      "time": 54.012332916259766,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 48.01933288574219,
+      "time": 54.22233200073242,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 48.1533317565918,
+      "time": 54.4293327331543,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 48.28733444213867,
+      "time": 54.634334564208984,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 48.422332763671875,
+      "time": 54.83833312988281,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 48.557334899902344,
+      "time": 55.04033279418945,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 48.69233322143555,
-      "state": "IDLE",
-      "chain": 0,
-      "hits": 0,
-      "clip": "FightingIdle"
-    },
-    {
-      "time": 48.8303337097168,
+      "time": 55.24733352661133,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "Running"
     },
     {
-      "time": 48.964332580566406,
+      "time": 55.44933319091797,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 49.099334716796875,
+      "time": 55.65533447265625,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 49.233333587646484,
+      "time": 55.86433410644531,
       "state": "IDLE",
       "chain": 0,
       "hits": 0,
       "clip": "Running"
     },
     {
-      "time": 49.3663330078125,
+      "time": 56.07133483886719,
       "state": "ATTACK",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 49.50233459472656,
-      "state": "ATTACK",
-      "chain": 1,
-      "hits": 0,
-      "clip": "RoundhouseKick"
-    },
-    {
-      "time": 49.63633346557617,
+      "time": 56.279335021972656,
       "state": "ATTACK",
       "chain": 1,
       "hits": 0,
       "clip": "RoundhouseKick"
     },
     {
-      "time": 49.784332275390625,
+      "time": 56.50133514404297,
       "state": "ATTACK",
       "chain": 1,
       "hits": 1,
       "clip": "RoundhouseKick"
     },
     {
-      "time": 49.9183349609375,
+      "time": 56.707332611083984,
       "state": "ATTACK",
       "chain": 1,
       "hits": 1,
       "clip": "RoundhouseKick"
     },
     {
-      "time": 50.05033493041992,
+      "time": 56.91033172607422,
       "state": "IDLE",
       "chain": 1,
       "hits": 1,
       "clip": "FightingIdle"
     },
     {
-      "time": 50.18633270263672,
+      "time": 57.11333465576172,
       "state": "IDLE",
       "chain": 1,
       "hits": 1,
       "clip": "FightingIdle"
     },
     {
-      "time": 50.32133483886719,
+      "time": 57.323333740234375,
       "state": "IDLE",
       "chain": 1,
       "hits": 1,
       "clip": "FightingIdle"
     },
     {
-      "time": 50.4543342590332,
+      "time": 57.52633285522461,
       "state": "IDLE",
       "chain": 1,
       "hits": 1,
       "clip": "FightingIdle"
     },
     {
-      "time": 50.61833190917969,
-      "state": "IDLE",
-      "chain": 1,
-      "hits": 1,
-      "clip": "FightingIdle"
-    },
-    {
-      "time": 50.753334045410156,
-      "state": "IDLE",
-      "chain": 1,
-      "hits": 1,
-      "clip": "FightingIdle"
-    },
-    {
-      "time": 50.887332916259766,
-      "state": "IDLE",
-      "chain": 1,
-      "hits": 1,
-      "clip": "FightingIdle"
-    },
-    {
-      "time": 51.022335052490234,
+      "time": 57.772335052490234,
       "state": "IDLE",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 51.15733337402344,
+      "time": 57.974334716796875,
       "state": "IDLE",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 51.29133224487305,
+      "time": 58.1783332824707,
       "state": "IDLE",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 51.42533493041992,
+      "time": 58.38233184814453,
       "state": "IDLE",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 51.55833435058594,
+      "time": 58.58533477783203,
       "state": "IDLE",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 51.69233322143555,
+      "time": 58.794334411621094,
       "state": "IDLE",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 51.82433319091797,
+      "time": 59.005332946777344,
       "state": "IDLE",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 51.95833206176758,
+      "time": 59.214332580566406,
       "state": "IDLE",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 52.091331481933594,
-      "state": "IDLE",
-      "chain": 1,
-      "hits": 0,
-      "clip": "FightingIdle"
-    },
-    {
-      "time": 52.23833465576172,
-      "state": "IDLE",
-      "chain": 1,
-      "hits": 0,
-      "clip": "FightingIdle"
-    },
-    {
-      "time": 52.374332427978516,
+      "time": 59.42433166503906,
       "state": "ATTACK",
       "chain": 1,
       "hits": 0,
       "clip": "FightingIdle"
     },
     {
-      "time": 52.5273323059082,
+      "time": 59.63233184814453,
       "state": "ATTACK",
       "chain": 1,
       "hits": 0,
       "clip": "RoundhouseKick"
     },
     {
-      "time": 52.6683349609375,
-      "state": "ATTACK",
-      "chain": 1,
-      "hits": 0,
-      "clip": "RoundhouseKick"
-    },
-    {
-      "time": 52.8033332824707,
+      "time": 59.84033203125,
       "state": "ATTACK",
       "chain": 1,
       "hits": 1,
       "clip": "RoundhouseKick"
     },
     {
-      "time": 52.94033432006836,
+      "time": 60.051334381103516,
       "state": "ATTACK",
       "chain": 1,
       "hits": 1,
       "clip": "RoundhouseKick"
     },
     {
-      "time": 53.076332092285156,
+      "time": 60.26033401489258,
       "state": "ATTACK",
       "chain": 2,
       "hits": 1,
       "clip": "MmaKick2"
     },
     {
-      "time": 53.211334228515625,
-      "state": "ATTACK",
-      "chain": 2,
-      "hits": 1,
-      "clip": "MmaKick2"
-    },
-    {
-      "time": 53.34633255004883,
+      "time": 60.464332580566406,
       "state": "ATTACK",
       "chain": 2,
       "hits": 2,
       "clip": "MmaKick2"
     },
     {
-      "time": 53.492332458496094,
+      "time": 60.67133331298828,
       "state": "ATTACK",
       "chain": 2,
       "hits": 2,
       "clip": "MmaKick2"
     },
     {
-      "time": 53.62533187866211,
+      "time": 60.87633514404297,
       "state": "ATTACK",
       "chain": 3,
       "hits": 2,
       "clip": "MmaKick1"
     },
     {
-      "time": 53.75733184814453,
+      "time": 61.082332611083984,
       "state": "ATTACK",
       "chain": 3,
       "hits": 2,
       "clip": "MmaKick1"
     },
     {
-      "time": 53.892333984375,
+      "time": 61.30933380126953,
       "state": "ATTACK",
       "chain": 3,
       "hits": 3,
