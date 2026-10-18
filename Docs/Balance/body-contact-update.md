@@ -1,5 +1,7 @@
 # 2026-10-18 combat contact / tempo revision
 
+Shared idle raised-arm root cause: player motion deltas were applied directly to native T-pose bind arms despite the player having a relaxed bind stance. Shared locomotion/guard/hit motions now align each target bind bone direction to the player bind direction before applying the source delta. Native attack clips retain their own bind basis. Idle hand-height regression checks cover the whole loop on all four students and Dojaehak.
+
 Dojaehak MMA kick removed from the combat whitelist entirely. Native source audit found both hands above the head at frames 102–103, with a rising two-hand tail already at 90–98. One-two finishing kick now uses SideKick; SideKick begins at frame 28 to skip the high-hand preparation. QuadPunch, Kicking and RoundhouseKick remain excluded. Source clips remain available in isolated review only. Live chain tests inspect both hand heights throughout every pattern.
 
 All campaign enemy start intervals shortened about 12%, movement about 8%; startup/recovery modestly shortened. Dojaehak legal attacks run 8% shorter with the contact frame still mapped to the exact damage event; pattern rests 1.20 / .90 seconds. The post-tutorial Deongchi duel also uses a 1.58s interval, .50/.46s startup/recovery and 1.73m/s approach. Guided lesson demonstrations remain deliberately slower. Damage, enemy counts and simultaneous attack caps retained.

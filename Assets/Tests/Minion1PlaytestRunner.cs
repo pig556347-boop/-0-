@@ -55,6 +55,7 @@ public sealed class Minion1PlaytestRunner : MonoBehaviour
                 context=clip+" phase="+frame;Vector3 root=enemy.transform.position;view.Preview(clip,frame/10f);
                 var bounds=SkinBounds(skin,root);Check(bounds.size.y<2.3f&&bounds.size.y>.6f,"plausible character size "+context+" bounds="+bounds+" modelScale="+view.ModelRoot.lossyScale+" hip="+view.Bone("Hips").position+" head="+view.Bone("Head").position);
                 Check(enemy.transform.position==root,"preview preserves physics root");
+                if(clip=="FightingIdle")Check(Mathf.Max(view.Bone("LeftHand").position.y,view.Bone("RightHand").position.y)<view.Bone("Head").position.y+.06f,"shared idle is a guard, not raised arms "+context);
             }
             if(clip=="PunchRight")view.Preview(clip,third?34/62f:22/51f);
             if(clip=="PunchLeft")view.Preview(clip,34/62f);

@@ -69,6 +69,11 @@ public sealed class DojaehakPlaytestRunner : MonoBehaviour
             while(!GameKeys.Down(KeyCode.Return)&&Time.time<timeout)yield return null;Check(Time.time<timeout,"captured boss preview "+clip);
             while(GameKeys.Held(KeyCode.Return))yield return null;yield return null;
         }
+        for(int sample=0;sample<=20;sample++)
+        {
+            view.Preview("FightingIdle",sample/20f);
+            Check(Mathf.Max(view.Bone("LeftHand").position.y,view.Bone("RightHand").position.y)<view.Bone("Head").position.y+.06f,"boss idle never raises hands above head");
+        }
         view.ResumeRuntime();
         var left=DojaehakMoves.Get("PunchLeft");var side=DojaehakMoves.Get("SideKick");
         Check(boss.Health.Maximum==300&&SchoolCampaign.Damage(5,true)==12,"production mid-boss health and damage budget");

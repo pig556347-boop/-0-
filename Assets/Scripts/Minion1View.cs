@@ -15,6 +15,7 @@ public sealed class Minion1View : MonoBehaviour
     private Material skinMaterial;
     private Transform model,hips;
     private readonly Dictionary<string,Transform> bones=new Dictionary<string,Transform>();
+    private readonly Dictionary<string,Quaternion> locomotionRestCorrection=new Dictionary<string,Quaternion>();
     private readonly Dictionary<string,Quaternion> restWorld=new Dictionary<string,Quaternion>();
     private Transform[] all;
     private Quaternion[] restLocal,blendFrom;
@@ -61,6 +62,7 @@ public sealed class Minion1View : MonoBehaviour
         foreach(string name in view.attacks.BoneNames)
             if(!view.bones.ContainsKey(name.Substring(10)))throw new InvalidOperationException(modelKind+" bone missing: "+name);
         view.locomotion=AuthoredMotionLibrary.Load();
+        view.CalibrateSharedMotionRest();
         var material=new Material(Resources.Load<Shader>("Shaders/SchoolCharacter"));
         var texture=Resources.Load<Texture2D>("Characters/"+modelKind+"/"+modelKind+"_BaseColor");
         if(texture==null)throw new InvalidOperationException(modelKind+" base color texture resource missing at runtime");
@@ -70,6 +72,36 @@ public sealed class Minion1View : MonoBehaviour
         actor.AttackPrepared+=view.OnAttack;actor.StrikeStarted+=()=>view.hitAt=Time.time;
         actor.Damaged+=result=>{if(result.Kind==SchoolRuleZero.DamageKind.Hit){view.started=Time.time;view.current="";}};
         Debug.Log(modelKind.ToUpperInvariant()+"_READY bones="+view.attacks.BoneNames.Length+" weighted=true");return true;
+    }
+    private void CalibrateSharedMotionRest()
+    {
+        // Shared motions were baked against the player's relaxed bind arms, not a native T-pose.
+        // Align bind directions before applying world deltas; otherwise guards become raised arms.
+        var source=Resources.Load<GameObject>("Characters/Player/PlayerModel").transform;
+        var sourceBones=new Dictionary<string,Transform>();
+        var aliases=new Dictionary<string,string>{{"Chest","Spine2"}};
+        foreach(string side in new[]{"Left","Right"})
+        {aliases[side+"UpperArm"]=side+"Arm";aliases[side+"Forearm"]=side+"ForeArm";aliases[side+"Thigh"]=side+"UpLeg";aliases[side+"Shin"]=side+"Leg";}
+        foreach(var bone in source.GetComponentsInChildren<Transform>())
+            {
+            string name=bone.name.StartsWith("mixamorig:")?bone.name.Substring(10):bone.name;
+            sourceBones[aliases.TryGetValue(name,out string alias)?alias:name]=bone;
+        }
+        var ends=new Dictionary<string,string>{{"Hips","Spine"},{"Spine","Spine2"},{"Spine2","Neck"},{"Neck","Head"},{"Head","Neck"}};
+        foreach(string side in new[]{"Left","Right"})
+        {
+            ends[side+"Shoulder"]=side+"Arm";ends[side+"Arm"]=side+"ForeArm";
+            ends[side+"ForeArm"]=side+"Hand";ends[side+"Hand"]=side+"ForeArm";
+            ends[side+"UpLeg"]=side+"Leg";ends[side+"Leg"]=side+"Foot";ends[side+"Foot"]=side+"Leg";
+        }
+        foreach(string full in locomotion.BoneNames)
+        {
+            string name=full.Substring(10);
+            if(!ends.TryGetValue(name,out string end)||!bones.ContainsKey(name)||!bones.ContainsKey(end)||!sourceBones.ContainsKey(name)||!sourceBones.ContainsKey(end))continue;
+            Vector3 from=model.InverseTransformDirection(bones[end].position-bones[name].position);
+            Vector3 to=source.InverseTransformDirection(sourceBones[end].position-sourceBones[name].position);
+            locomotionRestCorrection[name]=Quaternion.FromToRotation(from,to);
+        }
     }
     private void OnDestroy(){if(skinMaterial!=null)Destroy(skinMaterial);}
     private static float MeasuredHeight(SkinnedMeshRenderer skin)
@@ -167,7 +199,8 @@ public sealed class Minion1View : MonoBehaviour
         {
             string key=library.BoneNames[i].Substring(10);if(!bones.TryGetValue(key,out Transform bone))continue;
             Quaternion delta=Quaternion.Slerp(clip.Frames[a].Rotations[i],clip.Frames[b].Rotations[i],t);
-            bone.rotation=model.rotation*delta*restWorld[key];
+            Quaternion correction=library==locomotion&&locomotionRestCorrection.TryGetValue(key,out Quaternion calibrated)?calibrated:Quaternion.identity;
+            bone.rotation=model.rotation*delta*correction*restWorld[key];
         }
         hips.position=model.TransformPoint(hipHome)+model.rotation*Vector3.Lerp(clip.Frames[a].HipDelta,clip.Frames[b].HipDelta,t);
         float mix=Mathf.SmoothStep(0,1,Mathf.Clamp01((Time.time-transition)/.07f));
