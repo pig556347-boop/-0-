@@ -27,7 +27,7 @@ public sealed class EnemyBrain : MonoBehaviour
         if (!actor.CanAct) return;
         Vector3 delta = Target.transform.position - transform.position; delta.y = 0;
         actor.SetFacing(delta);
-        Vector3 direction = delta.magnitude > 1.45f ? delta.normalized * MoveSpeed : Vector3.zero;
+        Vector3 direction = delta.magnitude > 1.32f ? delta.normalized * MoveSpeed : Vector3.zero;
         if (Difficulty == 11 && IsBoss && delta.magnitude < 1.2f && Time.time < nextAttack)
             direction = -delta.normalized * MoveSpeed;
         Vector3 v = body.linearVelocity; v.x = direction.x; v.z = direction.z; body.linearVelocity = v;
@@ -48,7 +48,7 @@ public sealed class EnemyBrain : MonoBehaviour
             if (actor.TryBossUltimate(Difficulty == 5 ? "주먹작렬" : "K.O 펀치"))
             { ultimateReady = Time.time + 14; nextAttack = Time.time + 2; return; }
         }
-        if (delta.magnitude > 1.65f) return;
+        if (delta.magnitude > 1.42f) return;
         bool attacked = versatile && Target.State == CombatActor.ActionState.GUARD &&
             Random.value < (IsBoss ? .4f : .15f) && actor.TryGrab();
         if (!attacked) attacked = actor.TryAttack(Difficulty >= 5 && Random.value < .3f);
@@ -66,15 +66,15 @@ public sealed class EnemyBrain : MonoBehaviour
         actor.SetFacing(toward);
         bool hasSlot=Director.CanAttack(actor);
         Vector3 tangent=Vector3.Cross(Vector3.up,toward)*((GetInstanceID()&1)==0?1:-1);
-        float desired=hasSlot?1.40f:2.65f;
-        float radial=distance>desired+.18f?MoveSpeed:distance<desired-.35f?-MoveSpeed*.55f:0;
+        float desired=hasSlot?1.22f:2.65f;
+        float radial=distance>desired+(hasSlot?.10f:.18f)?MoveSpeed:distance<desired-.35f?-MoveSpeed*.55f:0;
         Vector3 movement=toward*radial+tangent*(hasSlot?.24f:.65f)+Director.Separation(actor)*1.3f;
-        if(distance<1.6f&&hasSlot&&Time.time>=nextAttack)movement=Director.Separation(actor)*.5f;
+        if(distance<1.38f&&hasSlot&&Time.time>=nextAttack)movement=Director.Separation(actor)*.5f;
         Move(Vector3.ClampMagnitude(movement,MoveSpeed));
         if(Time.time<nextThink)return;
         nextThink=Time.time+ThinkInterval;
         if(TryStudentDefense(distance))return;
-        if(!hasSlot||Time.time<nextAttack||distance>1.62f)return;
+        if(!hasSlot||Time.time<nextAttack||distance>1.42f)return;
         // Recovery is visible before it is punished, and it never bypasses this student's own attack cooldown.
         bool punish=Difficulty>=3&&Target.IsRecovering&&Target.ActionRecoveryRemaining>.25f;
         bool heavy=Difficulty>=3&&Random.value<(punish?.40f:.12f);
