@@ -1,0 +1,16 @@
+{
+  "commit": "1268055a35266ca70e1c1302c2d5852ba537a2ad",
+  "checks": 31,
+  "passed": true,
+  "musicEvents": [
+    "LobbyMusic",
+    "BattleMusic",
+    "UltimateRise",
+    "BossMusic",
+    "BattleMusic",
+    "BattleMusic",
+    "Down",
+    "MusicPaused",
+    "MusicResumed"
+  ]
+}
