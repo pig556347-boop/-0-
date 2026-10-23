@@ -1,0 +1,1241 @@
+{
+  "ok": true,
+  "utc": "2026-10-23T13:55:42.073Z",
+  "sourceCommit": "d99cee6532d9947d72a5c78a49a0e8052b5a7f67",
+  "workflowCommit": "d99cee6532d9947d72a5c78a49a0e8052b5a7f67",
+  "sourceBranch": "school-escape-web",
+  "publicURL": "https://rawcdn.githack.com/pig556347-boop/-0-/d99cee6532d9947d72a5c78a49a0e8052b5a7f67/index.html",
+  "kind": "External public browser smoke test of independent browser review, not Unity WebGL",
+  "checks": [
+    {
+      "name": "Only the separate web branch is tested",
+      "passed": true,
+      "actual": "school-escape-web"
+    },
+    {
+      "name": "Pinned commit is valid",
+      "passed": true
+    },
+    {
+      "name": "Manifest identifies the caretaker stamina audio release",
+      "passed": true,
+      "actual": "caretaker-stamina-audio-2026-10-23"
+    },
+    {
+      "name": "Manifest declares the expected room count",
+      "passed": true,
+      "actual": 41
+    },
+    {
+      "name": "Public CDN returns HTTP 200",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "name": "Public CDN serves HTML for execution",
+      "passed": true,
+      "actual": "text/html; charset=utf-8"
+    },
+    {
+      "name": "Public HTML matches the tested build",
+      "passed": true,
+      "actual": "8d10d62e4103f7087426e791cae0b4c097d98fe701bb5ab78d52345588250664"
+    },
+    {
+      "name": "Game starts from the public URL",
+      "passed": true
+    },
+    {
+      "name": "Original large caretaker is enabled by default",
+      "passed": true,
+      "actual": {
+        "enemy": {
+          "enabled": true,
+          "state": "patrol",
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 20,
+          "speed": 0,
+          "caught": false,
+          "transfers": 0,
+          "lastSensed": -100,
+          "graceUntil": 4,
+          "radius": 0.31,
+          "initial": {
+            "spaceId": "floor-1",
+            "x": 24,
+            "y": 20,
+            "distanceFromPlayer": 18.75
+          },
+          "path": [],
+          "portalTrail": [],
+          "transit": null,
+          "failedTransfers": 0
+        },
+        "visual": {
+          "name": "당직자",
+          "kind": "original-procedural-caretaker",
+          "targetHeight": 2.4,
+          "shoulderWidth": 0.87,
+          "meshCount": 104,
+          "animatedLimbs": 4,
+          "hasSeparateFingers": true,
+          "hasStaffBadge": true,
+          "geometrySource": "SchoolEscape original",
+          "localBounds": [
+            1.1669627157762363,
+            2.405290033705794,
+            0.7962836763858302
+          ]
+        },
+        "audio": {
+          "unlocked": false,
+          "contextState": "uninitialized",
+          "started": false,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 0,
+          "maxVoices": 36,
+          "scheduledVoices": 0,
+          "footsteps": 0,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 0,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0,
+          "effectiveGain": 0,
+          "rms": 0,
+          "ambienceActive": false,
+          "lastError": null
+        }
+      }
+    },
+    {
+      "name": "Sound has no autoplay context before Start",
+      "passed": true,
+      "actual": {
+        "unlocked": false,
+        "contextState": "uninitialized",
+        "started": false,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 0,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0,
+        "effectiveGain": 0,
+        "rms": 0,
+        "ambienceActive": false,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Actual Start click unlocks audible browser ambience",
+      "passed": true,
+      "actual": {
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 0,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0.22237524390220642,
+        "effectiveGain": 0.22237524390220642,
+        "rms": 0.0018049488996888866,
+        "ambienceActive": true,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Actual mute button silences audio and updates its state",
+      "passed": true,
+      "actual": {
+        "audio": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": true,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 0,
+          "maxVoices": 36,
+          "scheduledVoices": 0,
+          "footsteps": 0,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 0,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.00008349977724719793,
+          "effectiveGain": 0,
+          "rms": 0.000003002699650119627,
+          "ambienceActive": false,
+          "lastError": null
+        },
+        "pressed": "true"
+      }
+    },
+    {
+      "name": "Actual sound button restores audio",
+      "passed": true
+    },
+    {
+      "name": "Latest 41-room build loaded",
+      "passed": true,
+      "actual": {
+        "revision": "facilities-and-corridor-2026-10-23",
+        "rooms": 41,
+        "active": [
+          "floor-1"
+        ],
+        "startHidden": true,
+        "classrooms": 19,
+        "libraries": [
+          {
+            "id": "room-f2-1",
+            "floor": 2
+          }
+        ],
+        "formerLibrary": {
+          "label": "빈교실 3",
+          "kind": "classroom",
+          "floor": 1
+        },
+        "administrationDesks": 18,
+        "broadcastRooms": 1,
+        "studentRestrooms": 6,
+        "staffRestrooms": 6,
+        "largeMirrors": 12
+      }
+    },
+    {
+      "name": "Start button enters play",
+      "passed": true
+    },
+    {
+      "name": "Administration has 18 workstations",
+      "passed": true,
+      "actual": 18
+    },
+    {
+      "name": "Former 1F library is a classroom",
+      "passed": true,
+      "actual": {
+        "label": "빈교실 3",
+        "kind": "classroom",
+        "floor": 1
+      }
+    },
+    {
+      "name": "Only the 2F library remains",
+      "passed": true,
+      "actual": [
+        {
+          "id": "room-f2-1",
+          "floor": 2
+        }
+      ]
+    },
+    {
+      "name": "Broadcast and all twelve restroom mirrors loaded",
+      "passed": true
+    },
+    {
+      "name": "Actual W key moves safely at walking speed",
+      "passed": true,
+      "actual": {
+        "meters": 1.169999999999991,
+        "speed": 2.59999999999998,
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual Shift W sprints safely and spends stamina",
+      "passed": true,
+      "actual": {
+        "speed": 4.699999999999968,
+        "staminaBefore": 100,
+        "staminaAfter": 92,
+        "safe": true
+      }
+    },
+    {
+      "name": "Moving sprint exhausts stamina and held Shift falls back to walking",
+      "passed": true,
+      "actual": {
+        "strip": {
+          "floor": 1,
+          "x": 20,
+          "y": 2
+        },
+        "empty": {
+          "stamina": 0,
+          "exhausted": true,
+          "running": false
+        },
+        "locked": {
+          "speed": 2.59999999999998,
+          "exhausted": true,
+          "running": false
+        },
+        "partial": {
+          "stamina": 13.049999999999994,
+          "exhausted": true
+        },
+        "recovered": {
+          "stamina": 40.05000000000001,
+          "exhausted": false
+        },
+        "resumed": {
+          "speed": 4.700000000000061,
+          "running": true
+        },
+        "safe": true
+      }
+    },
+    {
+      "name": "Recovery delay and quarter-stamina lock prevent instant endless sprint",
+      "passed": true,
+      "actual": {
+        "strip": {
+          "floor": 1,
+          "x": 20,
+          "y": 2
+        },
+        "empty": {
+          "stamina": 0,
+          "exhausted": true,
+          "running": false
+        },
+        "locked": {
+          "speed": 2.59999999999998,
+          "exhausted": true,
+          "running": false
+        },
+        "partial": {
+          "stamina": 13.049999999999994,
+          "exhausted": true
+        },
+        "recovered": {
+          "stamina": 40.05000000000001,
+          "exhausted": false
+        },
+        "resumed": {
+          "speed": 4.700000000000061,
+          "running": true
+        },
+        "safe": true
+      }
+    },
+    {
+      "name": "Recovered stamina permits sprinting again",
+      "passed": true,
+      "actual": {
+        "speed": 4.700000000000061,
+        "running": true
+      }
+    },
+    {
+      "name": "broadcast hidden before E",
+      "passed": true
+    },
+    {
+      "name": "Actual E enters only broadcast",
+      "passed": true,
+      "actual": {
+        "id": "room-f1-5",
+        "label": "방송실",
+        "safe": true,
+        "activeIds": [
+          "room-f1-5"
+        ],
+        "visibleFixtureRoomIds": [
+          "room-f1-5"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "room-f1-5",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      }
+    },
+    {
+      "name": "broadcast exit approach reachable",
+      "passed": true
+    },
+    {
+      "name": "Actual E returns from broadcast to its 1F doorway",
+      "passed": true,
+      "actual": {
+        "space": "floor-1",
+        "safe": true,
+        "correctPosition": true,
+        "hidden": true
+      }
+    },
+    {
+      "name": "studentRestroom hidden before E",
+      "passed": true
+    },
+    {
+      "name": "Actual E enters only studentRestroom",
+      "passed": true,
+      "actual": {
+        "id": "room-f1-9",
+        "label": "학생 화장실 남",
+        "safe": true,
+        "activeIds": [
+          "room-f1-9"
+        ],
+        "visibleFixtureRoomIds": [
+          "room-f1-9"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "room-f1-9",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      }
+    },
+    {
+      "name": "Reach the large student restroom mirror",
+      "passed": true,
+      "actual": {
+        "reached": true,
+        "zone": "큰 거울 앞",
+        "safe": true
+      }
+    },
+    {
+      "name": "Only the current large mirror is visible",
+      "passed": true,
+      "actual": {
+        "count": 1,
+        "activeSpaceId": "room-f1-9",
+        "mirrors": [
+          {
+            "roomId": "room-f1-9",
+            "visible": true,
+            "width": 6.4,
+            "height": 1.55,
+            "renderedFrames": 2,
+            "actorInsideSurface": true,
+            "actorInReflection": true,
+            "textureWidth": 512,
+            "textureHeight": 512
+          }
+        ]
+      }
+    },
+    {
+      "name": "Large mirror renders the actual explorer",
+      "passed": true,
+      "actual": [
+        {
+          "roomId": "room-f1-9",
+          "visible": true,
+          "width": 6.4,
+          "height": 1.55,
+          "renderedFrames": 2,
+          "actorInsideSurface": true,
+          "actorInReflection": true,
+          "textureWidth": 512,
+          "textureHeight": 512
+        }
+      ]
+    },
+    {
+      "name": "Explorer changes real reflection pixels",
+      "passed": true,
+      "actual": {
+        "changedPixels": 465,
+        "maximumDelta": 234,
+        "roomId": "room-f1-9"
+      }
+    },
+    {
+      "name": "studentRestroom exit approach reachable",
+      "passed": true
+    },
+    {
+      "name": "Actual E returns from studentRestroom to its 1F doorway",
+      "passed": true,
+      "actual": {
+        "space": "floor-1",
+        "safe": true,
+        "correctPosition": true,
+        "hidden": true
+      }
+    },
+    {
+      "name": "Actual E enters a room before the pursuer arrives",
+      "passed": true,
+      "actual": {
+        "entered": true,
+        "notInstant": true,
+        "delay": 1.8999999999999964,
+        "safe": true,
+        "enemy": {
+          "enabled": true,
+          "state": "chase",
+          "spaceId": "room-f1-3",
+          "x": 9,
+          "y": 3,
+          "speed": 0,
+          "caught": false,
+          "transfers": 1,
+          "lastSensed": 2.1749999999999963,
+          "graceUntil": 100,
+          "radius": 0.31,
+          "initial": {
+            "spaceId": "floor-1",
+            "x": 24,
+            "y": 20,
+            "distanceFromPlayer": 18.75
+          },
+          "path": [],
+          "portalTrail": [],
+          "transit": null,
+          "failedTransfers": 0
+        },
+        "playerSpace": "room-f1-3",
+        "visible": true,
+        "active": [
+          "room-f1-3"
+        ],
+        "audio": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 24,
+          "maxVoices": 36,
+          "scheduledVoices": 82,
+          "footsteps": 20,
+          "stairSteps": 0,
+          "doorOpen": 6,
+          "doorClose": 6,
+          "enemyDoorOpen": 1,
+          "enemyDoorClose": 1,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 4,
+          "caughtStingers": 0,
+          "processedEvents": 25,
+          "chaseIntensity": 0.40183913382586295,
+          "chaseGain": 0.0954049825668335,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.024604097383334373,
+          "ambienceActive": true,
+          "lastError": null
+        },
+        "model": {
+          "name": "당직자",
+          "kind": "original-procedural-caretaker",
+          "targetHeight": 2.4,
+          "shoulderWidth": 0.87,
+          "meshCount": 104,
+          "animatedLimbs": 4,
+          "hasSeparateFingers": true,
+          "hasStaffBadge": true,
+          "geometrySource": "SchoolEscape original",
+          "localBounds": [
+            1.2016793633991085,
+            2.378069974004081,
+            0.9457750991342415
+          ]
+        }
+      }
+    },
+    {
+      "name": "Pursuer approaches and follows the actual used door after a delay",
+      "passed": true,
+      "actual": {
+        "entered": true,
+        "notInstant": true,
+        "delay": 1.8999999999999964,
+        "safe": true,
+        "enemy": {
+          "enabled": true,
+          "state": "chase",
+          "spaceId": "room-f1-3",
+          "x": 9,
+          "y": 3,
+          "speed": 0,
+          "caught": false,
+          "transfers": 1,
+          "lastSensed": 2.1749999999999963,
+          "graceUntil": 100,
+          "radius": 0.31,
+          "initial": {
+            "spaceId": "floor-1",
+            "x": 24,
+            "y": 20,
+            "distanceFromPlayer": 18.75
+          },
+          "path": [],
+          "portalTrail": [],
+          "transit": null,
+          "failedTransfers": 0
+        },
+        "playerSpace": "room-f1-3",
+        "visible": true,
+        "active": [
+          "room-f1-3"
+        ],
+        "audio": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 24,
+          "maxVoices": 36,
+          "scheduledVoices": 82,
+          "footsteps": 20,
+          "stairSteps": 0,
+          "doorOpen": 6,
+          "doorClose": 6,
+          "enemyDoorOpen": 1,
+          "enemyDoorClose": 1,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 4,
+          "caughtStingers": 0,
+          "processedEvents": 25,
+          "chaseIntensity": 0.40183913382586295,
+          "chaseGain": 0.0954049825668335,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.024604097383334373,
+          "ambienceActive": true,
+          "lastError": null
+        },
+        "model": {
+          "name": "당직자",
+          "kind": "original-procedural-caretaker",
+          "targetHeight": 2.4,
+          "shoulderWidth": 0.87,
+          "meshCount": 104,
+          "animatedLimbs": 4,
+          "hasSeparateFingers": true,
+          "hasStaffBadge": true,
+          "geometrySource": "SchoolEscape original",
+          "localBounds": [
+            1.2016793633991085,
+            2.378069974004081,
+            0.9457750991342415
+          ]
+        }
+      }
+    },
+    {
+      "name": "Following pursuer lands safely and renders only in the active room",
+      "passed": true,
+      "actual": {
+        "entered": true,
+        "notInstant": true,
+        "delay": 1.8999999999999964,
+        "safe": true,
+        "enemy": {
+          "enabled": true,
+          "state": "chase",
+          "spaceId": "room-f1-3",
+          "x": 9,
+          "y": 3,
+          "speed": 0,
+          "caught": false,
+          "transfers": 1,
+          "lastSensed": 2.1749999999999963,
+          "graceUntil": 100,
+          "radius": 0.31,
+          "initial": {
+            "spaceId": "floor-1",
+            "x": 24,
+            "y": 20,
+            "distanceFromPlayer": 18.75
+          },
+          "path": [],
+          "portalTrail": [],
+          "transit": null,
+          "failedTransfers": 0
+        },
+        "playerSpace": "room-f1-3",
+        "visible": true,
+        "active": [
+          "room-f1-3"
+        ],
+        "audio": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 24,
+          "maxVoices": 36,
+          "scheduledVoices": 82,
+          "footsteps": 20,
+          "stairSteps": 0,
+          "doorOpen": 6,
+          "doorClose": 6,
+          "enemyDoorOpen": 1,
+          "enemyDoorClose": 1,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 4,
+          "caughtStingers": 0,
+          "processedEvents": 25,
+          "chaseIntensity": 0.40183913382586295,
+          "chaseGain": 0.0954049825668335,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.024604097383334373,
+          "ambienceActive": true,
+          "lastError": null
+        },
+        "model": {
+          "name": "당직자",
+          "kind": "original-procedural-caretaker",
+          "targetHeight": 2.4,
+          "shoulderWidth": 0.87,
+          "meshCount": 104,
+          "animatedLimbs": 4,
+          "hasSeparateFingers": true,
+          "hasStaffBadge": true,
+          "geometrySource": "SchoolEscape original",
+          "localBounds": [
+            1.2016793633991085,
+            2.378069974004081,
+            0.9457750991342415
+          ]
+        }
+      }
+    },
+    {
+      "name": "Real pursuit produces urgent sound and follower door sounds",
+      "passed": true,
+      "actual": {
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 10,
+        "maxVoices": 36,
+        "scheduledVoices": 82,
+        "footsteps": 20,
+        "stairSteps": 0,
+        "doorOpen": 6,
+        "doorClose": 6,
+        "enemyDoorOpen": 1,
+        "enemyDoorClose": 1,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 4,
+        "caughtStingers": 0,
+        "processedEvents": 25,
+        "chaseIntensity": 0.40183913382586295,
+        "chaseGain": 0.21158048510551453,
+        "masterGain": 0.4000000059604645,
+        "effectiveGain": 0.4000000059604645,
+        "rms": 0.02061700981333552,
+        "ambienceActive": true,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Actual contact stops play and shows the caught screen",
+      "passed": true,
+      "actual": {
+        "caught": true,
+        "enemy": {
+          "enabled": true,
+          "state": "caught",
+          "spaceId": "room-f1-3",
+          "x": 9,
+          "y": 7,
+          "speed": 0,
+          "caught": true,
+          "transfers": 1,
+          "lastSensed": 2.199999999999996,
+          "graceUntil": -1,
+          "radius": 0.31,
+          "initial": {
+            "spaceId": "floor-1",
+            "x": 24,
+            "y": 20,
+            "distanceFromPlayer": 18.75
+          },
+          "path": [],
+          "portalTrail": [],
+          "transit": null,
+          "failedTransfers": 0
+        },
+        "overlay": true
+      }
+    },
+    {
+      "name": "Actual Restart restores stamina and safe independent pursuit",
+      "passed": true,
+      "actual": {
+        "caught": false,
+        "stamina": 100,
+        "spaceId": "floor-1",
+        "enemy": {
+          "enabled": true,
+          "state": "patrol",
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 20,
+          "speed": 0,
+          "caught": false,
+          "transfers": 0,
+          "lastSensed": -100,
+          "graceUntil": 4,
+          "radius": 0.31,
+          "initial": {
+            "spaceId": "floor-1",
+            "x": 24,
+            "y": 20,
+            "distanceFromPlayer": 18.75
+          },
+          "path": [],
+          "portalTrail": [],
+          "transit": null,
+          "failedTransfers": 0
+        },
+        "overlay": false,
+        "blocked": false
+      }
+    },
+    {
+      "name": "Public browser has no runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "warnings": [],
+  "externalContentNoticeConfirmed": true,
+  "build": {
+    "game": "폐교탈출",
+    "version": "0.7",
+    "featureRevision": "caretaker-stamina-audio-2026-10-23",
+    "revision": "facilities-and-corridor-2026-10-23",
+    "sourceCommit": "04583801ba312fbe89957b0f3ae4014b3d38c7e7",
+    "htmlSha256": "8d10d62e4103f7087426e791cae0b4c097d98fe701bb5ab78d52345588250664",
+    "htmlBytes": 5764285,
+    "roomCount": 41,
+    "browserRuntimeChecksPassed": 55,
+    "kernelChecksPassed": 16,
+    "browserErrors": 0,
+    "audio": "Original procedural ambience, footsteps, doors, stairs and pursuit score",
+    "unityCompilationSucceeded": true,
+    "unityPlayValidated": false,
+    "unityWebGL": false
+  },
+  "http": {
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 5764285,
+    "sha256": "8d10d62e4103f7087426e791cae0b4c097d98fe701bb5ab78d52345588250664"
+  },
+  "initialChase": {
+    "enemy": {
+      "enabled": true,
+      "state": "patrol",
+      "spaceId": "floor-1",
+      "x": 24,
+      "y": 20,
+      "speed": 0,
+      "caught": false,
+      "transfers": 0,
+      "lastSensed": -100,
+      "graceUntil": 4,
+      "radius": 0.31,
+      "initial": {
+        "spaceId": "floor-1",
+        "x": 24,
+        "y": 20,
+        "distanceFromPlayer": 18.75
+      },
+      "path": [],
+      "portalTrail": [],
+      "transit": null,
+      "failedTransfers": 0
+    },
+    "visual": {
+      "name": "당직자",
+      "kind": "original-procedural-caretaker",
+      "targetHeight": 2.4,
+      "shoulderWidth": 0.87,
+      "meshCount": 104,
+      "animatedLimbs": 4,
+      "hasSeparateFingers": true,
+      "hasStaffBadge": true,
+      "geometrySource": "SchoolEscape original",
+      "localBounds": [
+        1.1669627157762363,
+        2.405290033705794,
+        0.7962836763858302
+      ]
+    },
+    "audio": {
+      "unlocked": false,
+      "contextState": "uninitialized",
+      "started": false,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 0,
+      "maxVoices": 36,
+      "scheduledVoices": 0,
+      "footsteps": 0,
+      "stairSteps": 0,
+      "doorOpen": 0,
+      "doorClose": 0,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 0,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0,
+      "effectiveGain": 0,
+      "rms": 0,
+      "ambienceActive": false,
+      "lastError": null
+    }
+  },
+  "audioStarted": {
+    "unlocked": true,
+    "contextState": "running",
+    "started": true,
+    "muted": false,
+    "volume": 0.4,
+    "paused": false,
+    "activeVoices": 0,
+    "maxVoices": 36,
+    "scheduledVoices": 0,
+    "footsteps": 0,
+    "stairSteps": 0,
+    "doorOpen": 0,
+    "doorClose": 0,
+    "enemyDoorOpen": 0,
+    "enemyDoorClose": 0,
+    "enemyStairSteps": 0,
+    "stairTransitions": 0,
+    "chaseBeats": 0,
+    "caughtStingers": 0,
+    "processedEvents": 0,
+    "chaseIntensity": 0,
+    "chaseGain": 0,
+    "masterGain": 0.22237524390220642,
+    "effectiveGain": 0.22237524390220642,
+    "rms": 0.0018049488996888866,
+    "ambienceActive": true,
+    "lastError": null
+  },
+  "loaded": {
+    "revision": "facilities-and-corridor-2026-10-23",
+    "rooms": 41,
+    "active": [
+      "floor-1"
+    ],
+    "startHidden": true,
+    "classrooms": 19,
+    "libraries": [
+      {
+        "id": "room-f2-1",
+        "floor": 2
+      }
+    ],
+    "formerLibrary": {
+      "label": "빈교실 3",
+      "kind": "classroom",
+      "floor": 1
+    },
+    "administrationDesks": 18,
+    "broadcastRooms": 1,
+    "studentRestrooms": 6,
+    "staffRestrooms": 6,
+    "largeMirrors": 12
+  },
+  "keyboardMovement": {
+    "meters": 1.169999999999991,
+    "speed": 2.59999999999998,
+    "safe": true
+  },
+  "keyboardSprint": {
+    "speed": 4.699999999999968,
+    "staminaBefore": 100,
+    "staminaAfter": 92,
+    "safe": true
+  },
+  "stamina": {
+    "strip": {
+      "floor": 1,
+      "x": 20,
+      "y": 2
+    },
+    "empty": {
+      "stamina": 0,
+      "exhausted": true,
+      "running": false
+    },
+    "locked": {
+      "speed": 2.59999999999998,
+      "exhausted": true,
+      "running": false
+    },
+    "partial": {
+      "stamina": 13.049999999999994,
+      "exhausted": true
+    },
+    "recovered": {
+      "stamina": 40.05000000000001,
+      "exhausted": false
+    },
+    "resumed": {
+      "speed": 4.700000000000061,
+      "running": true
+    },
+    "safe": true
+  },
+  "roomVisits": [
+    {
+      "kind": "broadcast",
+      "id": "room-f1-5",
+      "inside": {
+        "id": "room-f1-5",
+        "label": "방송실",
+        "safe": true,
+        "activeIds": [
+          "room-f1-5"
+        ],
+        "visibleFixtureRoomIds": [
+          "room-f1-5"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "room-f1-5",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      },
+      "returned": {
+        "space": "floor-1",
+        "safe": true,
+        "correctPosition": true,
+        "hidden": true
+      }
+    },
+    {
+      "kind": "studentRestroom",
+      "id": "room-f1-9",
+      "inside": {
+        "id": "room-f1-9",
+        "label": "학생 화장실 남",
+        "safe": true,
+        "activeIds": [
+          "room-f1-9"
+        ],
+        "visibleFixtureRoomIds": [
+          "room-f1-9"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "room-f1-9",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      },
+      "returned": {
+        "space": "floor-1",
+        "safe": true,
+        "correctPosition": true,
+        "hidden": true
+      }
+    }
+  ],
+  "mirror": {
+    "count": 1,
+    "activeSpaceId": "room-f1-9",
+    "mirrors": [
+      {
+        "roomId": "room-f1-9",
+        "visible": true,
+        "width": 6.4,
+        "height": 1.55,
+        "renderedFrames": 2,
+        "actorInsideSurface": true,
+        "actorInReflection": true,
+        "textureWidth": 512,
+        "textureHeight": 512
+      }
+    ]
+  },
+  "mirrorPixels": {
+    "changedPixels": 465,
+    "maximumDelta": 234,
+    "roomId": "room-f1-9"
+  },
+  "doorPursuit": {
+    "entered": true,
+    "notInstant": true,
+    "delay": 1.8999999999999964,
+    "safe": true,
+    "enemy": {
+      "enabled": true,
+      "state": "chase",
+      "spaceId": "room-f1-3",
+      "x": 9,
+      "y": 3,
+      "speed": 0,
+      "caught": false,
+      "transfers": 1,
+      "lastSensed": 2.1749999999999963,
+      "graceUntil": 100,
+      "radius": 0.31,
+      "initial": {
+        "spaceId": "floor-1",
+        "x": 24,
+        "y": 20,
+        "distanceFromPlayer": 18.75
+      },
+      "path": [],
+      "portalTrail": [],
+      "transit": null,
+      "failedTransfers": 0
+    },
+    "playerSpace": "room-f1-3",
+    "visible": true,
+    "active": [
+      "room-f1-3"
+    ],
+    "audio": {
+      "unlocked": true,
+      "contextState": "running",
+      "started": true,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 24,
+      "maxVoices": 36,
+      "scheduledVoices": 82,
+      "footsteps": 20,
+      "stairSteps": 0,
+      "doorOpen": 6,
+      "doorClose": 6,
+      "enemyDoorOpen": 1,
+      "enemyDoorClose": 1,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 4,
+      "caughtStingers": 0,
+      "processedEvents": 25,
+      "chaseIntensity": 0.40183913382586295,
+      "chaseGain": 0.0954049825668335,
+      "masterGain": 0.4000000059604645,
+      "effectiveGain": 0.4000000059604645,
+      "rms": 0.024604097383334373,
+      "ambienceActive": true,
+      "lastError": null
+    },
+    "model": {
+      "name": "당직자",
+      "kind": "original-procedural-caretaker",
+      "targetHeight": 2.4,
+      "shoulderWidth": 0.87,
+      "meshCount": 104,
+      "animatedLimbs": 4,
+      "hasSeparateFingers": true,
+      "hasStaffBadge": true,
+      "geometrySource": "SchoolEscape original",
+      "localBounds": [
+        1.2016793633991085,
+        2.378069974004081,
+        0.9457750991342415
+      ]
+    }
+  },
+  "chaseAudio": {
+    "unlocked": true,
+    "contextState": "running",
+    "started": true,
+    "muted": false,
+    "volume": 0.4,
+    "paused": false,
+    "activeVoices": 10,
+    "maxVoices": 36,
+    "scheduledVoices": 82,
+    "footsteps": 20,
+    "stairSteps": 0,
+    "doorOpen": 6,
+    "doorClose": 6,
+    "enemyDoorOpen": 1,
+    "enemyDoorClose": 1,
+    "enemyStairSteps": 0,
+    "stairTransitions": 0,
+    "chaseBeats": 4,
+    "caughtStingers": 0,
+    "processedEvents": 25,
+    "chaseIntensity": 0.40183913382586295,
+    "chaseGain": 0.21158048510551453,
+    "masterGain": 0.4000000059604645,
+    "effectiveGain": 0.4000000059604645,
+    "rms": 0.02061700981333552,
+    "ambienceActive": true,
+    "lastError": null
+  },
+  "browserURL": "https://rawcdn.githack.com/pig556347-boop/-0-/d99cee6532d9947d72a5c78a49a0e8052b5a7f67/index.html?qa"
+}
