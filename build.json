@@ -1,10 +1,12 @@
 {
   "game": "폐교탈출",
-  "version": "0.5",
-  "revision": "support-room-interiors-2026-10-23",
-  "sourceCommit": "a069f7f40253bef7b518e61d7f6bd8d50f39a9b0",
-  "htmlSha256": "c59b69a762640f63d9dfb081b228f1aa3cccc05efdeb11a753028b97d904c7ca",
-  "browserRuntimeChecksPassed": 1447,
+  "version": "0.6",
+  "revision": "facilities-and-corridor-2026-10-23",
+  "sourceCommit": "6f4d4a4b84873bb0e2cd0d359f0101632e246a71",
+  "htmlSha256": "10c227a82c1f11b9316d301d24447aef48d3396a7f07d499a22809cb5416c887",
+  "roomCount": 41,
+  "browserRuntimeChecksPassed": 2267,
+  "staticChecksPassed": 69252,
   "browserErrors": 0,
   "unityWebGL": false
 }

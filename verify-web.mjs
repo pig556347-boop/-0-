@@ -22,6 +22,7 @@ async function verify(){
   check('Pinned commit is valid',/^[a-f0-9]{40}$/.test(sourceCommit||''));
   const manifest=JSON.parse(fs.readFileSync('build.json','utf8'));
   status.build=manifest;
+  check('Manifest declares the expected room count',Number.isInteger(manifest.roomCount)&&manifest.roomCount>0,manifest.roomCount);
   const response=await fetch(publicURL,{signal:AbortSignal.timeout(30000)});
   const html=Buffer.from(await response.arrayBuffer());
   status.http={status:response.status,contentType:response.headers.get('content-type'),
@@ -49,12 +50,26 @@ async function verify(){
   gameReady=true;
   check('Game starts from the public URL',await page.locator('#begin').isVisible());
   await page.click('#begin');
-  const loaded=await page.evaluate(()=>({revision:escapeQA.game.data.revision,
-    rooms:escapeQA.game.data.roomMaps.length,active:escapeQA.inspectSpace().activeIds,
-    startHidden:document.getElementById('start').hidden}));
+  const loaded=await page.evaluate(()=>{
+    const g=escapeQA.game,maps=g.data.roomMaps,former=g.data.floors[0].rooms.find(r=>r.label==='빈교실 3');
+    const formerMap=maps.find(m=>m.id===former?.interiorId);
+    return {revision:g.data.revision,rooms:maps.length,active:escapeQA.inspectSpace().activeIds,
+      startHidden:document.getElementById('start').hidden,classrooms:maps.filter(m=>m.kind==='classroom').length,
+      libraries:maps.filter(m=>m.kind==='library').map(m=>({id:m.id,floor:m.sourceFloor})),
+      formerLibrary:{label:former?.label,kind:formerMap?.kind,floor:formerMap?.sourceFloor},
+      administrationDesks:maps.filter(m=>m.kind==='administration').flatMap(m=>m.fixtures).filter(o=>o.kind==='admin-desk').length,
+      broadcastRooms:maps.filter(m=>m.kind==='broadcast').length,
+      studentRestrooms:maps.filter(m=>m.kind==='studentRestroom').length,
+      staffRestrooms:maps.filter(m=>m.kind==='staffRestroom').length,
+      largeMirrors:maps.flatMap(m=>m.fixtures).filter(o=>o.kind==='mirror-surface').length};
+  });
   status.loaded=loaded;
-  check('Latest 28-room build loaded',loaded.revision===manifest.revision&&loaded.rooms===28,loaded);
+  check(`Latest ${manifest.roomCount}-room build loaded`,loaded.revision===manifest.revision&&loaded.rooms===manifest.roomCount,loaded);
   check('Start button enters play',loaded.startHidden&&loaded.active.length===1);
+  check('Administration has 18 workstations',loaded.administrationDesks===18,loaded.administrationDesks);
+  check('Former 1F library is a classroom',loaded.formerLibrary.kind==='classroom'&&loaded.formerLibrary.floor===1&&loaded.classrooms===19,loaded.formerLibrary);
+  check('Only the 2F library remains',loaded.libraries.length===1&&loaded.libraries[0].floor===2,loaded.libraries);
+  check('Broadcast and all twelve restroom mirrors loaded',loaded.broadcastRooms===1&&loaded.studentRestrooms===6&&loaded.staffRestrooms===6&&loaded.largeMirrors===12);
 
   await page.evaluate(()=>{const g=escapeQA.game;g.warp(1,24,9);escapeQA.render()});
   const before=await page.evaluate(()=>({x:escapeQA.game.x,y:escapeQA.game.y,time:escapeQA.game.time}));
@@ -68,30 +83,49 @@ async function verify(){
   status.keyboardMovement=move;
   check('Actual W key moves safely at walking speed',move.safe&&move.meters>.8&&Math.abs(move.speed-2.6)<.3,move);
 
-  const room=await page.evaluate(()=>{
-    const g=escapeQA.game,m=g.data.roomMaps.find(m=>m.kind==='infirmary'&&m.sourceFloor===1);
-    if(!m)throw Error('Infirmary missing');
-    g.autoStairsEnabled=false;g.warp(1,m.returnX,m.returnY);g.lastDoorTransition=-10;escapeQA.render();
-    return {id:m.id,returnX:m.returnX,returnY:m.returnY,hidden:escapeQA.inspectSpace().visibleFixtureRoomIds.length===0};
-  });
-  check('Infirmary hidden before E',room.hidden);
-  await page.keyboard.press('KeyE');
-  await page.waitForFunction(id=>escapeQA.game.roomId===id&&!escapeQA.game.pendingDoor,room.id,{timeout:20000});
-  const inside=await page.evaluate(()=>{const g=escapeQA.game;escapeQA.render();return {
-    id:g.roomId,label:g.map.label,safe:!g.blocked(g.x,g.y),...escapeQA.inspectSpace()}});
-  status.infirmary=inside;
-  check('Actual E enters only the infirmary',inside.id===room.id&&inside.safe&&inside.activeIds.join()===room.id&&inside.visibleFixtureRoomIds.join()===room.id,inside);
-  try{await page.screenshot({path:'web-play.png',timeout:15000})}
-  catch(e){status.warnings.push('Optional screenshot: '+e.message)}
-  check('Infirmary exit approach reachable',await page.evaluate(()=>{const g=escapeQA.game;return g.walkTo(g.map.exitX,g.map.exitY+1)}));
-  await page.waitForFunction(()=>escapeQA.game.time-escapeQA.game.lastDoorTransition>.7,null,{timeout:20000});
-  await page.keyboard.press('KeyE');
-  await page.waitForFunction(()=>!escapeQA.game.roomId&&!escapeQA.game.pendingDoor,null,{timeout:20000});
-  const returned=await page.evaluate(room=>{const g=escapeQA.game;escapeQA.render();return {
-    space:g.spaceId,safe:!g.blocked(g.x,g.y),correctPosition:Math.hypot(g.x-room.returnX,g.y-room.returnY)<.01,
-    hidden:escapeQA.inspectSpace().visibleFixtureRoomIds.length===0}},room);
-  status.returned=returned;
-  check('Actual E returns to the original 1F doorway',returned.space==='floor-1'&&returned.safe&&returned.correctPosition&&returned.hidden,returned);
+  status.roomVisits=[];
+  for(const kind of ['broadcast','studentRestroom']){
+    const room=await page.evaluate(kind=>{
+      const g=escapeQA.game,m=g.data.roomMaps.find(m=>m.kind===kind&&m.sourceFloor===1);
+      if(!m)throw Error('Required 1F room missing: '+kind);
+      g.autoStairsEnabled=false;g.warp(1,m.returnX,m.returnY);g.lastDoorTransition=-10;escapeQA.render();
+      return {id:m.id,kind,returnX:m.returnX,returnY:m.returnY,hidden:escapeQA.inspectSpace().visibleFixtureRoomIds.length===0};
+    },kind);
+    check(`${kind} hidden before E`,room.hidden);
+    await page.keyboard.press('KeyE');
+    await page.waitForFunction(id=>escapeQA.game.roomId===id&&!escapeQA.game.pendingDoor,room.id,{timeout:20000});
+    const inside=await page.evaluate(()=>{const g=escapeQA.game;escapeQA.render(0);return {
+      id:g.roomId,label:g.map.label,safe:!g.blocked(g.x,g.y),...escapeQA.inspectSpace()}});
+    check(`Actual E enters only ${kind}`,inside.id===room.id&&inside.safe&&inside.activeIds.join()===room.id&&inside.visibleFixtureRoomIds.join()===room.id,inside);
+    if(kind==='studentRestroom'){
+      const mirrorRoute=await page.evaluate(()=>{
+        const g=escapeQA.game,z=g.map.interiorZones.find(z=>z.label.includes('큰 거울'));
+        if(!z)return {reached:false};
+        const reached=g.walkTo(z.x,z.y);escapeQA.render(0);
+        // Match the normal follow camera's settled position at the mirror.
+        escapeQA.camera.position.set((g.x-24)*g.data.tileSize,16,-(g.y-19)*g.data.tileSize+10.4);
+        escapeQA.render(0);return {reached,zone:z.label,safe:!g.blocked(g.x,g.y)};
+      });
+      check('Reach the large student restroom mirror',mirrorRoute.reached&&mirrorRoute.safe,mirrorRoute);
+      status.mirror=await page.evaluate(()=>{escapeQA.render(0);return escapeQA.inspectMirrors()});
+      const active=status.mirror.mirrors.filter(m=>m.visible&&m.roomId===room.id);
+      check('Only the current large mirror is visible',status.mirror.activeSpaceId===room.id&&active.length===1,status.mirror);
+      check('Large mirror renders the actual explorer',active.length===1&&active.every(m=>m.renderedFrames>0&&m.textureWidth>=128&&m.textureHeight>=128&&m.actorInReflection&&m.actorInsideSurface),active);
+      status.mirrorPixels=await page.evaluate(()=>escapeQA.checkMirrorPixels());
+      check('Explorer changes real reflection pixels',status.mirrorPixels.roomId===room.id&&status.mirrorPixels.changedPixels>10&&status.mirrorPixels.maximumDelta>2,status.mirrorPixels);
+      try{await page.screenshot({path:'web-play.png',timeout:15000})}
+      catch(e){status.warnings.push('Optional screenshot: '+e.message)}
+    }
+    check(`${kind} exit approach reachable`,await page.evaluate(()=>{const g=escapeQA.game;return g.walkTo(g.map.exitX,g.map.exitY+1)}));
+    await page.waitForFunction(()=>escapeQA.game.time-escapeQA.game.lastDoorTransition>.7,null,{timeout:20000});
+    await page.keyboard.press('KeyE');
+    await page.waitForFunction(()=>!escapeQA.game.roomId&&!escapeQA.game.pendingDoor,null,{timeout:20000});
+    const returned=await page.evaluate(room=>{const g=escapeQA.game;escapeQA.render(0);return {
+      space:g.spaceId,safe:!g.blocked(g.x,g.y),correctPosition:Math.hypot(g.x-room.returnX,g.y-room.returnY)<.01,
+      hidden:escapeQA.inspectSpace().visibleFixtureRoomIds.length===0}},room);
+    status.roomVisits.push({kind,id:room.id,inside,returned});
+    check(`Actual E returns from ${kind} to its 1F doorway`,returned.space==='floor-1'&&returned.safe&&returned.correctPosition&&returned.hidden,returned);
+  }
   check('Public browser has no runtime errors',status.errors.length===0&&status.consoleErrors.length===0);
   status.browserURL=page.url();
   status.ok=true;

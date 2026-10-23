@@ -19,8 +19,6 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env:
-      PUBLIC_GAME_COMMIT: 66e335440c9d20e2eeff62af8c8626629e9ebd3d
     steps:
       - uses: actions/checkout@v4
         with:
