@@ -1,0 +1,4 @@
+{
+  "commit": "1268055a35266ca70e1c1302c2d5852ba537a2ad",
+  "error": "Error: Dojaehak test failed: Exception: DOJAEHAK_TEST_FAIL ultimate breaks limited commitment boss=ATTACK player=HIT hp=300\n  at DojaehakPlaytestRunner.Check (System.Boolean value, System.String label) [0x00000] in <00000000000000000000000000000000>:0 \n\n DOJAEHAK_LAYOUT measuredRestHeight=189.9999 scale=(0.01, 0.01, 0.01) hip=(0.01, 110.00, 1.06) skinScale=(1.00, 1.00, 1.00)\n"
+}
