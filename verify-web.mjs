@@ -1,249 +1,135 @@
-// External smoke test of this branch's public HTML. It changes no site, Pages
-// configuration, other game, or deployment. The workflow saves only its report.
+// External Chromium proof for the isolated SchoolEscape web branch. QA setup
+// positions the real player; collection, inventory and victory use real input.
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import {chromium} from 'playwright';
-
 const sourceCommit=process.env.PUBLIC_GAME_COMMIT||process.env.GITHUB_SHA;
-const workflowCommit=process.env.GITHUB_SHA;
-const sourceBranch=process.env.GITHUB_REF_NAME;
+const workflowCommit=process.env.GITHUB_SHA,sourceBranch=process.env.GITHUB_REF_NAME;
 const repository=process.env.GITHUB_REPOSITORY;
 const publicURL=`https://rawcdn.githack.com/${repository}/${sourceCommit}/index.html`;
 const status={ok:false,utc:new Date().toISOString(),sourceCommit,workflowCommit,sourceBranch,publicURL,
-  kind:'External public browser smoke test of independent browser review, not Unity WebGL',
-  checks:[],errors:[],consoleErrors:[],warnings:[],externalContentNoticeConfirmed:false};
+ kind:'External public Chromium smoke test; independent browser game, not Unity WebGL',checks:[],errors:[],consoleErrors:[],warnings:[],externalContentNoticeConfirmed:false};
 let browser,page,gameReady=false;
-const check=(name,ok,actual)=>{
-  status.checks.push({name,passed:!!ok,...(actual===undefined?{}:{actual})});
-  if(!ok)throw Error(name);
-};
-async function verify(){
-  check('Only the separate web branch is tested',sourceBranch==='school-escape-web',sourceBranch);
-  check('Pinned commit is valid',/^[a-f0-9]{40}$/.test(sourceCommit||''));
-  const manifest=JSON.parse(fs.readFileSync('build.json','utf8'));
-  status.build=manifest;
-  check('Manifest identifies the caretaker stamina audio release',manifest.version==='0.7'&&manifest.featureRevision==='caretaker-stamina-audio-2026-10-23',manifest.featureRevision);
-  check('Manifest declares the expected room count',Number.isInteger(manifest.roomCount)&&manifest.roomCount>0,manifest.roomCount);
-  const response=await fetch(publicURL,{signal:AbortSignal.timeout(30000)});
-  const html=Buffer.from(await response.arrayBuffer());
-  status.http={status:response.status,contentType:response.headers.get('content-type'),
-    bytes:html.length,sha256:crypto.createHash('sha256').update(html).digest('hex')};
-  check('Public CDN returns HTTP 200',response.status===200,status.http.status);
-  check('Public CDN serves HTML for execution',/^text\/html\b/i.test(status.http.contentType||''),status.http.contentType);
-  check('Public HTML matches the tested build',status.http.sha256===manifest.htmlSha256,status.http.sha256);
-
-  browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,
-    args:['--no-sandbox','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
-  page=await browser.newPage({viewport:{width:1280,height:800},deviceScaleFactor:1});
-  page.setDefaultTimeout(20000);
-  page.on('pageerror',e=>status.errors.push(e.message));
-  page.on('console',m=>{if(gameReady&&m.type()==='error')status.consoleErrors.push(m.text())});
-  await page.goto(publicURL+'?qa',{waitUntil:'domcontentloaded',timeout:45000});
-  const open=page.getByRole('button',{name:'Open the page',exact:true})
-    .or(page.getByRole('link',{name:'Open the page',exact:true})).first();
-  if(await open.count()){
-    // Use the host's normal confirmation button, as a user would. No cookie
-    // injection or server-notice bypass is used.
-    await open.click();
-    status.externalContentNoticeConfirmed=true;
+function check(name,ok,actual){status.checks.push({name,passed:!!ok,...(actual===undefined?{}:{actual})});if(!ok)throw Error(name);}
+async function pickup(itemId){
+ const setup=await page.evaluate(id=>{
+  const q=escapeQA,g=q.game,s=q.items,item=s.worldItems.find(i=>i.itemId===id&&!i.picked);if(!item)throw Error('Missing authored item '+id);
+  const f=g.spaces.get(item.spaceId),source=item.sourceId?s.searchById.get(item.sourceId):null;let chosen;
+  for(const p of source?source.approaches:[item]){
+   if(f.isRoom)g.warpRoom(f.id,p.x,p.y);else g.warp(f.number,p.x,p.y);
+   const near=s.nearby();if(near&&(near.uid===item.uid||near.itemUid===item.uid)){chosen=p;break;}
   }
-  await page.waitForFunction(()=>window.escapeLoaded&&window.escapeQA,null,{timeout:45000});
-  gameReady=true;
-  check('Game starts from the public URL',await page.locator('#begin').isVisible());
-  const initial=await page.evaluate(()=>({enemy:escapeQA.pursuit?.inspect(),visual:escapeQA.pursuerVisual?.inspect(),audio:escapeQA.audio?.inspect()}));
-  status.initialChase=initial;
-  check('Original large caretaker is enabled by default',initial.enemy?.enabled&&initial.enemy.initial?.distanceFromPlayer>=15&&initial.visual?.kind==='original-procedural-caretaker'&&initial.visual.targetHeight===2.4&&initial.visual.hasStaffBadge,initial);
-  check('Sound has no autoplay context before Start',initial.audio?.contextState==='uninitialized'&&!initial.audio?.unlocked,initial.audio);
-  await page.click('#begin');
-  await page.waitForFunction(()=>escapeQA.audio.inspect().unlocked&&escapeQA.audio.inspect().rms>1e-7,null,{timeout:20000});
-  status.audioStarted=await page.evaluate(()=>escapeQA.audio.inspect());
-  check('Actual Start click unlocks audible browser ambience',status.audioStarted.contextState==='running'&&status.audioStarted.ambienceActive&&status.audioStarted.rms>1e-7,status.audioStarted);
-  await page.click('#sound-toggle');await page.waitForTimeout(200);
-  const muted=await page.evaluate(()=>({audio:escapeQA.audio.inspect(),pressed:document.getElementById('sound-toggle').getAttribute('aria-pressed')}));
-  check('Actual mute button silences audio and updates its state',muted.pressed==='true'&&muted.audio.muted&&muted.audio.masterGain<.005&&muted.audio.rms<.001,muted);
-  await page.click('#sound-toggle');
-  await page.waitForFunction(()=>!escapeQA.audio.inspect().muted&&escapeQA.audio.inspect().masterGain>.01&&escapeQA.audio.inspect().rms>1e-7);
-  check('Actual sound button restores audio',await page.evaluate(()=>document.getElementById('sound-toggle').getAttribute('aria-pressed')==='false'));
-  // Existing room and reflection checks below intentionally isolate geometry
-  // from pursuit. The real pursuit is verified separately after these routes.
-  await page.evaluate(()=>escapeQA.pursuit.setEnabled(false));
-  const loaded=await page.evaluate(()=>{
-    const g=escapeQA.game,maps=g.data.roomMaps,former=g.data.floors[0].rooms.find(r=>r.label==='빈교실 3');
-    const formerMap=maps.find(m=>m.id===former?.interiorId);
-    return {revision:g.data.revision,rooms:maps.length,active:escapeQA.inspectSpace().activeIds,
-      startHidden:document.getElementById('start').hidden,classrooms:maps.filter(m=>m.kind==='classroom').length,
-      libraries:maps.filter(m=>m.kind==='library').map(m=>({id:m.id,floor:m.sourceFloor})),
-      formerLibrary:{label:former?.label,kind:formerMap?.kind,floor:formerMap?.sourceFloor},
-      administrationDesks:maps.filter(m=>m.kind==='administration').flatMap(m=>m.fixtures).filter(o=>o.kind==='admin-desk').length,
-      broadcastRooms:maps.filter(m=>m.kind==='broadcast').length,
-      studentRestrooms:maps.filter(m=>m.kind==='studentRestroom').length,
-      staffRestrooms:maps.filter(m=>m.kind==='staffRestroom').length,
-      largeMirrors:maps.flatMap(m=>m.fixtures).filter(o=>o.kind==='mirror-surface').length};
-  });
-  status.loaded=loaded;
-  check(`Latest ${manifest.roomCount}-room build loaded`,loaded.revision===manifest.revision&&loaded.rooms===manifest.roomCount,loaded);
-  check('Start button enters play',loaded.startHidden&&loaded.active.length===1);
-  check('Administration has 18 workstations',loaded.administrationDesks===18,loaded.administrationDesks);
-  check('Former 1F library is a classroom',loaded.formerLibrary.kind==='classroom'&&loaded.formerLibrary.floor===1&&loaded.classrooms===19,loaded.formerLibrary);
-  check('Only the 2F library remains',loaded.libraries.length===1&&loaded.libraries[0].floor===2,loaded.libraries);
-  check('Broadcast and all twelve restroom mirrors loaded',loaded.broadcastRooms===1&&loaded.studentRestrooms===6&&loaded.staffRestrooms===6&&loaded.largeMirrors===12);
-
-  await page.evaluate(()=>{const g=escapeQA.game;g.warp(1,24,9);escapeQA.render()});
-  const before=await page.evaluate(()=>({x:escapeQA.game.x,y:escapeQA.game.y,time:escapeQA.game.time}));
-  await page.keyboard.down('KeyW');
-  try{await page.waitForFunction(t=>escapeQA.game.time>t+.4,before.time,{timeout:20000})}
-  finally{await page.keyboard.up('KeyW')}
-  const move=await page.evaluate(before=>{const g=escapeQA.game;return {
-    meters:Math.hypot(g.x-before.x,g.y-before.y)*g.data.tileSize,
-    speed:Math.hypot(g.x-before.x,g.y-before.y)*g.data.tileSize/(g.time-before.time),
-    safe:!g.blocked(g.x,g.y)&&g.spaceId==='floor-1'}},before);
-  status.keyboardMovement=move;
-  check('Actual W key moves safely at walking speed',move.safe&&move.meters>.8&&Math.abs(move.speed-2.6)<.3,move);
-
-  await page.evaluate(()=>{const g=escapeQA.game;g.warp(1,24,9);g.stamina=100;g.exhausted=false});
-  const sprintBefore=await page.evaluate(()=>({x:escapeQA.game.x,y:escapeQA.game.y,time:escapeQA.game.time,stamina:escapeQA.game.stamina}));
-  await page.keyboard.down('ShiftLeft');await page.keyboard.down('KeyW');
-  try{await page.waitForFunction(t=>escapeQA.game.time>t+.4,sprintBefore.time,{timeout:20000})}
-  finally{await page.keyboard.up('KeyW');await page.keyboard.up('ShiftLeft')}
-  const sprint=await page.evaluate(before=>{const g=escapeQA.game;return {
-    speed:Math.hypot(g.x-before.x,g.y-before.y)*g.data.tileSize/(g.time-before.time),
-    staminaBefore:before.stamina,staminaAfter:g.stamina,safe:!g.blocked(g.x,g.y)}},sprintBefore);
-  status.keyboardSprint=sprint;
-  check('Actual Shift W sprints safely and spends stamina',sprint.safe&&Math.abs(sprint.speed-4.7)<.35&&sprint.staminaAfter<sprint.staminaBefore-5,sprint);
-
-  const stamina=await page.evaluate(()=>{
-    const q=escapeQA,g=q.game;q.setManual(true);g.autoStairsEnabled=false;
-    let strip;
-    for(const f of g.data.floors){
-      for(let y=0;y<f.height&&!strip;y++)for(let x=0;x<f.width-5&&!strip;x++){
-        if([0,1,2,3,4].every(i=>!g.blocked(x+i,y,f))&&g.segmentClear(x,y,x+4,y,f))strip={floor:f.number,x,y};
-      }
-      if(strip)break;
-    }
-    if(!strip)throw Error('No collision-clear authored corridor for stamina smoke');
-    g.warp(strip.floor,strip.x+1,strip.y);g.stamina=100;g.exhausted=false;let direction=1;
-    const run=(seconds,sprint=false,moving=false)=>{
-      for(let elapsed=0;elapsed<seconds-1e-8;elapsed+=.025){
-        if(g.x>=strip.x+3)direction=-1;if(g.x<=strip.x+1)direction=1;
-        q.tick(Math.min(.025,seconds-elapsed),moving?direction:0,0,sprint);
-      }
-    };
-    run(5.2,true,true);const empty={stamina:g.stamina,exhausted:g.exhausted,running:g.isRunning};
-    run(.2,true,true);const locked={speed:g.speed,exhausted:g.exhausted,running:g.isRunning};
-    run(1.8);const partial={stamina:g.stamina,exhausted:g.exhausted};
-    run(1.5);const recovered={stamina:g.stamina,exhausted:g.exhausted};
-    run(.1,true,true);const resumed={speed:g.speed,running:g.isRunning};
-    q.setManual(false);return {strip,empty,locked,partial,recovered,resumed,safe:!g.blocked(g.x,g.y)};
-  });
-  status.stamina=stamina;
-  check('Moving sprint exhausts stamina and held Shift falls back to walking',stamina.safe&&stamina.empty.exhausted&&stamina.empty.stamina<1&&!stamina.empty.running&&stamina.locked.exhausted&&!stamina.locked.running&&Math.abs(stamina.locked.speed-2.6)<.05,stamina);
-  check('Recovery delay and quarter-stamina lock prevent instant endless sprint',stamina.partial.stamina>0&&stamina.partial.stamina<25&&stamina.partial.exhausted&&stamina.recovered.stamina>=25&&!stamina.recovered.exhausted,stamina);
-  check('Recovered stamina permits sprinting again',stamina.resumed.running&&Math.abs(stamina.resumed.speed-4.7)<.05,stamina.resumed);
-
-  status.roomVisits=[];
-  for(const kind of ['broadcast','studentRestroom']){
-    const room=await page.evaluate(kind=>{
-      const g=escapeQA.game,m=g.data.roomMaps.find(m=>m.kind===kind&&m.sourceFloor===1);
-      if(!m)throw Error('Required 1F room missing: '+kind);
-      g.autoStairsEnabled=false;g.warp(1,m.returnX,m.returnY);g.lastDoorTransition=-10;escapeQA.render();
-      return {id:m.id,kind,returnX:m.returnX,returnY:m.returnY,hidden:escapeQA.inspectSpace().visibleFixtureRoomIds.length===0};
-    },kind);
-    check(`${kind} hidden before E`,room.hidden);
-    await page.keyboard.press('KeyE');
-    await page.waitForFunction(id=>escapeQA.game.roomId===id&&!escapeQA.game.pendingDoor,room.id,{timeout:20000});
-    const inside=await page.evaluate(()=>{const g=escapeQA.game;escapeQA.render(0);return {
-      id:g.roomId,label:g.map.label,safe:!g.blocked(g.x,g.y),...escapeQA.inspectSpace()}});
-    check(`Actual E enters only ${kind}`,inside.id===room.id&&inside.safe&&inside.activeIds.join()===room.id&&inside.visibleFixtureRoomIds.join()===room.id,inside);
-    if(kind==='studentRestroom'){
-      const mirrorRoute=await page.evaluate(()=>{
-        const g=escapeQA.game,z=g.map.interiorZones.find(z=>z.label.includes('큰 거울'));
-        if(!z)return {reached:false};
-        const reached=g.walkTo(z.x,z.y);escapeQA.render(0);
-        // Match the normal follow camera's settled position at the mirror.
-        escapeQA.camera.position.set((g.x-24)*g.data.tileSize,16,-(g.y-19)*g.data.tileSize+10.4);
-        escapeQA.render(0);return {reached,zone:z.label,safe:!g.blocked(g.x,g.y)};
-      });
-      check('Reach the large student restroom mirror',mirrorRoute.reached&&mirrorRoute.safe,mirrorRoute);
-      status.mirror=await page.evaluate(()=>{escapeQA.render(0);return escapeQA.inspectMirrors()});
-      const active=status.mirror.mirrors.filter(m=>m.visible&&m.roomId===room.id);
-      check('Only the current large mirror is visible',status.mirror.activeSpaceId===room.id&&active.length===1,status.mirror);
-      check('Large mirror renders the actual explorer',active.length===1&&active.every(m=>m.renderedFrames>0&&m.textureWidth>=128&&m.textureHeight>=128&&m.actorInReflection&&m.actorInsideSurface),active);
-      status.mirrorPixels=await page.evaluate(()=>escapeQA.checkMirrorPixels());
-      check('Explorer changes real reflection pixels',status.mirrorPixels.roomId===room.id&&status.mirrorPixels.changedPixels>10&&status.mirrorPixels.maximumDelta>2,status.mirrorPixels);
-      try{await page.screenshot({path:'web-mirror.png',timeout:15000})}
-      catch(e){status.warnings.push('Optional screenshot: '+e.message)}
-    }
-    check(`${kind} exit approach reachable`,await page.evaluate(()=>{const g=escapeQA.game;return g.walkTo(g.map.exitX,g.map.exitY+1)}));
-    await page.waitForFunction(()=>escapeQA.game.time-escapeQA.game.lastDoorTransition>.7,null,{timeout:20000});
-    await page.keyboard.press('KeyE');
-    await page.waitForFunction(()=>!escapeQA.game.roomId&&!escapeQA.game.pendingDoor,null,{timeout:20000});
-    const returned=await page.evaluate(room=>{const g=escapeQA.game;escapeQA.render(0);return {
-      space:g.spaceId,safe:!g.blocked(g.x,g.y),correctPosition:Math.hypot(g.x-room.returnX,g.y-room.returnY)<.01,
-      hidden:escapeQA.inspectSpace().visibleFixtureRoomIds.length===0}},room);
-    status.roomVisits.push({kind,id:room.id,inside,returned});
-    check(`Actual E returns from ${kind} to its 1F doorway`,returned.space==='floor-1'&&returned.safe&&returned.correctPosition&&returned.hidden,returned);
-  }
-
-  const followSetup=await page.evaluate(()=>{
-    const q=escapeQA,g=q.game,p=q.pursuit;q.setManual(true);g.reset();p.reset();q.audio.resetEvents();g.autoStairsEnabled=false;
-    const f=g.data.floors[0],r=f.rooms.find(r=>r.label==='빈교실 3');
-    const [dx,dy]=({north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]})[r.facing];
-    g.warp(1,r.doorX+dx,r.doorY+dy);g.lastDoorTransition=-10;
-    const candidates=p.grid(f).nodes.filter(n=>{const d=Math.hypot(n.x-g.x,n.y-g.y)*g.data.tileSize;
-      return d>=3&&d<=6&&g.segmentClear(n.x,n.y,g.x,g.y,f,p.radius)});
-    if(!candidates.length)throw Error('No real corridor approach for public door pursuit');
-    candidates.sort((a,b)=>Math.hypot(a.x-g.x,a.y-g.y)-Math.hypot(b.x-g.x,b.y-g.y));
-    p.place(f.id,candidates[0].x,candidates[0].y,'chase');p.graceUntil=g.time+100;
-    q.render(0);return {roomId:r.interiorId,sourceId:f.id,before:p.inspect(),door:q.game.nearbyDoor()?.label};
-  });
-  await page.keyboard.press('KeyE');
-  const following=await page.evaluate(setup=>{
-    const q=escapeQA,g=q.game,p=q.pursuit;
-    for(let i=0;i<11;i++)q.tick(.025);
-    const entered=g.spaceId===setup.roomId,notInstant=p.spaceId===setup.sourceId,entryTime=g.time;
-    const origin={x:g.x,y:g.y},far=p.grid(g.map).nodes.filter(n=>{
-      const d=Math.hypot(n.x-origin.x,n.y-origin.y)*g.data.tileSize;return d>=5&&d<=8&&g.path(n.x,n.y);
-    });
-    far.sort((a,b)=>Math.hypot(a.x-origin.x,a.y-origin.y)-Math.hypot(b.x-origin.x,b.y-origin.y));
-    if(!far.length)throw Error('No reachable room observation point');g.warpRoom(g.roomId,far[0].x,far[0].y);
-    let safe=true,delay=null;
-    for(let t=0;t<8;t+=.025){q.tick(.025);safe&&=!g.blocked(p.x,p.y,g.spaces.get(p.spaceId),p.radius);
-      if(p.spaceId===g.spaceId){delay=g.time-entryTime;break;}}
-    q.render(0);q.camera.position.set((g.x-24)*g.data.tileSize,16,-(g.y-19)*g.data.tileSize+10.4);q.render(.016);
-    return {entered,notInstant,delay,safe,enemy:p.inspect(),playerSpace:g.spaceId,visible:q.pursuerVisual.root.visible,
-      active:q.inspectSpace().activeIds,audio:q.audio.inspect(),model:q.pursuerVisual.inspect()};
-  },followSetup);
-  status.doorPursuit=following;
-  check('Actual E enters a room before the pursuer arrives',following.entered&&following.notInstant,following);
-  check('Pursuer approaches and follows the actual used door after a delay',following.enemy.spaceId===followSetup.roomId&&following.delay>=1.2&&following.delay<8&&following.enemy.transfers===1&&following.enemy.failedTransfers===0,following);
-  check('Following pursuer lands safely and renders only in the active room',following.safe&&following.visible&&following.active.join()===followSetup.roomId,following);
-  await page.waitForTimeout(180);
-  const chaseAudio=await page.evaluate(()=>escapeQA.audio.inspect());status.chaseAudio=chaseAudio;
-  check('Real pursuit produces urgent sound and follower door sounds',chaseAudio.chaseBeats>0&&chaseAudio.chaseGain>.02&&chaseAudio.rms>1e-7&&chaseAudio.enemyDoorOpen>0&&chaseAudio.enemyDoorClose>0,chaseAudio);
-  try{await page.screenshot({path:'web-play.png',timeout:15000})}
-  catch(e){status.warnings.push('Optional chaser screenshot: '+e.message)}
-  const caught=await page.evaluate(()=>{
-    const q=escapeQA,g=q.game,p=q.pursuit;p.place(g.spaceId,g.x,g.y,'chase');p.graceUntil=p.catchGraceUntil=-1;
-    q.tick(.025);q.render(0);q.setManual(false);return {caught:g.caught,enemy:p.inspect(),overlay:!document.getElementById('caught').hidden};
-  });
-  check('Actual contact stops play and shows the caught screen',caught.caught&&caught.enemy.caught&&caught.overlay,caught);
-  await page.click('#restart');
-  const restarted=await page.evaluate(()=>({caught:escapeQA.game.caught,stamina:escapeQA.game.stamina,spaceId:escapeQA.game.spaceId,
-    enemy:escapeQA.pursuit.inspect(),overlay:!document.getElementById('caught').hidden,blocked:escapeQA.game.blocked(escapeQA.game.x,escapeQA.game.y)}));
-  check('Actual Restart restores stamina and safe independent pursuit',!restarted.caught&&restarted.stamina===100&&restarted.spaceId==='floor-1'&&!restarted.overlay&&!restarted.blocked&&restarted.enemy.enabled&&restarted.enemy.initial.distanceFromPlayer>=15,restarted);
-  check('Public browser has no runtime errors',status.errors.length===0&&status.consoleErrors.length===0);
-  status.browserURL=page.url();
-  status.ok=true;
+  if(!chosen)throw Error('No matching reachable interaction '+id);
+  g.autoStairsEnabled=false;for(let i=0;i<14;i++)q.tick(.025);q.render(0);
+  return {uid:item.uid,itemId:id,spaceId:f.id,hidden:item.hidden,sourceId:item.sourceId,key:g.nearbyDoor()||s.nearbyGate()?'KeyF':'KeyE',safe:!g.blocked(g.x,g.y)};
+ },itemId);
+ check('Reach real '+itemId+' interaction',setup.safe,setup);await page.keyboard.press(setup.key);
+ await page.waitForFunction(uid=>escapeQA.items.worldItems.find(i=>i.uid===uid)?.picked,setup.uid);
+ const got=await page.evaluate(s=>{
+  const q=escapeQA;q.render(0);return {carried:q.items.inventory.some(i=>i.uid===s.uid),crafted:s.itemId.startsWith('clock-')&&q.items.inventory.some(i=>i.itemId==='compass'),
+   active:q.inspectSpace().activeIds,capacity:q.items.inventory.length,copies:q.items.worldItems.filter(i=>i.uid===s.uid).length,
+   isolated:q.lootVisuals.inspect().items.filter(i=>i.visible).every(i=>i.spaceId===q.game.spaceId)};
+ },setup);
+ check('Actual '+setup.key+' obtains '+itemId+' without duplication',(got.carried||got.crafted)&&got.capacity<=9&&got.copies===1&&got.active.join()===setup.spaceId&&got.isolated,got);return setup;
 }
-
+async function inventoryAction(id,button){
+ if(!await page.evaluate(()=>escapeQA.inventoryUI.isOpen))await page.keyboard.press('KeyI');
+ const index=await page.evaluate(id=>escapeQA.items.inventory.findIndex(i=>i.itemId===id),id);if(index<0)throw Error('Inventory item missing '+id);
+ await page.click('#inventory-slot-'+index);await page.click(button);await page.keyboard.press('Escape');
+}
+async function verify(){
+ check('Only the separate web branch is tested',sourceBranch==='school-escape-web',sourceBranch);
+ check('Pinned commit is valid',/^[a-f0-9]{40}$/.test(sourceCommit||''));
+ const manifest=JSON.parse(fs.readFileSync('build.json','utf8'));status.build=manifest;
+ check('Manifest identifies items and roaming 0.8',manifest.version==='0.8'&&manifest.featureRevision==='items-search-roaming-2026-10-24',manifest.featureRevision);
+ const response=await fetch(publicURL,{signal:AbortSignal.timeout(30000)}),html=Buffer.from(await response.arrayBuffer());
+ status.http={status:response.status,contentType:response.headers.get('content-type'),bytes:html.length,sha256:crypto.createHash('sha256').update(html).digest('hex')};
+ check('Public CDN returns HTTP 200',response.status===200,status.http.status);
+ check('Public CDN serves executable HTML',/^text\/html\b/i.test(status.http.contentType||''),status.http.contentType);
+ check('Public HTML matches the tested build',status.http.sha256===manifest.htmlSha256,status.http.sha256);
+ browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ page=await browser.newPage({viewport:{width:1280,height:800},deviceScaleFactor:1});page.setDefaultTimeout(20000);
+ page.on('pageerror',e=>status.errors.push(e.message));page.on('console',m=>{if(gameReady&&m.type()==='error')status.consoleErrors.push(m.text())});
+ await page.goto(publicURL+'?qa',{waitUntil:'domcontentloaded',timeout:45000});
+ const open=page.getByRole('button',{name:'Open the page',exact:true}).or(page.getByRole('link',{name:'Open the page',exact:true})).first();
+ if(await open.count()){await open.click();status.externalContentNoticeConfirmed=true;}
+ await page.waitForFunction(()=>window.escapeLoaded&&window.escapeQA,null,{timeout:45000});gameReady=true;
+ check('Public game has a usable Start button',await page.locator('#begin').isVisible());
+ const initial=await page.evaluate(()=>{
+  const q=escapeQA,g=q.game,s=q.items,m=g.data.roomMaps;
+  return {seed:s.seed,enemy:q.pursuit.inspect(),visual:q.pursuerVisual.inspect(),audio:q.audio.inspect(),capacity:s.capacity,maxEquipped:s.maxEquipped,
+   itemCount:s.worldItems.length,keys:s.worldItems.filter(i=>i.itemId.startsWith('key-')).map(i=>({id:i.itemId,hidden:i.hidden,spaceId:i.spaceId})),
+   rooms:m.length,revision:g.data.revision,libraries:m.filter(m=>m.kind==='library').map(m=>m.sourceFloor),
+   adminDesks:m.filter(m=>m.kind==='administration').flatMap(m=>m.fixtures).filter(o=>o.kind==='admin-desk').length,mirrors:m.flatMap(m=>m.fixtures).filter(o=>o.kind==='mirror-surface').length};
+ });status.initial=initial;
+ check('Caretaker uses a designated safe random spawn',initial.enemy.enabled&&initial.enemy.spawnCandidates.length>=3&&initial.enemy.spawnCandidates.some(p=>p.id===initial.enemy.initial.spawnId&&p.spaceId===initial.enemy.initial.spaceId)&&(initial.enemy.initial.spaceId!=='floor-1'||initial.enemy.initial.distanceFromPlayer>=15)&&initial.visual.targetHeight===2.4,initial.enemy);
+ check('Inventory has nine carry and one worn slots',initial.capacity===9&&initial.maxEquipped===1);
+ check('Run has thirteen real pickups and exactly A B C',initial.itemCount===13&&initial.keys.map(k=>k.id).sort().join()==='key-a,key-b,key-c',initial.keys);
+ check('Keys mix furniture and ground locations',initial.keys.some(k=>k.hidden)&&initial.keys.some(k=>!k.hidden),initial.keys);
+ check('Existing 41 rooms and facility fixtures remain',initial.rooms===manifest.roomCount&&initial.rooms===41&&initial.revision===manifest.revision&&initial.libraries.join()==='2'&&initial.adminDesks===18&&initial.mirrors===12,initial);
+ check('No sound starts before Start',initial.audio.contextState==='uninitialized'&&!initial.audio.unlocked,initial.audio);
+ await page.click('#begin');await page.waitForFunction(()=>escapeQA.audio.inspect().contextState==='running'&&escapeQA.audio.inspect().rms>1e-7);
+ status.startedAudio=await page.evaluate(()=>escapeQA.audio.inspect());check('Real Start unlocks audible ambience',status.startedAudio.unlocked&&status.startedAudio.rms>1e-7,status.startedAudio);
+ await page.click('#sound-toggle');await page.waitForFunction(()=>escapeQA.audio.inspect().muted&&escapeQA.audio.inspect().masterGain<.005);
+ check('Real mute button silences output',await page.evaluate(()=>document.getElementById('sound-toggle').getAttribute('aria-pressed')==='true'&&escapeQA.audio.inspect().rms<.001));
+ await page.click('#sound-toggle');await page.waitForFunction(()=>!escapeQA.audio.inspect().muted&&escapeQA.audio.inspect().rms>1e-7);
+ await page.click('#enemy-toggle');await page.waitForFunction(()=>!escapeQA.pursuit.enabled&&document.getElementById('enemy-toggle').getAttribute('aria-pressed')==='false');
+ check('Real developer toggle disables pursuit',await page.evaluate(()=>!escapeQA.pursuit.enabled&&document.getElementById('enemy-toggle').getAttribute('aria-pressed')==='false'));
+ const seedBefore=await page.evaluate(()=>escapeQA.items.seed);await page.keyboard.press('Escape');await page.click('#new-run');
+ const reset=await page.evaluate(()=>({seed:escapeQA.items.seed,enabled:escapeQA.pursuit.enabled,items:escapeQA.items.worldItems.length,carry:escapeQA.items.inventory.length}));
+ check('New run rerolls loot and keeps developer OFF',reset.seed!==seedBefore&&!reset.enabled&&reset.items===13&&reset.carry===0,reset);
+ await page.keyboard.press('KeyI');const time=await page.evaluate(()=>escapeQA.game.time);await page.waitForTimeout(180);
+ check('Real I opens nine slots and pauses time',await page.evaluate(t=>escapeQA.inventoryUI.isOpen&&document.querySelectorAll('#inventory-grid button').length===9&&escapeQA.game.time===t,time));
+ await page.keyboard.press('Escape');check('Escape closes inventory',!await page.evaluate(()=>escapeQA.inventoryUI.isOpen));
+ await page.evaluate(()=>{const q=escapeQA;q.game.autoStairsEnabled=false;q.game.warp(1,24,9);q.game.stamina=100;q.render(0)});
+ const start=await page.evaluate(()=>({x:escapeQA.game.x,y:escapeQA.game.y,time:escapeQA.game.time}));
+ await page.keyboard.down('ShiftLeft');await page.keyboard.down('KeyW');
+ try{await page.waitForFunction(t=>escapeQA.game.time>t+.35,start.time)}finally{await page.keyboard.up('KeyW');await page.keyboard.up('ShiftLeft')}
+ const sprint=await page.evaluate(a=>{const g=escapeQA.game;return {speed:Math.hypot(g.x-a.x,g.y-a.y)*g.data.tileSize/(g.time-a.time),stamina:g.stamina,safe:!g.blocked(g.x,g.y)}},start);
+ check('Real Shift W sprints and spends stamina',sprint.safe&&Math.abs(sprint.speed-4.7)<.35&&sprint.stamina<95,sprint);await page.evaluate(()=>escapeQA.setManual(true));
+ await page.evaluate(()=>{const q=escapeQA,e=q.items.escapeGate;q.game.warp(1,e.x,e.y);q.render(0)});await page.keyboard.press('KeyE');
+ check('Real gate E cannot win without three keys',await page.evaluate(()=>!escapeQA.game.won&&escapeQA.items.nearbyGate().missing.length===3));status.pickups=[];
+ status.pickups.push(await pickup('vitamin-water'));await inventoryAction('vitamin-water','#inventory-use');
+ const boost=await page.evaluate(()=>{const q=escapeQA,g=q.game;g.warp(1,24,9);q.tick(.025,1,0,false);const boosted=g.speed;for(let i=0;i<84;i++)q.tick(.025);q.tick(.025,1,0,false);return {boosted,after:g.speed,remaining:g.speedBoostUntil-g.time,safe:!g.blocked(g.x,g.y)};});
+ check('Real drink UI boosts movement thirty percent for two seconds',boost.safe&&Math.abs(boost.boosted-3.38)<.03&&Math.abs(boost.after-2.6)<.03&&boost.remaining<0,boost);
+ status.pickups.push(await pickup('chocolate-bar'));await page.evaluate(()=>{escapeQA.game.stamina=3;escapeQA.game.exhausted=true});await inventoryAction('chocolate-bar','#inventory-use');
+ check('Real chocolate UI fills stamina and clears exhaustion',await page.evaluate(()=>escapeQA.game.stamina===100&&!escapeQA.game.exhausted));
+ const dropped=await pickup('chocolate-bar');await inventoryAction('chocolate-bar','#inventory-drop');
+ const loose=await page.evaluate(uid=>{const q=escapeQA,i=q.items.worldItems.find(i=>i.uid===uid);q.render(0);return {picked:i.picked,hidden:i.hidden,sourceId:i.sourceId,safe:!q.game.blocked(i.x,i.y),carried:q.items.inventory.some(i=>i.uid===uid)}},dropped.uid);
+ check('Real drop UI preserves a safe loose item identity',!loose.picked&&!loose.hidden&&!loose.sourceId&&!loose.carried&&loose.safe,loose);
+ const recovered=await pickup('chocolate-bar');check('Real pickup recovers the same dropped item',recovered.uid===dropped.uid,{dropped:dropped.uid,recovered:recovered.uid});
+ for(const id of ['clock-second-hand','clock-minute-hand','clock-body'])status.pickups.push(await pickup(id));
+ const crafted=await page.evaluate(()=>({inventory:escapeQA.items.inventory,compass:escapeQA.items.compass()}));status.compass=crafted;
+ check('Three picked clock parts automatically become one compass',crafted.inventory.filter(i=>i.itemId==='compass').length===1&&!crafted.inventory.some(i=>i.itemId.startsWith('clock-'))&&crafted.compass.active,crafted);
+ status.pickups.push(await pickup('smartwatch'));await inventoryAction('smartwatch','#inventory-equip');
+ check('Real equip UI uses the separate watch slot',await page.evaluate(()=>escapeQA.items.equipped?.itemId==='smartwatch'&&!escapeQA.items.inventory.some(i=>i.itemId==='smartwatch')));
+ await page.click('#enemy-toggle');const watch=await page.evaluate(()=>{
+  const q=escapeQA,g=q.game,p=q.pursuit;g.warp(1,24,9);const f=g.map,nodes=p.grid(f).nodes;
+  const choose=(lo,hi)=>nodes.find(n=>{const d=Math.hypot(n.x-g.x,n.y-g.y)*g.data.tileSize;return d>=lo&&d<=hi});const far=choose(10,12),near=choose(2,3);if(!far||!near)throw Error('No authored watch sensor positions');
+  const play=point=>{p.place(f.id,point.x,point.y,'patrol');for(let i=0;i<30;i++)q.updateAudio(.05);return q.audio.inspect()};return {far:play(far),near:play(near)};
+ });await page.waitForTimeout(180);watch.signal=await page.evaluate(()=>escapeQA.audio.inspect());status.watch=watch;
+ check('Worn watch heartbeat accelerates near a real enemy',watch.near.watchBpm>watch.far.watchBpm&&watch.far.watchBpm>0&&watch.signal.watchBeats>0&&watch.signal.rms>1e-7,watch);
+ await page.click('#enemy-toggle');check('Developer OFF removes watch threat heartbeat',await page.evaluate(()=>escapeQA.audio.inspect().watchBpm===0&&!escapeQA.pursuit.enabled));
+ const first=crafted.compass.targetItemId;
+ for(const id of [first,...['key-a','key-b','key-c'].filter(id=>id!==first)]){
+  status.pickups.push(await pickup(id));if(id===first)check('Picking the compass target consumes the compass',await page.evaluate(()=>!escapeQA.items.inventory.some(i=>i.itemId==='compass')&&!escapeQA.items.compass().active));
+ }
+ check('All three distinct real keys are held',await page.evaluate(()=>escapeQA.items.hasAllKeys()&&escapeQA.items.inventory.filter(i=>i.itemId.startsWith('key-')).length===3));
+ const away=await page.evaluate(()=>{const q=escapeQA;q.game.warp(1,24,9);return q.items.tryEscape()});check('Keys cannot win away from the gate',!away.ok&&!await page.evaluate(()=>escapeQA.game.won),away);
+ await page.evaluate(()=>{const q=escapeQA,e=q.items.escapeGate;q.game.warp(1,e.x,e.y);q.render(0)});await page.keyboard.press('KeyE');
+ await page.waitForFunction(()=>escapeQA.game.won&&!document.getElementById('success').hidden);
+ const won=await page.evaluate(()=>({won:escapeQA.game.won,escaped:escapeQA.items.escaped,seed:escapeQA.items.seed,keys:escapeQA.items.inventory.filter(i=>i.itemId.startsWith('key-')).length,active:escapeQA.inspectSpace().activeIds}));
+ check('Real gate E consumes A B C and shows Escape Success',won.won&&won.escaped&&won.keys===0&&won.active.join()==='floor-1',won);
+ try{await page.screenshot({path:'web-play.png',timeout:15000})}catch(e){status.warnings.push('Optional screenshot: '+e.message)}
+ await page.click('#success-restart');const restarted=await page.evaluate(()=>({won:escapeQA.game.won,seed:escapeQA.items.seed,carry:escapeQA.items.inventory.length,equipped:escapeQA.items.equipped,enabled:escapeQA.pursuit.enabled,keys:escapeQA.items.worldItems.filter(i=>i.itemId.startsWith('key-')&&!i.picked).length,spaceId:escapeQA.game.spaceId}));
+ check('Real victory restart rerolls loot, clears inventory and keeps OFF',restarted.seed!==won.seed&&!restarted.won&&!restarted.carry&&!restarted.equipped&&!restarted.enabled&&restarted.keys===3&&restarted.spaceId==='floor-1',restarted);
+ await page.evaluate(()=>escapeQA.setManual(false));check('No public runtime or console errors',!status.errors.length&&!status.consoleErrors.length);status.browserURL=page.url();status.ok=true;
+}
 let watchdog;
-try{
-  await Promise.race([verify(),new Promise((_,reject)=>{watchdog=setTimeout(()=>reject(Error('Public smoke test exceeded 185 seconds')),185000)})]);
-}catch(error){status.error=error.message;status.ok=false}
+try{await Promise.race([verify(),new Promise((_,reject)=>{watchdog=setTimeout(()=>reject(Error('Public smoke test exceeded 185 seconds')),185000)})]);}
+catch(error){status.error=error.message;status.ok=false;}
 finally{
-  clearTimeout(watchdog);status.utc=new Date().toISOString();
-  fs.writeFileSync('published-status.json',JSON.stringify(status,null,2)+'\n');
-  if(browser)await Promise.race([browser.close(),new Promise(resolve=>setTimeout(resolve,5000))]).catch(()=>{});
-  console.log(JSON.stringify({ok:status.ok,publicURL:status.publicURL,checks:status.checks.length,error:status.error||null}));
-  process.exit(status.ok?0:1);
+ clearTimeout(watchdog);status.utc=new Date().toISOString();fs.writeFileSync('published-status.json',JSON.stringify(status,null,2)+'\n');
+ if(browser)await Promise.race([browser.close(),new Promise(resolve=>setTimeout(resolve,5000))]).catch(()=>{});
+ console.log(JSON.stringify({ok:status.ok,publicURL,checks:status.checks.length,error:status.error||null}));process.exit(status.ok?0:1);
 }
