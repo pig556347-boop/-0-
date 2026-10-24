@@ -9,8 +9,35 @@ const repository=process.env.GITHUB_REPOSITORY;
 const publicURL=`https://rawcdn.githack.com/${repository}/${sourceCommit}/index.html`;
 const status={ok:false,utc:new Date().toISOString(),sourceCommit,workflowCommit,sourceBranch,publicURL,
  kind:'External public Chromium smoke test; independent browser game, not Unity WebGL',checks:[],errors:[],consoleErrors:[],warnings:[],externalContentNoticeConfirmed:false};
+const newRoomLabels={1:['창고','대회의실','설비관리실','세미나실'],2:['준비실 1','자료실','창고'],3:['교직원 휴게실','학부모상담실','메인회의실','교장실','중앙통제실']};
 let browser,page,gameReady=false;
 function check(name,ok,actual){status.checks.push({name,passed:!!ok,...(actual===undefined?{}:{actual})});if(!ok)throw Error(name);}
+async function visitRoom(floor,label){
+ const setup=await page.evaluate(({floor,label})=>{
+  const q=escapeQA,g=q.game,base=g.data.floors.find(f=>f.number===floor),door=base.rooms.find(r=>r.label===label),room=g.spaces.get(door.interiorId);
+  if(!room)throw Error('Missing authored room '+floor+' '+label);
+  q.setManual(true);g.autoStairsEnabled=false;g.warp(floor,room.returnX,room.returnY);for(let i=0;i<28;i++)q.tick(.025);q.render(0);
+  const root=q.floorRoots.find(r=>r.userData.spaceId===base.id),visual=root.getObjectByName('Closed door: '+label);
+  return {floor,label,id:room.id,sourceId:base.id,safe:!g.blocked(g.x,g.y),near:g.nearbyDoor()?.targetId,
+   before:q.inspectSpace(),hidden:!q.floorRoots.find(r=>r.userData.spaceId===room.id).visible,closedPosition:visual.position.toArray()};
+ },{floor,label});
+ check('New room stays hidden behind its closed door: '+floor+'F '+label,setup.safe&&setup.near===setup.id&&setup.hidden&&setup.before.activeIds.join()===setup.sourceId,setup);
+ await page.keyboard.press('KeyE');check('Real E begins entry: '+label,await page.evaluate(id=>escapeQA.game.pendingDoor?.targetId===id,setup.id));
+ const entered=await page.evaluate(()=>{const q=escapeQA;for(let i=0;i<12;i++)q.tick(.025);q.render(0);return {spaceId:q.game.spaceId,safe:!q.game.blocked(q.game.x,q.game.y),view:q.inspectSpace(),furnishings:q.game.map.fixtures.length}});
+ check('New interior is furnished and shown alone: '+label,entered.spaceId===setup.id&&entered.safe&&entered.furnishings>0&&entered.view.activeIds.join()===setup.id&&entered.view.minimapSpaceId===setup.id&&entered.view.visibleFixtureRoomIds.join()===setup.id,entered);
+ const start=await page.evaluate(()=>{const q=escapeQA;q.setManual(false);return {x:q.game.x,y:q.game.y,time:q.game.time}});
+ await page.keyboard.down('KeyW');try{await page.waitForFunction(t=>escapeQA.game.time>t+.3,start.time)}finally{await page.keyboard.up('KeyW')}
+ const walked=await page.evaluate(p=>{const q=escapeQA,g=q.game;q.setManual(true);return {spaceId:g.spaceId,distance:Math.hypot(g.x-p.x,g.y-p.y)*g.data.tileSize,safe:!g.blocked(g.x,g.y)}},start);
+ check('Real W explores the new room safely: '+label,walked.spaceId===setup.id&&walked.distance>.3&&walked.safe,walked);
+ await page.evaluate(()=>{const q=escapeQA,g=q.game,m=g.map;g.warpRoom(m.id,m.exitX,m.exitY+1);for(let i=0;i<28;i++)q.tick(.025);q.render(0)});
+ await page.keyboard.press('KeyE');const returned=await page.evaluate(label=>{
+  const q=escapeQA,g=q.game;for(let i=0;i<12;i++)q.tick(.025);q.render(0);
+  const root=q.floorRoots.find(r=>r.userData.spaceId===g.spaceId),visual=root.getObjectByName('Closed door: '+label);
+  return {spaceId:g.spaceId,safe:!g.blocked(g.x,g.y),pending:!!g.pendingDoor,view:q.inspectSpace(),closedPosition:visual?.position.toArray(),near:g.nearbyDoor()?.label};
+ },label);
+ check('Real E returns and closes the door: '+label,returned.spaceId===setup.sourceId&&returned.safe&&!returned.pending&&returned.view.activeIds.join()===setup.sourceId&&returned.view.minimapSpaceId===setup.sourceId&&returned.near===label&&returned.closedPosition?.every((n,i)=>Math.abs(n-setup.closedPosition[i])<1e-6),returned);
+ return {setup,entered,walked,returned};
+}
 async function pickup(itemId){
  const setup=await page.evaluate(id=>{
   const q=escapeQA,g=q.game,s=q.items,item=s.worldItems.find(i=>i.itemId===id&&!i.picked);if(!item)throw Error('Missing authored item '+id);
@@ -41,7 +68,7 @@ async function verify(){
  check('Only the separate web branch is tested',sourceBranch==='school-escape-web',sourceBranch);
  check('Pinned commit is valid',/^[a-f0-9]{40}$/.test(sourceCommit||''));
  const manifest=JSON.parse(fs.readFileSync('build.json','utf8'));status.build=manifest;
- check('Manifest identifies items and roaming 0.8',manifest.version==='0.8'&&manifest.featureRevision==='items-search-roaming-2026-10-24',manifest.featureRevision);
+ check('Manifest identifies completed main rooms 0.9',manifest.version==='0.9'&&manifest.featureRevision==='remaining-main-rooms-playground-plan-2026-10-24',manifest.featureRevision);
  const response=await fetch(publicURL,{signal:AbortSignal.timeout(30000)}),html=Buffer.from(await response.arrayBuffer());
  status.http={status:response.status,contentType:response.headers.get('content-type'),bytes:html.length,sha256:crypto.createHash('sha256').update(html).digest('hex')};
  check('Public CDN returns HTTP 200',response.status===200,status.http.status);
@@ -60,13 +87,17 @@ async function verify(){
   return {seed:s.seed,enemy:q.pursuit.inspect(),visual:q.pursuerVisual.inspect(),audio:q.audio.inspect(),capacity:s.capacity,maxEquipped:s.maxEquipped,
    itemCount:s.worldItems.length,keys:s.worldItems.filter(i=>i.itemId.startsWith('key-')).map(i=>({id:i.itemId,hidden:i.hidden,spaceId:i.spaceId})),
    rooms:m.length,revision:g.data.revision,libraries:m.filter(m=>m.kind==='library').map(m=>m.sourceFloor),
+   roomCoverage:g.data.floors.flatMap(f=>f.rooms.map(r=>{const interior=g.spaces.get(r.interiorId);return {floor:f.number,label:r.label,id:r.interiorId||'',kind:interior?.kind||'',sourceFloor:interior?.sourceFloor,fixtures:interior?.fixtures.length||0,fixtureKinds:new Set((interior?.fixtures||[]).map(o=>o.kind)).size,solidFixtures:(interior?.fixtures||[]).filter(o=>o.solid).length}})),
    adminDesks:m.filter(m=>m.kind==='administration').flatMap(m=>m.fixtures).filter(o=>o.kind==='admin-desk').length,mirrors:m.flatMap(m=>m.fixtures).filter(o=>o.kind==='mirror-surface').length};
  });status.initial=initial;
  check('Caretaker uses a designated safe random spawn',initial.enemy.enabled&&initial.enemy.spawnCandidates.length>=3&&initial.enemy.spawnCandidates.some(p=>p.id===initial.enemy.initial.spawnId&&p.spaceId===initial.enemy.initial.spaceId)&&(initial.enemy.initial.spaceId!=='floor-1'||initial.enemy.initial.distanceFromPlayer>=15)&&initial.visual.targetHeight===2.4,initial.enemy);
  check('Inventory has nine carry and one worn slots',initial.capacity===9&&initial.maxEquipped===1);
  check('Run has thirteen real pickups and exactly A B C',initial.itemCount===13&&initial.keys.map(k=>k.id).sort().join()==='key-a,key-b,key-c',initial.keys);
  check('Keys mix furniture and ground locations',initial.keys.some(k=>k.hidden)&&initial.keys.some(k=>!k.hidden),initial.keys);
- check('Existing 41 rooms and facility fixtures remain',initial.rooms===manifest.roomCount&&initial.rooms===41&&initial.revision===manifest.revision&&initial.libraries.join()==='2'&&initial.adminDesks===18&&initial.mirrors===12,initial);
+ check('All 53 rooms and existing facility fixtures remain',initial.rooms===manifest.roomCount&&initial.rooms===53&&initial.revision===manifest.revision&&initial.revision==='remaining-main-rooms-2026-10-24'&&initial.libraries.join()==='2'&&initial.adminDesks===18&&initial.mirrors===12,initial);
+ check('Every main-building door has a furnished interior',initial.roomCoverage.length===53&&initial.roomCoverage.every(r=>r.id&&r.sourceFloor===r.floor&&r.fixtures>0&&r.fixtureKinds>=3&&r.solidFixtures>0),initial.roomCoverage);
+ const newRooms=Object.entries(newRoomLabels).flatMap(([floor,labels])=>labels.map(label=>initial.roomCoverage.find(r=>r.floor===Number(floor)&&r.label===label)));
+ check('Twelve remaining rooms are furnished on their intended floors',newRooms.length===12&&newRooms.every(r=>r?.id&&r.fixtures>0&&r.fixtureKinds>=3&&r.solidFixtures>0),newRooms);
  check('No sound starts before Start',initial.audio.contextState==='uninitialized'&&!initial.audio.unlocked,initial.audio);
  await page.click('#begin');await page.waitForFunction(()=>escapeQA.audio.inspect().contextState==='running'&&escapeQA.audio.inspect().rms>1e-7);
  status.startedAudio=await page.evaluate(()=>escapeQA.audio.inspect());check('Real Start unlocks audible ambience',status.startedAudio.unlocked&&status.startedAudio.rms>1e-7,status.startedAudio);
@@ -87,6 +118,7 @@ async function verify(){
  try{await page.waitForFunction(t=>escapeQA.game.time>t+.35,start.time)}finally{await page.keyboard.up('KeyW');await page.keyboard.up('ShiftLeft')}
  const sprint=await page.evaluate(a=>{const g=escapeQA.game;return {speed:Math.hypot(g.x-a.x,g.y-a.y)*g.data.tileSize/(g.time-a.time),stamina:g.stamina,safe:!g.blocked(g.x,g.y)}},start);
  check('Real Shift W sprints and spends stamina',sprint.safe&&Math.abs(sprint.speed-4.7)<.35&&sprint.stamina<95,sprint);await page.evaluate(()=>escapeQA.setManual(true));
+ status.newRoomVisits=[];for(const [floor,label] of [[1,'설비관리실'],[2,'자료실'],[3,'교장실'],[3,'중앙통제실']])status.newRoomVisits.push(await visitRoom(floor,label));
  await page.evaluate(()=>{const q=escapeQA,e=q.items.escapeGate;q.game.warp(1,e.x,e.y);q.render(0)});await page.keyboard.press('KeyE');
  check('Real gate E cannot win without three keys',await page.evaluate(()=>!escapeQA.game.won&&escapeQA.items.nearbyGate().missing.length===3));status.pickups=[];
  status.pickups.push(await pickup('vitamin-water'));await inventoryAction('vitamin-water','#inventory-use');
