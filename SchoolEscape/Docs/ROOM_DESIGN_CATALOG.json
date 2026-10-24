@@ -1,0 +1,382 @@
+{
+  "status": "53 independent main-building interiors with default closed doors; E opens/transfers; current-space rendering; only the music suite shares a continuous map",
+  "source": "References/SOURCE.json",
+  "classroomV1": {
+    "status": "19 classroom maps; 1F former library is vacant classroom 3, 30 desk sets and4banks of4x2lockers permap",
+    "rearLockers": {
+      "columns": 4,
+      "rows": 2,
+      "banks": 4,
+      "compartmentWidthMeters": 0.6,
+      "compartmentHeightMeters": 0.46,
+      "supersedes": "old4columns x8rows by latest user instruction"
+    },
+    "fixtures": [
+      "long blackboard",
+      "ceiling mounted TV",
+      "central teacher desk",
+      "student desks and chairs"
+    ],
+    "interactions": "Implemented E/F furniture search and pickup for accessible desks, teacher desks, lockers and cabinets; common 13-item run distribution"
+  },
+  "broadcast": {
+    "status": "new small school PA room and continuous announcer booth built; old rejected image not reused",
+    "areaRatioToClassroom": [
+      0.6,
+      0.7
+    ],
+    "role": "school PA interior with searchable storage and desks; equipment remains decorative",
+    "grid": [
+      15,
+      15
+    ],
+    "interiorAreaRatioToClassroom": 0.65,
+    "fixtures": [
+      "school PA console",
+      "two mixers",
+      "three microphones",
+      "two equipment racks",
+      "announcer booth",
+      "tape and document storage"
+    ],
+    "interactions": "E map entry/exit plus E/F accessible furniture search/pickup; no PA equipment operation or puzzles"
+  },
+  "musicV3": {
+    "status": "nonrectangular main classroom with bent side passage, vocalroom atfarend andinstrumentstorebranch; same continuousmap",
+    "zones": [
+      "large main classroom",
+      "old school-style vocal practice room",
+      "instrument storage",
+      "small connecting passage with branch into storage"
+    ],
+    "fixtures": [
+      "piano",
+      "music desks",
+      "sheet music cabinets",
+      "composer portraits"
+    ],
+    "forbiddenStyle": "modern recording studio"
+  },
+  "art": {
+    "status": "independent art main room and independent storage map",
+    "storageAreaRatioToClassroom": 0.5,
+    "fixtures": [
+      "work tables",
+      "easels",
+      "teacher workbench",
+      "sinks",
+      "white plaster busts and figures",
+      "hand and foot casts"
+    ],
+    "storage": "separate map entered from its own corridor door; latest user scope"
+  },
+  "library": {
+    "status": "one large independent draft library on 2F; 1F library replaced by classroom 3 per latest request",
+    "scale": "multiple classrooms; among largest indoor spaces",
+    "zones": [
+      "entry",
+      "search and loan desk",
+      "librarian office",
+      "large shelves",
+      "reading tables",
+      "individual seats",
+      "book storage",
+      "central object",
+      "narrow shelf aisles"
+    ],
+    "floors": [
+      2
+    ]
+  },
+  "supportRooms": {
+    "status": "Four room concepts implemented; latest administration extended to18 office seats",
+    "source": "References/SupportRoomsConcept.png",
+    "infirmary": {
+      "floors": [
+        1
+      ],
+      "grid": [
+        24,
+        22
+      ],
+      "fixtures": [
+        "four curtained beds",
+        "nurse consultation desk",
+        "medicine cabinets",
+        "sink",
+        "waiting benches"
+      ],
+      "label": "보건실 (former 양호실 footprint)"
+    },
+    "administration": {
+      "floors": [
+        1
+      ],
+      "grid": [
+        26,
+        24
+      ],
+      "fixtures": [
+        "L reception counter",
+        "nine paired workstation islands, 18 seats",
+        "archives",
+        "copier",
+        "safe",
+        "waiting area"
+      ]
+    },
+    "staff": {
+      "floors": [
+        2,
+        3
+      ],
+      "grid": [
+        28,
+        26
+      ],
+      "fixtures": [
+        "four teacher workstation islands",
+        "central meeting table",
+        "head teacher desk",
+        "timetable board",
+        "printer",
+        "tea corner"
+      ],
+      "isolation": "Each floor has a distinct instance and returns to its own doorway"
+    },
+    "computer": {
+      "floors": [
+        2
+      ],
+      "grid": [
+        28,
+        26
+      ],
+      "fixtures": [
+        "24 student PCs",
+        "three rows split by central aisle",
+        "teacher station",
+        "front screen",
+        "network rack"
+      ]
+    },
+    "interactions": "E map entry/exit plus E/F accessible desks, tables and cabinets search/pickup; no treatment, administration or computer-operation gameplay"
+  },
+  "restrooms": {
+    "status": "12 independently entered maps across1-3F; students/staff and male/female differentiated",
+    "student": {
+      "grid": [
+        22,
+        20
+      ],
+      "sinks": 4,
+      "maleStalls": 3,
+      "femaleStalls": 5,
+      "maleUrinals": 3,
+      "mirrorWidthMeters": 6.4
+    },
+    "staff": {
+      "grid": [
+        18,
+        18
+      ],
+      "sinks": 2,
+      "maleStalls": 2,
+      "femaleStalls": 3,
+      "maleUrinals": 2,
+      "mirrorWidthMeters": 4.0,
+      "detail": [
+        "vanity cabinets",
+        "coat cabinet and hooks",
+        "bench"
+      ]
+    },
+    "mirrors": "live orthographic planar render texture, character and current room reflect; center approach left clear",
+    "interactions": "E exterior map door and common accessible-cabinet search where available; cubicle doors remain static ajar props; no toilet use or hiding"
+  },
+  "corridorCorrection": {
+    "floor": 2,
+    "reference": "latest user hand sketch",
+    "description": "classroom A recessed on west, east-facing door, two4-cell-wide L corridor legs in front of student toilets"
+  },
+  "revision": "remaining-main-rooms-2026-10-24",
+  "interactionRevision": "items-search-roaming-2026-10-24 extended to new table, workbench and crate bodies",
+  "supersedes": "Earlier static-only, search-deferred and not-implemented interaction descriptions are historic scope statements, superseded by the current 0.8/0.9 searchable-furniture item system. Equipment-specific gameplay, puzzles, hiding and combat remain outside scope.",
+  "remainingMainRooms": {
+    "status": "All 12 previously unlinked main-building room labels have furnished independent interiors; total 53 room maps",
+    "rooms": [
+      {
+        "id": "room-f1-6",
+        "floor": 1,
+        "label": "창고",
+        "kind": "storage",
+        "grid": [
+          22,
+          20
+        ],
+        "fixtures": 226,
+        "solid": 39,
+        "zones": 7
+      },
+      {
+        "id": "room-f1-8",
+        "floor": 1,
+        "label": "대회의실",
+        "kind": "assembly",
+        "grid": [
+          32,
+          28
+        ],
+        "fixtures": 274,
+        "solid": 34,
+        "zones": 8
+      },
+      {
+        "id": "room-f1-11",
+        "floor": 1,
+        "label": "설비관리실",
+        "kind": "maintenance",
+        "grid": [
+          22,
+          20
+        ],
+        "fixtures": 164,
+        "solid": 11,
+        "zones": 7
+      },
+      {
+        "id": "room-f1-12",
+        "floor": 1,
+        "label": "세미나실",
+        "kind": "seminar",
+        "grid": [
+          26,
+          24
+        ],
+        "fixtures": 308,
+        "solid": 27,
+        "zones": 7
+      },
+      {
+        "id": "room-f2-16",
+        "floor": 2,
+        "label": "준비실 1",
+        "kind": "preparation",
+        "grid": [
+          22,
+          20
+        ],
+        "fixtures": 172,
+        "solid": 12,
+        "zones": 7
+      },
+      {
+        "id": "room-f2-17",
+        "floor": 2,
+        "label": "자료실",
+        "kind": "archives",
+        "grid": [
+          26,
+          24
+        ],
+        "fixtures": 575,
+        "solid": 94,
+        "zones": 7
+      },
+      {
+        "id": "room-f2-18",
+        "floor": 2,
+        "label": "창고",
+        "kind": "storage",
+        "grid": [
+          22,
+          20
+        ],
+        "fixtures": 226,
+        "solid": 39,
+        "zones": 7
+      },
+      {
+        "id": "room-f3-4",
+        "floor": 3,
+        "label": "교직원 휴게실",
+        "kind": "lounge",
+        "grid": [
+          26,
+          22
+        ],
+        "fixtures": 148,
+        "solid": 13,
+        "zones": 7
+      },
+      {
+        "id": "room-f3-6",
+        "floor": 3,
+        "label": "학부모상담실",
+        "kind": "counseling",
+        "grid": [
+          24,
+          22
+        ],
+        "fixtures": 167,
+        "solid": 16,
+        "zones": 7
+      },
+      {
+        "id": "room-f3-7",
+        "floor": 3,
+        "label": "메인회의실",
+        "kind": "meeting",
+        "grid": [
+          28,
+          24
+        ],
+        "fixtures": 209,
+        "solid": 17,
+        "zones": 7
+      },
+      {
+        "id": "room-f3-8",
+        "floor": 3,
+        "label": "교장실",
+        "kind": "principal",
+        "grid": [
+          28,
+          24
+        ],
+        "fixtures": 201,
+        "solid": 17,
+        "zones": 7
+      },
+      {
+        "id": "room-f3-10",
+        "floor": 3,
+        "label": "중앙통제실",
+        "kind": "control",
+        "grid": [
+          26,
+          24
+        ],
+        "fixtures": 314,
+        "solid": 16,
+        "zones": 7
+      }
+    ],
+    "additionalExplorationZones": 85,
+    "existingRoomMapsDeepUnchanged": 41,
+    "floorsStairsAndBarriersUnchanged": true,
+    "interactions": "Existing closed-door E entry/exit and E/F search on accessible cabinets, shelves and primary desk/table/workbench/crate bodies",
+    "designDocument": "MAIN_BUILDING_COMPLETION.md"
+  },
+  "playground": {
+    "status": "Plan only, not implemented or executable; temporary 1F gate remains current A/B/C escape target",
+    "plan": "PLAYGROUND_PLAN.md",
+    "diagram": "PlaygroundPlan.svg",
+    "proposedMeters": [
+      84,
+      66
+    ],
+    "layout": "North main entrance, south gate, central plus west/east routes, two staggered occluders",
+    "scopeExcludes": "No outdoor runtime, gate relocation, west/annex/roof opening in this release"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "kind": "independent browser runtime; NOT Unity/WebGL build",
+  "passed": [],
+  "failed": [
+    "Fatal runtime test: page.goto: net::ERR_EMPTY_RESPONSE at http://127.0.0.1:8797/?qa\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8797/?qa\", waiting until \"networkidle\"\u001b[22m\n\n    at /workspace/-0-/SchoolEscape/Tools/browser_check.cjs:22:13"
+  ],
+  "errors": [],
+  "screenshotsCompleted": false,
+  "utc": "2026-10-24T11:49:46.928Z",
+  "failureState": {
+    "diagnostics": "page.evaluate: Execution context was destroyed, most likely because of a navigation"
+  }
+}

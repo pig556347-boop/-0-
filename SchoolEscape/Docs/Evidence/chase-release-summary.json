@@ -1,0 +1,58 @@
+{
+  "version": "0.7",
+  "featureRevision": "caretaker-stamina-audio-2026-10-23",
+  "public": {
+    "branch": "school-escape-web",
+    "commit": "d99cee6532d9947d72a5c78a49a0e8052b5a7f67",
+    "workflowCommit": "d99cee6532d9947d72a5c78a49a0e8052b5a7f67",
+    "productionUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/d99cee6532d9947d72a5c78a49a0e8052b5a7f67/index.html",
+    "previewUrl": "https://raw.githack.com/pig556347-boop/-0-/school-escape-web/index.html",
+    "version": "0.7",
+    "featureRevision": "caretaker-stamina-audio-2026-10-23",
+    "imageUrl": "https://raw.githubusercontent.com/pig556347-boop/-0-/d99cee6532d9947d72a5c78a49a0e8052b5a7f67/concepts/in-game-caretaker-07.png"
+  },
+  "build": {
+    "bytes": 5764285,
+    "sha256": "8d10d62e4103f7087426e791cae0b4c097d98fe701bb5ab78d52345588250664",
+    "reproducedByteIdentical": true
+  },
+  "checks": {
+    "targetedBrowser": 55,
+    "fullGeometryBrowser": 2267,
+    "kernel": 16,
+    "isolatedAudio": 19,
+    "publicBrowser": 43,
+    "actualCaretakerMirror": 9
+  },
+  "errors": [],
+  "fullRegressionEnemyDisabledOnlyForQA": true,
+  "newChaseSuiteDefaultEnemyEnabled": true,
+  "unity": {
+    "compileSucceeded": true,
+    "playExecuted": false,
+    "webGLExecuted": false,
+    "exitCode": 198,
+    "reason": "No valid Unity Editor license found",
+    "headlessAudioOutput": "nosound"
+  },
+  "additionalAssets": [
+    "Final caretaker mesh/textures/rig and character animation",
+    "Recorded school ambience/door/stairs/footstep Foley and finished pursuit music"
+  ],
+  "inGameImage": {
+    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/d99cee6532d9947d72a5c78a49a0e8052b5a7f67/concepts/in-game-caretaker-07.png",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 504299,
+    "sha256": "99de8e421149e99f20dbe21dff5af5c7f28e75e2c3306a916ea20df14a9f87bf"
+  },
+  "mirror": {
+    "changedPixels": 847,
+    "maximumDelta": 244,
+    "actorOnlyMovementCacheFrames": [
+      4,
+      5
+    ],
+    "playerAndCameraUnchanged": true
+  }
+}

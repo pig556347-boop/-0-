@@ -1,0 +1,26 @@
+{
+  "version": "0.9",
+  "sourceCommit": "569fb02a8181b780c3f99a0a116dcb9f94cb6ba8",
+  "publicGameCommit": "7f267cbd0903ab6aeb2e0a9c469026c0c2df469b",
+  "productionUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/7f267cbd0903ab6aeb2e0a9c469026c0c2df469b/index.html",
+  "html": {
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 6481052,
+    "sha256": "3971f6feb8b178a41eea8efdc3a684a073352140696afbff6b526fca780bd0a6"
+  },
+  "rooms": 53,
+  "newRooms": 12,
+  "oldRoomMapsUnchanged": 41,
+  "staticChecks": 78583,
+  "kernelChecks": 25,
+  "browserChecks": 2914,
+  "publicBrowserChecks": 79,
+  "errors": [],
+  "unityCompilationSucceeded": true,
+  "unityPlayValidated": false,
+  "unityWebGL": false,
+  "playgroundImplemented": false,
+  "playgroundPlan": "Docs/PlaygroundPlan.png",
+  "publicVerifiedUtc": "2026-10-24T12:02:10.110Z"
+}

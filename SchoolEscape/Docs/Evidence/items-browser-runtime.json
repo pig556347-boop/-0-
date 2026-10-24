@@ -1,0 +1,482 @@
+{
+  "kind": "Actual SchoolEscape browser items, inventory, development toggle and escape; NOT Unity Play",
+  "passed": [
+    "Latest artifact executes as actual HTML",
+    "Executed artifact matches expected SHA-256",
+    "Thirteen initial items and exactly A/B/C keys exist",
+    "Default enemy uses a designated random spawn",
+    "Audio still waits for actual Start click",
+    "Actual development toggle turns pursuit OFF",
+    "Actual I key opens nine bag slots and a separate wearable slot",
+    "Inventory freezes movement, pursuit and game clock",
+    "Inventory also pauses audible output",
+    "Actual interaction collects bag item run-22c73802-13-smartwatch",
+    "Actual interaction collects bag item run-22c73802-1-key-a",
+    "Actual interaction collects bag item run-22c73802-2-key-b",
+    "Actual interaction collects bag item run-22c73802-3-key-c",
+    "Actual interaction collects bag item run-22c73802-4-vitamin-water",
+    "Actual interaction collects bag item run-22c73802-5-chocolate-bar",
+    "Actual interaction collects bag item run-22c73802-6-vitamin-water",
+    "Actual interaction collects bag item run-22c73802-7-chocolate-bar",
+    "Actual interaction collects bag item run-22c73802-8-vitamin-water",
+    "Full bag refuses pickup while retaining world item",
+    "Rendered bag count reaches its nine-item capacity",
+    "Actual Equip button moves watch into one separate worn slot",
+    "Wearing the watch frees a bag slot for the tenth carried-or-worn item",
+    "Actual full-bag Unequip refuses safely without losing watch",
+    "Actual Drop button creates a safe visible ground pickup",
+    "Actual dropped item can be picked back up without duplication",
+    "Production restart rerolls items and preserves development OFF",
+    "Actual search or pickup acquires clock-second-hand",
+    "Actual search or pickup acquires clock-minute-hand",
+    "Actual search or pickup acquires clock-body",
+    "Three real clock pickups auto-craft one active direction compass",
+    "Compass gives a finite direction via the actual map connection",
+    "Actual interaction acquires usable item vitamin-water",
+    "Actual interaction acquires usable item chocolate-bar",
+    "Actual interaction acquires usable item smartwatch",
+    "Actual Use button consumes vitamin water and grants a two-second effect",
+    "Vitamin changes real production movement by thirty percent and expires",
+    "Actual chocolate Use restores all stamina immediately",
+    "Actual watch Equip enables wearable slot in fresh run",
+    "Equipped smartwatch heartbeat becomes faster as the monster approaches",
+    "Actual recorded smartwatch heartbeat is audible with ambience and movement silenced",
+    "Development OFF also disables proximity heartbeat warnings",
+    "Actual gate E refuses escape before keys are collected",
+    "Actual interaction acquires exit key-a",
+    "Actual interaction acquires exit key-b",
+    "Collecting its target key consumes the compass and hides its HUD",
+    "Actual interaction acquires exit key-c",
+    "A/B/C are all present in actual bag before escape",
+    "Actual gate E uses all three keys and displays escape success",
+    "Successful escape consumes A/B/C together",
+    "Actual success Restart creates a fresh safe run and preserves development OFF",
+    "Development preference also persists through page reload",
+    "Real E interactions were exercised",
+    "Self-contained build makes no external asset requests",
+    "No browser runtime, missing asset or console errors"
+  ],
+  "failed": [],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:8797/?qa",
+      "type": "document"
+    },
+    {
+      "url": "http://127.0.0.1:8797/?qa",
+      "type": "document"
+    }
+  ],
+  "samples": {
+    "Latest artifact executes as actual HTML": {
+      "url": "http://127.0.0.1:8797/?qa",
+      "bytes": 5833749,
+      "sha256": "52c7529b3083d400c820f3d4a7d0eab51b7daa063a797922d5856693728eff01"
+    },
+    "Thirteen initial items and exactly A/B/C keys exist": [
+      {
+        "id": "key-a",
+        "label": "열쇠 A",
+        "owned": false
+      },
+      {
+        "id": "key-b",
+        "label": "열쇠 B",
+        "owned": false
+      },
+      {
+        "id": "key-c",
+        "label": "열쇠 C",
+        "owned": false
+      }
+    ],
+    "Default enemy uses a designated random spawn": {
+      "spaceId": "floor-1",
+      "x": 9,
+      "y": 38,
+      "spawnId": "floor-1-landmark-6",
+      "label": "북서 복도",
+      "sameSpace": true,
+      "distanceFromPlayer": 45.31142240097964,
+      "pathDistanceFromPlayer": 60
+    },
+    "Inventory freezes movement, pursuit and game clock": {
+      "before": {
+        "t": 0.1,
+        "x": 24,
+        "y": 5,
+        "px": 8.98738114526272,
+        "py": 37.89273973473313,
+        "slots": 9,
+        "wear": true,
+        "audio": {
+          "unlocked": true,
+          "contextState": "suspended",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": true,
+          "activeVoices": 0,
+          "maxVoices": 36,
+          "scheduledVoices": 0,
+          "footsteps": 0,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 1,
+          "watchBeats": 0,
+          "searchSounds": 0,
+          "itemSounds": 0,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0,
+          "rms": 0,
+          "watchEquipped": false,
+          "watchBpm": 0,
+          "watchDistance": null,
+          "ambienceActive": false,
+          "lastError": null
+        }
+      },
+      "after": {
+        "t": 0.1,
+        "x": 24,
+        "y": 5,
+        "px": 8.98738114526272,
+        "py": 37.89273973473313,
+        "audio": {
+          "unlocked": true,
+          "contextState": "suspended",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": true,
+          "activeVoices": 0,
+          "maxVoices": 36,
+          "scheduledVoices": 0,
+          "footsteps": 0,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 1,
+          "watchBeats": 0,
+          "searchSounds": 0,
+          "itemSounds": 0,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0,
+          "rms": 0,
+          "watchEquipped": false,
+          "watchBpm": 0,
+          "watchDistance": null,
+          "ambienceActive": false,
+          "lastError": null
+        }
+      }
+    },
+    "Full bag refuses pickup while retaining world item": {
+      "uid": "run-22c73802-9-chocolate-bar",
+      "itemId": "chocolate-bar",
+      "hidden": true,
+      "spaceId": "room-f3-14",
+      "before": 9,
+      "key": "KeyE",
+      "gate": false,
+      "after": {
+        "item": {
+          "uid": "run-22c73802-9-chocolate-bar",
+          "itemId": "chocolate-bar",
+          "spaceId": "room-f3-14",
+          "x": 11,
+          "y": 9,
+          "displayX": 11.612,
+          "displayY": 9,
+          "sourceId": "room-f3-14-0216",
+          "hidden": true,
+          "revealed": true,
+          "picked": false
+        },
+        "inventory": [
+          {
+            "uid": "run-22c73802-13-smartwatch",
+            "itemId": "smartwatch"
+          },
+          {
+            "uid": "run-22c73802-1-key-a",
+            "itemId": "key-a"
+          },
+          {
+            "uid": "run-22c73802-2-key-b",
+            "itemId": "key-b"
+          },
+          {
+            "uid": "run-22c73802-3-key-c",
+            "itemId": "key-c"
+          },
+          {
+            "uid": "run-22c73802-4-vitamin-water",
+            "itemId": "vitamin-water"
+          },
+          {
+            "uid": "run-22c73802-5-chocolate-bar",
+            "itemId": "chocolate-bar"
+          },
+          {
+            "uid": "run-22c73802-6-vitamin-water",
+            "itemId": "vitamin-water"
+          },
+          {
+            "uid": "run-22c73802-7-chocolate-bar",
+            "itemId": "chocolate-bar"
+          },
+          {
+            "uid": "run-22c73802-8-vitamin-water",
+            "itemId": "vitamin-water"
+          }
+        ],
+        "action": {
+          "ok": false,
+          "message": "인벤토리가 가득 찼습니다. 사용하거나 내려놓아 자리를 만드세요.",
+          "type": "inventory-full",
+          "uid": "run-22c73802-9-chocolate-bar",
+          "itemId": "chocolate-bar"
+        },
+        "near": {
+          "type": "search",
+          "kind": "search",
+          "sourceId": "room-f3-14-0216",
+          "itemUid": "run-22c73802-9-chocolate-bar",
+          "label": "책상",
+          "prompt": "초코바 꺼내기",
+          "searched": true,
+          "revealed": true,
+          "x": 11,
+          "y": 9,
+          "approachX": 11.612,
+          "approachY": 9,
+          "distance": 0.06
+        }
+      }
+    },
+    "Actual Drop button creates a safe visible ground pickup": {
+      "world": {
+        "uid": "run-22c73802-4-vitamin-water",
+        "itemId": "vitamin-water",
+        "spaceId": "room-f3-14",
+        "x": 11.612,
+        "y": 9,
+        "displayX": 11.612,
+        "displayY": 9,
+        "sourceId": null,
+        "hidden": false,
+        "revealed": true,
+        "picked": false
+      },
+      "bag": 8,
+      "action": {
+        "ok": true,
+        "message": "비타민워터 내려놓음",
+        "type": "drop",
+        "itemId": "vitamin-water",
+        "uid": "run-22c73802-4-vitamin-water"
+      }
+    },
+    "Production restart rerolls items and preserves development OFF": {
+      "seed": 3838945821,
+      "enemy": false,
+      "bag": 0,
+      "wear": null
+    },
+    "Three real clock pickups auto-craft one active direction compass": {
+      "inventory": [
+        {
+          "uid": "run-e4d1aa1d-14-compass",
+          "itemId": "compass",
+          "targetKeyUid": "run-e4d1aa1d-2-key-b"
+        }
+      ],
+      "compass": {
+        "active": true,
+        "targetKeyUid": "run-e4d1aa1d-2-key-b",
+        "targetItemId": "key-b",
+        "targetLabel": "열쇠 B",
+        "targetSpaceId": "room-f3-9",
+        "spaceId": "room-f3-5",
+        "x": 14,
+        "y": 2,
+        "dx": 6,
+        "dy": -0.7280000000000002,
+        "angle": 1.6915394506583366,
+        "distance": 7.555004963598635,
+        "via": "door",
+        "label": "복도로 나가기",
+        "hops": 2
+      },
+      "hidden": false
+    },
+    "Actual Use button consumes vitamin water and grants a two-second effect": {
+      "remaining": 2,
+      "used": {
+        "ok": true,
+        "message": "2초 동안 이동속도가 30% 증가합니다.",
+        "type": "use",
+        "itemId": "vitamin-water"
+      },
+      "water": 0
+    },
+    "Vitamin changes real production movement by thirty percent and expires": {
+      "boosted": 3.3799999999999386,
+      "expired": 2.59999999999998
+    },
+    "Equipped smartwatch heartbeat becomes faster as the monster approaches": {
+      "distant": {
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 54,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 45,
+        "watchBeats": 0,
+        "searchSounds": 9,
+        "itemSounds": 18,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0.4000000059604645,
+        "effectiveGain": 0.4000000059604645,
+        "rms": 0.009998816397442106,
+        "watchEquipped": true,
+        "watchBpm": 71.29586443541983,
+        "watchDistance": 12.562344526401112,
+        "ambienceActive": true,
+        "lastError": null
+      },
+      "close": {
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 54,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 45,
+        "watchBeats": 0,
+        "searchSounds": 9,
+        "itemSounds": 18,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0.4000000059604645,
+        "effectiveGain": 0.4000000059604645,
+        "rms": 0.004946361532885117,
+        "watchEquipped": true,
+        "watchBpm": 148.03861807812706,
+        "watchDistance": 2.7950849718747373,
+        "ambienceActive": true,
+        "lastError": null
+      },
+      "player": {
+        "x": 17,
+        "y": 3
+      },
+      "spaceId": "room-f2-1"
+    },
+    "Actual recorded smartwatch heartbeat is audible with ambience and movement silenced": {
+      "beforeBeats": 0,
+      "afterBeats": 3,
+      "encodedBytes": 11285,
+      "seconds": 0.84,
+      "rms": 0.006777686614033542,
+      "peak": 0.06327596306800842
+    },
+    "Actual gate E refuses escape before keys are collected": {
+      "spaceId": "floor-1",
+      "x": 24,
+      "y": 2,
+      "label": "교문으로 탈출",
+      "range": 1.7,
+      "missing": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    "Actual success Restart creates a fresh safe run and preserves development OFF": {
+      "won": false,
+      "seed": 3618968967,
+      "bag": 0,
+      "equipped": null,
+      "enemy": false,
+      "successHidden": true,
+      "blocked": false
+    },
+    "Real E interactions were exercised": {
+      "E": 21,
+      "F": 0
+    },
+    "Self-contained build makes no external asset requests": [
+      {
+        "url": "http://127.0.0.1:8797/?qa",
+        "type": "document"
+      },
+      {
+        "url": "http://127.0.0.1:8797/?qa",
+        "type": "document"
+      }
+    ],
+    "No browser runtime, missing asset or console errors": []
+  },
+  "screenshots": [
+    "items-title.png",
+    "items-empty-inventory.png",
+    "items-full-inventory-watch.png",
+    "items-compass-and-watch.png",
+    "items-escape-success.png"
+  ],
+  "utc": "2026-10-24T00:03:59.855Z",
+  "build": {
+    "url": "http://127.0.0.1:8797/?qa",
+    "bytes": 5833749,
+    "sha256": "52c7529b3083d400c820f3d4a7d0eab51b7daa063a797922d5856693728eff01"
+  },
+  "stage": "complete"
+}

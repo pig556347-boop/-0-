@@ -1,0 +1,17 @@
+{
+  "game": "폐교탈출",
+  "version": "0.7",
+  "featureRevision": "caretaker-stamina-audio-2026-10-23",
+  "revision": "facilities-and-corridor-2026-10-23",
+  "sourceCommit": "04583801ba312fbe89957b0f3ae4014b3d38c7e7",
+  "htmlSha256": "8d10d62e4103f7087426e791cae0b4c097d98fe701bb5ab78d52345588250664",
+  "htmlBytes": 5764285,
+  "roomCount": 41,
+  "browserRuntimeChecksPassed": 55,
+  "kernelChecksPassed": 16,
+  "browserErrors": 0,
+  "audio": "Original procedural ambience, footsteps, doors, stairs and pursuit score",
+  "unityCompilationSucceeded": true,
+  "unityPlayValidated": false,
+  "unityWebGL": false
+}

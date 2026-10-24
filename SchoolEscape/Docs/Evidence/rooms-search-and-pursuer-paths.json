@@ -1,0 +1,188 @@
+{
+  "kind": "Actual production ItemSystem search template and pursuer radius/path/portal integration for newly furnished rooms; not rendered or Unity Play",
+  "utc": "2026-10-24T12:03:53.264Z",
+  "roomCount": 12,
+  "searchables": 1093,
+  "rooms": [
+    {
+      "id": "room-f1-6",
+      "label": "창고",
+      "floor": 1,
+      "searchables": 14,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 11,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 25,
+        "y": 22
+      }
+    },
+    {
+      "id": "room-f1-8",
+      "label": "대회의실",
+      "floor": 1,
+      "searchables": 5,
+      "pursuerZones": 8,
+      "pursuerSafeEntry": {
+        "x": 16,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 42,
+        "y": 22
+      }
+    },
+    {
+      "id": "room-f1-11",
+      "label": "설비관리실",
+      "floor": 1,
+      "searchables": 8,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 11,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 14,
+        "y": 14
+      }
+    },
+    {
+      "id": "room-f1-12",
+      "label": "세미나실",
+      "floor": 1,
+      "searchables": 5,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 13,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 35,
+        "y": 14
+      }
+    },
+    {
+      "id": "room-f2-16",
+      "label": "준비실 1",
+      "floor": 2,
+      "searchables": 7,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 11,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 46,
+        "y": 7
+      }
+    },
+    {
+      "id": "room-f2-17",
+      "label": "자료실",
+      "floor": 2,
+      "searchables": 20,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 13,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 56,
+        "y": 7
+      }
+    },
+    {
+      "id": "room-f2-18",
+      "label": "창고",
+      "floor": 2,
+      "searchables": 14,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 11,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 63,
+        "y": 7
+      }
+    },
+    {
+      "id": "room-f3-4",
+      "label": "교직원 휴게실",
+      "floor": 3,
+      "searchables": 4,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 13,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 14,
+        "y": 24
+      }
+    },
+    {
+      "id": "room-f3-6",
+      "label": "학부모상담실",
+      "floor": 3,
+      "searchables": 6,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 12,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 34,
+        "y": 15
+      }
+    },
+    {
+      "id": "room-f3-7",
+      "label": "메인회의실",
+      "floor": 3,
+      "searchables": 5,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 14,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 7,
+        "y": 23
+      }
+    },
+    {
+      "id": "room-f3-8",
+      "label": "교장실",
+      "floor": 3,
+      "searchables": 8,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 14,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 7,
+        "y": 13
+      }
+    },
+    {
+      "id": "room-f3-10",
+      "label": "중앙통제실",
+      "floor": 3,
+      "searchables": 6,
+      "pursuerZones": 7,
+      "pursuerSafeEntry": {
+        "x": 13,
+        "y": 3
+      },
+      "pursuerSafeExit": {
+        "x": 41,
+        "y": 20
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "kind": "Actual Chromium render-target pixel check of original caretaker in existing live restroom mirror; not Unity",
+  "utc": "2026-10-23T16:50:37.337Z",
+  "build": {
+    "bytes": 5764285,
+    "sha256": "8d10d62e4103f7087426e791cae0b4c097d98fe701bb5ab78d52345588250664"
+  },
+  "checks": {
+    "exactBuild": true,
+    "enemyInsideRealMirror": true,
+    "enemyChangesActualReflectionPixels": true,
+    "restoringSameSceneRestoresSameTexture": true,
+    "unchangedSceneUsesMirrorCache": true,
+    "enemyMovementInvalidatesCache": true,
+    "playerAndCameraStayedStill": true,
+    "safeAndIsolated": true,
+    "noRuntimeErrors": true
+  },
+  "passed": 9,
+  "failed": [],
+  "errors": [],
+  "result": {
+    "roomId": "room-f1-9",
+    "fixture": {
+      "id": "room-f1-9-0052",
+      "room": "학생 화장실 남",
+      "kind": "mirror-surface",
+      "label": "큰 거울",
+      "x": 11,
+      "y": 18.35,
+      "width": 6.4,
+      "depth": 0.025,
+      "height": 1.55,
+      "elevation": 0.85,
+      "color": "#a9c4bd",
+      "solid": false,
+      "shape": "box"
+    },
+    "player": {
+      "x": 11,
+      "y": 17
+    },
+    "enemy": {
+      "x": 11,
+      "y": 18
+    },
+    "projection": {
+      "roomId": "room-f1-9",
+      "visible": true,
+      "width": 6.4,
+      "height": 1.55,
+      "renderedFrames": 1,
+      "actorInsideSurface": true,
+      "actorInReflection": true,
+      "textureWidth": 512,
+      "textureHeight": 512
+    },
+    "visibleDifference": {
+      "changedPixels": 847,
+      "maximumDelta": 244
+    },
+    "restoreDifference": {
+      "changedPixels": 0,
+      "maximumDelta": 0
+    },
+    "idle": {
+      "before": 4,
+      "after": 4
+    },
+    "movement": {
+      "deltaX": 0.08,
+      "beforeFrames": 4,
+      "afterFrames": 5,
+      "changedPixels": 518,
+      "maximumDelta": 244
+    },
+    "playerUnchanged": true,
+    "cameraUnchanged": true,
+    "currentSpaceOnly": true,
+    "enemySafe": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "version": "0.8",
+  "publicGameCommit": "abb593029282eadabd8aee550107e371253b2fd9",
+  "productionUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/abb593029282eadabd8aee550107e371253b2fd9/index.html",
+  "html": {
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 5833749,
+    "sha256": "52c7529b3083d400c820f3d4a7d0eab51b7daa063a797922d5856693728eff01"
+  },
+  "featureBrowserChecks": 54,
+  "kernelChecks": 25,
+  "mapRegressionChecks": 2267,
+  "mapRegressionHtmlSha256": "de73c8951272b6b6094e14727811bbfd1859cec67ceb31a854f17ec673dde3c8",
+  "mapRegressionDelta": "Only immediate UI synchronization for enemy toggle and victory overlay changed afterward.",
+  "publicBrowserChecks": 57,
+  "errors": [],
+  "unityCompilationSucceeded": true,
+  "unityPlayValidated": false,
+  "unityWebGL": false,
+  "mainUnchanged": "1268055a35266ca70e1c1302c2d5852ba537a2ad",
+  "publicVerifiedUtc": "2026-10-24T00:10:51.681Z"
+}

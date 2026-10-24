@@ -1,0 +1,7 @@
+Actual Unity6000.0.62f1 / SchoolEscape only; -executeMethod SchoolEscape.EditorTools.Validate -escapeValidate
+Exit:198
+*** Tundra build success (0.53 seconds), 7 items updated, 138 evaluated
+Start importing Assets/Resources/PlanarMirror.shader using Guid(4c780d12c0e3484580190cb82759e15c) (ShaderImporter)Launched and connected shader compiler UnityShaderCompiler after 0.04 seconds
+Start importing Assets/Resources/SchoolMap.json using Guid(9bf04cb0f42580d0dae4857d9ebac3a8) (TextScriptImporter) -> (artifact id: '19be025b145508fe26fd1bac0d5305d6') in 0.053847328 seconds
+No valid Unity Editor license found. Please activate your license.
+C# compiled and shader imported; licensed Unity Play, shader rendering and Unity WebGL not executed.

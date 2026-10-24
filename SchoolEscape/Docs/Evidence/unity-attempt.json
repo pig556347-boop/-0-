@@ -1,0 +1,14 @@
+{
+  "kind": "actual Unity editor import and compile attempt; play blocked",
+  "unity": "6000.0.62f1 (f99f05b3e950)",
+  "exitCode": 198,
+  "importCompleted": true,
+  "scriptCompilationSucceeded": true,
+  "compilerDiagnostics": [],
+  "playTestsExecuted": false,
+  "runtimeResultFileCreated": false,
+  "blocker": "No valid Unity Editor license found. Please activate your license.",
+  "webglBuildExecuted": false,
+  "graphicsMode": "-batchmode -nographics; no Unity visual quality claim",
+  "utc": "2026-10-23T01:20:28.066952+00:00"
+}

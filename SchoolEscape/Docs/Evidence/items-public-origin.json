@@ -1,0 +1,27 @@
+{
+  "commit": "abb593029282eadabd8aee550107e371253b2fd9",
+  "note": "Raw origin byte validation only; index text/plain is not the play URL. Actual public Chromium report is separate.",
+  "results": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 5833749,
+      "sha256": "52c7529b3083d400c820f3d4a7d0eab51b7daa063a797922d5856693728eff01"
+    },
+    {
+      "path": "concepts/in-game-inventory-08.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 242232,
+      "sha256": "3a8069f5a98ff85c3a6d2fa6019ead53572c7f333b5cbe7a233189c6484abddd"
+    },
+    {
+      "path": "concepts/in-game-compass-watch-08.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 221844,
+      "sha256": "430769877c81eb959f3a41e1fe8a16a2d953ce1cd95b616bac706af5dfbd4cdf"
+    }
+  ]
+}

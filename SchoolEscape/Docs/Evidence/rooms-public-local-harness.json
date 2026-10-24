@@ -1,0 +1,4157 @@
+{
+  "ok": true,
+  "utc": "2026-10-24T11:59:23.354Z",
+  "sourceCommit": "0000000000000000000000000000000000000000",
+  "workflowCommit": "0000000000000000000000000000000000000000",
+  "sourceBranch": "school-escape-web",
+  "publicURL": "http://127.0.0.1:8801/index.html",
+  "kind": "LOCAL harness of public smoke; NOT external public browser verification",
+  "checks": [
+    {
+      "name": "Only the separate web branch is tested",
+      "passed": true,
+      "actual": "school-escape-web"
+    },
+    {
+      "name": "Pinned commit is valid",
+      "passed": true
+    },
+    {
+      "name": "Manifest identifies completed main rooms 0.9",
+      "passed": true,
+      "actual": "remaining-main-rooms-playground-plan-2026-10-24"
+    },
+    {
+      "name": "Public CDN returns HTTP 200",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "name": "Public CDN serves executable HTML",
+      "passed": true,
+      "actual": "text/html"
+    },
+    {
+      "name": "Public HTML matches the tested build",
+      "passed": true,
+      "actual": "3971f6feb8b178a41eea8efdc3a684a073352140696afbff6b526fca780bd0a6"
+    },
+    {
+      "name": "Public game has a usable Start button",
+      "passed": true
+    },
+    {
+      "name": "Caretaker uses a designated safe random spawn",
+      "passed": true,
+      "actual": {
+        "enabled": true,
+        "state": "patrol",
+        "alerted": false,
+        "spaceId": "floor-1",
+        "x": 4,
+        "y": 21,
+        "speed": 0,
+        "caught": false,
+        "transfers": 0,
+        "lastSensed": -100,
+        "lastSeen": -100,
+        "lastHeard": -100,
+        "lastKnown": null,
+        "lastEvidenceKind": "none",
+        "lastSense": {
+          "visible": false,
+          "heard": false
+        },
+        "graceUntil": 4,
+        "radius": 0.31,
+        "seed": 3012054662,
+        "initial": {
+          "spaceId": "floor-1",
+          "x": 4,
+          "y": 21,
+          "spawnId": "floor-1-landmark-5",
+          "label": "복도 끝",
+          "sameSpace": true,
+          "distanceFromPlayer": 32.01562118716424,
+          "pathDistanceFromPlayer": 45
+        },
+        "spawnCandidates": [
+          {
+            "id": "floor-1-landmark-3",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 40,
+            "y": 22,
+            "label": "동쪽 우회",
+            "pathDistance": 41.25
+          },
+          {
+            "id": "floor-1-landmark-5",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 4,
+            "y": 21,
+            "label": "복도 끝",
+            "pathDistance": 45
+          },
+          {
+            "id": "floor-1-landmark-6",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 9,
+            "y": 38,
+            "label": "북서 복도",
+            "pathDistance": 60
+          },
+          {
+            "id": "floor-2-landmark-0",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 8,
+            "label": "남쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-1",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 34,
+            "y": 23,
+            "label": "서쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-2",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 17,
+            "label": "내부 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-3",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 29,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-7",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 60,
+            "y": 40,
+            "label": "학년 분기 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-8",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 18,
+            "y": 13,
+            "label": "서관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-10",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 82,
+            "y": 13,
+            "label": "별관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-12",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 31,
+            "y": 10,
+            "label": "빈교실 A 앞 꺾임",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-0",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 8,
+            "label": "남쪽 계단홀",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-1",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 15,
+            "y": 14,
+            "label": "서쪽 분기",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-2",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 20,
+            "label": "중앙 교차로",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-4",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 12,
+            "y": 26,
+            "label": "북서 막다른 길",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-5",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 34,
+            "y": 25,
+            "label": "동쪽 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-6",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 30,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          }
+        ],
+        "rules": {
+          "sightRange": 11,
+          "fovDegrees": 120,
+          "peripheralRange": 1.8,
+          "investigateSpeed": 1.9,
+          "unseenBeforeSearch": 8,
+          "searchSeconds": 4,
+          "memorySeconds": 12,
+          "unreachableSeconds": 3,
+          "exitEvidenceSeconds": 2.5
+        },
+        "lostReason": "",
+        "stuckSeconds": 0,
+        "patrolGoal": null,
+        "patrolWait": 0,
+        "localPatrols": 0,
+        "path": [],
+        "portalTrail": [],
+        "transit": null,
+        "failedTransfers": 0
+      }
+    },
+    {
+      "name": "Inventory has nine carry and one worn slots",
+      "passed": true
+    },
+    {
+      "name": "Run has thirteen real pickups and exactly A B C",
+      "passed": true,
+      "actual": [
+        {
+          "id": "key-a",
+          "hidden": false,
+          "spaceId": "room-f2-17"
+        },
+        {
+          "id": "key-b",
+          "hidden": false,
+          "spaceId": "room-f3-6"
+        },
+        {
+          "id": "key-c",
+          "hidden": true,
+          "spaceId": "room-f1-8"
+        }
+      ]
+    },
+    {
+      "name": "Keys mix furniture and ground locations",
+      "passed": true,
+      "actual": [
+        {
+          "id": "key-a",
+          "hidden": false,
+          "spaceId": "room-f2-17"
+        },
+        {
+          "id": "key-b",
+          "hidden": false,
+          "spaceId": "room-f3-6"
+        },
+        {
+          "id": "key-c",
+          "hidden": true,
+          "spaceId": "room-f1-8"
+        }
+      ]
+    },
+    {
+      "name": "All 53 rooms and existing facility fixtures remain",
+      "passed": true,
+      "actual": {
+        "seed": 3012054662,
+        "enemy": {
+          "enabled": true,
+          "state": "patrol",
+          "alerted": false,
+          "spaceId": "floor-1",
+          "x": 4,
+          "y": 21,
+          "speed": 0,
+          "caught": false,
+          "transfers": 0,
+          "lastSensed": -100,
+          "lastSeen": -100,
+          "lastHeard": -100,
+          "lastKnown": null,
+          "lastEvidenceKind": "none",
+          "lastSense": {
+            "visible": false,
+            "heard": false
+          },
+          "graceUntil": 4,
+          "radius": 0.31,
+          "seed": 3012054662,
+          "initial": {
+            "spaceId": "floor-1",
+            "x": 4,
+            "y": 21,
+            "spawnId": "floor-1-landmark-5",
+            "label": "복도 끝",
+            "sameSpace": true,
+            "distanceFromPlayer": 32.01562118716424,
+            "pathDistanceFromPlayer": 45
+          },
+          "spawnCandidates": [
+            {
+              "id": "floor-1-landmark-3",
+              "spaceId": "floor-1",
+              "floor": 1,
+              "x": 40,
+              "y": 22,
+              "label": "동쪽 우회",
+              "pathDistance": 41.25
+            },
+            {
+              "id": "floor-1-landmark-5",
+              "spaceId": "floor-1",
+              "floor": 1,
+              "x": 4,
+              "y": 21,
+              "label": "복도 끝",
+              "pathDistance": 45
+            },
+            {
+              "id": "floor-1-landmark-6",
+              "spaceId": "floor-1",
+              "floor": 1,
+              "x": 9,
+              "y": 38,
+              "label": "북서 복도",
+              "pathDistance": 60
+            },
+            {
+              "id": "floor-2-landmark-0",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 50,
+              "y": 8,
+              "label": "남쪽 복도",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-1",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 34,
+              "y": 23,
+              "label": "서쪽 복도",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-2",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 50,
+              "y": 17,
+              "label": "내부 우회",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-3",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 50,
+              "y": 29,
+              "label": "북쪽 복도",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-7",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 60,
+              "y": 40,
+              "label": "학년 분기 복도",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-8",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 18,
+              "y": 13,
+              "label": "서관 연결 통로 중간",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-10",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 82,
+              "y": 13,
+              "label": "별관 연결 통로 중간",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-12",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 31,
+              "y": 10,
+              "label": "빈교실 A 앞 꺾임",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-0",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 24,
+              "y": 8,
+              "label": "남쪽 계단홀",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-1",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 15,
+              "y": 14,
+              "label": "서쪽 분기",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-2",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 24,
+              "y": 20,
+              "label": "중앙 교차로",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-4",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 12,
+              "y": 26,
+              "label": "북서 막다른 길",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-5",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 34,
+              "y": 25,
+              "label": "동쪽 우회",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-6",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 24,
+              "y": 30,
+              "label": "북쪽 복도",
+              "pathDistance": null
+            }
+          ],
+          "rules": {
+            "sightRange": 11,
+            "fovDegrees": 120,
+            "peripheralRange": 1.8,
+            "investigateSpeed": 1.9,
+            "unseenBeforeSearch": 8,
+            "searchSeconds": 4,
+            "memorySeconds": 12,
+            "unreachableSeconds": 3,
+            "exitEvidenceSeconds": 2.5
+          },
+          "lostReason": "",
+          "stuckSeconds": 0,
+          "patrolGoal": null,
+          "patrolWait": 0,
+          "localPatrols": 0,
+          "path": [],
+          "portalTrail": [],
+          "transit": null,
+          "failedTransfers": 0
+        },
+        "visual": {
+          "name": "당직자",
+          "kind": "original-procedural-caretaker",
+          "targetHeight": 2.4,
+          "shoulderWidth": 0.87,
+          "meshCount": 104,
+          "animatedLimbs": 4,
+          "hasSeparateFingers": true,
+          "hasStaffBadge": true,
+          "geometrySource": "SchoolEscape original",
+          "localBounds": [
+            1.1669627157762434,
+            2.405290033705794,
+            0.7962836763858303
+          ]
+        },
+        "audio": {
+          "unlocked": false,
+          "contextState": "uninitialized",
+          "started": false,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 0,
+          "maxVoices": 36,
+          "scheduledVoices": 0,
+          "footsteps": 0,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 0,
+          "watchBeats": 0,
+          "searchSounds": 0,
+          "itemSounds": 0,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0,
+          "effectiveGain": 0,
+          "rms": 0,
+          "watchEquipped": false,
+          "watchBpm": 0,
+          "watchDistance": null,
+          "ambienceActive": false,
+          "lastError": null
+        },
+        "capacity": 9,
+        "maxEquipped": 1,
+        "itemCount": 13,
+        "keys": [
+          {
+            "id": "key-a",
+            "hidden": false,
+            "spaceId": "room-f2-17"
+          },
+          {
+            "id": "key-b",
+            "hidden": false,
+            "spaceId": "room-f3-6"
+          },
+          {
+            "id": "key-c",
+            "hidden": true,
+            "spaceId": "room-f1-8"
+          }
+        ],
+        "rooms": 53,
+        "revision": "remaining-main-rooms-2026-10-24",
+        "libraries": [
+          2
+        ],
+        "roomCoverage": [
+          {
+            "floor": 1,
+            "label": "빈교실 1",
+            "id": "room-f1-0",
+            "kind": "classroom",
+            "sourceFloor": 1,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 1,
+            "label": "교직원 화장실 남",
+            "id": "room-f1-1",
+            "kind": "staffRestroom",
+            "sourceFloor": 1,
+            "fixtures": 91,
+            "fixtureKinds": 43,
+            "solidFixtures": 24
+          },
+          {
+            "floor": 1,
+            "label": "교직원 화장실 여",
+            "id": "room-f1-2",
+            "kind": "staffRestroom",
+            "sourceFloor": 1,
+            "fixtures": 103,
+            "fixtureKinds": 39,
+            "solidFixtures": 32
+          },
+          {
+            "floor": 1,
+            "label": "빈교실 3",
+            "id": "room-f1-3",
+            "kind": "classroom",
+            "sourceFloor": 1,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 1,
+            "label": "빈교실 2",
+            "id": "room-f1-4",
+            "kind": "classroom",
+            "sourceFloor": 1,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 1,
+            "label": "방송실",
+            "id": "room-f1-5",
+            "kind": "broadcast",
+            "sourceFloor": 1,
+            "fixtures": 247,
+            "fixtureKinds": 46,
+            "solidFixtures": 20
+          },
+          {
+            "floor": 1,
+            "label": "창고",
+            "id": "room-f1-6",
+            "kind": "storage",
+            "sourceFloor": 1,
+            "fixtures": 226,
+            "fixtureKinds": 36,
+            "solidFixtures": 39
+          },
+          {
+            "floor": 1,
+            "label": "행정실",
+            "id": "room-f1-7",
+            "kind": "administration",
+            "sourceFloor": 1,
+            "fixtures": 649,
+            "fixtureKinds": 60,
+            "solidFixtures": 53
+          },
+          {
+            "floor": 1,
+            "label": "대회의실",
+            "id": "room-f1-8",
+            "kind": "assembly",
+            "sourceFloor": 1,
+            "fixtures": 274,
+            "fixtureKinds": 39,
+            "solidFixtures": 34
+          },
+          {
+            "floor": 1,
+            "label": "학생 화장실 남",
+            "id": "room-f1-9",
+            "kind": "studentRestroom",
+            "sourceFloor": 1,
+            "fixtures": 116,
+            "fixtureKinds": 41,
+            "solidFixtures": 34
+          },
+          {
+            "floor": 1,
+            "label": "학생 화장실 여",
+            "id": "room-f1-10",
+            "kind": "studentRestroom",
+            "sourceFloor": 1,
+            "fixtures": 141,
+            "fixtureKinds": 37,
+            "solidFixtures": 50
+          },
+          {
+            "floor": 1,
+            "label": "설비관리실",
+            "id": "room-f1-11",
+            "kind": "maintenance",
+            "sourceFloor": 1,
+            "fixtures": 164,
+            "fixtureKinds": 30,
+            "solidFixtures": 11
+          },
+          {
+            "floor": 1,
+            "label": "세미나실",
+            "id": "room-f1-12",
+            "kind": "seminar",
+            "sourceFloor": 1,
+            "fixtures": 308,
+            "fixtureKinds": 39,
+            "solidFixtures": 27
+          },
+          {
+            "floor": 1,
+            "label": "보건실",
+            "id": "room-f1-13",
+            "kind": "infirmary",
+            "sourceFloor": 1,
+            "fixtures": 319,
+            "fixtureKinds": 73,
+            "solidFixtures": 44
+          },
+          {
+            "floor": 2,
+            "label": "음악실",
+            "id": "room-f2-0",
+            "kind": "music",
+            "sourceFloor": 2,
+            "fixtures": 623,
+            "fixtureKinds": 64,
+            "solidFixtures": 113
+          },
+          {
+            "floor": 2,
+            "label": "도서실",
+            "id": "room-f2-1",
+            "kind": "library",
+            "sourceFloor": 2,
+            "fixtures": 1366,
+            "fixtureKinds": 45,
+            "solidFixtures": 271
+          },
+          {
+            "floor": 2,
+            "label": "2학년 3반",
+            "id": "room-f2-2",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "2학년 4반",
+            "id": "room-f2-3",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "미술실",
+            "id": "room-f2-4",
+            "kind": "art",
+            "sourceFloor": 2,
+            "fixtures": 385,
+            "fixtureKinds": 53,
+            "solidFixtures": 43
+          },
+          {
+            "floor": 2,
+            "label": "미술실 창고",
+            "id": "room-f2-5",
+            "kind": "artStorage",
+            "sourceFloor": 2,
+            "fixtures": 146,
+            "fixtureKinds": 27,
+            "solidFixtures": 45
+          },
+          {
+            "floor": 2,
+            "label": "빈교실 A",
+            "id": "room-f2-6",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "2학년 1반",
+            "id": "room-f2-7",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "2학년 2반",
+            "id": "room-f2-8",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "자습실",
+            "id": "room-f2-9",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "빈교실 B",
+            "id": "room-f2-10",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "빈교실 C",
+            "id": "room-f2-11",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "빈교실 D",
+            "id": "room-f2-12",
+            "kind": "classroom",
+            "sourceFloor": 2,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 2,
+            "label": "학생 화장실 남",
+            "id": "room-f2-13",
+            "kind": "studentRestroom",
+            "sourceFloor": 2,
+            "fixtures": 116,
+            "fixtureKinds": 41,
+            "solidFixtures": 34
+          },
+          {
+            "floor": 2,
+            "label": "학생 화장실 여",
+            "id": "room-f2-14",
+            "kind": "studentRestroom",
+            "sourceFloor": 2,
+            "fixtures": 141,
+            "fixtureKinds": 37,
+            "solidFixtures": 50
+          },
+          {
+            "floor": 2,
+            "label": "컴퓨터실",
+            "id": "room-f2-15",
+            "kind": "computer",
+            "sourceFloor": 2,
+            "fixtures": 754,
+            "fixtureKinds": 58,
+            "solidFixtures": 62
+          },
+          {
+            "floor": 2,
+            "label": "준비실 1",
+            "id": "room-f2-16",
+            "kind": "preparation",
+            "sourceFloor": 2,
+            "fixtures": 172,
+            "fixtureKinds": 41,
+            "solidFixtures": 12
+          },
+          {
+            "floor": 2,
+            "label": "자료실",
+            "id": "room-f2-17",
+            "kind": "archives",
+            "sourceFloor": 2,
+            "fixtures": 575,
+            "fixtureKinds": 43,
+            "solidFixtures": 94
+          },
+          {
+            "floor": 2,
+            "label": "창고",
+            "id": "room-f2-18",
+            "kind": "storage",
+            "sourceFloor": 2,
+            "fixtures": 226,
+            "fixtureKinds": 36,
+            "solidFixtures": 39
+          },
+          {
+            "floor": 2,
+            "label": "교직원 화장실 남",
+            "id": "room-f2-19",
+            "kind": "staffRestroom",
+            "sourceFloor": 2,
+            "fixtures": 91,
+            "fixtureKinds": 43,
+            "solidFixtures": 24
+          },
+          {
+            "floor": 2,
+            "label": "교직원 화장실 여",
+            "id": "room-f2-20",
+            "kind": "staffRestroom",
+            "sourceFloor": 2,
+            "fixtures": 103,
+            "fixtureKinds": 39,
+            "solidFixtures": 32
+          },
+          {
+            "floor": 2,
+            "label": "2학년 교무실",
+            "id": "room-f2-21",
+            "kind": "staff",
+            "sourceFloor": 2,
+            "fixtures": 671,
+            "fixtureKinds": 57,
+            "solidFixtures": 54
+          },
+          {
+            "floor": 3,
+            "label": "3학년 1반",
+            "id": "room-f3-0",
+            "kind": "classroom",
+            "sourceFloor": 3,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 3,
+            "label": "학생 화장실 남",
+            "id": "room-f3-1",
+            "kind": "studentRestroom",
+            "sourceFloor": 3,
+            "fixtures": 116,
+            "fixtureKinds": 41,
+            "solidFixtures": 34
+          },
+          {
+            "floor": 3,
+            "label": "학생 화장실 여",
+            "id": "room-f3-2",
+            "kind": "studentRestroom",
+            "sourceFloor": 3,
+            "fixtures": 141,
+            "fixtureKinds": 37,
+            "solidFixtures": 50
+          },
+          {
+            "floor": 3,
+            "label": "3학년 4반",
+            "id": "room-f3-3",
+            "kind": "classroom",
+            "sourceFloor": 3,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 3,
+            "label": "교직원 휴게실",
+            "id": "room-f3-4",
+            "kind": "lounge",
+            "sourceFloor": 3,
+            "fixtures": 148,
+            "fixtureKinds": 37,
+            "solidFixtures": 13
+          },
+          {
+            "floor": 3,
+            "label": "3학년 교무실",
+            "id": "room-f3-5",
+            "kind": "staff",
+            "sourceFloor": 3,
+            "fixtures": 671,
+            "fixtureKinds": 57,
+            "solidFixtures": 54
+          },
+          {
+            "floor": 3,
+            "label": "학부모상담실",
+            "id": "room-f3-6",
+            "kind": "counseling",
+            "sourceFloor": 3,
+            "fixtures": 167,
+            "fixtureKinds": 49,
+            "solidFixtures": 16
+          },
+          {
+            "floor": 3,
+            "label": "메인회의실",
+            "id": "room-f3-7",
+            "kind": "meeting",
+            "sourceFloor": 3,
+            "fixtures": 209,
+            "fixtureKinds": 41,
+            "solidFixtures": 17
+          },
+          {
+            "floor": 3,
+            "label": "교장실",
+            "id": "room-f3-8",
+            "kind": "principal",
+            "sourceFloor": 3,
+            "fixtures": 201,
+            "fixtureKinds": 53,
+            "solidFixtures": 17
+          },
+          {
+            "floor": 3,
+            "label": "빈교실 1",
+            "id": "room-f3-9",
+            "kind": "classroom",
+            "sourceFloor": 3,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 3,
+            "label": "중앙통제실",
+            "id": "room-f3-10",
+            "kind": "control",
+            "sourceFloor": 3,
+            "fixtures": 314,
+            "fixtureKinds": 44,
+            "solidFixtures": 16
+          },
+          {
+            "floor": 3,
+            "label": "교직원 화장실 여",
+            "id": "room-f3-11",
+            "kind": "staffRestroom",
+            "sourceFloor": 3,
+            "fixtures": 103,
+            "fixtureKinds": 39,
+            "solidFixtures": 32
+          },
+          {
+            "floor": 3,
+            "label": "교직원 화장실 남",
+            "id": "room-f3-12",
+            "kind": "staffRestroom",
+            "sourceFloor": 3,
+            "fixtures": 91,
+            "fixtureKinds": 43,
+            "solidFixtures": 24
+          },
+          {
+            "floor": 3,
+            "label": "3학년 2반",
+            "id": "room-f3-13",
+            "kind": "classroom",
+            "sourceFloor": 3,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 3,
+            "label": "빈교실 2",
+            "id": "room-f3-14",
+            "kind": "classroom",
+            "sourceFloor": 3,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 3,
+            "label": "3학년 3반",
+            "id": "room-f3-15",
+            "kind": "classroom",
+            "sourceFloor": 3,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          },
+          {
+            "floor": 3,
+            "label": "빈교실 3",
+            "id": "room-f3-16",
+            "kind": "classroom",
+            "sourceFloor": 3,
+            "fixtures": 802,
+            "fixtureKinds": 57,
+            "solidFixtures": 85
+          }
+        ],
+        "adminDesks": 18,
+        "mirrors": 12
+      }
+    },
+    {
+      "name": "Every main-building door has a furnished interior",
+      "passed": true,
+      "actual": [
+        {
+          "floor": 1,
+          "label": "빈교실 1",
+          "id": "room-f1-0",
+          "kind": "classroom",
+          "sourceFloor": 1,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 1,
+          "label": "교직원 화장실 남",
+          "id": "room-f1-1",
+          "kind": "staffRestroom",
+          "sourceFloor": 1,
+          "fixtures": 91,
+          "fixtureKinds": 43,
+          "solidFixtures": 24
+        },
+        {
+          "floor": 1,
+          "label": "교직원 화장실 여",
+          "id": "room-f1-2",
+          "kind": "staffRestroom",
+          "sourceFloor": 1,
+          "fixtures": 103,
+          "fixtureKinds": 39,
+          "solidFixtures": 32
+        },
+        {
+          "floor": 1,
+          "label": "빈교실 3",
+          "id": "room-f1-3",
+          "kind": "classroom",
+          "sourceFloor": 1,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 1,
+          "label": "빈교실 2",
+          "id": "room-f1-4",
+          "kind": "classroom",
+          "sourceFloor": 1,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 1,
+          "label": "방송실",
+          "id": "room-f1-5",
+          "kind": "broadcast",
+          "sourceFloor": 1,
+          "fixtures": 247,
+          "fixtureKinds": 46,
+          "solidFixtures": 20
+        },
+        {
+          "floor": 1,
+          "label": "창고",
+          "id": "room-f1-6",
+          "kind": "storage",
+          "sourceFloor": 1,
+          "fixtures": 226,
+          "fixtureKinds": 36,
+          "solidFixtures": 39
+        },
+        {
+          "floor": 1,
+          "label": "행정실",
+          "id": "room-f1-7",
+          "kind": "administration",
+          "sourceFloor": 1,
+          "fixtures": 649,
+          "fixtureKinds": 60,
+          "solidFixtures": 53
+        },
+        {
+          "floor": 1,
+          "label": "대회의실",
+          "id": "room-f1-8",
+          "kind": "assembly",
+          "sourceFloor": 1,
+          "fixtures": 274,
+          "fixtureKinds": 39,
+          "solidFixtures": 34
+        },
+        {
+          "floor": 1,
+          "label": "학생 화장실 남",
+          "id": "room-f1-9",
+          "kind": "studentRestroom",
+          "sourceFloor": 1,
+          "fixtures": 116,
+          "fixtureKinds": 41,
+          "solidFixtures": 34
+        },
+        {
+          "floor": 1,
+          "label": "학생 화장실 여",
+          "id": "room-f1-10",
+          "kind": "studentRestroom",
+          "sourceFloor": 1,
+          "fixtures": 141,
+          "fixtureKinds": 37,
+          "solidFixtures": 50
+        },
+        {
+          "floor": 1,
+          "label": "설비관리실",
+          "id": "room-f1-11",
+          "kind": "maintenance",
+          "sourceFloor": 1,
+          "fixtures": 164,
+          "fixtureKinds": 30,
+          "solidFixtures": 11
+        },
+        {
+          "floor": 1,
+          "label": "세미나실",
+          "id": "room-f1-12",
+          "kind": "seminar",
+          "sourceFloor": 1,
+          "fixtures": 308,
+          "fixtureKinds": 39,
+          "solidFixtures": 27
+        },
+        {
+          "floor": 1,
+          "label": "보건실",
+          "id": "room-f1-13",
+          "kind": "infirmary",
+          "sourceFloor": 1,
+          "fixtures": 319,
+          "fixtureKinds": 73,
+          "solidFixtures": 44
+        },
+        {
+          "floor": 2,
+          "label": "음악실",
+          "id": "room-f2-0",
+          "kind": "music",
+          "sourceFloor": 2,
+          "fixtures": 623,
+          "fixtureKinds": 64,
+          "solidFixtures": 113
+        },
+        {
+          "floor": 2,
+          "label": "도서실",
+          "id": "room-f2-1",
+          "kind": "library",
+          "sourceFloor": 2,
+          "fixtures": 1366,
+          "fixtureKinds": 45,
+          "solidFixtures": 271
+        },
+        {
+          "floor": 2,
+          "label": "2학년 3반",
+          "id": "room-f2-2",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "2학년 4반",
+          "id": "room-f2-3",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "미술실",
+          "id": "room-f2-4",
+          "kind": "art",
+          "sourceFloor": 2,
+          "fixtures": 385,
+          "fixtureKinds": 53,
+          "solidFixtures": 43
+        },
+        {
+          "floor": 2,
+          "label": "미술실 창고",
+          "id": "room-f2-5",
+          "kind": "artStorage",
+          "sourceFloor": 2,
+          "fixtures": 146,
+          "fixtureKinds": 27,
+          "solidFixtures": 45
+        },
+        {
+          "floor": 2,
+          "label": "빈교실 A",
+          "id": "room-f2-6",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "2학년 1반",
+          "id": "room-f2-7",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "2학년 2반",
+          "id": "room-f2-8",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "자습실",
+          "id": "room-f2-9",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "빈교실 B",
+          "id": "room-f2-10",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "빈교실 C",
+          "id": "room-f2-11",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "빈교실 D",
+          "id": "room-f2-12",
+          "kind": "classroom",
+          "sourceFloor": 2,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 2,
+          "label": "학생 화장실 남",
+          "id": "room-f2-13",
+          "kind": "studentRestroom",
+          "sourceFloor": 2,
+          "fixtures": 116,
+          "fixtureKinds": 41,
+          "solidFixtures": 34
+        },
+        {
+          "floor": 2,
+          "label": "학생 화장실 여",
+          "id": "room-f2-14",
+          "kind": "studentRestroom",
+          "sourceFloor": 2,
+          "fixtures": 141,
+          "fixtureKinds": 37,
+          "solidFixtures": 50
+        },
+        {
+          "floor": 2,
+          "label": "컴퓨터실",
+          "id": "room-f2-15",
+          "kind": "computer",
+          "sourceFloor": 2,
+          "fixtures": 754,
+          "fixtureKinds": 58,
+          "solidFixtures": 62
+        },
+        {
+          "floor": 2,
+          "label": "준비실 1",
+          "id": "room-f2-16",
+          "kind": "preparation",
+          "sourceFloor": 2,
+          "fixtures": 172,
+          "fixtureKinds": 41,
+          "solidFixtures": 12
+        },
+        {
+          "floor": 2,
+          "label": "자료실",
+          "id": "room-f2-17",
+          "kind": "archives",
+          "sourceFloor": 2,
+          "fixtures": 575,
+          "fixtureKinds": 43,
+          "solidFixtures": 94
+        },
+        {
+          "floor": 2,
+          "label": "창고",
+          "id": "room-f2-18",
+          "kind": "storage",
+          "sourceFloor": 2,
+          "fixtures": 226,
+          "fixtureKinds": 36,
+          "solidFixtures": 39
+        },
+        {
+          "floor": 2,
+          "label": "교직원 화장실 남",
+          "id": "room-f2-19",
+          "kind": "staffRestroom",
+          "sourceFloor": 2,
+          "fixtures": 91,
+          "fixtureKinds": 43,
+          "solidFixtures": 24
+        },
+        {
+          "floor": 2,
+          "label": "교직원 화장실 여",
+          "id": "room-f2-20",
+          "kind": "staffRestroom",
+          "sourceFloor": 2,
+          "fixtures": 103,
+          "fixtureKinds": 39,
+          "solidFixtures": 32
+        },
+        {
+          "floor": 2,
+          "label": "2학년 교무실",
+          "id": "room-f2-21",
+          "kind": "staff",
+          "sourceFloor": 2,
+          "fixtures": 671,
+          "fixtureKinds": 57,
+          "solidFixtures": 54
+        },
+        {
+          "floor": 3,
+          "label": "3학년 1반",
+          "id": "room-f3-0",
+          "kind": "classroom",
+          "sourceFloor": 3,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 3,
+          "label": "학생 화장실 남",
+          "id": "room-f3-1",
+          "kind": "studentRestroom",
+          "sourceFloor": 3,
+          "fixtures": 116,
+          "fixtureKinds": 41,
+          "solidFixtures": 34
+        },
+        {
+          "floor": 3,
+          "label": "학생 화장실 여",
+          "id": "room-f3-2",
+          "kind": "studentRestroom",
+          "sourceFloor": 3,
+          "fixtures": 141,
+          "fixtureKinds": 37,
+          "solidFixtures": 50
+        },
+        {
+          "floor": 3,
+          "label": "3학년 4반",
+          "id": "room-f3-3",
+          "kind": "classroom",
+          "sourceFloor": 3,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 3,
+          "label": "교직원 휴게실",
+          "id": "room-f3-4",
+          "kind": "lounge",
+          "sourceFloor": 3,
+          "fixtures": 148,
+          "fixtureKinds": 37,
+          "solidFixtures": 13
+        },
+        {
+          "floor": 3,
+          "label": "3학년 교무실",
+          "id": "room-f3-5",
+          "kind": "staff",
+          "sourceFloor": 3,
+          "fixtures": 671,
+          "fixtureKinds": 57,
+          "solidFixtures": 54
+        },
+        {
+          "floor": 3,
+          "label": "학부모상담실",
+          "id": "room-f3-6",
+          "kind": "counseling",
+          "sourceFloor": 3,
+          "fixtures": 167,
+          "fixtureKinds": 49,
+          "solidFixtures": 16
+        },
+        {
+          "floor": 3,
+          "label": "메인회의실",
+          "id": "room-f3-7",
+          "kind": "meeting",
+          "sourceFloor": 3,
+          "fixtures": 209,
+          "fixtureKinds": 41,
+          "solidFixtures": 17
+        },
+        {
+          "floor": 3,
+          "label": "교장실",
+          "id": "room-f3-8",
+          "kind": "principal",
+          "sourceFloor": 3,
+          "fixtures": 201,
+          "fixtureKinds": 53,
+          "solidFixtures": 17
+        },
+        {
+          "floor": 3,
+          "label": "빈교실 1",
+          "id": "room-f3-9",
+          "kind": "classroom",
+          "sourceFloor": 3,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 3,
+          "label": "중앙통제실",
+          "id": "room-f3-10",
+          "kind": "control",
+          "sourceFloor": 3,
+          "fixtures": 314,
+          "fixtureKinds": 44,
+          "solidFixtures": 16
+        },
+        {
+          "floor": 3,
+          "label": "교직원 화장실 여",
+          "id": "room-f3-11",
+          "kind": "staffRestroom",
+          "sourceFloor": 3,
+          "fixtures": 103,
+          "fixtureKinds": 39,
+          "solidFixtures": 32
+        },
+        {
+          "floor": 3,
+          "label": "교직원 화장실 남",
+          "id": "room-f3-12",
+          "kind": "staffRestroom",
+          "sourceFloor": 3,
+          "fixtures": 91,
+          "fixtureKinds": 43,
+          "solidFixtures": 24
+        },
+        {
+          "floor": 3,
+          "label": "3학년 2반",
+          "id": "room-f3-13",
+          "kind": "classroom",
+          "sourceFloor": 3,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 3,
+          "label": "빈교실 2",
+          "id": "room-f3-14",
+          "kind": "classroom",
+          "sourceFloor": 3,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 3,
+          "label": "3학년 3반",
+          "id": "room-f3-15",
+          "kind": "classroom",
+          "sourceFloor": 3,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        },
+        {
+          "floor": 3,
+          "label": "빈교실 3",
+          "id": "room-f3-16",
+          "kind": "classroom",
+          "sourceFloor": 3,
+          "fixtures": 802,
+          "fixtureKinds": 57,
+          "solidFixtures": 85
+        }
+      ]
+    },
+    {
+      "name": "Twelve remaining rooms are furnished on their intended floors",
+      "passed": true,
+      "actual": [
+        {
+          "floor": 1,
+          "label": "창고",
+          "id": "room-f1-6",
+          "kind": "storage",
+          "sourceFloor": 1,
+          "fixtures": 226,
+          "fixtureKinds": 36,
+          "solidFixtures": 39
+        },
+        {
+          "floor": 1,
+          "label": "대회의실",
+          "id": "room-f1-8",
+          "kind": "assembly",
+          "sourceFloor": 1,
+          "fixtures": 274,
+          "fixtureKinds": 39,
+          "solidFixtures": 34
+        },
+        {
+          "floor": 1,
+          "label": "설비관리실",
+          "id": "room-f1-11",
+          "kind": "maintenance",
+          "sourceFloor": 1,
+          "fixtures": 164,
+          "fixtureKinds": 30,
+          "solidFixtures": 11
+        },
+        {
+          "floor": 1,
+          "label": "세미나실",
+          "id": "room-f1-12",
+          "kind": "seminar",
+          "sourceFloor": 1,
+          "fixtures": 308,
+          "fixtureKinds": 39,
+          "solidFixtures": 27
+        },
+        {
+          "floor": 2,
+          "label": "준비실 1",
+          "id": "room-f2-16",
+          "kind": "preparation",
+          "sourceFloor": 2,
+          "fixtures": 172,
+          "fixtureKinds": 41,
+          "solidFixtures": 12
+        },
+        {
+          "floor": 2,
+          "label": "자료실",
+          "id": "room-f2-17",
+          "kind": "archives",
+          "sourceFloor": 2,
+          "fixtures": 575,
+          "fixtureKinds": 43,
+          "solidFixtures": 94
+        },
+        {
+          "floor": 2,
+          "label": "창고",
+          "id": "room-f2-18",
+          "kind": "storage",
+          "sourceFloor": 2,
+          "fixtures": 226,
+          "fixtureKinds": 36,
+          "solidFixtures": 39
+        },
+        {
+          "floor": 3,
+          "label": "교직원 휴게실",
+          "id": "room-f3-4",
+          "kind": "lounge",
+          "sourceFloor": 3,
+          "fixtures": 148,
+          "fixtureKinds": 37,
+          "solidFixtures": 13
+        },
+        {
+          "floor": 3,
+          "label": "학부모상담실",
+          "id": "room-f3-6",
+          "kind": "counseling",
+          "sourceFloor": 3,
+          "fixtures": 167,
+          "fixtureKinds": 49,
+          "solidFixtures": 16
+        },
+        {
+          "floor": 3,
+          "label": "메인회의실",
+          "id": "room-f3-7",
+          "kind": "meeting",
+          "sourceFloor": 3,
+          "fixtures": 209,
+          "fixtureKinds": 41,
+          "solidFixtures": 17
+        },
+        {
+          "floor": 3,
+          "label": "교장실",
+          "id": "room-f3-8",
+          "kind": "principal",
+          "sourceFloor": 3,
+          "fixtures": 201,
+          "fixtureKinds": 53,
+          "solidFixtures": 17
+        },
+        {
+          "floor": 3,
+          "label": "중앙통제실",
+          "id": "room-f3-10",
+          "kind": "control",
+          "sourceFloor": 3,
+          "fixtures": 314,
+          "fixtureKinds": 44,
+          "solidFixtures": 16
+        }
+      ]
+    },
+    {
+      "name": "No sound starts before Start",
+      "passed": true,
+      "actual": {
+        "unlocked": false,
+        "contextState": "uninitialized",
+        "started": false,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 0,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 0,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0,
+        "effectiveGain": 0,
+        "rms": 0,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": false,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Real Start unlocks audible ambience",
+      "passed": true,
+      "actual": {
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 0,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 0,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0.22237524390220642,
+        "effectiveGain": 0.22237524390220642,
+        "rms": 0.0018049489017947778,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": true,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Real mute button silences output",
+      "passed": true
+    },
+    {
+      "name": "Real developer toggle disables pursuit",
+      "passed": true
+    },
+    {
+      "name": "New run rerolls loot and keeps developer OFF",
+      "passed": true,
+      "actual": {
+        "seed": 2884515208,
+        "enabled": false,
+        "items": 13,
+        "carry": 0
+      }
+    },
+    {
+      "name": "Real I opens nine slots and pauses time",
+      "passed": true
+    },
+    {
+      "name": "Escape closes inventory",
+      "passed": true
+    },
+    {
+      "name": "Real Shift W sprints and spends stamina",
+      "passed": true,
+      "actual": {
+        "speed": 4.699999999999971,
+        "stamina": 92,
+        "safe": true
+      }
+    },
+    {
+      "name": "New room stays hidden behind its closed door: 1F 설비관리실",
+      "passed": true,
+      "actual": {
+        "floor": 1,
+        "label": "설비관리실",
+        "id": "room-f1-11",
+        "sourceId": "floor-1",
+        "safe": true,
+        "near": "room-f1-11",
+        "before": {
+          "activeIds": [
+            "floor-1"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-1",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "hidden": true,
+        "closedPosition": [
+          -12.5,
+          0.775,
+          6.862500000000001
+        ]
+      }
+    },
+    {
+      "name": "Real E begins entry: 설비관리실",
+      "passed": true
+    },
+    {
+      "name": "New interior is furnished and shown alone: 설비관리실",
+      "passed": true,
+      "actual": {
+        "spaceId": "room-f1-11",
+        "safe": true,
+        "view": {
+          "activeIds": [
+            "room-f1-11"
+          ],
+          "visibleFixtureRoomIds": [
+            "room-f1-11"
+          ],
+          "pendingDoor": false,
+          "minimapSpaceId": "room-f1-11",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "furnishings": 164
+      }
+    },
+    {
+      "name": "Real W explores the new room safely: 설비관리실",
+      "passed": true,
+      "actual": {
+        "spaceId": "room-f1-11",
+        "distance": 0.6934200000000024,
+        "safe": true
+      }
+    },
+    {
+      "name": "Real E returns and closes the door: 설비관리실",
+      "passed": true,
+      "actual": {
+        "spaceId": "floor-1",
+        "safe": true,
+        "pending": false,
+        "view": {
+          "activeIds": [
+            "floor-1"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-1",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "closedPosition": [
+          -12.5,
+          0.775,
+          6.862500000000001
+        ],
+        "near": "설비관리실"
+      }
+    },
+    {
+      "name": "New room stays hidden behind its closed door: 2F 자료실",
+      "passed": true,
+      "actual": {
+        "floor": 2,
+        "label": "자료실",
+        "id": "room-f2-17",
+        "sourceId": "floor-2",
+        "safe": true,
+        "near": "room-f2-17",
+        "before": {
+          "activeIds": [
+            "floor-2"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-2",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "hidden": true,
+        "closedPosition": [
+          40,
+          0.775,
+          15.6125
+        ]
+      }
+    },
+    {
+      "name": "Real E begins entry: 자료실",
+      "passed": true
+    },
+    {
+      "name": "New interior is furnished and shown alone: 자료실",
+      "passed": true,
+      "actual": {
+        "spaceId": "room-f2-17",
+        "safe": true,
+        "view": {
+          "activeIds": [
+            "room-f2-17"
+          ],
+          "visibleFixtureRoomIds": [
+            "room-f2-17"
+          ],
+          "pendingDoor": false,
+          "minimapSpaceId": "room-f2-17",
+          "bookShadowsDisabled": true,
+          "bookBatches": 4
+        },
+        "furnishings": 575
+      }
+    },
+    {
+      "name": "Real W explores the new room safely: 자료실",
+      "passed": true,
+      "actual": {
+        "spaceId": "room-f2-17",
+        "distance": 0.8665800000000085,
+        "safe": true
+      }
+    },
+    {
+      "name": "Real E returns and closes the door: 자료실",
+      "passed": true,
+      "actual": {
+        "spaceId": "floor-2",
+        "safe": true,
+        "pending": false,
+        "view": {
+          "activeIds": [
+            "floor-2"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-2",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "closedPosition": [
+          40,
+          0.775,
+          15.6125
+        ],
+        "near": "자료실"
+      }
+    },
+    {
+      "name": "New room stays hidden behind its closed door: 3F 교장실",
+      "passed": true,
+      "actual": {
+        "floor": 3,
+        "label": "교장실",
+        "id": "room-f3-8",
+        "sourceId": "floor-3",
+        "safe": true,
+        "near": "room-f3-8",
+        "before": {
+          "activeIds": [
+            "floor-3"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-3",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "hidden": true,
+        "closedPosition": [
+          -21.862500000000004,
+          0.775,
+          7.5
+        ]
+      }
+    },
+    {
+      "name": "Real E begins entry: 교장실",
+      "passed": true
+    },
+    {
+      "name": "New interior is furnished and shown alone: 교장실",
+      "passed": true,
+      "actual": {
+        "spaceId": "room-f3-8",
+        "safe": true,
+        "view": {
+          "activeIds": [
+            "room-f3-8"
+          ],
+          "visibleFixtureRoomIds": [
+            "room-f3-8"
+          ],
+          "pendingDoor": false,
+          "minimapSpaceId": "room-f3-8",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "furnishings": 201
+      }
+    },
+    {
+      "name": "Real W explores the new room safely: 교장실",
+      "passed": true,
+      "actual": {
+        "spaceId": "room-f3-8",
+        "distance": 0.6934200000000024,
+        "safe": true
+      }
+    },
+    {
+      "name": "Real E returns and closes the door: 교장실",
+      "passed": true,
+      "actual": {
+        "spaceId": "floor-3",
+        "safe": true,
+        "pending": false,
+        "view": {
+          "activeIds": [
+            "floor-3"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-3",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "closedPosition": [
+          -21.862500000000004,
+          0.775,
+          7.5
+        ],
+        "near": "교장실"
+      }
+    },
+    {
+      "name": "New room stays hidden behind its closed door: 3F 중앙통제실",
+      "passed": true,
+      "actual": {
+        "floor": 3,
+        "label": "중앙통제실",
+        "id": "room-f3-10",
+        "sourceId": "floor-3",
+        "safe": true,
+        "near": "room-f3-10",
+        "before": {
+          "activeIds": [
+            "floor-3"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-3",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "hidden": true,
+        "closedPosition": [
+          21.862500000000004,
+          0.775,
+          -1.25
+        ]
+      }
+    },
+    {
+      "name": "Real E begins entry: 중앙통제실",
+      "passed": true
+    },
+    {
+      "name": "New interior is furnished and shown alone: 중앙통제실",
+      "passed": true,
+      "actual": {
+        "spaceId": "room-f3-10",
+        "safe": true,
+        "view": {
+          "activeIds": [
+            "room-f3-10"
+          ],
+          "visibleFixtureRoomIds": [
+            "room-f3-10"
+          ],
+          "pendingDoor": false,
+          "minimapSpaceId": "room-f3-10",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "furnishings": 314
+      }
+    },
+    {
+      "name": "Real W explores the new room safely: 중앙통제실",
+      "passed": true,
+      "actual": {
+        "spaceId": "room-f3-10",
+        "distance": 0.7800000000000007,
+        "safe": true
+      }
+    },
+    {
+      "name": "Real E returns and closes the door: 중앙통제실",
+      "passed": true,
+      "actual": {
+        "spaceId": "floor-3",
+        "safe": true,
+        "pending": false,
+        "view": {
+          "activeIds": [
+            "floor-3"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-3",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "closedPosition": [
+          21.862500000000004,
+          0.775,
+          -1.25
+        ],
+        "near": "중앙통제실"
+      }
+    },
+    {
+      "name": "Real gate E cannot win without three keys",
+      "passed": true
+    },
+    {
+      "name": "Reach real vitamin-water interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-4-vitamin-water",
+        "itemId": "vitamin-water",
+        "spaceId": "room-f1-0",
+        "hidden": true,
+        "sourceId": "room-f1-0-0072",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains vitamin-water without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-0"
+        ],
+        "capacity": 1,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real drink UI boosts movement thirty percent for two seconds",
+      "passed": true,
+      "actual": {
+        "boosted": 3.3799999999999386,
+        "after": 2.59999999999998,
+        "remaining": -0.15000000000003055,
+        "safe": true
+      }
+    },
+    {
+      "name": "Reach real chocolate-bar interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-5-chocolate-bar",
+        "itemId": "chocolate-bar",
+        "spaceId": "room-f1-7",
+        "hidden": true,
+        "sourceId": "room-f1-7-0405",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains chocolate-bar without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-7"
+        ],
+        "capacity": 1,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real chocolate UI fills stamina and clears exhaustion",
+      "passed": true
+    },
+    {
+      "name": "Reach real chocolate-bar interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-7-chocolate-bar",
+        "itemId": "chocolate-bar",
+        "spaceId": "room-f2-18",
+        "hidden": true,
+        "sourceId": "room-f2-18-0024",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains chocolate-bar without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f2-18"
+        ],
+        "capacity": 1,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real drop UI preserves a safe loose item identity",
+      "passed": true,
+      "actual": {
+        "picked": false,
+        "hidden": false,
+        "sourceId": null,
+        "safe": true,
+        "carried": false
+      }
+    },
+    {
+      "name": "Reach real chocolate-bar interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-7-chocolate-bar",
+        "itemId": "chocolate-bar",
+        "spaceId": "room-f2-18",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains chocolate-bar without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f2-18"
+        ],
+        "capacity": 1,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real pickup recovers the same dropped item",
+      "passed": true,
+      "actual": {
+        "dropped": "run-abee3588-7-chocolate-bar",
+        "recovered": "run-abee3588-7-chocolate-bar"
+      }
+    },
+    {
+      "name": "Reach real clock-second-hand interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-11-clock-second-hand",
+        "itemId": "clock-second-hand",
+        "spaceId": "room-f1-0",
+        "hidden": true,
+        "sourceId": "room-f1-0-rear-locker-0",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains clock-second-hand without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-0"
+        ],
+        "capacity": 2,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Reach real clock-minute-hand interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-10-clock-minute-hand",
+        "itemId": "clock-minute-hand",
+        "spaceId": "room-f3-16",
+        "hidden": true,
+        "sourceId": "room-f3-16-rear-locker-3",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains clock-minute-hand without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f3-16"
+        ],
+        "capacity": 3,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Reach real clock-body interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-12-clock-body",
+        "itemId": "clock-body",
+        "spaceId": "room-f2-16",
+        "hidden": true,
+        "sourceId": "room-f2-16-0099",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains clock-body without duplication",
+      "passed": true,
+      "actual": {
+        "carried": false,
+        "crafted": true,
+        "active": [
+          "room-f2-16"
+        ],
+        "capacity": 2,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Three picked clock parts automatically become one compass",
+      "passed": true,
+      "actual": {
+        "inventory": [
+          {
+            "uid": "run-abee3588-7-chocolate-bar",
+            "itemId": "chocolate-bar"
+          },
+          {
+            "uid": "run-abee3588-14-compass",
+            "itemId": "compass",
+            "targetKeyUid": "run-abee3588-3-key-c"
+          }
+        ],
+        "compass": {
+          "active": true,
+          "targetKeyUid": "run-abee3588-3-key-c",
+          "targetItemId": "key-c",
+          "targetLabel": "열쇠 C",
+          "targetSpaceId": "room-f2-11",
+          "spaceId": "room-f2-16",
+          "x": 11,
+          "y": 2,
+          "dx": 5,
+          "dy": -1.1480000000000001,
+          "angle": 1.7964847784843898,
+          "distance": 6.412622318521497,
+          "via": "door",
+          "label": "복도로 나가기",
+          "hops": 2
+        }
+      }
+    },
+    {
+      "name": "Reach real smartwatch interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-13-smartwatch",
+        "itemId": "smartwatch",
+        "spaceId": "room-f1-0",
+        "hidden": true,
+        "sourceId": "room-f1-0-0276",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains smartwatch without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-0"
+        ],
+        "capacity": 3,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real equip UI uses the separate watch slot",
+      "passed": true
+    },
+    {
+      "name": "Worn watch heartbeat accelerates near a real enemy",
+      "passed": true,
+      "actual": {
+        "far": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 4,
+          "maxVoices": 36,
+          "scheduledVoices": 78,
+          "footsteps": 1,
+          "stairSteps": 0,
+          "doorOpen": 8,
+          "doorClose": 8,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 67,
+          "watchBeats": 2,
+          "searchSounds": 7,
+          "itemSounds": 9,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.01129140595401801,
+          "watchEquipped": true,
+          "watchBpm": 82.15447231250826,
+          "watchDistance": 11.180339887498949,
+          "ambienceActive": true,
+          "lastError": null
+        },
+        "near": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 10,
+          "maxVoices": 36,
+          "scheduledVoices": 84,
+          "footsteps": 1,
+          "stairSteps": 0,
+          "doorOpen": 8,
+          "doorClose": 8,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 67,
+          "watchBeats": 5,
+          "searchSounds": 7,
+          "itemSounds": 9,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.01129140595401801,
+          "watchEquipped": true,
+          "watchBpm": 148.03861807812706,
+          "watchDistance": 2.7950849718747373,
+          "ambienceActive": true,
+          "lastError": null
+        },
+        "signal": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 5,
+          "maxVoices": 36,
+          "scheduledVoices": 84,
+          "footsteps": 1,
+          "stairSteps": 0,
+          "doorOpen": 8,
+          "doorClose": 8,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 67,
+          "watchBeats": 5,
+          "searchSounds": 7,
+          "itemSounds": 9,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.016541462221222738,
+          "watchEquipped": true,
+          "watchBpm": 148.03861807812706,
+          "watchDistance": 2.7950849718747373,
+          "ambienceActive": true,
+          "lastError": null
+        }
+      }
+    },
+    {
+      "name": "Developer OFF removes watch threat heartbeat",
+      "passed": true
+    },
+    {
+      "name": "Reach real key-c interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-3-key-c",
+        "itemId": "key-c",
+        "spaceId": "room-f2-11",
+        "hidden": true,
+        "sourceId": "room-f2-11-0336",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains key-c without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f2-11"
+        ],
+        "capacity": 2,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Picking the compass target consumes the compass",
+      "passed": true
+    },
+    {
+      "name": "Reach real key-a interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-1-key-a",
+        "itemId": "key-a",
+        "spaceId": "room-f3-0",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains key-a without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f3-0"
+        ],
+        "capacity": 3,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Reach real key-b interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-abee3588-2-key-b",
+        "itemId": "key-b",
+        "spaceId": "room-f1-4",
+        "hidden": true,
+        "sourceId": "room-f1-4-0312",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains key-b without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-4"
+        ],
+        "capacity": 4,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "All three distinct real keys are held",
+      "passed": true
+    },
+    {
+      "name": "Keys cannot win away from the gate",
+      "passed": true,
+      "actual": {
+        "ok": false,
+        "message": "1층 현관의 교문 출구 앞에서 사용하세요.",
+        "missing": []
+      }
+    },
+    {
+      "name": "Real gate E consumes A B C and shows Escape Success",
+      "passed": true,
+      "actual": {
+        "won": true,
+        "escaped": true,
+        "seed": 2884515208,
+        "keys": 0,
+        "active": [
+          "floor-1"
+        ]
+      }
+    },
+    {
+      "name": "Real victory restart rerolls loot, clears inventory and keeps OFF",
+      "passed": true,
+      "actual": {
+        "won": false,
+        "seed": 2052340159,
+        "carry": 0,
+        "equipped": null,
+        "enabled": false,
+        "keys": 3,
+        "spaceId": "floor-1"
+      }
+    },
+    {
+      "name": "No public runtime or console errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "warnings": [],
+  "externalContentNoticeConfirmed": false,
+  "build": {
+    "version": "0.9",
+    "featureRevision": "remaining-main-rooms-playground-plan-2026-10-24",
+    "roomCount": 53,
+    "revision": "remaining-main-rooms-2026-10-24",
+    "htmlSha256": "3971f6feb8b178a41eea8efdc3a684a073352140696afbff6b526fca780bd0a6",
+    "bytes": 6481052
+  },
+  "http": {
+    "status": 200,
+    "contentType": "text/html",
+    "bytes": 6481052,
+    "sha256": "3971f6feb8b178a41eea8efdc3a684a073352140696afbff6b526fca780bd0a6"
+  },
+  "initial": {
+    "seed": 3012054662,
+    "enemy": {
+      "enabled": true,
+      "state": "patrol",
+      "alerted": false,
+      "spaceId": "floor-1",
+      "x": 4,
+      "y": 21,
+      "speed": 0,
+      "caught": false,
+      "transfers": 0,
+      "lastSensed": -100,
+      "lastSeen": -100,
+      "lastHeard": -100,
+      "lastKnown": null,
+      "lastEvidenceKind": "none",
+      "lastSense": {
+        "visible": false,
+        "heard": false
+      },
+      "graceUntil": 4,
+      "radius": 0.31,
+      "seed": 3012054662,
+      "initial": {
+        "spaceId": "floor-1",
+        "x": 4,
+        "y": 21,
+        "spawnId": "floor-1-landmark-5",
+        "label": "복도 끝",
+        "sameSpace": true,
+        "distanceFromPlayer": 32.01562118716424,
+        "pathDistanceFromPlayer": 45
+      },
+      "spawnCandidates": [
+        {
+          "id": "floor-1-landmark-3",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 40,
+          "y": 22,
+          "label": "동쪽 우회",
+          "pathDistance": 41.25
+        },
+        {
+          "id": "floor-1-landmark-5",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 4,
+          "y": 21,
+          "label": "복도 끝",
+          "pathDistance": 45
+        },
+        {
+          "id": "floor-1-landmark-6",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 9,
+          "y": 38,
+          "label": "북서 복도",
+          "pathDistance": 60
+        },
+        {
+          "id": "floor-2-landmark-0",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 8,
+          "label": "남쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-1",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 34,
+          "y": 23,
+          "label": "서쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-2",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 17,
+          "label": "내부 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-3",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 29,
+          "label": "북쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-7",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 60,
+          "y": 40,
+          "label": "학년 분기 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-8",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 18,
+          "y": 13,
+          "label": "서관 연결 통로 중간",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-10",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 82,
+          "y": 13,
+          "label": "별관 연결 통로 중간",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-12",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 31,
+          "y": 10,
+          "label": "빈교실 A 앞 꺾임",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-0",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 8,
+          "label": "남쪽 계단홀",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-1",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 15,
+          "y": 14,
+          "label": "서쪽 분기",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-2",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 20,
+          "label": "중앙 교차로",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-4",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 12,
+          "y": 26,
+          "label": "북서 막다른 길",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-5",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 34,
+          "y": 25,
+          "label": "동쪽 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-6",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 30,
+          "label": "북쪽 복도",
+          "pathDistance": null
+        }
+      ],
+      "rules": {
+        "sightRange": 11,
+        "fovDegrees": 120,
+        "peripheralRange": 1.8,
+        "investigateSpeed": 1.9,
+        "unseenBeforeSearch": 8,
+        "searchSeconds": 4,
+        "memorySeconds": 12,
+        "unreachableSeconds": 3,
+        "exitEvidenceSeconds": 2.5
+      },
+      "lostReason": "",
+      "stuckSeconds": 0,
+      "patrolGoal": null,
+      "patrolWait": 0,
+      "localPatrols": 0,
+      "path": [],
+      "portalTrail": [],
+      "transit": null,
+      "failedTransfers": 0
+    },
+    "visual": {
+      "name": "당직자",
+      "kind": "original-procedural-caretaker",
+      "targetHeight": 2.4,
+      "shoulderWidth": 0.87,
+      "meshCount": 104,
+      "animatedLimbs": 4,
+      "hasSeparateFingers": true,
+      "hasStaffBadge": true,
+      "geometrySource": "SchoolEscape original",
+      "localBounds": [
+        1.1669627157762434,
+        2.405290033705794,
+        0.7962836763858303
+      ]
+    },
+    "audio": {
+      "unlocked": false,
+      "contextState": "uninitialized",
+      "started": false,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 0,
+      "maxVoices": 36,
+      "scheduledVoices": 0,
+      "footsteps": 0,
+      "stairSteps": 0,
+      "doorOpen": 0,
+      "doorClose": 0,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 0,
+      "watchBeats": 0,
+      "searchSounds": 0,
+      "itemSounds": 0,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0,
+      "effectiveGain": 0,
+      "rms": 0,
+      "watchEquipped": false,
+      "watchBpm": 0,
+      "watchDistance": null,
+      "ambienceActive": false,
+      "lastError": null
+    },
+    "capacity": 9,
+    "maxEquipped": 1,
+    "itemCount": 13,
+    "keys": [
+      {
+        "id": "key-a",
+        "hidden": false,
+        "spaceId": "room-f2-17"
+      },
+      {
+        "id": "key-b",
+        "hidden": false,
+        "spaceId": "room-f3-6"
+      },
+      {
+        "id": "key-c",
+        "hidden": true,
+        "spaceId": "room-f1-8"
+      }
+    ],
+    "rooms": 53,
+    "revision": "remaining-main-rooms-2026-10-24",
+    "libraries": [
+      2
+    ],
+    "roomCoverage": [
+      {
+        "floor": 1,
+        "label": "빈교실 1",
+        "id": "room-f1-0",
+        "kind": "classroom",
+        "sourceFloor": 1,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 1,
+        "label": "교직원 화장실 남",
+        "id": "room-f1-1",
+        "kind": "staffRestroom",
+        "sourceFloor": 1,
+        "fixtures": 91,
+        "fixtureKinds": 43,
+        "solidFixtures": 24
+      },
+      {
+        "floor": 1,
+        "label": "교직원 화장실 여",
+        "id": "room-f1-2",
+        "kind": "staffRestroom",
+        "sourceFloor": 1,
+        "fixtures": 103,
+        "fixtureKinds": 39,
+        "solidFixtures": 32
+      },
+      {
+        "floor": 1,
+        "label": "빈교실 3",
+        "id": "room-f1-3",
+        "kind": "classroom",
+        "sourceFloor": 1,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 1,
+        "label": "빈교실 2",
+        "id": "room-f1-4",
+        "kind": "classroom",
+        "sourceFloor": 1,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 1,
+        "label": "방송실",
+        "id": "room-f1-5",
+        "kind": "broadcast",
+        "sourceFloor": 1,
+        "fixtures": 247,
+        "fixtureKinds": 46,
+        "solidFixtures": 20
+      },
+      {
+        "floor": 1,
+        "label": "창고",
+        "id": "room-f1-6",
+        "kind": "storage",
+        "sourceFloor": 1,
+        "fixtures": 226,
+        "fixtureKinds": 36,
+        "solidFixtures": 39
+      },
+      {
+        "floor": 1,
+        "label": "행정실",
+        "id": "room-f1-7",
+        "kind": "administration",
+        "sourceFloor": 1,
+        "fixtures": 649,
+        "fixtureKinds": 60,
+        "solidFixtures": 53
+      },
+      {
+        "floor": 1,
+        "label": "대회의실",
+        "id": "room-f1-8",
+        "kind": "assembly",
+        "sourceFloor": 1,
+        "fixtures": 274,
+        "fixtureKinds": 39,
+        "solidFixtures": 34
+      },
+      {
+        "floor": 1,
+        "label": "학생 화장실 남",
+        "id": "room-f1-9",
+        "kind": "studentRestroom",
+        "sourceFloor": 1,
+        "fixtures": 116,
+        "fixtureKinds": 41,
+        "solidFixtures": 34
+      },
+      {
+        "floor": 1,
+        "label": "학생 화장실 여",
+        "id": "room-f1-10",
+        "kind": "studentRestroom",
+        "sourceFloor": 1,
+        "fixtures": 141,
+        "fixtureKinds": 37,
+        "solidFixtures": 50
+      },
+      {
+        "floor": 1,
+        "label": "설비관리실",
+        "id": "room-f1-11",
+        "kind": "maintenance",
+        "sourceFloor": 1,
+        "fixtures": 164,
+        "fixtureKinds": 30,
+        "solidFixtures": 11
+      },
+      {
+        "floor": 1,
+        "label": "세미나실",
+        "id": "room-f1-12",
+        "kind": "seminar",
+        "sourceFloor": 1,
+        "fixtures": 308,
+        "fixtureKinds": 39,
+        "solidFixtures": 27
+      },
+      {
+        "floor": 1,
+        "label": "보건실",
+        "id": "room-f1-13",
+        "kind": "infirmary",
+        "sourceFloor": 1,
+        "fixtures": 319,
+        "fixtureKinds": 73,
+        "solidFixtures": 44
+      },
+      {
+        "floor": 2,
+        "label": "음악실",
+        "id": "room-f2-0",
+        "kind": "music",
+        "sourceFloor": 2,
+        "fixtures": 623,
+        "fixtureKinds": 64,
+        "solidFixtures": 113
+      },
+      {
+        "floor": 2,
+        "label": "도서실",
+        "id": "room-f2-1",
+        "kind": "library",
+        "sourceFloor": 2,
+        "fixtures": 1366,
+        "fixtureKinds": 45,
+        "solidFixtures": 271
+      },
+      {
+        "floor": 2,
+        "label": "2학년 3반",
+        "id": "room-f2-2",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "2학년 4반",
+        "id": "room-f2-3",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "미술실",
+        "id": "room-f2-4",
+        "kind": "art",
+        "sourceFloor": 2,
+        "fixtures": 385,
+        "fixtureKinds": 53,
+        "solidFixtures": 43
+      },
+      {
+        "floor": 2,
+        "label": "미술실 창고",
+        "id": "room-f2-5",
+        "kind": "artStorage",
+        "sourceFloor": 2,
+        "fixtures": 146,
+        "fixtureKinds": 27,
+        "solidFixtures": 45
+      },
+      {
+        "floor": 2,
+        "label": "빈교실 A",
+        "id": "room-f2-6",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "2학년 1반",
+        "id": "room-f2-7",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "2학년 2반",
+        "id": "room-f2-8",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "자습실",
+        "id": "room-f2-9",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "빈교실 B",
+        "id": "room-f2-10",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "빈교실 C",
+        "id": "room-f2-11",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "빈교실 D",
+        "id": "room-f2-12",
+        "kind": "classroom",
+        "sourceFloor": 2,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 2,
+        "label": "학생 화장실 남",
+        "id": "room-f2-13",
+        "kind": "studentRestroom",
+        "sourceFloor": 2,
+        "fixtures": 116,
+        "fixtureKinds": 41,
+        "solidFixtures": 34
+      },
+      {
+        "floor": 2,
+        "label": "학생 화장실 여",
+        "id": "room-f2-14",
+        "kind": "studentRestroom",
+        "sourceFloor": 2,
+        "fixtures": 141,
+        "fixtureKinds": 37,
+        "solidFixtures": 50
+      },
+      {
+        "floor": 2,
+        "label": "컴퓨터실",
+        "id": "room-f2-15",
+        "kind": "computer",
+        "sourceFloor": 2,
+        "fixtures": 754,
+        "fixtureKinds": 58,
+        "solidFixtures": 62
+      },
+      {
+        "floor": 2,
+        "label": "준비실 1",
+        "id": "room-f2-16",
+        "kind": "preparation",
+        "sourceFloor": 2,
+        "fixtures": 172,
+        "fixtureKinds": 41,
+        "solidFixtures": 12
+      },
+      {
+        "floor": 2,
+        "label": "자료실",
+        "id": "room-f2-17",
+        "kind": "archives",
+        "sourceFloor": 2,
+        "fixtures": 575,
+        "fixtureKinds": 43,
+        "solidFixtures": 94
+      },
+      {
+        "floor": 2,
+        "label": "창고",
+        "id": "room-f2-18",
+        "kind": "storage",
+        "sourceFloor": 2,
+        "fixtures": 226,
+        "fixtureKinds": 36,
+        "solidFixtures": 39
+      },
+      {
+        "floor": 2,
+        "label": "교직원 화장실 남",
+        "id": "room-f2-19",
+        "kind": "staffRestroom",
+        "sourceFloor": 2,
+        "fixtures": 91,
+        "fixtureKinds": 43,
+        "solidFixtures": 24
+      },
+      {
+        "floor": 2,
+        "label": "교직원 화장실 여",
+        "id": "room-f2-20",
+        "kind": "staffRestroom",
+        "sourceFloor": 2,
+        "fixtures": 103,
+        "fixtureKinds": 39,
+        "solidFixtures": 32
+      },
+      {
+        "floor": 2,
+        "label": "2학년 교무실",
+        "id": "room-f2-21",
+        "kind": "staff",
+        "sourceFloor": 2,
+        "fixtures": 671,
+        "fixtureKinds": 57,
+        "solidFixtures": 54
+      },
+      {
+        "floor": 3,
+        "label": "3학년 1반",
+        "id": "room-f3-0",
+        "kind": "classroom",
+        "sourceFloor": 3,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 3,
+        "label": "학생 화장실 남",
+        "id": "room-f3-1",
+        "kind": "studentRestroom",
+        "sourceFloor": 3,
+        "fixtures": 116,
+        "fixtureKinds": 41,
+        "solidFixtures": 34
+      },
+      {
+        "floor": 3,
+        "label": "학생 화장실 여",
+        "id": "room-f3-2",
+        "kind": "studentRestroom",
+        "sourceFloor": 3,
+        "fixtures": 141,
+        "fixtureKinds": 37,
+        "solidFixtures": 50
+      },
+      {
+        "floor": 3,
+        "label": "3학년 4반",
+        "id": "room-f3-3",
+        "kind": "classroom",
+        "sourceFloor": 3,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 3,
+        "label": "교직원 휴게실",
+        "id": "room-f3-4",
+        "kind": "lounge",
+        "sourceFloor": 3,
+        "fixtures": 148,
+        "fixtureKinds": 37,
+        "solidFixtures": 13
+      },
+      {
+        "floor": 3,
+        "label": "3학년 교무실",
+        "id": "room-f3-5",
+        "kind": "staff",
+        "sourceFloor": 3,
+        "fixtures": 671,
+        "fixtureKinds": 57,
+        "solidFixtures": 54
+      },
+      {
+        "floor": 3,
+        "label": "학부모상담실",
+        "id": "room-f3-6",
+        "kind": "counseling",
+        "sourceFloor": 3,
+        "fixtures": 167,
+        "fixtureKinds": 49,
+        "solidFixtures": 16
+      },
+      {
+        "floor": 3,
+        "label": "메인회의실",
+        "id": "room-f3-7",
+        "kind": "meeting",
+        "sourceFloor": 3,
+        "fixtures": 209,
+        "fixtureKinds": 41,
+        "solidFixtures": 17
+      },
+      {
+        "floor": 3,
+        "label": "교장실",
+        "id": "room-f3-8",
+        "kind": "principal",
+        "sourceFloor": 3,
+        "fixtures": 201,
+        "fixtureKinds": 53,
+        "solidFixtures": 17
+      },
+      {
+        "floor": 3,
+        "label": "빈교실 1",
+        "id": "room-f3-9",
+        "kind": "classroom",
+        "sourceFloor": 3,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 3,
+        "label": "중앙통제실",
+        "id": "room-f3-10",
+        "kind": "control",
+        "sourceFloor": 3,
+        "fixtures": 314,
+        "fixtureKinds": 44,
+        "solidFixtures": 16
+      },
+      {
+        "floor": 3,
+        "label": "교직원 화장실 여",
+        "id": "room-f3-11",
+        "kind": "staffRestroom",
+        "sourceFloor": 3,
+        "fixtures": 103,
+        "fixtureKinds": 39,
+        "solidFixtures": 32
+      },
+      {
+        "floor": 3,
+        "label": "교직원 화장실 남",
+        "id": "room-f3-12",
+        "kind": "staffRestroom",
+        "sourceFloor": 3,
+        "fixtures": 91,
+        "fixtureKinds": 43,
+        "solidFixtures": 24
+      },
+      {
+        "floor": 3,
+        "label": "3학년 2반",
+        "id": "room-f3-13",
+        "kind": "classroom",
+        "sourceFloor": 3,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 3,
+        "label": "빈교실 2",
+        "id": "room-f3-14",
+        "kind": "classroom",
+        "sourceFloor": 3,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 3,
+        "label": "3학년 3반",
+        "id": "room-f3-15",
+        "kind": "classroom",
+        "sourceFloor": 3,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      },
+      {
+        "floor": 3,
+        "label": "빈교실 3",
+        "id": "room-f3-16",
+        "kind": "classroom",
+        "sourceFloor": 3,
+        "fixtures": 802,
+        "fixtureKinds": 57,
+        "solidFixtures": 85
+      }
+    ],
+    "adminDesks": 18,
+    "mirrors": 12
+  },
+  "startedAudio": {
+    "unlocked": true,
+    "contextState": "running",
+    "started": true,
+    "muted": false,
+    "volume": 0.4,
+    "paused": false,
+    "activeVoices": 0,
+    "maxVoices": 36,
+    "scheduledVoices": 0,
+    "footsteps": 0,
+    "stairSteps": 0,
+    "doorOpen": 0,
+    "doorClose": 0,
+    "enemyDoorOpen": 0,
+    "enemyDoorClose": 0,
+    "enemyStairSteps": 0,
+    "stairTransitions": 0,
+    "chaseBeats": 0,
+    "caughtStingers": 0,
+    "processedEvents": 0,
+    "watchBeats": 0,
+    "searchSounds": 0,
+    "itemSounds": 0,
+    "chaseIntensity": 0,
+    "chaseGain": 0,
+    "masterGain": 0.22237524390220642,
+    "effectiveGain": 0.22237524390220642,
+    "rms": 0.0018049489017947778,
+    "watchEquipped": false,
+    "watchBpm": 0,
+    "watchDistance": null,
+    "ambienceActive": true,
+    "lastError": null
+  },
+  "newRoomVisits": [
+    {
+      "setup": {
+        "floor": 1,
+        "label": "설비관리실",
+        "id": "room-f1-11",
+        "sourceId": "floor-1",
+        "safe": true,
+        "near": "room-f1-11",
+        "before": {
+          "activeIds": [
+            "floor-1"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-1",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "hidden": true,
+        "closedPosition": [
+          -12.5,
+          0.775,
+          6.862500000000001
+        ]
+      },
+      "entered": {
+        "spaceId": "room-f1-11",
+        "safe": true,
+        "view": {
+          "activeIds": [
+            "room-f1-11"
+          ],
+          "visibleFixtureRoomIds": [
+            "room-f1-11"
+          ],
+          "pendingDoor": false,
+          "minimapSpaceId": "room-f1-11",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "furnishings": 164
+      },
+      "walked": {
+        "spaceId": "room-f1-11",
+        "distance": 0.6934200000000024,
+        "safe": true
+      },
+      "returned": {
+        "spaceId": "floor-1",
+        "safe": true,
+        "pending": false,
+        "view": {
+          "activeIds": [
+            "floor-1"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-1",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "closedPosition": [
+          -12.5,
+          0.775,
+          6.862500000000001
+        ],
+        "near": "설비관리실"
+      }
+    },
+    {
+      "setup": {
+        "floor": 2,
+        "label": "자료실",
+        "id": "room-f2-17",
+        "sourceId": "floor-2",
+        "safe": true,
+        "near": "room-f2-17",
+        "before": {
+          "activeIds": [
+            "floor-2"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-2",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "hidden": true,
+        "closedPosition": [
+          40,
+          0.775,
+          15.6125
+        ]
+      },
+      "entered": {
+        "spaceId": "room-f2-17",
+        "safe": true,
+        "view": {
+          "activeIds": [
+            "room-f2-17"
+          ],
+          "visibleFixtureRoomIds": [
+            "room-f2-17"
+          ],
+          "pendingDoor": false,
+          "minimapSpaceId": "room-f2-17",
+          "bookShadowsDisabled": true,
+          "bookBatches": 4
+        },
+        "furnishings": 575
+      },
+      "walked": {
+        "spaceId": "room-f2-17",
+        "distance": 0.8665800000000085,
+        "safe": true
+      },
+      "returned": {
+        "spaceId": "floor-2",
+        "safe": true,
+        "pending": false,
+        "view": {
+          "activeIds": [
+            "floor-2"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-2",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "closedPosition": [
+          40,
+          0.775,
+          15.6125
+        ],
+        "near": "자료실"
+      }
+    },
+    {
+      "setup": {
+        "floor": 3,
+        "label": "교장실",
+        "id": "room-f3-8",
+        "sourceId": "floor-3",
+        "safe": true,
+        "near": "room-f3-8",
+        "before": {
+          "activeIds": [
+            "floor-3"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-3",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "hidden": true,
+        "closedPosition": [
+          -21.862500000000004,
+          0.775,
+          7.5
+        ]
+      },
+      "entered": {
+        "spaceId": "room-f3-8",
+        "safe": true,
+        "view": {
+          "activeIds": [
+            "room-f3-8"
+          ],
+          "visibleFixtureRoomIds": [
+            "room-f3-8"
+          ],
+          "pendingDoor": false,
+          "minimapSpaceId": "room-f3-8",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "furnishings": 201
+      },
+      "walked": {
+        "spaceId": "room-f3-8",
+        "distance": 0.6934200000000024,
+        "safe": true
+      },
+      "returned": {
+        "spaceId": "floor-3",
+        "safe": true,
+        "pending": false,
+        "view": {
+          "activeIds": [
+            "floor-3"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-3",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "closedPosition": [
+          -21.862500000000004,
+          0.775,
+          7.5
+        ],
+        "near": "교장실"
+      }
+    },
+    {
+      "setup": {
+        "floor": 3,
+        "label": "중앙통제실",
+        "id": "room-f3-10",
+        "sourceId": "floor-3",
+        "safe": true,
+        "near": "room-f3-10",
+        "before": {
+          "activeIds": [
+            "floor-3"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-3",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "hidden": true,
+        "closedPosition": [
+          21.862500000000004,
+          0.775,
+          -1.25
+        ]
+      },
+      "entered": {
+        "spaceId": "room-f3-10",
+        "safe": true,
+        "view": {
+          "activeIds": [
+            "room-f3-10"
+          ],
+          "visibleFixtureRoomIds": [
+            "room-f3-10"
+          ],
+          "pendingDoor": false,
+          "minimapSpaceId": "room-f3-10",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "furnishings": 314
+      },
+      "walked": {
+        "spaceId": "room-f3-10",
+        "distance": 0.7800000000000007,
+        "safe": true
+      },
+      "returned": {
+        "spaceId": "floor-3",
+        "safe": true,
+        "pending": false,
+        "view": {
+          "activeIds": [
+            "floor-3"
+          ],
+          "visibleFixtureRoomIds": [],
+          "pendingDoor": false,
+          "minimapSpaceId": "floor-3",
+          "bookShadowsDisabled": true,
+          "bookBatches": 0
+        },
+        "closedPosition": [
+          21.862500000000004,
+          0.775,
+          -1.25
+        ],
+        "near": "중앙통제실"
+      }
+    }
+  ],
+  "pickups": [
+    {
+      "uid": "run-abee3588-4-vitamin-water",
+      "itemId": "vitamin-water",
+      "spaceId": "room-f1-0",
+      "hidden": true,
+      "sourceId": "room-f1-0-0072",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-abee3588-5-chocolate-bar",
+      "itemId": "chocolate-bar",
+      "spaceId": "room-f1-7",
+      "hidden": true,
+      "sourceId": "room-f1-7-0405",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-abee3588-11-clock-second-hand",
+      "itemId": "clock-second-hand",
+      "spaceId": "room-f1-0",
+      "hidden": true,
+      "sourceId": "room-f1-0-rear-locker-0",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-abee3588-10-clock-minute-hand",
+      "itemId": "clock-minute-hand",
+      "spaceId": "room-f3-16",
+      "hidden": true,
+      "sourceId": "room-f3-16-rear-locker-3",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-abee3588-12-clock-body",
+      "itemId": "clock-body",
+      "spaceId": "room-f2-16",
+      "hidden": true,
+      "sourceId": "room-f2-16-0099",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-abee3588-13-smartwatch",
+      "itemId": "smartwatch",
+      "spaceId": "room-f1-0",
+      "hidden": true,
+      "sourceId": "room-f1-0-0276",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-abee3588-3-key-c",
+      "itemId": "key-c",
+      "spaceId": "room-f2-11",
+      "hidden": true,
+      "sourceId": "room-f2-11-0336",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-abee3588-1-key-a",
+      "itemId": "key-a",
+      "spaceId": "room-f3-0",
+      "hidden": false,
+      "sourceId": null,
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-abee3588-2-key-b",
+      "itemId": "key-b",
+      "spaceId": "room-f1-4",
+      "hidden": true,
+      "sourceId": "room-f1-4-0312",
+      "key": "KeyE",
+      "safe": true
+    }
+  ],
+  "compass": {
+    "inventory": [
+      {
+        "uid": "run-abee3588-7-chocolate-bar",
+        "itemId": "chocolate-bar"
+      },
+      {
+        "uid": "run-abee3588-14-compass",
+        "itemId": "compass",
+        "targetKeyUid": "run-abee3588-3-key-c"
+      }
+    ],
+    "compass": {
+      "active": true,
+      "targetKeyUid": "run-abee3588-3-key-c",
+      "targetItemId": "key-c",
+      "targetLabel": "열쇠 C",
+      "targetSpaceId": "room-f2-11",
+      "spaceId": "room-f2-16",
+      "x": 11,
+      "y": 2,
+      "dx": 5,
+      "dy": -1.1480000000000001,
+      "angle": 1.7964847784843898,
+      "distance": 6.412622318521497,
+      "via": "door",
+      "label": "복도로 나가기",
+      "hops": 2
+    }
+  },
+  "watch": {
+    "far": {
+      "unlocked": true,
+      "contextState": "running",
+      "started": true,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 4,
+      "maxVoices": 36,
+      "scheduledVoices": 78,
+      "footsteps": 1,
+      "stairSteps": 0,
+      "doorOpen": 8,
+      "doorClose": 8,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 67,
+      "watchBeats": 2,
+      "searchSounds": 7,
+      "itemSounds": 9,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0.4000000059604645,
+      "effectiveGain": 0.4000000059604645,
+      "rms": 0.01129140595401801,
+      "watchEquipped": true,
+      "watchBpm": 82.15447231250826,
+      "watchDistance": 11.180339887498949,
+      "ambienceActive": true,
+      "lastError": null
+    },
+    "near": {
+      "unlocked": true,
+      "contextState": "running",
+      "started": true,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 10,
+      "maxVoices": 36,
+      "scheduledVoices": 84,
+      "footsteps": 1,
+      "stairSteps": 0,
+      "doorOpen": 8,
+      "doorClose": 8,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 67,
+      "watchBeats": 5,
+      "searchSounds": 7,
+      "itemSounds": 9,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0.4000000059604645,
+      "effectiveGain": 0.4000000059604645,
+      "rms": 0.01129140595401801,
+      "watchEquipped": true,
+      "watchBpm": 148.03861807812706,
+      "watchDistance": 2.7950849718747373,
+      "ambienceActive": true,
+      "lastError": null
+    },
+    "signal": {
+      "unlocked": true,
+      "contextState": "running",
+      "started": true,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 5,
+      "maxVoices": 36,
+      "scheduledVoices": 84,
+      "footsteps": 1,
+      "stairSteps": 0,
+      "doorOpen": 8,
+      "doorClose": 8,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 67,
+      "watchBeats": 5,
+      "searchSounds": 7,
+      "itemSounds": 9,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0.4000000059604645,
+      "effectiveGain": 0.4000000059604645,
+      "rms": 0.016541462221222738,
+      "watchEquipped": true,
+      "watchBpm": 148.03861807812706,
+      "watchDistance": 2.7950849718747373,
+      "ambienceActive": true,
+      "lastError": null
+    }
+  },
+  "browserURL": "http://127.0.0.1:8801/index.html?qa"
+}

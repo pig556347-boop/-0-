@@ -1,0 +1,660 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-23T13:51:03.832Z",
+  "scope": "Authored-data Node kernel/pursuit checks; not native Unity or browser audio/render validation",
+  "passed": 16,
+  "failed": 0,
+  "durationMs": 836,
+  "metrics": {
+    "collisionCheckedMovementFrames": 7644,
+    "authoredSpacesTraversed": 44
+  },
+  "sources": {
+    "Assets/Resources/SchoolMap.json": "111cd717db11ac249623cc352f3ef203b2f3f507ce3bdad7bd1516d474c129c5",
+    "Web/kernel.mjs": "94420344d97125781664c55b11c63d78f43da83f16d1bb96ca4d1d4394707252",
+    "Web/pursuit.mjs": "ad3155e3b477b92be84f3ef1d6744aa9568268c7e99849727e29e535260bac73"
+  },
+  "checks": [
+    {
+      "name": "Initial placement is reachable and safely separated from the player",
+      "passed": true,
+      "details": {
+        "spaceId": "floor-1",
+        "x": 24,
+        "y": 20,
+        "straightMetres": 18.75,
+        "routeMetres": 18.75
+      }
+    },
+    {
+      "name": "Walking and sprinting preserve cardinal and diagonal speeds",
+      "passed": true,
+      "details": {
+        "walkCardinal": 2.59999999999998,
+        "walkDiagonal": 2.5999999999999672,
+        "runCardinal": 4.70000000000006,
+        "runDiagonal": 4.699999999999948
+      }
+    },
+    {
+      "name": "Five seconds of actual sprint movement exhausts stamina and forces walking",
+      "passed": true,
+      "details": {
+        "elapsed": 5.04999999999999,
+        "stamina": 0,
+        "exhausted": true,
+        "speed": 2.59999999999998
+      }
+    },
+    {
+      "name": "Recovery delay and exhaustion threshold prevent immediate sprint reuse",
+      "passed": true,
+      "details": {
+        "recoveryDelaySeconds": 1.5,
+        "reusableAtSeconds": 2.8999999999999897,
+        "recoveredStamina": 25.19999999999999
+      }
+    },
+    {
+      "name": "Holding sprint against a solid boundary drains no stamina",
+      "passed": true,
+      "details": {
+        "staminaBefore": 50,
+        "staminaAfter": 68,
+        "movedMetres": 0
+      }
+    },
+    {
+      "name": "Stationary sprint input does not drain stamina",
+      "passed": true,
+      "details": {
+        "staminaAfter": 68
+      }
+    },
+    {
+      "name": "Door-opening movement lock stops both displacement and sprint drain",
+      "passed": true,
+      "details": {
+        "lockedSeconds": 0.19999999999999998,
+        "stamina": 63.60000000000002
+      }
+    },
+    {
+      "name": "Exact swept clearance rejects library corner contacts missed by coarse samples",
+      "passed": true,
+      "details": {
+        "spaceId": "room-f2-1",
+        "radius": 0.31,
+        "segments": [
+          {
+            "from": {
+              "x": 1.6009790070812508,
+              "y": 6.041273434006522
+            },
+            "to": {
+              "x": 1,
+              "y": 11
+            },
+            "contact": {
+              "x": 1.1415823381512684,
+              "y": 9.83179263635868
+            },
+            "coarseSampleWouldAccept": true,
+            "exactSweepAccepts": false
+          },
+          {
+            "from": {
+              "x": 1.4421621136159097,
+              "y": 7.351684512389946
+            },
+            "to": {
+              "x": 1,
+              "y": 11
+            },
+            "contact": {
+              "x": 1.1415804242771013,
+              "y": 9.831808427889772
+            },
+            "coarseSampleWouldAccept": true,
+            "exactSweepAccepts": false
+          },
+          {
+            "from": {
+              "x": 1.2833452201505686,
+              "y": 8.66209559077338
+            },
+            "to": {
+              "x": 1,
+              "y": 11
+            },
+            "contact": {
+              "x": 1.1415763650956137,
+              "y": 9.831841920525694
+            },
+            "coarseSampleWouldAccept": true,
+            "exactSweepAccepts": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "Pursuer reaches the farthest connected navigation point in every authored space without collision",
+      "passed": true,
+      "details": {
+        "radius": 0.31,
+        "spaces": [
+          {
+            "spaceId": "floor-1",
+            "reachableNodes": 712,
+            "graphMetres": 66.25,
+            "frames": 329,
+            "target": {
+              "x": 7,
+              "y": 39
+            }
+          },
+          {
+            "spaceId": "floor-2",
+            "reachableNodes": 997,
+            "graphMetres": 66.25,
+            "frames": 360,
+            "target": {
+              "x": 3,
+              "y": 14
+            }
+          },
+          {
+            "spaceId": "floor-3",
+            "reachableNodes": 780,
+            "graphMetres": 50,
+            "frames": 268,
+            "target": {
+              "x": 7,
+              "y": 31
+            }
+          },
+          {
+            "spaceId": "room-f1-0",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 140,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f1-1",
+            "reachableNodes": 218,
+            "graphMetres": 26.25,
+            "frames": 144,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f1-2",
+            "reachableNodes": 212,
+            "graphMetres": 26.25,
+            "frames": 144,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f1-3",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 140,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f1-4",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 140,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f1-5",
+            "reachableNodes": 137,
+            "graphMetres": 21.25,
+            "frames": 109,
+            "target": {
+              "x": 12,
+              "y": 13
+            }
+          },
+          {
+            "spaceId": "room-f1-7",
+            "reachableNodes": 412,
+            "graphMetres": 38.75,
+            "frames": 213,
+            "target": {
+              "x": 1,
+              "y": 22
+            }
+          },
+          {
+            "spaceId": "room-f1-9",
+            "reachableNodes": 307,
+            "graphMetres": 31.25,
+            "frames": 176,
+            "target": {
+              "x": 1,
+              "y": 18
+            }
+          },
+          {
+            "spaceId": "room-f1-10",
+            "reachableNodes": 294,
+            "graphMetres": 31.25,
+            "frames": 176,
+            "target": {
+              "x": 1,
+              "y": 18
+            }
+          },
+          {
+            "spaceId": "room-f1-13",
+            "reachableNodes": 375,
+            "graphMetres": 35,
+            "frames": 198,
+            "target": {
+              "x": 1,
+              "y": 20
+            }
+          },
+          {
+            "spaceId": "room-f2-0",
+            "reachableNodes": 556,
+            "graphMetres": 60,
+            "frames": 314,
+            "target": {
+              "x": 19,
+              "y": 30
+            }
+          },
+          {
+            "spaceId": "room-f2-1",
+            "reachableNodes": 802,
+            "graphMetres": 53.75,
+            "frames": 309,
+            "target": {
+              "x": 1,
+              "y": 30
+            }
+          },
+          {
+            "spaceId": "room-f2-2",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-3",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-4",
+            "reachableNodes": 458,
+            "graphMetres": 38.75,
+            "frames": 234,
+            "target": {
+              "x": 1,
+              "y": 22
+            }
+          },
+          {
+            "spaceId": "room-f2-5",
+            "reachableNodes": 158,
+            "graphMetres": 21.25,
+            "frames": 105,
+            "target": {
+              "x": 1,
+              "y": 12
+            }
+          },
+          {
+            "spaceId": "room-f2-6",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-7",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-8",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-9",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-10",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-11",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-12",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-13",
+            "reachableNodes": 307,
+            "graphMetres": 31.25,
+            "frames": 172,
+            "target": {
+              "x": 1,
+              "y": 18
+            }
+          },
+          {
+            "spaceId": "room-f2-14",
+            "reachableNodes": 294,
+            "graphMetres": 31.25,
+            "frames": 172,
+            "target": {
+              "x": 1,
+              "y": 18
+            }
+          },
+          {
+            "spaceId": "room-f2-15",
+            "reachableNodes": 522,
+            "graphMetres": 42.5,
+            "frames": 227,
+            "target": {
+              "x": 1,
+              "y": 24
+            }
+          },
+          {
+            "spaceId": "room-f2-19",
+            "reachableNodes": 218,
+            "graphMetres": 26.25,
+            "frames": 146,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-20",
+            "reachableNodes": 212,
+            "graphMetres": 26.25,
+            "frames": 146,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f2-21",
+            "reachableNodes": 525,
+            "graphMetres": 42.5,
+            "frames": 219,
+            "target": {
+              "x": 1,
+              "y": 24
+            }
+          },
+          {
+            "spaceId": "room-f3-0",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f3-1",
+            "reachableNodes": 307,
+            "graphMetres": 31.25,
+            "frames": 172,
+            "target": {
+              "x": 1,
+              "y": 18
+            }
+          },
+          {
+            "spaceId": "room-f3-2",
+            "reachableNodes": 294,
+            "graphMetres": 31.25,
+            "frames": 172,
+            "target": {
+              "x": 1,
+              "y": 18
+            }
+          },
+          {
+            "spaceId": "room-f3-3",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f3-5",
+            "reachableNodes": 525,
+            "graphMetres": 42.5,
+            "frames": 219,
+            "target": {
+              "x": 1,
+              "y": 24
+            }
+          },
+          {
+            "spaceId": "room-f3-9",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f3-11",
+            "reachableNodes": 212,
+            "graphMetres": 26.25,
+            "frames": 146,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f3-12",
+            "reachableNodes": 218,
+            "graphMetres": 26.25,
+            "frames": 146,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f3-13",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f3-14",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f3-15",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          },
+          {
+            "spaceId": "room-f3-16",
+            "reachableNodes": 186,
+            "graphMetres": 26.25,
+            "frames": 138,
+            "target": {
+              "x": 1,
+              "y": 16
+            }
+          }
+        ],
+        "frames": 7644,
+        "positionAndNextLegClearance": true
+      }
+    },
+    {
+      "name": "Every exterior room approach and canonical return landing fits the pursuer",
+      "passed": true,
+      "details": {
+        "roomCount": 41,
+        "clearanceChecks": 123,
+        "radius": 0.31
+      }
+    },
+    {
+      "name": "A quiet player across a solid wall cannot be visually detected",
+      "passed": true,
+      "details": {
+        "distanceMetres": 6.25,
+        "state": "patrol"
+      }
+    },
+    {
+      "name": "Last-seen pursuit and search expire within their configured timeouts",
+      "passed": true,
+      "details": {
+        "sensoryIsolation": "QA relocation without transition event",
+        "lastSeenSeconds": 10,
+        "searchSeconds": 2,
+        "endedAfterSeconds": 12.000000000000036
+      }
+    },
+    {
+      "name": "A genuine E door transition is followed physically, after delay, without player overlap",
+      "passed": true,
+      "details": {
+        "playerTransferAt": 0.22499999999999998,
+        "enemyReachedDoorAt": 0.6000000000000002,
+        "enemyArrivalAt": 1.8749999999999973,
+        "doorDelay": 1.25,
+        "separationMetres": 1.4142135623730956
+      }
+    },
+    {
+      "name": "Automatic stair following respects its delay and standing arrivals do not loop",
+      "passed": true,
+      "details": {
+        "stairDelay": 1.45,
+        "separationAtArrival": 1.4142135623730923,
+        "playerTransitions": 1,
+        "enemyTransfers": 1,
+        "standingObservationSeconds": 2
+      }
+    },
+    {
+      "name": "Catch freezes input and E, while reset restores a safe complete run",
+      "passed": true,
+      "details": {
+        "inputFrozen": true,
+        "resetStamina": 100,
+        "resetSpaceId": "floor-1",
+        "eventIdsRemainMonotonic": true
+      }
+    },
+    {
+      "name": "Events remain bounded and disabling pursuit releases a caught QA state",
+      "passed": true,
+      "details": {
+        "retainedEvents": 128,
+        "lastSerial": 200,
+        "disabledCaughtReleased": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+실제 Unity Editor 6000.0.62f1 실행: exit 198. 아이템·배회·인벤토리 C# 컴파일은 7 items 빌드 성공. 최종 로그에 C# 오류와 TagManager 파싱 오류 없음. Play 진입은 유효한 라이선스가 없어 중단되어 Unity Play/네이티브 물리/음향/Unity WebGL은 미검증. 헤드리스 출력 장치 오류 후 FMOD nosound 사용.
+원본: TestResults/unity-items-release.log
+
+Unity Editor version:    6000.0.62f1 (f99f05b3e950)
+FMOD failed to initialize the output device.: "Error initializing output device. " (60)
+FMOD failed to initialize the output device.: "Error initializing output device. " (60)
+FMOD initialized on nosound output
+*** Tundra build success (0.67 seconds), 7 items updated, 138 evaluated
+No valid Unity Editor license found. Please activate your license.
+[winston] Attempt to write logs with no transports, which can increase memory usage: {"message":"Exiting with exit code 100. Goodbye!","level":"info"}

@@ -1,0 +1,326 @@
+{
+  "kind": "SchoolEscape item transactions, seeded reachable loot and local pursuit kernel; NOT Unity Play",
+  "utc": "2026-10-24T00:01:09.635Z",
+  "passed": 25,
+  "failed": [],
+  "checks": [
+    {
+      "name": "128 seeded runs keep exactly A/B/C, one per floor, and all thirteen items",
+      "passed": true,
+      "details": {
+        "seeds": 128,
+        "placements": 1664,
+        "ground": 665,
+        "hidden": 999,
+        "uniqueLayouts": 128,
+        "uniqueKeyLayouts": 128
+      }
+    },
+    {
+      "name": "A specified seed reproduces positions; new seeds change positions",
+      "passed": true,
+      "details": {
+        "deterministicSeed": true,
+        "differentSeedChangesLayout": true
+      }
+    },
+    {
+      "name": "Sampled seeded keys can be reached by production movement and E-style interaction",
+      "passed": true,
+      "details": {
+        "runs": 12,
+        "realMovementRoutes": 36
+      }
+    },
+    {
+      "name": "Desks, cabinets, lockers, teacher desks and library shelves are searchable",
+      "passed": true,
+      "details": {
+        "searchableCount": 989,
+        "kinds": [
+          "teacher-desk",
+          "student-desk",
+          "locker-bank",
+          "teaching-supply-cabinet",
+          "cleaning-closet",
+          "shelf-body",
+          "staff-vanity-cabinet",
+          "staff-restroom-coat-cabinet",
+          "broadcast-announcer-desk",
+          "broadcast-storage-cabinet",
+          "broadcast-club-desk",
+          "broadcast-file-cabinet",
+          "broadcast-media-cabinet",
+          "admin-desk",
+          "archive-cabinet",
+          "admin-stationery-cabinet",
+          "admin-document-worktable",
+          "student-cleaning-cabinet",
+          "medicine-cabinet",
+          "medical-sink-cabinet",
+          "nurse-desk",
+          "music-teacher-desk",
+          "music-desk",
+          "music-cabinet",
+          "old-vocal-desk",
+          "instrument-crate",
+          "loan-counter",
+          "reading-table",
+          "individual-reading-desk",
+          "library-document-cabinet",
+          "library-study-table",
+          "art-worktable",
+          "art-teacher-workbench",
+          "sink-cabinet",
+          "art-sculpture-worktable",
+          "art-material-cabinet",
+          "art-supply-crate",
+          "art-tool-cabinet",
+          "computer-workstation",
+          "computer-teacher-desk",
+          "computer-equipment-cabinet",
+          "computer-supply-cabinet",
+          "staff-desk",
+          "head-teacher-desk",
+          "staff-meeting-table",
+          "staff-record-cabinet",
+          "staff-low-file-cabinet"
+        ]
+      }
+    },
+    {
+      "name": "Nine-slot bag rejects pickup without destroying the world item",
+      "passed": true,
+      "details": {
+        "capacity": 9,
+        "length": 9,
+        "retainedWorldUid": "run-4-13-smartwatch"
+      }
+    },
+    {
+      "name": "Full-bag furniture discovery remains recoverable and repeated searches do not duplicate it",
+      "passed": true,
+      "details": {
+        "first": "인벤토리가 가득 찼습니다. 사용하거나 내려놓아 자리를 만드세요.",
+        "second": "열쇠 A 획득",
+        "uniqueTargetCopies": 1
+      }
+    },
+    {
+      "name": "Equipping moves the watch into one separate slot; full-bag unequip is atomic",
+      "passed": true,
+      "details": {
+        "watchUid": "run-3-13-smartwatch",
+        "separateWearCapacity": 1
+      }
+    },
+    {
+      "name": "Dropping and picking up preserves the same item UID without duplication",
+      "passed": true,
+      "details": {
+        "uid": "run-5-1-key-a"
+      }
+    },
+    {
+      "name": "Hidden searches are single use as loot sources and publish a localized sound event",
+      "passed": true,
+      "details": {
+        "sourceId": "room-f3-15-0324",
+        "event": {
+          "spaceId": "room-f3-15",
+          "x": 15.612,
+          "y": 7,
+          "sourceId": "room-f3-15-0324",
+          "label": "책상",
+          "radius": 5,
+          "id": 800,
+          "type": "search",
+          "time": 0.35
+        }
+      }
+    },
+    {
+      "name": "All three clock parts auto-craft one compass and consume all three parts",
+      "passed": true,
+      "details": {
+        "active": true,
+        "targetKeyUid": "run-f-3-key-c",
+        "targetItemId": "key-c",
+        "targetLabel": "열쇠 C",
+        "targetSpaceId": "floor-1",
+        "spaceId": "floor-1",
+        "x": 19,
+        "y": 29,
+        "dx": -5,
+        "dy": 24,
+        "angle": -0.2053953891897674,
+        "distance": 30.644126680328156,
+        "via": "key",
+        "label": "열쇠 C",
+        "hops": 0
+      }
+    },
+    {
+      "name": "The final clock part can craft when the bag is full without a lost item",
+      "passed": true,
+      "details": {
+        "before": 9,
+        "after": 8
+      }
+    },
+    {
+      "name": "Compass points to a real remaining key and expires only on its target",
+      "passed": true,
+      "details": {
+        "targetUid": "run-19-1-key-a",
+        "targetItemId": "key-a"
+      }
+    },
+    {
+      "name": "A dropped compass keeps its target, and target collection also consumes the dropped compass",
+      "passed": true,
+      "details": {
+        "uid": "run-1a-14-compass",
+        "target": "run-1a-1-key-a"
+      }
+    },
+    {
+      "name": "Vitamin water changes actual movement by thirty percent for two seconds only",
+      "passed": true,
+      "details": {
+        "boostedWalk": 3.3799999999999386,
+        "boostedDiagonalRun": 6.110000000000083,
+        "normalAfterExpiry": 2.59999999999998
+      }
+    },
+    {
+      "name": "Repeated vitamin water refreshes the duration and does not multiply the speed",
+      "passed": true,
+      "details": {
+        "speed": 3.3799999999999386
+      }
+    },
+    {
+      "name": "Chocolate immediately fully restores stamina and releases exhaustion",
+      "passed": true,
+      "details": {
+        "runningAfterUse": true
+      }
+    },
+    {
+      "name": "Keys cannot be used away from the gate or escape with a missing key",
+      "passed": true,
+      "details": {
+        "missing": [
+          "B",
+          "C"
+        ],
+        "wrongFloorRefused": true
+      }
+    },
+    {
+      "name": "All A/B/C keys open the gate atomically and the won game stays frozen",
+      "passed": true,
+      "details": {
+        "won": true,
+        "keysConsumed": 3
+      }
+    },
+    {
+      "name": "Restart replaces run items, clears worn inventory and restores a playable game",
+      "passed": true,
+      "details": {
+        "oldSeed": 40,
+        "newSeed": 41
+      }
+    },
+    {
+      "name": "Random designated monster spawns cover multiple safe authored places and are seeded",
+      "passed": true,
+      "details": {
+        "runs": 96,
+        "spawnCount": 17,
+        "floors": [
+          2,
+          3,
+          1
+        ]
+      }
+    },
+    {
+      "name": "Development OFF persists through reset and prevents movement or capture",
+      "passed": true,
+      "details": {
+        "persists": true
+      }
+    },
+    {
+      "name": "Rear and wall-occluded players do not trigger sight; a front encounter does",
+      "passed": true,
+      "details": {
+        "wall": {
+          "a": {
+            "id": 236,
+            "x": 3,
+            "y": 16,
+            "edges": [
+              196,
+              237,
+              276
+            ]
+          },
+          "x": 3,
+          "y": 19
+        }
+      }
+    },
+    {
+      "name": "Noise investigation remembers the sound snapshot rather than hidden live player coordinates",
+      "passed": true,
+      "details": {
+        "remembered": {
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 10
+        }
+      }
+    },
+    {
+      "name": "After loss of local evidence the monster searches and gives up within the configured memory",
+      "passed": true,
+      "details": {
+        "lastEvidence": {
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 9
+        },
+        "gaveUpAfter": 5.325000000000008,
+        "reason": "search-finished"
+      }
+    },
+    {
+      "name": "Independent patrol goals are unchanged when only the distant unseen player moves",
+      "passed": true,
+      "details": {
+        "enemySpace": "floor-2",
+        "playerSpace": "floor-1",
+        "goal": {
+          "x": 66,
+          "y": 24
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "seededPlacements": 1664,
+    "seeds": 128,
+    "productionKeyRoutes": 36
+  },
+  "durationMs": 2181.331626,
+  "sources": {
+    "Assets/Resources/SchoolMap.json": "111cd717db11ac249623cc352f3ef203b2f3f507ce3bdad7bd1516d474c129c5",
+    "Web/kernel.mjs": "a863a01fe6c56f39dc7909e32b99852514d5623c2ba9197321de53f3225ac4a6",
+    "Web/items.mjs": "014ff51aa138669e50791bed09ab97dc151a8c8fa5914f69c13e420bda0dbb93",
+    "Web/pursuit.mjs": "fe6f82354b4250d63ae827cffe3dd8f90075a736d15fba3414e4d52e5db44dec"
+  }
+}

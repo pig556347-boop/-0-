@@ -1,0 +1,8 @@
+{
+  "project": "SchoolEscape",
+  "version": "0.9",
+  "sourceBranch": "feat/school-escape-exploration-beta",
+  "sourceCommit": "5b55794c2e561ad624fba0fd21d9af47817034db",
+  "publicGameCommit": "7f267cbd0903ab6aeb2e0a9c469026c0c2df469b",
+  "note": "Project-only snapshot. No sibling games or root automatic workflows are included."
+}

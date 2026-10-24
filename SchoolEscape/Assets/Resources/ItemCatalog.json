@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "inventoryCapacity": 9,
+  "equipmentCapacity": 1,
+  "vitaminSpeedMultiplier": 1.3,
+  "vitaminSeconds": 2,
+  "chocolateStamina": 100,
+  "defaultSpawnCounts": {
+    "keys": 3,
+    "vitaminWater": 3,
+    "chocolateBar": 3,
+    "clockParts": 3,
+    "smartwatch": 1
+  },
+  "items": [
+    {
+      "id": "key-a",
+      "label": "열쇠 A",
+      "name": "열쇠 A",
+      "type": "key",
+      "description": "교문의 A 잠금장치를 여는 열쇠입니다.",
+      "color": "#d8b56c",
+      "icon": "A",
+      "usable": false,
+      "wearable": false
+    },
+    {
+      "id": "key-b",
+      "label": "열쇠 B",
+      "name": "열쇠 B",
+      "type": "key",
+      "description": "교문의 B 잠금장치를 여는 열쇠입니다.",
+      "color": "#a8c5bf",
+      "icon": "B",
+      "usable": false,
+      "wearable": false
+    },
+    {
+      "id": "key-c",
+      "label": "열쇠 C",
+      "name": "열쇠 C",
+      "type": "key",
+      "description": "교문의 C 잠금장치를 여는 열쇠입니다.",
+      "color": "#c0a8c7",
+      "icon": "C",
+      "usable": false,
+      "wearable": false
+    },
+    {
+      "id": "vitamin-water",
+      "label": "비타민워터",
+      "name": "비타민워터",
+      "type": "consumable",
+      "description": "사용하면 2초 동안 이동속도가 30% 증가합니다. 중복 사용해도 배율은 증가하지 않습니다.",
+      "color": "#d3a264",
+      "icon": "물",
+      "usable": true,
+      "wearable": false
+    },
+    {
+      "id": "chocolate-bar",
+      "label": "초코바",
+      "name": "초코바",
+      "type": "consumable",
+      "description": "스태미나를 즉시 100% 회복하고 지침 상태를 해제합니다.",
+      "color": "#967b63",
+      "icon": "초",
+      "usable": true,
+      "wearable": false
+    },
+    {
+      "id": "clock-second-hand",
+      "label": "시계초침",
+      "name": "시계초침",
+      "type": "component",
+      "description": "시계분침·시계본체와 함께 소지하면 나침반으로 자동 조합됩니다.",
+      "color": "#c7c1a5",
+      "icon": "초침",
+      "usable": false,
+      "wearable": false
+    },
+    {
+      "id": "clock-minute-hand",
+      "label": "시계분침",
+      "name": "시계분침",
+      "type": "component",
+      "description": "시계초침·시계본체와 함께 소지하면 나침반으로 자동 조합됩니다.",
+      "color": "#b5bca8",
+      "icon": "분침",
+      "usable": false,
+      "wearable": false
+    },
+    {
+      "id": "clock-body",
+      "label": "시계본체",
+      "name": "시계본체",
+      "type": "component",
+      "description": "초침과 분침을 모으면 세 부품이 사라지고 나침반이 생깁니다.",
+      "color": "#b6a782",
+      "icon": "시계",
+      "usable": false,
+      "wearable": false
+    },
+    {
+      "id": "compass",
+      "label": "나침반",
+      "name": "나침반",
+      "type": "tool",
+      "description": "미획득 열쇠 하나의 방향을 가리킵니다. 다른 공간이면 연결 문·계단을 가리키며, 그 열쇠를 얻으면 사라집니다.",
+      "color": "#d6c184",
+      "icon": "침",
+      "usable": false,
+      "wearable": false
+    },
+    {
+      "id": "smartwatch",
+      "label": "스마트워치",
+      "name": "스마트워치",
+      "type": "wearable",
+      "description": "착용하면 같은 공간의 추격자가 가까울수록 심장박동 소리가 빨라집니다.",
+      "color": "#91aaa6",
+      "icon": "시계",
+      "usable": false,
+      "wearable": true
+    }
+  ]
+}

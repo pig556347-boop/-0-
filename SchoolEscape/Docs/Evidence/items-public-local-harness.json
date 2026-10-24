@@ -1,0 +1,1805 @@
+{
+  "ok": true,
+  "utc": "2026-10-24T00:08:12.861Z",
+  "sourceCommit": "0000000000000000000000000000000000000000",
+  "workflowCommit": "0000000000000000000000000000000000000000",
+  "sourceBranch": "school-escape-web",
+  "publicURL": "http://127.0.0.1:8797/index.html",
+  "kind": "LOCAL harness of public smoke; NOT external public browser verification",
+  "checks": [
+    {
+      "name": "Only the separate web branch is tested",
+      "passed": true,
+      "actual": "school-escape-web"
+    },
+    {
+      "name": "Pinned commit is valid",
+      "passed": true
+    },
+    {
+      "name": "Manifest identifies items and roaming 0.8",
+      "passed": true,
+      "actual": "items-search-roaming-2026-10-24"
+    },
+    {
+      "name": "Public CDN returns HTTP 200",
+      "passed": true,
+      "actual": 200
+    },
+    {
+      "name": "Public CDN serves executable HTML",
+      "passed": true,
+      "actual": "text/html"
+    },
+    {
+      "name": "Public HTML matches the tested build",
+      "passed": true,
+      "actual": "52c7529b3083d400c820f3d4a7d0eab51b7daa063a797922d5856693728eff01"
+    },
+    {
+      "name": "Public game has a usable Start button",
+      "passed": true
+    },
+    {
+      "name": "Caretaker uses a designated safe random spawn",
+      "passed": true,
+      "actual": {
+        "enabled": true,
+        "state": "patrol",
+        "alerted": false,
+        "spaceId": "floor-2",
+        "x": 31,
+        "y": 10,
+        "speed": 0,
+        "caught": false,
+        "transfers": 0,
+        "lastSensed": -100,
+        "lastSeen": -100,
+        "lastHeard": -100,
+        "lastKnown": null,
+        "lastEvidenceKind": "none",
+        "lastSense": {
+          "visible": false,
+          "heard": false
+        },
+        "graceUntil": 4,
+        "radius": 0.31,
+        "seed": 2337560459,
+        "initial": {
+          "spaceId": "floor-2",
+          "x": 31,
+          "y": 10,
+          "spawnId": "floor-2-landmark-12",
+          "label": "빈교실 A 앞 꺾임",
+          "sameSpace": false,
+          "distanceFromPlayer": null,
+          "pathDistanceFromPlayer": null
+        },
+        "spawnCandidates": [
+          {
+            "id": "floor-1-landmark-3",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 40,
+            "y": 22,
+            "label": "동쪽 우회",
+            "pathDistance": 41.25
+          },
+          {
+            "id": "floor-1-landmark-5",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 4,
+            "y": 21,
+            "label": "복도 끝",
+            "pathDistance": 45
+          },
+          {
+            "id": "floor-1-landmark-6",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 9,
+            "y": 38,
+            "label": "북서 복도",
+            "pathDistance": 60
+          },
+          {
+            "id": "floor-2-landmark-0",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 8,
+            "label": "남쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-1",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 34,
+            "y": 23,
+            "label": "서쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-2",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 17,
+            "label": "내부 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-3",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 29,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-7",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 60,
+            "y": 40,
+            "label": "학년 분기 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-8",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 18,
+            "y": 13,
+            "label": "서관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-10",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 82,
+            "y": 13,
+            "label": "별관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-12",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 31,
+            "y": 10,
+            "label": "빈교실 A 앞 꺾임",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-0",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 8,
+            "label": "남쪽 계단홀",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-1",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 15,
+            "y": 14,
+            "label": "서쪽 분기",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-2",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 20,
+            "label": "중앙 교차로",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-4",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 12,
+            "y": 26,
+            "label": "북서 막다른 길",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-5",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 34,
+            "y": 25,
+            "label": "동쪽 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-6",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 30,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          }
+        ],
+        "rules": {
+          "sightRange": 11,
+          "fovDegrees": 120,
+          "peripheralRange": 1.8,
+          "investigateSpeed": 1.9,
+          "unseenBeforeSearch": 8,
+          "searchSeconds": 4,
+          "memorySeconds": 12,
+          "unreachableSeconds": 3,
+          "exitEvidenceSeconds": 2.5
+        },
+        "lostReason": "",
+        "stuckSeconds": 0,
+        "patrolGoal": null,
+        "patrolWait": 0,
+        "localPatrols": 0,
+        "path": [],
+        "portalTrail": [],
+        "transit": null,
+        "failedTransfers": 0
+      }
+    },
+    {
+      "name": "Inventory has nine carry and one worn slots",
+      "passed": true
+    },
+    {
+      "name": "Run has thirteen real pickups and exactly A B C",
+      "passed": true,
+      "actual": [
+        {
+          "id": "key-a",
+          "hidden": false,
+          "spaceId": "room-f1-7"
+        },
+        {
+          "id": "key-b",
+          "hidden": true,
+          "spaceId": "room-f3-13"
+        },
+        {
+          "id": "key-c",
+          "hidden": false,
+          "spaceId": "room-f2-21"
+        }
+      ]
+    },
+    {
+      "name": "Keys mix furniture and ground locations",
+      "passed": true,
+      "actual": [
+        {
+          "id": "key-a",
+          "hidden": false,
+          "spaceId": "room-f1-7"
+        },
+        {
+          "id": "key-b",
+          "hidden": true,
+          "spaceId": "room-f3-13"
+        },
+        {
+          "id": "key-c",
+          "hidden": false,
+          "spaceId": "room-f2-21"
+        }
+      ]
+    },
+    {
+      "name": "Existing 41 rooms and facility fixtures remain",
+      "passed": true,
+      "actual": {
+        "seed": 2337560459,
+        "enemy": {
+          "enabled": true,
+          "state": "patrol",
+          "alerted": false,
+          "spaceId": "floor-2",
+          "x": 31,
+          "y": 10,
+          "speed": 0,
+          "caught": false,
+          "transfers": 0,
+          "lastSensed": -100,
+          "lastSeen": -100,
+          "lastHeard": -100,
+          "lastKnown": null,
+          "lastEvidenceKind": "none",
+          "lastSense": {
+            "visible": false,
+            "heard": false
+          },
+          "graceUntil": 4,
+          "radius": 0.31,
+          "seed": 2337560459,
+          "initial": {
+            "spaceId": "floor-2",
+            "x": 31,
+            "y": 10,
+            "spawnId": "floor-2-landmark-12",
+            "label": "빈교실 A 앞 꺾임",
+            "sameSpace": false,
+            "distanceFromPlayer": null,
+            "pathDistanceFromPlayer": null
+          },
+          "spawnCandidates": [
+            {
+              "id": "floor-1-landmark-3",
+              "spaceId": "floor-1",
+              "floor": 1,
+              "x": 40,
+              "y": 22,
+              "label": "동쪽 우회",
+              "pathDistance": 41.25
+            },
+            {
+              "id": "floor-1-landmark-5",
+              "spaceId": "floor-1",
+              "floor": 1,
+              "x": 4,
+              "y": 21,
+              "label": "복도 끝",
+              "pathDistance": 45
+            },
+            {
+              "id": "floor-1-landmark-6",
+              "spaceId": "floor-1",
+              "floor": 1,
+              "x": 9,
+              "y": 38,
+              "label": "북서 복도",
+              "pathDistance": 60
+            },
+            {
+              "id": "floor-2-landmark-0",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 50,
+              "y": 8,
+              "label": "남쪽 복도",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-1",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 34,
+              "y": 23,
+              "label": "서쪽 복도",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-2",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 50,
+              "y": 17,
+              "label": "내부 우회",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-3",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 50,
+              "y": 29,
+              "label": "북쪽 복도",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-7",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 60,
+              "y": 40,
+              "label": "학년 분기 복도",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-8",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 18,
+              "y": 13,
+              "label": "서관 연결 통로 중간",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-10",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 82,
+              "y": 13,
+              "label": "별관 연결 통로 중간",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-2-landmark-12",
+              "spaceId": "floor-2",
+              "floor": 2,
+              "x": 31,
+              "y": 10,
+              "label": "빈교실 A 앞 꺾임",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-0",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 24,
+              "y": 8,
+              "label": "남쪽 계단홀",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-1",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 15,
+              "y": 14,
+              "label": "서쪽 분기",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-2",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 24,
+              "y": 20,
+              "label": "중앙 교차로",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-4",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 12,
+              "y": 26,
+              "label": "북서 막다른 길",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-5",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 34,
+              "y": 25,
+              "label": "동쪽 우회",
+              "pathDistance": null
+            },
+            {
+              "id": "floor-3-landmark-6",
+              "spaceId": "floor-3",
+              "floor": 3,
+              "x": 24,
+              "y": 30,
+              "label": "북쪽 복도",
+              "pathDistance": null
+            }
+          ],
+          "rules": {
+            "sightRange": 11,
+            "fovDegrees": 120,
+            "peripheralRange": 1.8,
+            "investigateSpeed": 1.9,
+            "unseenBeforeSearch": 8,
+            "searchSeconds": 4,
+            "memorySeconds": 12,
+            "unreachableSeconds": 3,
+            "exitEvidenceSeconds": 2.5
+          },
+          "lostReason": "",
+          "stuckSeconds": 0,
+          "patrolGoal": null,
+          "patrolWait": 0,
+          "localPatrols": 0,
+          "path": [],
+          "portalTrail": [],
+          "transit": null,
+          "failedTransfers": 0
+        },
+        "visual": {
+          "name": "당직자",
+          "kind": "original-procedural-caretaker",
+          "targetHeight": 2.4,
+          "shoulderWidth": 0.87,
+          "meshCount": 104,
+          "animatedLimbs": 4,
+          "hasSeparateFingers": true,
+          "hasStaffBadge": true,
+          "geometrySource": "SchoolEscape original",
+          "localBounds": [
+            1.1669627157762346,
+            2.405290033705794,
+            0.7962836763858299
+          ]
+        },
+        "audio": {
+          "unlocked": false,
+          "contextState": "uninitialized",
+          "started": false,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 0,
+          "maxVoices": 36,
+          "scheduledVoices": 0,
+          "footsteps": 0,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 0,
+          "watchBeats": 0,
+          "searchSounds": 0,
+          "itemSounds": 0,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0,
+          "effectiveGain": 0,
+          "rms": 0,
+          "watchEquipped": false,
+          "watchBpm": 0,
+          "watchDistance": null,
+          "ambienceActive": false,
+          "lastError": null
+        },
+        "capacity": 9,
+        "maxEquipped": 1,
+        "itemCount": 13,
+        "keys": [
+          {
+            "id": "key-a",
+            "hidden": false,
+            "spaceId": "room-f1-7"
+          },
+          {
+            "id": "key-b",
+            "hidden": true,
+            "spaceId": "room-f3-13"
+          },
+          {
+            "id": "key-c",
+            "hidden": false,
+            "spaceId": "room-f2-21"
+          }
+        ],
+        "rooms": 41,
+        "revision": "facilities-and-corridor-2026-10-23",
+        "libraries": [
+          2
+        ],
+        "adminDesks": 18,
+        "mirrors": 12
+      }
+    },
+    {
+      "name": "No sound starts before Start",
+      "passed": true,
+      "actual": {
+        "unlocked": false,
+        "contextState": "uninitialized",
+        "started": false,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 0,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 0,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0,
+        "effectiveGain": 0,
+        "rms": 0,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": false,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Real Start unlocks audible ambience",
+      "passed": true,
+      "actual": {
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 0,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 0,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0.32119500637054443,
+        "effectiveGain": 0.32119500637054443,
+        "rms": 0.0031370817599640707,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": true,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Real mute button silences output",
+      "passed": true
+    },
+    {
+      "name": "Real developer toggle disables pursuit",
+      "passed": true
+    },
+    {
+      "name": "New run rerolls loot and keeps developer OFF",
+      "passed": true,
+      "actual": {
+        "seed": 3158592274,
+        "enabled": false,
+        "items": 13,
+        "carry": 0
+      }
+    },
+    {
+      "name": "Real I opens nine slots and pauses time",
+      "passed": true
+    },
+    {
+      "name": "Escape closes inventory",
+      "passed": true
+    },
+    {
+      "name": "Real Shift W sprints and spends stamina",
+      "passed": true,
+      "actual": {
+        "speed": 4.699999999999971,
+        "stamina": 92,
+        "safe": true
+      }
+    },
+    {
+      "name": "Real gate E cannot win without three keys",
+      "passed": true
+    },
+    {
+      "name": "Reach real vitamin-water interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-4-vitamin-water",
+        "itemId": "vitamin-water",
+        "spaceId": "room-f1-4",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains vitamin-water without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-4"
+        ],
+        "capacity": 1,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real drink UI boosts movement thirty percent for two seconds",
+      "passed": true,
+      "actual": {
+        "boosted": 3.3799999999999386,
+        "after": 2.59999999999998,
+        "remaining": -0.1499999999999937,
+        "safe": true
+      }
+    },
+    {
+      "name": "Reach real chocolate-bar interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-5-chocolate-bar",
+        "itemId": "chocolate-bar",
+        "spaceId": "room-f1-9",
+        "hidden": true,
+        "sourceId": "room-f1-9-0099",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains chocolate-bar without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-9"
+        ],
+        "capacity": 1,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real chocolate UI fills stamina and clears exhaustion",
+      "passed": true
+    },
+    {
+      "name": "Reach real chocolate-bar interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-7-chocolate-bar",
+        "itemId": "chocolate-bar",
+        "spaceId": "room-f2-13",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains chocolate-bar without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f2-13"
+        ],
+        "capacity": 1,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real drop UI preserves a safe loose item identity",
+      "passed": true,
+      "actual": {
+        "picked": false,
+        "hidden": false,
+        "sourceId": null,
+        "safe": true,
+        "carried": false
+      }
+    },
+    {
+      "name": "Reach real chocolate-bar interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-7-chocolate-bar",
+        "itemId": "chocolate-bar",
+        "spaceId": "room-f2-13",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains chocolate-bar without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f2-13"
+        ],
+        "capacity": 1,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real pickup recovers the same dropped item",
+      "passed": true,
+      "actual": {
+        "dropped": "run-bc444b12-7-chocolate-bar",
+        "recovered": "run-bc444b12-7-chocolate-bar"
+      }
+    },
+    {
+      "name": "Reach real clock-second-hand interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-12-clock-second-hand",
+        "itemId": "clock-second-hand",
+        "spaceId": "room-f1-4",
+        "hidden": true,
+        "sourceId": "room-f1-4-rear-locker-2",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains clock-second-hand without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-4"
+        ],
+        "capacity": 2,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Reach real clock-minute-hand interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-10-clock-minute-hand",
+        "itemId": "clock-minute-hand",
+        "spaceId": "room-f2-10",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains clock-minute-hand without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f2-10"
+        ],
+        "capacity": 3,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Reach real clock-body interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-11-clock-body",
+        "itemId": "clock-body",
+        "spaceId": "room-f3-0",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains clock-body without duplication",
+      "passed": true,
+      "actual": {
+        "carried": false,
+        "crafted": true,
+        "active": [
+          "room-f3-0"
+        ],
+        "capacity": 2,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Three picked clock parts automatically become one compass",
+      "passed": true,
+      "actual": {
+        "inventory": [
+          {
+            "uid": "run-bc444b12-7-chocolate-bar",
+            "itemId": "chocolate-bar"
+          },
+          {
+            "uid": "run-bc444b12-14-compass",
+            "itemId": "compass",
+            "targetKeyUid": "run-bc444b12-2-key-b"
+          }
+        ],
+        "compass": {
+          "active": true,
+          "targetKeyUid": "run-bc444b12-2-key-b",
+          "targetItemId": "key-b",
+          "targetLabel": "열쇠 B",
+          "targetSpaceId": "room-f3-0",
+          "spaceId": "room-f3-0",
+          "x": 11.612,
+          "y": 5,
+          "dx": -4.388,
+          "dy": 3,
+          "angle": -0.971105672753976,
+          "distance": 6.644375440927462,
+          "via": "key",
+          "label": "열쇠 B",
+          "hops": 0
+        }
+      }
+    },
+    {
+      "name": "Reach real smartwatch interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-13-smartwatch",
+        "itemId": "smartwatch",
+        "spaceId": "floor-1",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains smartwatch without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "floor-1"
+        ],
+        "capacity": 3,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Real equip UI uses the separate watch slot",
+      "passed": true
+    },
+    {
+      "name": "Worn watch heartbeat accelerates near a real enemy",
+      "passed": true,
+      "actual": {
+        "far": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 4,
+          "maxVoices": 36,
+          "scheduledVoices": 28,
+          "footsteps": 1,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 22,
+          "watchBeats": 2,
+          "searchSounds": 2,
+          "itemSounds": 9,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.01003128554475003,
+          "watchEquipped": true,
+          "watchBpm": 82.15447231250826,
+          "watchDistance": 11.180339887498949,
+          "ambienceActive": true,
+          "lastError": null
+        },
+        "near": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 10,
+          "maxVoices": 36,
+          "scheduledVoices": 34,
+          "footsteps": 1,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 22,
+          "watchBeats": 5,
+          "searchSounds": 2,
+          "itemSounds": 9,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.01003128554475003,
+          "watchEquipped": true,
+          "watchBpm": 148.03861807812706,
+          "watchDistance": 2.7950849718747373,
+          "ambienceActive": true,
+          "lastError": null
+        },
+        "signal": {
+          "unlocked": true,
+          "contextState": "running",
+          "started": true,
+          "muted": false,
+          "volume": 0.4,
+          "paused": false,
+          "activeVoices": 5,
+          "maxVoices": 36,
+          "scheduledVoices": 34,
+          "footsteps": 1,
+          "stairSteps": 0,
+          "doorOpen": 0,
+          "doorClose": 0,
+          "enemyDoorOpen": 0,
+          "enemyDoorClose": 0,
+          "enemyStairSteps": 0,
+          "stairTransitions": 0,
+          "chaseBeats": 0,
+          "caughtStingers": 0,
+          "processedEvents": 22,
+          "watchBeats": 5,
+          "searchSounds": 2,
+          "itemSounds": 9,
+          "chaseIntensity": 0,
+          "chaseGain": 0,
+          "masterGain": 0.4000000059604645,
+          "effectiveGain": 0.4000000059604645,
+          "rms": 0.009154097912225365,
+          "watchEquipped": true,
+          "watchBpm": 148.03861807812706,
+          "watchDistance": 2.7950849718747373,
+          "ambienceActive": true,
+          "lastError": null
+        }
+      }
+    },
+    {
+      "name": "Developer OFF removes watch threat heartbeat",
+      "passed": true
+    },
+    {
+      "name": "Reach real key-b interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-2-key-b",
+        "itemId": "key-b",
+        "spaceId": "room-f3-0",
+        "hidden": true,
+        "sourceId": "room-f3-0-0192",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains key-b without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f3-0"
+        ],
+        "capacity": 2,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Picking the compass target consumes the compass",
+      "passed": true
+    },
+    {
+      "name": "Reach real key-a interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-1-key-a",
+        "itemId": "key-a",
+        "spaceId": "room-f2-0",
+        "hidden": false,
+        "sourceId": null,
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains key-a without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f2-0"
+        ],
+        "capacity": 3,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "Reach real key-c interaction",
+      "passed": true,
+      "actual": {
+        "uid": "run-bc444b12-3-key-c",
+        "itemId": "key-c",
+        "spaceId": "room-f1-1",
+        "hidden": true,
+        "sourceId": "room-f1-1-0071",
+        "key": "KeyE",
+        "safe": true
+      }
+    },
+    {
+      "name": "Actual KeyE obtains key-c without duplication",
+      "passed": true,
+      "actual": {
+        "carried": true,
+        "crafted": false,
+        "active": [
+          "room-f1-1"
+        ],
+        "capacity": 4,
+        "copies": 1,
+        "isolated": true
+      }
+    },
+    {
+      "name": "All three distinct real keys are held",
+      "passed": true
+    },
+    {
+      "name": "Keys cannot win away from the gate",
+      "passed": true,
+      "actual": {
+        "ok": false,
+        "message": "1층 현관의 교문 출구 앞에서 사용하세요.",
+        "missing": []
+      }
+    },
+    {
+      "name": "Real gate E consumes A B C and shows Escape Success",
+      "passed": true,
+      "actual": {
+        "won": true,
+        "escaped": true,
+        "seed": 3158592274,
+        "keys": 0,
+        "active": [
+          "floor-1"
+        ]
+      }
+    },
+    {
+      "name": "Real victory restart rerolls loot, clears inventory and keeps OFF",
+      "passed": true,
+      "actual": {
+        "won": false,
+        "seed": 608931079,
+        "carry": 0,
+        "equipped": null,
+        "enabled": false,
+        "keys": 3,
+        "spaceId": "floor-1"
+      }
+    },
+    {
+      "name": "No public runtime or console errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "warnings": [],
+  "externalContentNoticeConfirmed": false,
+  "build": {
+    "version": "0.8",
+    "featureRevision": "items-search-roaming-2026-10-24",
+    "roomCount": 41,
+    "revision": "facilities-and-corridor-2026-10-23",
+    "htmlSha256": "52c7529b3083d400c820f3d4a7d0eab51b7daa063a797922d5856693728eff01",
+    "bytes": 5833749
+  },
+  "http": {
+    "status": 200,
+    "contentType": "text/html",
+    "bytes": 5833749,
+    "sha256": "52c7529b3083d400c820f3d4a7d0eab51b7daa063a797922d5856693728eff01"
+  },
+  "initial": {
+    "seed": 2337560459,
+    "enemy": {
+      "enabled": true,
+      "state": "patrol",
+      "alerted": false,
+      "spaceId": "floor-2",
+      "x": 31,
+      "y": 10,
+      "speed": 0,
+      "caught": false,
+      "transfers": 0,
+      "lastSensed": -100,
+      "lastSeen": -100,
+      "lastHeard": -100,
+      "lastKnown": null,
+      "lastEvidenceKind": "none",
+      "lastSense": {
+        "visible": false,
+        "heard": false
+      },
+      "graceUntil": 4,
+      "radius": 0.31,
+      "seed": 2337560459,
+      "initial": {
+        "spaceId": "floor-2",
+        "x": 31,
+        "y": 10,
+        "spawnId": "floor-2-landmark-12",
+        "label": "빈교실 A 앞 꺾임",
+        "sameSpace": false,
+        "distanceFromPlayer": null,
+        "pathDistanceFromPlayer": null
+      },
+      "spawnCandidates": [
+        {
+          "id": "floor-1-landmark-3",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 40,
+          "y": 22,
+          "label": "동쪽 우회",
+          "pathDistance": 41.25
+        },
+        {
+          "id": "floor-1-landmark-5",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 4,
+          "y": 21,
+          "label": "복도 끝",
+          "pathDistance": 45
+        },
+        {
+          "id": "floor-1-landmark-6",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 9,
+          "y": 38,
+          "label": "북서 복도",
+          "pathDistance": 60
+        },
+        {
+          "id": "floor-2-landmark-0",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 8,
+          "label": "남쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-1",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 34,
+          "y": 23,
+          "label": "서쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-2",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 17,
+          "label": "내부 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-3",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 29,
+          "label": "북쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-7",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 60,
+          "y": 40,
+          "label": "학년 분기 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-8",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 18,
+          "y": 13,
+          "label": "서관 연결 통로 중간",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-10",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 82,
+          "y": 13,
+          "label": "별관 연결 통로 중간",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-12",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 31,
+          "y": 10,
+          "label": "빈교실 A 앞 꺾임",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-0",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 8,
+          "label": "남쪽 계단홀",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-1",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 15,
+          "y": 14,
+          "label": "서쪽 분기",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-2",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 20,
+          "label": "중앙 교차로",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-4",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 12,
+          "y": 26,
+          "label": "북서 막다른 길",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-5",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 34,
+          "y": 25,
+          "label": "동쪽 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-6",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 30,
+          "label": "북쪽 복도",
+          "pathDistance": null
+        }
+      ],
+      "rules": {
+        "sightRange": 11,
+        "fovDegrees": 120,
+        "peripheralRange": 1.8,
+        "investigateSpeed": 1.9,
+        "unseenBeforeSearch": 8,
+        "searchSeconds": 4,
+        "memorySeconds": 12,
+        "unreachableSeconds": 3,
+        "exitEvidenceSeconds": 2.5
+      },
+      "lostReason": "",
+      "stuckSeconds": 0,
+      "patrolGoal": null,
+      "patrolWait": 0,
+      "localPatrols": 0,
+      "path": [],
+      "portalTrail": [],
+      "transit": null,
+      "failedTransfers": 0
+    },
+    "visual": {
+      "name": "당직자",
+      "kind": "original-procedural-caretaker",
+      "targetHeight": 2.4,
+      "shoulderWidth": 0.87,
+      "meshCount": 104,
+      "animatedLimbs": 4,
+      "hasSeparateFingers": true,
+      "hasStaffBadge": true,
+      "geometrySource": "SchoolEscape original",
+      "localBounds": [
+        1.1669627157762346,
+        2.405290033705794,
+        0.7962836763858299
+      ]
+    },
+    "audio": {
+      "unlocked": false,
+      "contextState": "uninitialized",
+      "started": false,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 0,
+      "maxVoices": 36,
+      "scheduledVoices": 0,
+      "footsteps": 0,
+      "stairSteps": 0,
+      "doorOpen": 0,
+      "doorClose": 0,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 0,
+      "watchBeats": 0,
+      "searchSounds": 0,
+      "itemSounds": 0,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0,
+      "effectiveGain": 0,
+      "rms": 0,
+      "watchEquipped": false,
+      "watchBpm": 0,
+      "watchDistance": null,
+      "ambienceActive": false,
+      "lastError": null
+    },
+    "capacity": 9,
+    "maxEquipped": 1,
+    "itemCount": 13,
+    "keys": [
+      {
+        "id": "key-a",
+        "hidden": false,
+        "spaceId": "room-f1-7"
+      },
+      {
+        "id": "key-b",
+        "hidden": true,
+        "spaceId": "room-f3-13"
+      },
+      {
+        "id": "key-c",
+        "hidden": false,
+        "spaceId": "room-f2-21"
+      }
+    ],
+    "rooms": 41,
+    "revision": "facilities-and-corridor-2026-10-23",
+    "libraries": [
+      2
+    ],
+    "adminDesks": 18,
+    "mirrors": 12
+  },
+  "startedAudio": {
+    "unlocked": true,
+    "contextState": "running",
+    "started": true,
+    "muted": false,
+    "volume": 0.4,
+    "paused": false,
+    "activeVoices": 0,
+    "maxVoices": 36,
+    "scheduledVoices": 0,
+    "footsteps": 0,
+    "stairSteps": 0,
+    "doorOpen": 0,
+    "doorClose": 0,
+    "enemyDoorOpen": 0,
+    "enemyDoorClose": 0,
+    "enemyStairSteps": 0,
+    "stairTransitions": 0,
+    "chaseBeats": 0,
+    "caughtStingers": 0,
+    "processedEvents": 0,
+    "watchBeats": 0,
+    "searchSounds": 0,
+    "itemSounds": 0,
+    "chaseIntensity": 0,
+    "chaseGain": 0,
+    "masterGain": 0.32119500637054443,
+    "effectiveGain": 0.32119500637054443,
+    "rms": 0.0031370817599640707,
+    "watchEquipped": false,
+    "watchBpm": 0,
+    "watchDistance": null,
+    "ambienceActive": true,
+    "lastError": null
+  },
+  "pickups": [
+    {
+      "uid": "run-bc444b12-4-vitamin-water",
+      "itemId": "vitamin-water",
+      "spaceId": "room-f1-4",
+      "hidden": false,
+      "sourceId": null,
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-bc444b12-5-chocolate-bar",
+      "itemId": "chocolate-bar",
+      "spaceId": "room-f1-9",
+      "hidden": true,
+      "sourceId": "room-f1-9-0099",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-bc444b12-12-clock-second-hand",
+      "itemId": "clock-second-hand",
+      "spaceId": "room-f1-4",
+      "hidden": true,
+      "sourceId": "room-f1-4-rear-locker-2",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-bc444b12-10-clock-minute-hand",
+      "itemId": "clock-minute-hand",
+      "spaceId": "room-f2-10",
+      "hidden": false,
+      "sourceId": null,
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-bc444b12-11-clock-body",
+      "itemId": "clock-body",
+      "spaceId": "room-f3-0",
+      "hidden": false,
+      "sourceId": null,
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-bc444b12-13-smartwatch",
+      "itemId": "smartwatch",
+      "spaceId": "floor-1",
+      "hidden": false,
+      "sourceId": null,
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-bc444b12-2-key-b",
+      "itemId": "key-b",
+      "spaceId": "room-f3-0",
+      "hidden": true,
+      "sourceId": "room-f3-0-0192",
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-bc444b12-1-key-a",
+      "itemId": "key-a",
+      "spaceId": "room-f2-0",
+      "hidden": false,
+      "sourceId": null,
+      "key": "KeyE",
+      "safe": true
+    },
+    {
+      "uid": "run-bc444b12-3-key-c",
+      "itemId": "key-c",
+      "spaceId": "room-f1-1",
+      "hidden": true,
+      "sourceId": "room-f1-1-0071",
+      "key": "KeyE",
+      "safe": true
+    }
+  ],
+  "compass": {
+    "inventory": [
+      {
+        "uid": "run-bc444b12-7-chocolate-bar",
+        "itemId": "chocolate-bar"
+      },
+      {
+        "uid": "run-bc444b12-14-compass",
+        "itemId": "compass",
+        "targetKeyUid": "run-bc444b12-2-key-b"
+      }
+    ],
+    "compass": {
+      "active": true,
+      "targetKeyUid": "run-bc444b12-2-key-b",
+      "targetItemId": "key-b",
+      "targetLabel": "열쇠 B",
+      "targetSpaceId": "room-f3-0",
+      "spaceId": "room-f3-0",
+      "x": 11.612,
+      "y": 5,
+      "dx": -4.388,
+      "dy": 3,
+      "angle": -0.971105672753976,
+      "distance": 6.644375440927462,
+      "via": "key",
+      "label": "열쇠 B",
+      "hops": 0
+    }
+  },
+  "watch": {
+    "far": {
+      "unlocked": true,
+      "contextState": "running",
+      "started": true,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 4,
+      "maxVoices": 36,
+      "scheduledVoices": 28,
+      "footsteps": 1,
+      "stairSteps": 0,
+      "doorOpen": 0,
+      "doorClose": 0,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 22,
+      "watchBeats": 2,
+      "searchSounds": 2,
+      "itemSounds": 9,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0.4000000059604645,
+      "effectiveGain": 0.4000000059604645,
+      "rms": 0.01003128554475003,
+      "watchEquipped": true,
+      "watchBpm": 82.15447231250826,
+      "watchDistance": 11.180339887498949,
+      "ambienceActive": true,
+      "lastError": null
+    },
+    "near": {
+      "unlocked": true,
+      "contextState": "running",
+      "started": true,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 10,
+      "maxVoices": 36,
+      "scheduledVoices": 34,
+      "footsteps": 1,
+      "stairSteps": 0,
+      "doorOpen": 0,
+      "doorClose": 0,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 22,
+      "watchBeats": 5,
+      "searchSounds": 2,
+      "itemSounds": 9,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0.4000000059604645,
+      "effectiveGain": 0.4000000059604645,
+      "rms": 0.01003128554475003,
+      "watchEquipped": true,
+      "watchBpm": 148.03861807812706,
+      "watchDistance": 2.7950849718747373,
+      "ambienceActive": true,
+      "lastError": null
+    },
+    "signal": {
+      "unlocked": true,
+      "contextState": "running",
+      "started": true,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 5,
+      "maxVoices": 36,
+      "scheduledVoices": 34,
+      "footsteps": 1,
+      "stairSteps": 0,
+      "doorOpen": 0,
+      "doorClose": 0,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 22,
+      "watchBeats": 5,
+      "searchSounds": 2,
+      "itemSounds": 9,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0.4000000059604645,
+      "effectiveGain": 0.4000000059604645,
+      "rms": 0.009154097912225365,
+      "watchEquipped": true,
+      "watchBpm": 148.03861807812706,
+      "watchDistance": 2.7950849718747373,
+      "ambienceActive": true,
+      "lastError": null
+    }
+  },
+  "browserURL": "http://127.0.0.1:8797/index.html?qa"
+}

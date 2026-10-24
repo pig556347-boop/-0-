@@ -1,0 +1,8 @@
+Unity 6000.0.62f1 editor retry:
+[132/138    2s] Csc Library/Bee/artifacts/2400b0aE.dag/Assembly-CSharp.dll (+2 others)
+[135/138    0s] Csc Library/Bee/artifacts/2400b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+*** Tundra build success (4.80 seconds), 137 items updated, 138 evaluated
+[Project] Loading completed in 7.998 seconds
+No valid Unity Editor license found. Please activate your license.
+Process exit code: 198
+TestResults/unity-runtime.json: not created; zero Play checks executed.

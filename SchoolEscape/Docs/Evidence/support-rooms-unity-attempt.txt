@@ -1,0 +1,7 @@
+Unity 6000.0.62f1, project SchoolEscape only; -executeMethod SchoolEscape.EditorTools.Validate -escapeValidate
+Exit code: 198
+*** Tundra build success (0.08 seconds), 0 items updated, 138 evaluated
+Start importing Assets/Resources/SchoolFont.otf using Guid(5f4abaf58165a74d497343b796e8a490) (TrueTypeFontImporter) -> (artifact id: '8b1197438a50c7212d799f98ac842ac5') in 0.027117081 seconds
+Start importing Assets/Resources/SchoolMap.json using Guid(9bf04cb0f42580d0dae4857d9ebac3a8) (TextScriptImporter) -> (artifact id: 'ea7156b2de8eedc6166891916cc95066') in 0.032432261 seconds
+No valid Unity Editor license found. Please activate your license.
+Unity Play, physics/visual review, Unity WebGL build: not executed.

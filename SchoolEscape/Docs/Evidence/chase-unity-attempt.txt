@@ -1,0 +1,10 @@
+실제 Unity Editor 실행: exit 198. 새 스크립트의 첫 실행은 Tundra 7 items 빌드 성공. 최초 TagManager 빈 레이어 파싱 오류를 명시적 빈 문자열로 수정한 뒤 재실행했고 최종 로그에는 파싱 오류와 C# 오류가 없음.
+최종 Play는 유효한 Unity Editor 라이선스가 없어 실행되지 않음. Unity Play/물리/네이티브 음향/Unity WebGL 미검증. 헤드리스 오디오 출력 장치 오류 뒤 nosound 출력으로 초기화됨.
+원본 로그: TestResults/unity-chase-pre-tag-fix.log, TestResults/unity-chase-release.log
+
+Unity Editor version:    6000.0.62f1 (f99f05b3e950)
+FMOD failed to initialize the output device.: "Error initializing output device. " (60)
+FMOD failed to initialize the output device.: "Error initializing output device. " (60)
+FMOD initialized on nosound output
+*** Tundra build success (0.05 seconds), 0 items updated, 138 evaluated
+No valid Unity Editor license found. Please activate your license.

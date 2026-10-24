@@ -1,0 +1,10 @@
+{
+  "kind": "C# API compatibility compile, not Unity import/play/build",
+  "sources": 5,
+  "compiler": "Roslyn from .NET SDK 8.0.426",
+  "references": "Actual Unity 6000.0.62f1 modular API assemblies plus .NET 8 references",
+  "exitCode": 0,
+  "warnings": 0,
+  "errors": 0,
+  "utc": "2026-10-23T01:17:38.188115+00:00"
+}

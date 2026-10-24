@@ -1,0 +1,27 @@
+{
+  "commit": "7f267cbd0903ab6aeb2e0a9c469026c0c2df469b",
+  "results": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 6481052,
+      "sha256": "3971f6feb8b178a41eea8efdc3a684a073352140696afbff6b526fca780bd0a6"
+    },
+    {
+      "path": "concepts/playground-plan-09.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 109659,
+      "sha256": "1a6270153347e01bf2b3203375502396227234e0ca16f6560014436da4f8186e"
+    },
+    {
+      "path": "concepts/in-game-control-09.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 714627,
+      "sha256": "562263d4e7bf4dce83b7662d859c61236f0c3397c16a2b463cca5e9a45d119b6"
+    }
+  ],
+  "note": "Raw origin byte/image validation only; actual executable public Chromium report is public-web-rooms.json."
+}

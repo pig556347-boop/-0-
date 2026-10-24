@@ -1,0 +1,3 @@
+*** Tundra build success (1.06 seconds), 3 items updated, 138 evaluated
+No valid Unity Editor license found. Please activate your license.
+Exit: 198. Unity Play and WebGL not executed.

@@ -1,0 +1,8 @@
+Unity Editor 6000.0.62f1 실제 실행. 최초 기본 설정 경로 /home/agent/.config/unity3d 생성 실패로 exit1. XDG_CONFIG_HOME/CACHE_HOME을 작업 공간의 unity-config/unity-cache로 지정해 재시도.
+재시도 C#3items 빌드 성공. 실제 Play는 유효한 라이선스가 없어 exit198 중단. Unity Play/물리/조명/네이티브 음향/UnityWebGL은 미검증. FMOD는nosound.
+원본로그:TestResults/unity-rooms-release-retry.log
+
+Unity Editor version:    6000.0.62f1 (f99f05b3e950)
+FMOD initialized on nosound output
+*** Tundra build success (2.05 seconds), 3 items updated, 138 evaluated
+No valid Unity Editor license found. Please activate your license.

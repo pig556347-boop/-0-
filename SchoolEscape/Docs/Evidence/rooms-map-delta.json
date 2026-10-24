@@ -1,0 +1,163 @@
+{
+  "existingRoomMapsUnchanged": 41,
+  "floorsAndStairsUnchanged": true,
+  "rooms": 53,
+  "newRooms": [
+    {
+      "id": "room-f1-6",
+      "floor": 1,
+      "label": "창고",
+      "kind": "storage",
+      "grid": [
+        22,
+        20
+      ],
+      "fixtures": 226,
+      "solid": 39,
+      "zones": 7
+    },
+    {
+      "id": "room-f1-8",
+      "floor": 1,
+      "label": "대회의실",
+      "kind": "assembly",
+      "grid": [
+        32,
+        28
+      ],
+      "fixtures": 274,
+      "solid": 34,
+      "zones": 8
+    },
+    {
+      "id": "room-f1-11",
+      "floor": 1,
+      "label": "설비관리실",
+      "kind": "maintenance",
+      "grid": [
+        22,
+        20
+      ],
+      "fixtures": 164,
+      "solid": 11,
+      "zones": 7
+    },
+    {
+      "id": "room-f1-12",
+      "floor": 1,
+      "label": "세미나실",
+      "kind": "seminar",
+      "grid": [
+        26,
+        24
+      ],
+      "fixtures": 308,
+      "solid": 27,
+      "zones": 7
+    },
+    {
+      "id": "room-f2-16",
+      "floor": 2,
+      "label": "준비실 1",
+      "kind": "preparation",
+      "grid": [
+        22,
+        20
+      ],
+      "fixtures": 172,
+      "solid": 12,
+      "zones": 7
+    },
+    {
+      "id": "room-f2-17",
+      "floor": 2,
+      "label": "자료실",
+      "kind": "archives",
+      "grid": [
+        26,
+        24
+      ],
+      "fixtures": 575,
+      "solid": 94,
+      "zones": 7
+    },
+    {
+      "id": "room-f2-18",
+      "floor": 2,
+      "label": "창고",
+      "kind": "storage",
+      "grid": [
+        22,
+        20
+      ],
+      "fixtures": 226,
+      "solid": 39,
+      "zones": 7
+    },
+    {
+      "id": "room-f3-4",
+      "floor": 3,
+      "label": "교직원 휴게실",
+      "kind": "lounge",
+      "grid": [
+        26,
+        22
+      ],
+      "fixtures": 148,
+      "solid": 13,
+      "zones": 7
+    },
+    {
+      "id": "room-f3-6",
+      "floor": 3,
+      "label": "학부모상담실",
+      "kind": "counseling",
+      "grid": [
+        24,
+        22
+      ],
+      "fixtures": 167,
+      "solid": 16,
+      "zones": 7
+    },
+    {
+      "id": "room-f3-7",
+      "floor": 3,
+      "label": "메인회의실",
+      "kind": "meeting",
+      "grid": [
+        28,
+        24
+      ],
+      "fixtures": 209,
+      "solid": 17,
+      "zones": 7
+    },
+    {
+      "id": "room-f3-8",
+      "floor": 3,
+      "label": "교장실",
+      "kind": "principal",
+      "grid": [
+        28,
+        24
+      ],
+      "fixtures": 201,
+      "solid": 17,
+      "zones": 7
+    },
+    {
+      "id": "room-f3-10",
+      "floor": 3,
+      "label": "중앙통제실",
+      "kind": "control",
+      "grid": [
+        26,
+        24
+      ],
+      "fixtures": 314,
+      "solid": 16,
+      "zones": 7
+    }
+  ]
+}
