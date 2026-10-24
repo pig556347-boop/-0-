@@ -6,3 +6,5 @@
 
 본관53실 구현, 운동장은 기획 단계입니다. Unity C#컴파일 성공, 실제UnityPlay/WebGL은라이선스문제로미검증입니다.
 기존main/다른게임/루트자동배포워크플로와분리한프로젝트스냅샷입니다. 원본작업커밋은 SOURCE_CHECKPOINT.json을참조하세요.
+
+[맵 전개도 전체 보기](https://rawcdn.githack.com/pig556347-boop/-0-/ab240036150fa14bb61608fef9d0150f203eedd5/maps/index.html)
