@@ -11,3 +11,5 @@ WASD/방향키 걷기,Shift달리기,E문·조사·줍기·교문,F문과겹친�
 
 독립 브라우저 실행물이며 UnityWebGL 빌드는 아닙니다. 실제UnityC#컴파일성공, Play는라이선스문제로미검증.
 기존main·다른게임·사이트설정은 변경하지 않는 폐교탈출 전용 브랜치입니다.
+
+[전체 Unity/웹 소스와 검증 기록](https://github.com/pig556347-boop/-0-/tree/school-escape-source/SchoolEscape)
