@@ -9,7 +9,7 @@ import json, math
 
 root=Path(__file__).resolve().parents[1]
 res=root/'Assets/Resources'
-for kind in ['Floor','Wall']:
+for kind in ['Floor','Wall','Yard']:
     im=Image.new('RGB',(256,256)); pix=im.load()
     for y in range(256):
         for x in range(256):
@@ -20,6 +20,11 @@ for kind in ['Floor','Wall']:
                 stain=math.sin(x*.024+y*.012)*math.cos(y*.031)*9
                 v=150+noise+stain-(30 if seam else 0)
                 pix[x,y]=(int(v),int(v*.99),int(v*.90))
+            elif kind=='Yard':
+                soil=math.sin(x*.052)*math.sin(y*.037)*9
+                v=112+noise+soil
+                pebble=14 if h<12 else 0
+                pix[x,y]=(int(v+pebble),int(v*.93+pebble),int(v*.75+pebble))
             else:
                 flake=25 if h<18 and ((x//17+y//11)%4==0) else 0
                 v=185+noise-flake
@@ -40,4 +45,4 @@ options=subset.Options();options.name_IDs=['*'];options.name_legacy=True;options
 sub=subset.Subsetter(options=options);sub.populate(text=text);sub.subset(font)
 font.save(str(res/'SchoolFont.otf'))
 (root/'Docs/FontLicense.txt').write_text(Path('/usr/share/doc/fonts-noto-cjk/copyright').read_text())
-print('Original floor/wall textures and OFL font subset generated')
+print('Original floor/wall/yard textures and OFL font subset generated')

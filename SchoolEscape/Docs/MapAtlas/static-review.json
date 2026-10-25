@@ -1,0 +1,39 @@
+{
+  "utc": "2026-10-25T06:49:33.501361+00:00",
+  "scope": "Static current atlas XML, input hash and all file links; no browser/game execution",
+  "mapSha256": "d33884ec869d0bace02ae683d24941faf91cd6900745fa9d8a14bea5fed7a7e9",
+  "passed": true,
+  "views": 58,
+  "independentRoomViews": 53,
+  "diagramCount": 5,
+  "yardFixtures": 379,
+  "yardLandmarks": 20,
+  "yardRoutes": 3,
+  "dimensions": [
+    {
+      "file": "overview.svg",
+      "width": 1200,
+      "height": 1195
+    },
+    {
+      "file": "floor-1.svg",
+      "width": 1204,
+      "height": 1048
+    },
+    {
+      "file": "floor-2.svg",
+      "width": 2036,
+      "height": 1048
+    },
+    {
+      "file": "floor-3.svg",
+      "width": 1204,
+      "height": 1048
+    },
+    {
+      "file": "playground.svg",
+      "width": 1554,
+      "height": 1180
+    }
+  ]
+}

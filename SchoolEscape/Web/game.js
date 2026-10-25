@@ -25,9 +25,10 @@ try {
  moon.shadow.mapSize.set(2048,2048);Object.assign(moon.shadow.camera,{left:-38,right:38,top:38,bottom:-38,near:1,far:100});moon.shadow.bias=-.001;scene.add(moon);scene.add(moon.target);
  const textures=new T.TextureLoader();
  const loadTexture=path=>{const t=textures.load(embedded?.[path]||path);t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;return t};
- const floorTexture=loadTexture('../Assets/Resources/FloorTexture.png'),wallTexture=loadTexture('../Assets/Resources/WallTexture.png');
+ const floorTexture=loadTexture('../Assets/Resources/FloorTexture.png'),wallTexture=loadTexture('../Assets/Resources/WallTexture.png'),yardTexture=loadTexture('../Assets/Resources/YardTexture.png');yardTexture.repeat.set(16,13);
  const mat=(color,extras={})=>new T.MeshStandardMaterial({color,roughness:.95,...extras});
  const materials={floor:mat('#8c9185',{map:floorTexture}),wall:mat('#8f9a8d',{map:wallTexture}),cap:mat('#303f43'),lower:mat('#344c49'),wood:mat('#806347',{map:wallTexture,emissive:'#46301e',emissiveIntensity:.22}),glass:mat('#294956',{metalness:.25,roughness:.5}),metal:mat('#55666a'),gold:mat('#ac925f'),lamp:mat('#cfc292',{emissive:'#a78e53',emissiveIntensity:.8}),paper:mat('#b7b3a1'),frame:mat('#b6b09a'),threshold:mat('#a79a75',{emissive:'#514329',emissiveIntensity:.16})};
+ const yardMaterial=mat('#a59a7b',{map:yardTexture});
  const unit=new T.BoxGeometry(1,1,1),world=new T.Group();scene.add(world);const floorRoots=[],doorVisuals=[],mirrors=[];
  const pos=(x,y,h=0)=>new T.Vector3((x-24)*tile,h,-(y-19)*tile);
  const box=(name,parent,p,s,m,shadow=false)=>{const o=new T.Mesh(unit,m);o.name=name;o.position.copy(p);o.scale.set(...s);o.castShadow=shadow;o.receiveShadow=true;parent.add(o);return o};
@@ -43,24 +44,24 @@ try {
    const mesh=new T.InstancedMesh(unit,material,entries.length);mesh.name=name;mesh.receiveShadow=true;
    entries.forEach(([p,s],i)=>{dummy.position.copy(p);dummy.scale.set(...s);dummy.rotation.set(0,0,0);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix)});parent.add(mesh);return mesh;
  }
- for(const f of [...data.floors,...data.roomMaps]){
-   const root=new T.Group();root.name=f.isRoom?f.label:`본관 ${f.number}F`;root.userData.spaceId=f.id;floorRoots.push(root);world.add(root);
+ for(const f of [...data.floors,...data.roomMaps,...(data.outdoorMaps||[])]){
+   const root=new T.Group();root.name=f.isOutdoor||f.isRoom?f.label:`본관 ${f.number}F`;root.userData.spaceId=f.id;floorRoots.push(root);world.add(root);
    const tiles=[],walls=[],caps=[],lower=[],windows=[],mullions=[],lamps=[],papers=[],trim=[];
    const interiorWall=(x,y)=>f.isRoom;
-   const doorCells=new Set(f.rooms.map(r=>`${r.doorX},${r.doorY}`)),isDoor=(x,y)=>doorCells.has(`${x},${y}`);
-   box('Ground',root,pos((f.width-1)/2,(f.height-1)/2,-.1),[f.width*tile+2,.2,f.height*tile+2],f.isRoom?mat({classroom:'#757a66',music:'#79664b',art:'#8c8874',artStorage:'#777762',library:'#786e55',infirmary:'#89988c',administration:'#7c8070',staff:'#7a8274',computer:'#737f7d',broadcast:'#7f7765',studentRestroom:'#83958a',staffRestroom:'#9b9e8c',storage:'#777a67',assembly:'#7e7665',maintenance:'#6b7976',seminar:'#7e8070',preparation:'#858171',archives:'#7d7866',lounge:'#7f806a',counseling:'#828776',meeting:'#7f7b6c',principal:'#7b715f',control:'#6b7e7d'}[f.kind]||'#757a66',{map:floorTexture}):materials.floor);
+   const doorCells=new Set([...f.rooms,...(f.portals||[])].map(r=>`${r.doorX},${r.doorY}`)),isDoor=(x,y)=>doorCells.has(`${x},${y}`);
+   box('Ground',root,pos((f.width-1)/2,(f.height-1)/2,-.1),[f.width*tile+2,.2,f.height*tile+2],f.isOutdoor?yardMaterial:f.isRoom?mat({classroom:'#757a66',music:'#79664b',art:'#8c8874',artStorage:'#777762',library:'#786e55',infirmary:'#89988c',administration:'#7c8070',staff:'#7a8274',computer:'#737f7d',broadcast:'#7f7765',studentRestroom:'#83958a',staffRestroom:'#9b9e8c',storage:'#777a67',assembly:'#7e7665',maintenance:'#6b7976',seminar:'#7e8070',preparation:'#858171',archives:'#7d7866',lounge:'#7f806a',counseling:'#828776',meeting:'#7f7b6c',principal:'#7b715f',control:'#6b7e7d'}[f.kind]||'#757a66',{map:floorTexture}):materials.floor);
    for(let y=0;y<f.height;y++)for(let x=0;x<f.width;){
      if(game.open(x,y,f)){x++;continue}const start=x,cut=isDoor(x,y),interior=interiorWall(x,y);while(x<f.width&&!game.open(x,y,f)&&isDoor(x,y)===cut&&interiorWall(x,y)===interior)x++;
-     const height=cut?.18:interior?(y===f.height-1?1.4:.5):1.6;
+     const height=cut?.18:f.isOutdoor?.3:interior?(y===f.height-1?1.4:.5):1.6;
      const p=pos((start+x-1)/2,y,height/2);walls.push([p,[(x-start)*tile,height,tile]]);
      caps.push([pos((start+x-1)/2,y,height+.01),[(x-start)*tile,.035,tile]]);
    }
    for(let y=0;y<f.height;y++)for(let x=0;x<f.width;x++){
      if(!game.open(x,y,f))continue;
-     tiles.push([pos(x,y,.009),[tile-.025,.018,tile-.025]]);
-     if((x*17+y*11+f.number)%43===0)papers.push([pos(x+.13,y-.19,.025),[.22,.012,.30]]);
+     if(!f.isOutdoor)tiles.push([pos(x,y,.009),[tile-.025,.018,tile-.025]]);
+     if(!f.isOutdoor&&(x*17+y*11+f.number)%43===0)papers.push([pos(x+.13,y-.19,.025),[.22,.012,.30]]);
      for(const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]])if(!game.open(x+dx,y+dy,f)){
-       if(isDoor(x+dx,y+dy))continue;
+       if(f.isOutdoor||isDoor(x+dx,y+dy))continue;
        lower.push([pos(x+dx*.49,y+dy*.49,.24),[dx?.085:tile,.48,dy?.085:tile]]);
        trim.push([pos(x+dx*.48,y+dy*.48,.51),[dx?.09:tile,.035,dy?.09:tile]]);
        if(!interiorWall(x+dx,y+dy)&&(x+y)%5===0){windows.push([pos(x+dx*.485,y+dy*.485,1.05),[dx?.10:.8,.53,dy?.10:.8]]);mullions.push([pos(x+dx*.48,y+dy*.48,1.05),[dx?.12:.035,.53,dy?.12:.035]])}
@@ -79,16 +80,20 @@ try {
          extraSignature:[game.eventSerial,...(pursuerVisual.root.visible?[pursuit.x,pursuit.y,pursuerVisual.root.rotation.y,game.time]:[0])]}));
        mirror.position.copy(pos(item.x,item.y,item.elevation+item.height/2));root.add(mirror);mirrors.push(mirror);continue;
      }
-     const key=item.color+'|'+(item.shape||'box')+'|'+(item.kind==='books'||item.kind.startsWith('book-')?'book':'other');if(!batches.has(key))batches.set(key,[]);batches.get(key).push(item);
+     const key=item.color+'|'+(item.shape||'box')+'|'+(item.kind==='escape-gate-lamp'?'yard-lamp':item.kind==='books'||item.kind.startsWith('book-')?'book':'other');if(!batches.has(key))batches.set(key,[]);batches.get(key).push(item);
    }
    for(const [key,items] of batches){
-     const [color,shape,category]=key.split('|'),mesh=new T.InstancedMesh(geometries[shape]||unit,mat(color),items.length);mesh.name='Interior furnishings '+key;mesh.castShadow=category!=='book';mesh.receiveShadow=category!=='book';mesh.userData.fixtureRoomId=f.isRoom?f.id:'';mesh.userData.isBooks=category==='book';
+     const [color,shape,category]=key.split('|'),mesh=new T.InstancedMesh(geometries[shape]||unit,mat(color,category==='yard-lamp'?{emissive:color,emissiveIntensity:.85}:{}),items.length);mesh.name='Interior furnishings '+key;mesh.castShadow=category!=='book';mesh.receiveShadow=category!=='book';mesh.userData.fixtureRoomId=f.isRoom?f.id:'';mesh.userData.fixtureSpaceId=f.id;mesh.userData.isBooks=category==='book';
      items.forEach((o,i)=>{dummy.position.copy(pos(o.x,o.y,o.elevation+o.height/2));dummy.scale.set(o.width,o.height,o.depth);dummy.rotation.set(0,0,0);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix)});root.add(mesh);
+   }
+   if(f.isOutdoor){
+     for(const lamp of (f.fixtures||[]).filter(o=>o.kind==='escape-gate-lamp')){const light=new T.PointLight('#ecd09a',9,8,2);light.position.copy(pos(lamp.x,lamp.y+.5,2.5));root.add(light)}
+     for(const portal of f.portals||[]){const light=new T.PointLight('#c9dfd5',7,7,2);light.position.copy(pos(portal.doorX,portal.doorY-1,2.5));root.add(light)}
    }
    const musicRooms=new Set(f.isRoom&&f.kind==='music'?[f.label]:[]);
    for(const z of f.interiorZones||[])if(musicRooms.has(z.room)&&['보컬 연습실','연결 통로','악기보관창고'].includes(z.label))
      textSprite(z.label,root,pos(z.x,z.y+.65,1.15),z.label==='연결 통로'?1.05:1.55,.26);
-   const doors=f.isRoom?[{label:'복도로 나가기',doorX:f.exitX,doorY:f.exitY,facing:'north',exit:true}]:f.rooms;
+   const doors=[...(f.isRoom?[{label:'복도로 나가기',doorX:f.exitX,doorY:f.exitY,facing:'north',exit:true}]:f.rooms),...(f.portals||[])];
    for(const r of doors){
      const pieces=[];const doorBox=(name,p,scale,material)=>{const o=box(name,root,p,scale,material);pieces.push(o);return o};
      const [dx,dy]=directions[r.facing],x=r.doorX+dx*.51,y=r.doorY+dy*.51,horizontal=dy!==0;
@@ -147,10 +152,8 @@ try {
  const ring=new T.Mesh(new T.RingGeometry(.31,.34,40),new T.MeshBasicMaterial({color:'#ddd3b0',transparent:true,opacity:.55,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.025;actor.add(ring);
  const pursuerVisual=createPursuerVisual(T);scene.add(pursuerVisual.root);
  const lootVisuals=createLootVisuals(T,items,pos);scene.add(lootVisuals.root);
- const gateRoot=new T.Group();gateRoot.name='교문 · 임시 탈출 출구';floorRoots.find(r=>r.userData.spaceId===items.escapeGate.spaceId).add(gateRoot);
- for(let i=-4;i<=4;i++)box('Closed entrance gate bars',gateRoot,pos(items.escapeGate.x+i*.24,.5,.85),[.055,1.7,.08],materials.metal);
- box('Gate crossbar',gateRoot,pos(items.escapeGate.x,.5,1.25),[2.6,.085,.09],materials.gold);
- textSprite('교문 · 열쇠 A / B / C',gateRoot,pos(items.escapeGate.x,.5,1.9),3.2,.42);
+ const gateRoot=new T.Group();gateRoot.name='운동장 교문 · 최종 탈출';floorRoots.find(r=>r.userData.spaceId===items.escapeGate.spaceId).add(gateRoot);
+ textSprite('탈출 교문 · 열쇠 A / B / C',gateRoot,pos(items.escapeGate.x,items.escapeGate.y-2,2.15),4,.48,'#e4c572');
  let started=false,paused=false,manual=false,keys=new Set(),last=performance.now(),seenFloor='',angle=0,toastTimer,chaseIntensity=0;
  let gameplayEventCursor=game.eventSerial,inventoryUI;
  inventoryUI=createInventoryUI({items,game,onClose:()=>{keys.clear();last=performance.now();updateAudio(0)},onAction:result=>{if(result?.message)toast(result.message);pumpItemNoise();updateAudio(0)}});
@@ -170,7 +173,7 @@ try {
    chaseIntensity+=(goal-chaseIntensity)*(1-Math.exp(-3*Math.max(dt,.001)));
    const stair=game.nearby(),onStairs=!!stair&&Math.abs(stair.x-game.x)*tile<1.2&&Math.abs(stair.y-game.y)*tile<1.05;
    audio.update(dt,{started,paused:paused||!!inventoryUI?.isOpen,speed:game.speed,isRunning:game.isRunning,stamina:game.stamina,exhausted:game.exhausted,
-     spaceId:game.spaceId,roomKind:game.map.kind,onStairs,chaseIntensity,enemyDistance,enemyMoving:sameSpace&&pursuit.speed>.1,
+     spaceId:game.spaceId,roomKind:game.map.kind,isOutdoor:!!game.map.isOutdoor,onStairs,chaseIntensity,enemyDistance,enemyMoving:sameSpace&&pursuit.speed>.1,
      watchEquipped:items.equipped?.itemId==='smartwatch',caught:game.caught,won:game.won,events:game.events});
  }
  function pumpItemNoise(){for(const event of [...game.events])if(event.id>gameplayEventCursor){gameplayEventCursor=event.id;if(event.type==='search'||event.type==='item-dropped')game.emit('noise',{spaceId:event.spaceId||game.spaceId,x:event.x??game.x,y:event.y??game.y,radius:event.type==='search'?4:2.5,loudness:1,kind:event.type})}}
@@ -197,21 +200,26 @@ try {
    moon.target.position.copy(center);moon.position.copy(center).add(new T.Vector3(-12,30,10));
    Object.assign(moon.shadow.camera,{left:-extent,right:extent,top:extent,bottom:-extent,far:220});moon.shadow.camera.updateProjectionMatrix();
    floorRoots.forEach(r=>r.visible=r.userData.spaceId===game.spaceId);
-   const m=game.map,label=game.roomId?m.label:`본관 ${game.floor}층 · ${m.subtitle}`;
-   $('area').textContent=label;$('floor-label').textContent=game.roomId?m.label:`MAIN BUILDING — 0${game.floor}`;
-   $('route-note').textContent=game.roomId?'출입문 앞에서 E를 눌러 복도로 돌아갑니다.':'닫힌 문 앞에서 E를 눌러 방에 들어갑니다.';
+   const m=game.map,label=m.isOutdoor?m.label:game.roomId?m.label:`본관 ${game.floor}층 · ${m.subtitle}`;
+   scene.background.set(m.isOutdoor?'#14222a':'#0c1721');scene.fog.color.copy(scene.background);scene.fog.density=m.isOutdoor?.0045:.009;
+   document.querySelector('.legend').innerHTML=m.isOutdoor?'<i></i>현재 위치 <b></b>탈출 교문 <em style="background:#91c8c3"></em>본관 입구':'<i></i>현재 위치 <b></b>계단 <em></em>방 출입구';
+   $('area').textContent=label;$('floor-label').textContent=m.isOutdoor?'SCHOOL YARD':game.roomId?m.label:`MAIN BUILDING — 0${game.floor}`;
+   $('route-note').textContent=m.isOutdoor?'북쪽 문: 본관 / 남쪽 교문: 열쇠 A·B·C로 탈출':game.roomId?'출입문 앞에서 E를 눌러 복도로 돌아갑니다.':game.floor===1?'현관문에서 E로 운동장에 나갈 수 있습니다.':'닫힌 문 앞에서 E를 눌러 방에 들어갑니다.';
    seenFloor=game.spaceId;camera.position.copy(pos(game.x,game.y,16)).add(new T.Vector3(0,0,10.4));camera.lookAt(pos(game.x,game.y));if(started)toast(label);
  }
  function drawMap(){
    const c=$('minimap');c.dataset.spaceId=game.spaceId;const ctx=c.getContext('2d'),s=Math.min(c.width/game.map.width,c.height/game.map.height),ox=(c.width-game.map.width*s)/2,top=game.map.height-1;
    const px=x=>ox+x*s,py=y=>(top-y)*s;
    ctx.clearRect(0,0,c.width,c.height);ctx.fillStyle='#111e26';ctx.fillRect(0,0,c.width,c.height);
-   ctx.fillStyle='#576a65';for(let y=0;y<game.map.height;y++)for(let x=0;x<game.map.width;x++)if(game.open(x,y))ctx.fillRect(px(x),py(y),s,s);
+   ctx.fillStyle='#576a65';for(let y=0;y<game.map.height;y++)for(let x=0;x<game.map.width;x++)if(game.open(x,y))ctx.fillRect(Math.floor(px(x)),Math.floor(py(y)),Math.ceil(px(x+1))-Math.floor(px(x)),Math.ceil(py(y-1))-Math.floor(py(y)));
    for(const r of game.map.rooms){ctx.strokeStyle='#475650';ctx.lineWidth=.7;ctx.strokeRect(px(r.x0),py(r.y1),(r.x1-r.x0+1)*s,(r.y1-r.y0+1)*s);ctx.fillStyle='#b69b74';ctx.fillRect(px(r.doorX),py(r.doorY),s,s);
      if($('map-panel').classList.contains('expanded')){ctx.font='10px School,sans-serif';ctx.textAlign='center';ctx.fillStyle='#d1d5c4';ctx.fillText(r.label,px((r.x0+r.x1+1)/2),py((r.y0+r.y1)/2)+s/2,(r.x1-r.x0+1)*s-1)}
    }
-   if($('map-panel').classList.contains('expanded')){ctx.fillStyle='#b2a07b';for(const o of game.solidFixtures[game.spaceId])ctx.fillRect(px(o.x-o.width/tile/2+.5),py(o.y+o.depth/tile/2-.5),o.width/tile*s,o.depth/tile*s)}
+   if(game.map.isOutdoor||$('map-panel').classList.contains('expanded')){ctx.fillStyle=game.map.isOutdoor?'#30463d':'#b2a07b';for(const o of game.solidFixtures[game.spaceId])ctx.fillRect(px(o.x-o.width/tile/2+.5),py(o.y+o.depth/tile/2-.5),o.width/tile*s,o.depth/tile*s)}
    if(game.roomId){ctx.fillStyle='#b69b74';ctx.fillRect(px(game.map.exitX),py(game.map.exitY),s,s)}
+   ctx.fillStyle='#91c8c3';for(const p of game.map.portals||[]){ctx.fillRect(px(p.doorX)-1,py(p.doorY)-1,s+2,s+2);if($('map-panel').classList.contains('expanded')){ctx.font='12px School,sans-serif';ctx.textAlign='center';ctx.fillText(game.map.isOutdoor?'본관 입구':'운동장 출입문',px(p.doorX),py(p.doorY)+(p.facing==='south'?21:-8))}}
+   if(game.map.isOutdoor){ctx.font='10px School,sans-serif';ctx.textAlign='left';ctx.fillStyle='#c2d7cb';ctx.fillText('북 ↑',8,15)}
+   if(game.spaceId===items.escapeGate.spaceId){const e=items.escapeGate;ctx.fillStyle='#e4c572';ctx.fillRect(px(e.x)-2,py(e.y)-2,s+4,s+4);if($('map-panel').classList.contains('expanded')){ctx.font='12px School,sans-serif';ctx.textAlign='center';ctx.fillText('탈출 교문',px(e.x),py(e.y)+20)}}
    ctx.fillStyle='#d8b56c';for(const st of game.map.stairs)ctx.fillRect(px(st.x)-1,py(st.y)-1,s+2,s+2);
    ctx.beginPath();ctx.fillStyle='#f0f6e9';ctx.arc(px(game.x)+s/2,py(game.y)+s/2,3,0,Math.PI*2);ctx.fill();
  }
@@ -230,8 +238,8 @@ try {
    camera.quaternion.setFromEuler(new T.Euler(-Math.atan2(16,10.4),0,0));
    const near=game.nearby();$('stair-prompt').hidden=!near||!started||game.caught;if(near)$('stair-prompt').querySelector('span').textContent=near.label+' 계단';
    if(near)$('stair-prompt').querySelector('small').textContent=game.arrivalLock===near.id?'계단 구역을 벗어난 뒤 다시 진입하세요':'계단 안으로 이동하면 자동 전환';
-   const room=game.currentRoom();$('room-status').textContent=room?room.label+' 탐방 중':'방문 기본 닫힘 · E 입장';
-   const door=game.nearbyDoor();$('door-prompt').hidden=!door||!started||game.caught;if(door)$('door-prompt').querySelector('span').textContent=door.exit?'문 열고 복도로 나가기':door.label+' 문 열고 입장';
+   const room=game.currentRoom();$('room-status').textContent=game.map.isOutdoor?'운동장 탐방 중 · 남쪽 교문 탈출':room?room.label+' 탐방 중':'방문 기본 닫힘 · E 입장';
+   const door=game.nearbyDoor();$('door-prompt').hidden=!door||!started||game.caught;if(door)$('door-prompt').querySelector('span').textContent=door.portal?door.label:door.exit?'문 열고 복도로 나가기':door.label+' 문 열고 입장';
    const transit=pursuit.enabled?pursuit.transit:null,portal=transit?.portal;
    let enemyDoor=null,enemyDoorAmount=0;
    if(portal?.kind==='door'&&(portal.fromId===game.spaceId||portal.toId===game.spaceId)){
@@ -240,7 +248,7 @@ try {
      enemyDoorAmount=Math.max(0,Math.min(1,(source?game.time-(transit.until-1.25):.35-(transit.until-game.time))/.22));
    }
    for(const d of doorVisuals)if(d.spaceId===game.spaceId){const pending=game.pendingDoor,playerAmount=pending&&pending.doorX===d.doorX&&pending.doorY===d.doorY?Math.min(1,(game.time-pending.started)/.22):0,amount=Math.max(playerAmount,enemyDoor===d?enemyDoorAmount:0);d.pieces.forEach((o,i)=>{o.position.copy(d.bases[i]);if(d.horizontal)o.position.x+=amount*1.15;else o.position.z-=amount*1.15})}
-   $('area').textContent=room?`본관 ${game.floor}층 · ${room.label}`:`본관 ${game.floor}층 · ${game.map.subtitle}`;
+   $('area').textContent=game.map.isOutdoor?`${game.map.label} · 남쪽 교문으로 탈출`:room?`본관 ${game.floor}층 · ${room.label}`:`본관 ${game.floor}층 · ${game.map.subtitle}`;
    const stamina=Math.max(0,Math.min(100,game.stamina));$('stamina-value').textContent=Math.ceil(stamina)+'%';$('stamina-fill').style.transform=`scaleX(${stamina/100})`;
    $('stamina-meter').setAttribute('aria-valuenow',String(Math.round(stamina)));$('vitals').classList.toggle('exhausted',game.exhausted);
    $('stamina-hint').textContent=game.exhausted?'지침 · 25% 회복 후 다시 달릴 수 있습니다':game.isRunning?'달리는 중 · 스태미나 소모':'달리면 소모 · 걸으면 회복';
@@ -302,7 +310,7 @@ try {
    const entranceVisible=r.interiorOpen&&Math.abs(ev.x)<1&&Math.abs(ev.y)<1&&(!hit||hit.distance>=camera.position.distanceTo(entry)-.2);
    return {firstHit:first?.object.name,entranceVisible,inViewport:Math.abs(projected.x)<1&&Math.abs(projected.y)<1&&Math.abs(projected.z)<1};
  }
- function inspectSpace(){const active=floorRoots.filter(r=>r.visible),rooms=new Set(),books=[];for(const root of active)root.traverse(o=>{if(o.userData.fixtureRoomId)rooms.add(o.userData.fixtureRoomId);if(o.userData.isBooks)books.push(o)});return {activeIds:active.map(r=>r.userData.spaceId),visibleFixtureRoomIds:[...rooms],pendingDoor:!!game.pendingDoor,minimapSpaceId:$('minimap').dataset.spaceId,bookShadowsDisabled:books.every(o=>!o.castShadow&&!o.receiveShadow),bookBatches:books.length}}
+ function inspectSpace(){const active=floorRoots.filter(r=>r.visible),rooms=new Set(),spaces=new Set(),books=[];for(const root of active)root.traverse(o=>{if(o.userData.fixtureRoomId)rooms.add(o.userData.fixtureRoomId);if(o.userData.fixtureSpaceId)spaces.add(o.userData.fixtureSpaceId);if(o.userData.isBooks)books.push(o)});return {activeIds:active.map(r=>r.userData.spaceId),visibleFixtureRoomIds:[...rooms],visibleFixtureSpaceIds:[...spaces],pendingDoor:!!game.pendingDoor,minimapSpaceId:$('minimap').dataset.spaceId,bookShadowsDisabled:books.every(o=>!o.castShadow&&!o.receiveShadow),bookBatches:books.length}}
  function inspectMirrors(){const active=mirrors.filter(m=>m.spaceId===game.spaceId);return {count:active.length,activeSpaceId:game.spaceId,mirrors:active.map(m=>m.inspect(actor))}}
  function checkMirrorPixels(){
    const mirror=mirrors.find(m=>m.spaceId===game.spaceId);if(!mirror)return {changedPixels:0};

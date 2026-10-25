@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-24T23:53:25.455717+00:00",
+  "kind": "Actual Unity 6000.0.62f1 editor invocation",
+  "exitCode": 198,
+  "csharpCompilationSucceeded": true,
+  "compileItemsUpdated": 6,
+  "unityPlayValidated": false,
+  "unityWebGLValidated": false,
+  "observedError": "No valid Unity Editor license found. Please activate your license.",
+  "log": "TestResults/unity-playground-release.log",
+  "limitations": "Editor compiler ran successfully; Play execution, native physics/audio/rendering and Unity WebGL not run."
+}

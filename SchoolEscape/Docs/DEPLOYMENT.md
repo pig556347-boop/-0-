@@ -1,6 +1,27 @@
 # 폐교탈출 전용 웹 배포
 
-## 최신 0.9 — 본관53방·운동장 기획
+## 현재0.10 — 운동장 교문 탈출
+
+최종 정리:2026-10-26(한국시간). **[폐교탈출 웹 플레이0.10](https://rawcdn.githack.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/index.html)**
+
+본관 현관과 운동장 북쪽 문에서 E로 왕복합니다. 열쇠A/B/C를 모아 운동장 남쪽 교문에서 E로 탈출합니다. 매판 본관과 운동장에 열쇠가 최소1개씩 놓이고 나머지1개는 무작위입니다.
+
+- 고정 공개 커밋: `6e40868697e73f470d0163ce00a14889ef00cb67`.
+- 빌드 소스 커밋: `0ffddc60604c9dd2df566057b6c4fcb7e816f521`.
+- 최종HTML:6,659,374bytes / SHA-256 `a07f0080b02cbabceb58d4c87550434701fcc69f23983ff173bdcfc2c2b179bd`.
+- 실제 로컬Chromium: 운동장65개·전체53방2,913개 통과. 배포검증기 로컬91개 통과. 실행오류0.
+- 실제 외부Chromium:91개 통과·실행/콘솔오류0. HTTP200/text-html·최종해시일치. 실행UTC2026-10-25T06:55:44.186Z. [외부 증거](Evidence/public-web-playground.json).
+- 정적79,795개·아이템커널29개 통과. Unity C#6항목 컴파일 성공; Play는 유효한 라이선스 없음으로exit198. Unity Play/WebGL 미검증.
+
+웹게임은 독립 Three.js 구현입니다. 첫 안내가 표시되면 **Open the page → 폐교에 들어가기**를 누릅니다. [전개도](https://rawcdn.githack.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/index.html)도 같은 버전으로 갱신했습니다.
+
+폐교탈출 전용 `school-escape-web`에만 게시했습니다. 프로젝트는 `SchoolEscape/`만 담는 [소스 백업](https://github.com/pig556347-boop/-0-/tree/school-escape-source/SchoolEscape)에 보존합니다. 백업의 `SOURCE_CHECKPOINT.json`에 원본 소스 커밋을 기록합니다. 기존main과 다른 게임의 배포는 변경하지 않았습니다.
+
+---
+
+## 이전 0.9 — 본관53방·운동장 기획
+
+이 절의 “현재”와 완료 결과는0.9 게시 당시를 뜻합니다. 운동장 기획만 존재했고1층 임시 교문을 쓰던 과거 공개물입니다.
 
 [폐교탈출 전용 소스 백업](https://github.com/pig556347-boop/-0-/tree/school-escape-source/SchoolEscape): `SchoolEscape/`만 담는 독립 스냅샷 브랜치이며 루트 자동 배포 워크플로가 없다. 원본 작업 브랜치의 최종 소스 커밋은 백업의 `SOURCE_CHECKPOINT.json`에 기록한다.
 

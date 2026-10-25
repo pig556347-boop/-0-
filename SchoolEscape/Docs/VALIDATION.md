@@ -2,7 +2,48 @@
 
 정적 데이터, 독립 브라우저 검토판, 실제 Unity Play, Unity WebGL은 서로 다른 검증 대상입니다.
 
-## 최신0.9 — 본관 나머지12개 방·운동장 기획
+## 현재0.10 — 독립 운동장·실제 교문 탈출
+
+기록일:2026-10-25(한국시간). 본관53실을 유지하고69×55셀(내부 약83.75×66.25m)의 `playground` 독립 공간과 본관1층 현관의 양방향 E문을 추가했습니다. A/B/C 최종 사용 지점은 운동장 남쪽 교문입니다. 매판 열쇠는 본관 최소1개·운동장 최소1개·나머지 무작위이며 초기13개 아이템과9+1칸 수납은 유지합니다.
+
+최종 HTML은6,659,374bytes, SHA-256 `a07f0080b02cbabceb58d4c87550434701fcc69f23983ff173bdcfc2c2b179bd`입니다. 새 공개 주소: [웹 플레이0.10](https://rawcdn.githack.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/index.html). 아래 실제 결과와 진행 중인 검사를 구분하며0.9 결과를0.10의 새 검사로 세지 않습니다.
+
+| 대상 | 이번 결과 | 증거·범위 |
+|---|---|---|
+| Astra 코어 검토 / Node 실행 |47개 통과·실패0. 실제 작성된 운동장 기하와 생산 커널/추적/아이템 코드를 사용 |[검토 JSON](Evidence/playground-astra-core-review.json). 해당 보고서의 소스 해시 기준이며 이후 울타리·시각 수정의 최종 빌드 결과와 별도 |
+| 최종 정적 지도·아이템 검사 |정적79,795개 및 아이템 커널29개 통과·실패0 |[지도](Evidence/playground-map-check.json), [아이템](Evidence/playground-items-kernel.json).128시드/1,664배치/36경로 |
+| 실제 로컬 Chromium 전체 회귀 |2,913개 통과·실패/실행오류0 |[전체 실행](Evidence/playground-full-browser-runtime.json), [실행물 해시](Evidence/playground-full-artifact.json).53방·자동계단1→2→3→2→1·거울·기존 동선 |
+| 실제 로컬 Chromium 운동장 |65개 통과·실패/실행오류0 |[운동장 실행](Evidence/playground-browser-runtime.json).실제E왕복·보행/충돌·조사/드롭·나침반·양방향추적·남쪽교문탈출·녹음 신호 |
+| 공개 검증기의 로컬 사전 실행 |91개 통과·실행/콘솔오류0 |[로컬 검사](Evidence/playground-public-local-harness.json).공개주소 결과와 별도 |
+| 새 공개 주소 외부 Chromium |91개 통과·실행/콘솔오류0 |[외부 보고서](Evidence/public-web-playground.json).HTTP200/text-html·최종해시일치·실제E왕복/수집/교문성공/재시작 |
+| 실제 Unity Editor C# |컴파일 성공,6항목 갱신. `Tundra build success` |[이번 Unity 실행 JSON](Evidence/playground-unity-attempt.json), `TestResults/unity-playground-release.log` |
+| Unity Play/물리/화면/네이티브 음향/Unity WebGL |미실행·미검증. Play 진입은 라이선스 오류exit198 |실제 오류: `No valid Unity Editor license found. Please activate your license.` |
+
+이번 Unity 실행 증거 UTC는 `2026-10-24T23:53:25.455717+00:00`입니다. 에디터 컴파일 성공을 실제 Unity 플레이나 Unity WebGL 실행 성공으로 확대하지 않습니다. Node 검토 역시 브라우저 입력·렌더링·오디오 검증을 대신하지 않습니다.
+
+네이티브 러너에는 운동장 흙 텍스처 임포트,13개 아이템/9칸 가방·A/B/C 구역 배분, 닫힌 현관 E왕복·정확한 도착 좌표·단일 활성 공간, 운동장 경계/탐방 지점, 옛 현관 탈출 불가·열쇠 부족·남쪽 교문 범위 검사를 추가했습니다. 이번 Play 중단으로 해당 Unity 런타임 검사는 실행 완료되지 않았습니다.
+
+### 0.10 브라우저 검사 재실행
+
+프로젝트 루트 `SchoolEscape/`에서 최종 HTML을 생성하고 별도 터미널로 HTTP 서버를 실행합니다. 아래 명령은 재실행 방법이며 통과 보고가 아닙니다. `ESCAPE_EXPECT_SHA256`에는 실제 검사 파일의 최종 해시를 지정합니다.
+
+```bash
+python3 Tools/check_maps.py
+node Tools/items_check.mjs
+node Tools/build_web.cjs /출력/SchoolEscape-play.html
+python3 -m http.server 8793 --bind 127.0.0.1 --directory /출력
+```
+
+```bash
+ESCAPE_URL='http://127.0.0.1:8793/SchoolEscape-play.html?qa' ESCAPE_EXPECT_SELF_CONTAINED=1 node Tools/browser_check.cjs
+ESCAPE_URL='http://127.0.0.1:8793/SchoolEscape-play.html?qa' node Tools/playground_browser_check.cjs
+```
+
+`ESCAPE_RESULTS_DIR`로 증거 출력 위치를 분리합니다. 실제 실행 결과 파일·UTC·HTML 해시가 있는 검사만 완료로 기록합니다.
+
+## 이전0.9 — 본관 나머지12개 방·운동장 기획
+
+이하0.9 표와 해시는 과거 본관 확장판의 기록입니다. 당시 운동장 기획만 존재했고1층 임시 교문에서 탈출했습니다. 현재0.10 상태는 위 표를 기준으로 봅니다.
 
 지도 revision `remaining-main-rooms-2026-10-24`, featureRevision `remaining-main-rooms-playground-plan-2026-10-24`. 새 방12개/85구역을 추가해53개 방이 되었으며 운동장은 기획 문서/SVG만 작성했습니다. 실외 실행 맵이나 교문 이전을 검증했다고 기록하지 않습니다.
 
@@ -133,7 +174,7 @@ Revision `support-room-interiors-2026-10-23`, 총28개 독립 방/142개 구역�
 
 음악실은 확인 가능한 텍스트 백업의 관계와 기본1안 방향을 적용했습니다. 이미지 포함DOCX는 재시도해도32MiB전송제한으로 미확인이라 원본이미지의 정확한 배치·치수 복제를 주장하지 않습니다. 연결 통로는 현재 채팅의 손그림을 참고했습니다.
 
-## 재실행
+## 이전0.9 검사의 재실행 기록
 
 프로젝트 루트 `SchoolEscape/`에서:
 
@@ -153,7 +194,7 @@ Playwright 기본 설치 경로는 `/workspace/escape-tools/node_modules/playwri
 
 관리형 Chromium에서 `file://` 직접 탐색은 이전 시도에서 `ERR_BLOCKED_BY_ADMINISTRATOR`로 차단됐습니다. 정책을 우회하지 않았으며, 동일 단일 파일의 HTTP 실행 검증과 직접 파일 열기 미실행을 구분합니다. 이후 공개 실행 주소와 외부 브라우저 검증을 추가했습니다. [배포 기록](DEPLOYMENT.md)을 참조하세요.
 
-## Unity 재개 지점
+## Unity 실행 방법과 이전 실행 기록
 
 실제 Unity 6000.0.62f1 에디터로 이번 변경의 임포트와 C# 컴파일까지 수행했습니다. `Tundra build success` 후 `No valid Unity Editor license found. Please activate your license.`로 exit 198 종료했습니다. Unity 런타임 결과는 생성되지 않았습니다. 라이선스 값을 채팅으로 전달하지 말고 활성화된 Unity Hub 환경에서 이 프로젝트만 여세요.
 
@@ -180,10 +221,10 @@ python3 -m http.server 8792 --directory Builds/WebGL
 
 ## 이전 단계 증거
 
-외곽 전용 단계의 `backup-*`, `interiors-*`, `single-html-runtime.json`, 초기 `browser-runtime.json`은 과거 기록입니다. 현재 결과는 이 문서 상단의0.9 `rooms-*` 증거가 기준이며 `dense-*`와 `room-portals-*`는 이전 단계입니다. 미열람 DOCX의 이미지와 실제 평면도 일치 여부, 최종 아트 교체는 남은 작업입니다.
+외곽 전용 단계의 `backup-*`, `interiors-*`, `single-html-runtime.json`, 초기 `browser-runtime.json`은 과거 기록입니다. 0.9 결과는 `rooms-*` 증거에 보존하며 `dense-*`와 `room-portals-*`는 이전 단계입니다. 미열람 DOCX의 이미지와 실제 평면도 일치 여부, 최종 아트 교체는 남은 작업입니다.
 
 
-## 공개 웹 주소의 실제 외부 실행
+## 이전0.5~0.7 공개 웹 주소의 실제 외부 실행
 
 [실행 보고서](Evidence/public-web-play.json):2026-10-23T10:51:55.190Z,14개항목통과/실행·콘솔오류0. 공개CDN HTTP200/text-html/해시일치,처음확인화면정상버튼,최신28방로드,실제시작/W보행/E보건실입퇴실및공간분리확인. 로컬전체1,447개검사를외부14개로대체하거나UnityWebGL검증으로간주하지않습니다.
 

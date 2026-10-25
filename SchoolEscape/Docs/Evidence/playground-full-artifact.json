@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-25T06:51:40.477558+00:00",
+  "executedUrl": "http://127.0.0.1:8811/index.html?qa",
+  "htmlBytes": 6659374,
+  "htmlSha256": "a07f0080b02cbabceb58d4c87550434701fcc69f23983ff173bdcfc2c2b179bd",
+  "passed": 2913,
+  "failed": [],
+  "errors": [],
+  "selfContainedRequests": true,
+  "note": "Static served file hash checked before and after this full suite; no source/build changes during execution."
+}

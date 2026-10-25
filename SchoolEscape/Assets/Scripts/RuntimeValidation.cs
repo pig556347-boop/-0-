@@ -81,13 +81,22 @@ namespace SchoolEscape
             if(Game.Pursuer!=null)
             {
                 var enemy=Game.Pursuer.Position;
-                var enemyMap=Array.Find(Game.Data.floors,f=>f.id==Game.Pursuer.SpaceId)??Array.Find(Game.Data.roomMaps,f=>f.id==Game.Pursuer.SpaceId);
+                var enemyMap=Game.FindSpace(Game.Pursuer.SpaceId);
                 Check(enemyMap!=null&&enemyMap.Clear(enemy.x,enemy.y,Game.Data.tileSize,Pursuer.Radius),"Caretaker initial landing is clear on its selected map");
                 Check(Game.Pursuer.SpaceId!=Game.Current.id||Vector2.Distance(enemy,Game.Data.Grid(Game.Player.transform.position))*Game.Data.tileSize>=15,"Caretaker starts on another floor or at a safe reachable distance");
             }
             Check(Resources.Load<Font>("SchoolFont")!=null,"Korean font imported");
             Check(Resources.Load<Texture2D>("FloorTexture")!=null,"Floor texture imported");
             Check(Resources.Load<Texture2D>("WallTexture")!=null,"Wall texture imported");
+            if((Game.Data.outdoorMaps??Array.Empty<FloorData>()).Length>0)
+            {
+                Check(Resources.Load<Texture2D>("YardTexture")!=null,"Outdoor soil texture imported");
+                var keys=Game.Items.WorldItems.FindAll(i=>i.id.StartsWith("key-",StringComparison.Ordinal));
+                Check(Game.Items.WorldItems.Count==13&&Game.Items.Capacity==9,"Outdoor expansion preserves thirteen items and nine carried slots");
+                Check(keys.Count==3&&keys.Exists(i=>i.id=="key-a")&&keys.Exists(i=>i.id=="key-b")&&keys.Exists(i=>i.id=="key-c"),"Outdoor run has exactly the three unique A/B/C keys");
+                Check(keys.Exists(i=>Game.FindSpace(i.spaceId).isOutdoor)&&keys.Exists(i=>!Game.FindSpace(i.spaceId).isOutdoor),"Every native run places a key outdoors and a key in the main building");
+                Check(keys.Exists(i=>i.hidden)&&keys.Exists(i=>!i.hidden),"Native key locations include furniture search and loose pickup");
+            }
             Check(Shader.Find("Standard")!=null,"Built-in shader available");
             Vector3 cameraTarget=(Game.Player.transform.position-Game.View.transform.position).normalized;
             Check(Vector3.Dot(Game.View.transform.forward,cameraTarget)>.999f,"Camera points at explorer");
@@ -232,6 +241,58 @@ namespace SchoolEscape
                 Check(Game.Floor==roomMap.sourceFloor&&Vector2.Distance(returned,new Vector2(roomMap.returnX,roomMap.returnY))<.02f&&Game.ActiveSpaceCount==1,"Precise portal return and hidden room: "+roomMap.label);
                 Check(!Game.Interact(),"No immediate return loop: "+roomMap.label);
                 Check(WalkTo(start.x,start.y),"Return from door to main route: "+roomMap.label);
+            }
+            // Exercise the exterior through the same closed-door coroutine as
+            // a user, rather than treating it as another numbered floor.
+            foreach(var yard in Game.Data.outdoorMaps??Array.Empty<FloorData>())
+            {
+                var entrance=Array.Find(Game.Data.floors[0].portals??Array.Empty<PortalData>(),p=>p.targetId==yard.id);
+                Check(entrance!=null,"Outdoor map has main-entrance portal: "+yard.id);
+                if(entrance==null)continue;
+                Game.SwitchFloor(1,24,3,false);yield return new WaitForSecondsRealtime(.7f);
+                Check(!Game.NearExitGate(),"Former first-floor gate is no longer an escape point");
+                Vector2 at=new Vector2(entrance.doorX,entrance.doorY)+entrance.Outward;
+                Game.Player.Warp(Game.Data.World(at.x,at.y));Move(-entrance.Outward,true,.6f);
+                Check(Game.Current.id=="floor-1"&&ValidPosition(),"Closed entrance prevents walk-only outdoor transfer");
+                Game.Player.Warp(Game.Data.World(at.x,at.y));int transfers=Game.RoomTransitions;
+                Check(Game.Interact()&&Game.Opening&&Game.Current.id=="floor-1","Actual E opens outdoor entrance before transfer");
+                yield return new WaitForSecondsRealtime(.3f);
+                Check(Game.Current==yard&&yard.isOutdoor&&Game.ActiveSpaceCount==1&&string.IsNullOrEmpty(Game.RoomId)&&ValidPosition(),"Outdoor arrival is safe and isolated from interior rooms");
+                Check(Vector2.Distance(Game.Data.Grid(Game.Player.transform.position),new Vector2(entrance.arrivalX,entrance.arrivalY))<.03f&&Game.Floor==0,"Outdoor arrival uses its authored landing and has no indoor floor number");
+                Check(Game.RoomTransitions==transfers+1&&!Game.Interact(),"Outdoor arrival blocks repeated E and idle transfer loops");
+                yield return null;yield return new WaitForFixedUpdate();
+                foreach(var landmark in yard.landmarks??Array.Empty<LandmarkData>())
+                {
+                    Check(WalkTo(landmark.x,landmark.y),"Outdoor walking route: "+landmark.label);
+                    Check(WalkTo(yard.spawnX,yard.spawnY),"Outdoor route return: "+landmark.label);
+                }
+                foreach(var direction in new[]{Vector2.right,Vector2.left,Vector2.up,Vector2.down})
+                {
+                    Game.Player.Warp(Game.Data.World(yard.spawnX,yard.spawnY));Move(direction,true,35);
+                    Check(Game.Current==yard&&ValidPosition(),"Outdoor boundary/closed door prevents walking escape: "+direction);
+                }
+                var gate=Game.Data.escapeGate;
+                Check(gate!=null&&gate.spaceId==yard.id,"Final escape gate belongs to the actual schoolyard");
+                if(gate!=null&&gate.spaceId==yard.id)
+                {
+                    Game.Player.Warp(Game.Data.World(gate.x,gate.y));
+                    Check(Game.NearExitGate(),"Outdoor south gate has a safe usable approach");
+                    Check(!Game.Items.ConsumeEscapeKeys()&&!Game.Won,"Outdoor gate rejects escape while A/B/C are missing");
+                    Game.Player.Warp(Game.Data.World(gate.x,gate.y+(gate.range+.25f)/Game.Data.tileSize));
+                    Check(!Game.NearExitGate(),"Outdoor escape interaction remains limited to the south gate range");
+                }
+                Game.Player.Warp(Game.Data.World(yard.spawnX,yard.spawnY));
+                var back=Array.Find(yard.portals??Array.Empty<PortalData>(),p=>p.targetId=="floor-1");
+                Check(back!=null,"Schoolyard has a return portal to main building");
+                if(back==null)continue;
+                Vector2 returnAt=new Vector2(back.doorX,back.doorY)+back.Outward;
+                Check(WalkTo(Mathf.RoundToInt(returnAt.x),Mathf.RoundToInt(returnAt.y)),"Outdoor return entrance reachable after exploration");
+                yield return new WaitForSecondsRealtime(.7f);
+                Check(Game.Interact()&&Game.Opening&&Game.Current==yard,"Actual E opens main-building return door");
+                yield return new WaitForSecondsRealtime(.3f);
+                Vector2 returned=Game.Data.Grid(Game.Player.transform.position);
+                Check(Game.Current.id=="floor-1"&&Game.ActiveSpaceCount==1&&ValidPosition()&&Vector2.Distance(returned,new Vector2(back.arrivalX,back.arrivalY))<.03f,"Outdoor round trip returns safely to the precise main entrance");
+                Check(!Game.Interact(),"No immediate outdoor/main-building bounce");
             }
             Game.SwitchFloor(1,24,5,false);
             Game.AutomaticStairsEnabled=true;

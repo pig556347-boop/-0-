@@ -24,7 +24,10 @@ const shuffle=(array,random)=>{const a=[...array];for(let i=a.length-1;i>0;i--){
 export class ItemSystem {
  constructor(game,options={}){
   this.game=game;this.catalog=ITEM_CATALOG;this.capacity=9;this.maxEquipped=1;this.options=options;
-  this.escapeGate={spaceId:`floor-${game.data.spawnFloor}`,x:game.data.spawnX,y:Math.max(1,game.data.spawnY-3),label:'교문으로 탈출',range:1.7};
+  const yard=(game.data.outdoorMaps||[]).find(f=>f.id==='playground');
+  if(yard&&!game.data.escapeGate)throw Error('Outdoor map requires an authored escape gate');
+  this.escapeGate={...(game.data.escapeGate||{spaceId:`floor-${game.data.spawnFloor}`,x:game.data.spawnX,y:Math.max(1,game.data.spawnY-3),label:'교문으로 탈출',range:1.7})};
+  if(!game.spaces.has(this.escapeGate.spaceId))throw Error('Unknown escape gate space '+this.escapeGate.spaceId);
   this.navigation=new Map();this.searchTemplate=[];this.connections=new Map();this._buildLocations();this.reset(options.seed??game.runSeed);
  }
  reset(seed){
@@ -33,13 +36,27 @@ export class ItemSystem {
   this.serial=0;this.escaped=false;this.lastAction=null;this.game.won=false;this.searchables=this.searchTemplate.map(s=>({...s,searched:false,itemUid:null}));
   this.searchById=new Map(this.searchables.map(s=>[s.id,s]));this.game.speedBoostUntil=0;
   const floors=shuffle([1,2,3],this.random),modes=shuffle(['hidden','ground',this.random()<.5?'hidden':'ground'],this.random);
-  KEYS.forEach((id,i)=>this._spawn(id,floors[i],modes[i]));
+  if(this.game.spaces.has('playground')){
+   const regions=shuffle(['playground','main',this.random()<.5?'playground':'main'],this.random);
+   shuffle(KEYS,this.random).forEach((id,i)=>this._spawn(id,regions[i],modes[i]));
+  }else KEYS.forEach((id,i)=>this._spawn(id,floors[i],modes[i]));
   for(const floor of [1,2,3]){this._spawn('vitamin-water',floor,this.random()<.6?'hidden':'ground');this._spawn('chocolate-bar',floor,this.random()<.6?'hidden':'ground');}
   shuffle(PARTS,this.random).forEach((id,i)=>this._spawn(id,floors[i],this.random()<.7?'hidden':'ground'));
   this._spawn('smartwatch',1,this.random()<.5?'hidden':'ground');
   return this.inspect();
  }
  _buildLocations(){
+  // Keys stay away from arrival/door/gate use areas; the navigation below
+  // still proves every selected display/interaction point is reachable.
+  this.keyExclusions=new Map();
+  const avoid=(id,x,y)=>{if(!id||!Number.isFinite(x)||!Number.isFinite(y))return;if(!this.keyExclusions.has(id))this.keyExclusions.set(id,[]);this.keyExclusions.get(id).push({x,y});};
+  for(const f of this.game.spaces.values()){
+   if(f.isRoom){avoid(f.id,f.spawnX,f.spawnY);avoid(f.id,f.exitX,f.exitY+1);avoid(`floor-${f.sourceFloor}`,f.returnX,f.returnY);}
+   for(const r of f.rooms||[])if(r.interiorId){const [dx,dy]=DIR[r.facing],target=this.game.spaces.get(r.interiorId);avoid(f.id,r.doorX+dx,r.doorY+dy);if(target)avoid(target.id,target.spawnX,target.spawnY);}
+   for(const s of f.stairs||[]){avoid(f.id,s.x,s.y);avoid(`floor-${s.target}`,s.arrivalX,s.arrivalY);}
+   for(const p of f.portals||[]){const [dx,dy]=DIR[p.facing];avoid(f.id,p.doorX+dx,p.doorY+dy);avoid(p.targetId,p.arrivalX,p.arrivalY);}
+  }
+  avoid(this.escapeGate.spaceId,this.escapeGate.x,this.escapeGate.y);
   for(const f of this.game.spaces.values()){
    const nodes=[],byKey=new Map();
    for(let y=0;y<f.height;y++)for(let x=0;x<f.width;x++)if(this.game.open(x,y,f)&&!this.game.blocked(x,y,f)){
@@ -70,25 +87,29 @@ export class ItemSystem {
     for(const s of f.stairs)edges.push({toId:`floor-${s.target}`,x:s.x,y:s.y,label:s.label,kind:'stairs'});
     for(const r of f.rooms)if(r.interiorId){const [dx,dy]=DIR[r.facing];edges.push({toId:r.interiorId,x:r.doorX+dx,y:r.doorY+dy,label:r.label+' 입구',kind:'door'});}
    }
+   for(const p of f.portals||[]){const [dx,dy]=DIR[p.facing];edges.push({toId:p.targetId,x:p.doorX+dx,y:p.doorY+dy,label:p.label,kind:'door'});}
    this.connections.set(f.id,edges);
   }
  }
  _floor(f){return f.isRoom?f.sourceFloor:f.number}
+ _selectedSpace(f,selection){return typeof selection==='number'?this._floor(f)===selection:selection==='main'?!f.isOutdoor&&f.id!=='playground':f.id===selection}
+ _safeKeyLocation(f,p){return!(this.keyExclusions.get(f.id)||[]).some(q=>Math.hypot(q.x-p.x,q.y-p.y)*this.game.data.tileSize<4)}
  _freshUid(itemId){return`run-${this.seed.toString(16)}-${++this.serial}-${itemId}`}
- _spawn(itemId,floor,mode){
-  const g=this.game,spaces=[...g.spaces.values()].filter(f=>this._floor(f)===floor);
+ _spawn(itemId,selection,mode){
+  const g=this.game,isKey=KEYS.includes(itemId),spaces=[...g.spaces.values()].filter(f=>this._selectedSpace(f,selection));
   let source;
-  if(mode==='hidden')source=shuffle(this.searchables.filter(s=>this._floor(g.spaces.get(s.spaceId))===floor&&!s.itemUid),this.random)[0];
+  if(mode==='hidden')source=shuffle(this.searchables.filter(s=>this._selectedSpace(g.spaces.get(s.spaceId),selection)&&!s.itemUid&&(!isKey||(this._safeKeyLocation(g.spaces.get(s.spaceId),s)&&s.approaches.every(p=>this._safeKeyLocation(g.spaces.get(s.spaceId),p))))),this.random)[0];
+  if(mode==='hidden'&&isKey&&g.spaces.has('playground')&&!source)throw Error(`No safe hidden key source in ${selection}`);
   let spot;
-  if(source){const a=source.approaches[0];spot={spaceId:source.spaceId,x:source.x,y:source.y,displayX:a.x,displayY:a.y,sourceId:source.id,hidden:true,revealed:false};}
+  if(source){const a=source.approaches.find(p=>!isKey||this._safeKeyLocation(g.spaces.get(source.spaceId),p));spot={spaceId:source.spaceId,x:source.x,y:source.y,displayX:a.x,displayY:a.y,sourceId:source.id,hidden:true,revealed:false};}
   else{
    const maps=shuffle(spaces,this.random);
    for(const f of maps){const nodes=shuffle(this.navigation.get(f.id).available,this.random);
-    const p=nodes.find(n=>Math.hypot(n.x-f.spawnX,n.y-f.spawnY)*g.data.tileSize>=2&&!(f.stairs||[]).some(s=>Math.hypot(s.x-n.x,s.y-n.y)*g.data.tileSize<2.5)&&!(this.connections.get(f.id)||[]).some(e=>Math.hypot(e.x-n.x,e.y-n.y)*g.data.tileSize<1.8)&&!this.worldItems.some(o=>o.spaceId===f.id&&Math.hypot(o.displayX-n.x,o.displayY-n.y)*g.data.tileSize<1.2));
+    const p=nodes.find(n=>Math.hypot(n.x-f.spawnX,n.y-f.spawnY)*g.data.tileSize>=2&&!(f.stairs||[]).some(s=>Math.hypot(s.x-n.x,s.y-n.y)*g.data.tileSize<2.5)&&!(this.connections.get(f.id)||[]).some(e=>Math.hypot(e.x-n.x,e.y-n.y)*g.data.tileSize<1.8)&&(!isKey||this._safeKeyLocation(f,n))&&!this.worldItems.some(o=>o.spaceId===f.id&&Math.hypot(o.displayX-n.x,o.displayY-n.y)*g.data.tileSize<1.2));
     if(p){spot={spaceId:f.id,x:p.x,y:p.y,displayX:p.x,displayY:p.y,sourceId:null,hidden:false,revealed:true};break;}
    }
   }
-  if(!spot)throw Error(`No reachable item placement for ${itemId}`);
+  if(!spot)throw Error(`No reachable item placement for ${itemId} in ${selection}`);
   const item={uid:this._freshUid(itemId),itemId,...spot,picked:false};this.worldItems.push(item);if(source)source.itemUid=item.uid;return item;
  }
  _action(ok,message,extra={}){return this.lastAction={ok,message,...extra}}
@@ -196,7 +217,7 @@ export class ItemSystem {
  nearbyGate(){const g=this.game,e=this.escapeGate;return!g.caught&&!g.pendingDoor&&!this.escaped&&g.spaceId===e.spaceId&&Math.hypot(g.x-e.x,g.y-e.y)*g.data.tileSize<=e.range&&g.segmentClear(g.x,g.y,e.x,e.y)?{...e,missing:KEYS.filter(id=>!this.inventory.some(i=>i.itemId===id)).map(id=>id.slice(-1).toUpperCase())}:null}
  tryEscape(){return this.consumeEscapeKeys()}
  consumeEscapeKeys(){
-  const gate=this.nearbyGate();if(!gate)return this._action(false,'1층 현관의 교문 출구 앞에서 사용하세요.',{missing:KEYS.filter(id=>!this.inventory.some(i=>i.itemId===id)).map(id=>id.slice(-1).toUpperCase())});
+  const gate=this.nearbyGate();if(!gate)return this._action(false,'운동장 교문 앞에서 사용하세요.',{missing:KEYS.filter(id=>!this.inventory.some(i=>i.itemId===id)).map(id=>id.slice(-1).toUpperCase())});
   if(!this.hasAllKeys())return this._action(false,`열쇠 ${gate.missing.join('·')}가 필요합니다.`,{missing:gate.missing});
   const keys=this.inventory.filter(i=>KEYS.includes(i.itemId));this.inventory=this.inventory.filter(i=>!KEYS.includes(i.itemId));this.consumed.push(...keys);this.escaped=true;this.game.won=true;this.game.speed=0;this.game.isRunning=false;this.game.emit('escaped',{keys:KEYS.slice()});return this._action(true,'열쇠 A·B·C로 교문을 열었습니다.',{type:'escaped',missing:[]});
  }

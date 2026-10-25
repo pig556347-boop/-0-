@@ -1,26 +1,42 @@
 [
   {
-    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/ab240036150fa14bb61608fef9d0150f203eedd5/maps/overview.png",
+    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/overview.png",
     "status": 200,
-    "bytes": 179733,
-    "sha256": "8bd4e5cd2da5b47ddbd9da4a6fce30bf64d8a66a2b8bd9b026dd6d084ec56408"
+    "contentType": "image/png",
+    "bytes": 148752,
+    "sha256": "a78c99b695fa993072f676b67db1cd2af92b21e54ca771823d9db350ad1b650c",
+    "matchesLocal": true
   },
   {
-    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/ab240036150fa14bb61608fef9d0150f203eedd5/maps/floor-1.png",
+    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/floor-1.png",
     "status": 200,
-    "bytes": 122427,
-    "sha256": "964807ac97bbcdc4bc5d9a333bba43a742ee5135f4ff859ac3d0c322a7667442"
+    "contentType": "image/png",
+    "bytes": 106456,
+    "sha256": "535d0f921f1441e834c366eb963f999e10a5684de566c362a9e48d787b7b35fa",
+    "matchesLocal": true
   },
   {
-    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/ab240036150fa14bb61608fef9d0150f203eedd5/maps/floor-2.png",
+    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/floor-2.png",
     "status": 200,
-    "bytes": 169053,
-    "sha256": "c1a51eb5ac1ce4e8fb3fbc6f5fdc239386834310ce966b7c9a24091de66d413f"
+    "contentType": "image/png",
+    "bytes": 132925,
+    "sha256": "69c0922f6dca074a6f1b1ae48ef8f323675c320748c0b0c1e6af9f6c4e2eeaae",
+    "matchesLocal": true
   },
   {
-    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/ab240036150fa14bb61608fef9d0150f203eedd5/maps/floor-3.png",
+    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/floor-3.png",
     "status": 200,
-    "bytes": 145172,
-    "sha256": "dd336db51210e59b4ff1f9210cd9d342bbe3c5eb42140ba8bb89466e0905ce8f"
+    "contentType": "image/png",
+    "bytes": 117310,
+    "sha256": "0a9a6fa576baa0d2c45ba938f57cef08e18eb2e7bd617cabebd498be480dc4bb",
+    "matchesLocal": true
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/playground.png",
+    "status": 200,
+    "contentType": "image/png",
+    "bytes": 204262,
+    "sha256": "a2a0469e72e1a1720378ca39a8fefd398c5ebdab0c5c98db6635088ae6c126dd",
+    "matchesLocal": true
   }
 ]

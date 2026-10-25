@@ -9,6 +9,7 @@ namespace SchoolEscape
     {
         public MapData Data { get; private set; }
         public FloorData Current { get; private set; }
+        public string CurrentSpaceId=>Current!=null?Current.id:string.Empty;
         public string RoomId => Current!=null&&Current.isRoom?Current.id:string.Empty;
         public int RoomTransitions { get; private set; }
         public bool Opening { get; private set; }
@@ -17,7 +18,7 @@ namespace SchoolEscape
         public bool Won { get; private set; }
         public bool InventoryOpen { get; private set; }
         public ItemInventory Items { get; private set; }
-        public Vector2 ExitGatePoint=>new Vector2(Data.spawnX,Mathf.Max(1,Data.spawnY-3));
+        public Vector2 ExitGatePoint=>Data.escapeGate!=null?new Vector2(Data.escapeGate.x,Data.escapeGate.y):new Vector2(Data.spawnX,Mathf.Max(1,Data.spawnY-3));
         public float SimulationTime { get; private set; }
         public bool Caught => Pursuer != null && Pursuer.Caught;
         public Pursuer Pursuer { get; private set; }
@@ -138,12 +139,20 @@ namespace SchoolEscape
         GameObject BuildFloor(FloorData f)
         {
             float t = Data.tileSize;
-            var root = new GameObject(f.isRoom?"Room · "+f.id:"Main building · " + f.number + "F");
-            if(!f.isRoom&&f.number==1)
-                Label("교문 · 열쇠 A / B / C",root.transform,Data.World(ExitGatePoint.x,ExitGatePoint.y)+Vector3.up*1.9f,.15f);
+            var root = new GameObject(f.isOutdoor?"Schoolyard · "+f.id:f.isRoom?"Room · "+f.id:"Main building · " + f.number + "F");
+            if(Data.escapeGate!=null&&Data.escapeGate.spaceId==f.id)
+                Label("운동장 교문 · 열쇠 A / B / C",root.transform,Data.World(ExitGatePoint.x,ExitGatePoint.y)+Vector3.up*1.9f,.15f);
             // Single ground collider; no holes or unsupported landing points.
             Vector3 groundCenter=Data.World((f.width-1)*.5f,(f.height-1)*.5f);groundCenter.y=-.15f;
-            Box("Ground", root.transform, groundCenter, new Vector3(f.width*t+2, .3f, f.height*t+2), floorMat, true);
+            Material groundMaterial=floorMat;
+            if(f.isOutdoor)
+            {
+                groundMaterial=Mat(new Color(.65f,.60f,.48f),"YardTexture");
+                // Match the outdoor review renderer's ground scale: the soil
+                // grain repeats across the yard instead of stretching 84m.
+                groundMaterial.mainTextureScale=new Vector2(16,13);
+            }
+            Box("Ground", root.transform, groundCenter, new Vector3(f.width*t+2, .3f, f.height*t+2), groundMaterial, true);
             // Walls follow shared navigation rows. Lower interior walls keep the
             // camera view clear while colliders retain their full height.
             for (int y = 0; y < f.height; y++)
@@ -154,11 +163,11 @@ namespace SchoolEscape
                     int start = x;
                     bool cut=f.DoorCell(x,y),low=f.LowInteriorWall(x,y);
                     while (x < f.width && !f.Open(x,y)&&f.DoorCell(x,y)==cut&&f.LowInteriorWall(x,y)==low) x++;
-                    float height=cut?.18f:low?.45f:1.7f;
+                    float height=cut?.18f:f.isOutdoor?.72f:low?.45f:1.7f;
                     Vector3 center = Data.World((start + x - 1) * .5f, y);
                     center.y = height*.5f;
-                    var wall=Box(cut?"Door wall cutaway · collision retained":low?"Interior cutaway wall · collision retained":"Solid wall", root.transform, center, new Vector3((x-start)*t, height, t), wallMat, true);
-                    if(cut||low)
+                    var wall=Box(cut?"Door wall cutaway · collision retained":f.isOutdoor?"Schoolyard perimeter fence · collision retained":low?"Interior cutaway wall · collision retained":"Solid wall", root.transform, center, new Vector3((x-start)*t, height, t), f.isOutdoor?metalMat:wallMat, true);
+                    if(cut||low||f.isOutdoor)
                     {
                         var collider=wall.GetComponent<BoxCollider>();
                         collider.size=new Vector3(1,1.7f/height,1);
@@ -169,6 +178,9 @@ namespace SchoolEscape
             for (int y = 0; y < f.height; y++) for (int x = 0; x < f.width; x++)
             {
                 if (!f.Open(x,y)) continue;
+                // Outdoor paths and lamps are authored fixtures, rather than
+                // classroom checker tiles, wainscots or corridor windows.
+                if(f.isOutdoor)continue;
                 Vector3 p = Data.World(x,y);
                 if ((x+y)%2 == 0) Box("Worn floor tile",root.transform,p+Vector3.up*.006f,new Vector3(t-.025f,.01f,t-.025f),floorMat);
                 if ((x*17+y*11+f.number)%43==0) Box("Abandoned paper",root.transform,p+new Vector3(.13f,.02f,.19f),new Vector3(.22f,.012f,.30f),Mat(new Color(.66f,.65f,.55f)));
@@ -195,6 +207,8 @@ namespace SchoolEscape
             }
             foreach (var r in f.rooms)BuildDoor(r,root.transform,t,string.IsNullOrEmpty(r.interiorId)?f.id+"|"+r.label:r.interiorId);
             if(f.isRoom)BuildDoor(new RoomData{label="복도로 나가기",facing="north",doorX=f.exitX,doorY=f.exitY},root.transform,t,f.id+":exit");
+            foreach(var portal in f.portals??Array.Empty<PortalData>())
+                BuildDoor(new RoomData{label=portal.label,facing=portal.facing,doorX=portal.doorX,doorY=portal.doorY},root.transform,t,PortalDoorKey(f,portal));
             foreach(var fixture in f.fixtures??Array.Empty<FixtureData>())
             {
                 string key=string.IsNullOrEmpty(fixture.color)?"#88765a":fixture.color;
@@ -330,7 +344,7 @@ namespace SchoolEscape
         }
         public bool CheckAutomaticStairs()
         {
-            if(Current.isRoom||Opening||Caught||Won||Paused)return false;
+            if(Current.isRoom||Current.isOutdoor||Opening||Caught||Won||Paused)return false;
             if(arrivalLock!=null)
             {
                 var locked=Array.Find(Current.stairs,s=>s.id==arrivalLock);
@@ -359,6 +373,7 @@ namespace SchoolEscape
             Current=space;Floor=space.isRoom?space.sourceFloor:space.number;
             Player.Warp(Data.World(x,y));arrivalLock=null;nearby=null;
             Items?.SyncVisuals();
+            Pursuer?.SyncSpace();
             Physics.SyncTransforms();
             if(View!=null)SnapCamera();
         }
@@ -374,6 +389,40 @@ namespace SchoolEscape
             }
             lastTransition=SimulationTime;if(count)Transitions++;
             notice=target+"층 · "+Current.subtitle;noticeUntil=SimulationTime+3;
+        }
+        public FloorData FindSpace(string id)=>Data.FindSpace(id);
+        public void SwitchSpace(string id,int x,int y)
+        {
+            var destination=FindSpace(id);
+            if(destination==null)throw new InvalidOperationException("Unknown exploration space: "+id);
+            if(openingRoutine!=null){StopCoroutine(openingRoutine);openingRoutine=null;Opening=false;ResetDoorLeaves();}
+            ActivateSpace(destination,x,y);
+            notice=destination.label;noticeUntil=SimulationTime+3;
+        }
+        static string PortalDoorKey(FloorData from,PortalData portal)=>from.id+"|portal:"+portal.id;
+        public PortalData NearbyPortal()
+        {
+            if(Current==null||Opening)return null;
+            var player=Data.Grid(Player.transform.position);PortalData nearest=null;float range=1.6f;
+            foreach(var portal in Current.portals??Array.Empty<PortalData>())
+            {
+                if(FindSpace(portal.targetId)==null)continue;
+                var at=new Vector2(portal.doorX,portal.doorY)+portal.Outward;
+                float distance=Vector2.Distance(player,at)*Data.tileSize;
+                if(distance>range||Vector2.Dot(player-new Vector2(portal.doorX,portal.doorY),portal.Outward)<=.45f)continue;
+                if(Items!=null&&!Items.ClearSegment(Current,player,at))continue;
+                nearest=portal;range=distance;
+            }
+            return nearest;
+        }
+        public bool UsePortal(string id)
+        {
+            if(Caught||Won||Opening||Paused||SimulationTime-lastRoomInteraction<.6f)return false;
+            var portal=NearbyPortal();if(portal==null||portal.id!=id)return false;
+            var destination=FindSpace(portal.targetId);if(destination==null)return false;
+            Opening=true;
+            openingRoutine=StartCoroutine(OpenPortal(destination,portal.arrivalX,portal.arrivalY,PortalDoorKey(Current,portal),destination.label));
+            return true;
         }
         static Vector2 Outward(RoomData room)=>room.facing=="north"?Vector2.up:room.facing=="south"?Vector2.down:room.facing=="west"?Vector2.left:Vector2.right;
         bool CloseTo(float x,float y,float range=1.6f)
@@ -445,10 +494,11 @@ namespace SchoolEscape
             // threshold, so nearby rear lockers cannot trap the player inside.
             if(CanExitRoom())return ExitRoom();
             var room=NearbyRoom();if(room!=null&&EnterRoom(room.interiorId))return true;
+            var portal=NearbyPortal();if(portal!=null&&UsePortal(portal.id))return true;
             return InteractItems();
         }
         public bool InteractItems()=>ItemInteractionsEnabled&&!Caught&&!Won&&!Opening&&!Paused&&Items!=null&&Items.Interact();
-        public bool NearExitGate()=>Current!=null&&!Current.isRoom&&Floor==1&&CloseTo(ExitGatePoint.x,ExitGatePoint.y,1.7f)&&
+        public bool NearExitGate()=>Current!=null&&Data.escapeGate!=null&&Current.id==Data.escapeGate.spaceId&&CloseTo(ExitGatePoint.x,ExitGatePoint.y,Data.escapeGate.range)&&
             (Items==null||Items.ClearSegment(Current,Data.Grid(Player.transform.position),ExitGatePoint));
         public void ShowNotice(string message){notice=message;noticeUntil=SimulationTime+4;}
         public void EmitNoise(string spaceId,Vector2 point,float radius,string kind)=>Pursuer?.HearNoise(spaceId,point,radius,kind);
@@ -486,7 +536,7 @@ namespace SchoolEscape
             Player.ResetState();SwitchFloor(Data.spawnFloor,Data.spawnX,Data.spawnY,false);
             Pursuer.ResetPursuit();Player.InputEnabled=true;started=true;
             Items?.ResetRun();
-            Audio?.ResetState();Audio?.StartAudio();notice="열쇠 A·B·C를 찾아 1층 현관 교문으로 돌아오세요.";noticeUntil=SimulationTime+4;
+            Audio?.ResetState();Audio?.StartAudio();notice="본관과 운동장에서 열쇠 A·B·C를 찾아 운동장 교문으로 가세요.";noticeUntil=SimulationTime+4;
         }
         public void SetPaused(bool paused)
         {
@@ -509,12 +559,12 @@ namespace SchoolEscape
             {
                 GUI.Box(new Rect(Screen.width*.5f-250,Screen.height*.5f-160,500,320),"");
                 GUI.Label(new Rect(Screen.width*.5f-215,Screen.height*.5f-130,430,60),"폐교탈출",title);
-                GUI.Label(new Rect(Screen.width*.5f-215,Screen.height*.5f-65,440,100),"열쇠 A·B·C를 찾아 현관 교문으로 돌아오세요.\nWASD 이동 · Shift 달리기 · E 조사/줍기/문\nI 인벤토리 · 계단 자동 이동 · Tab 안내도",text);
+                GUI.Label(new Rect(Screen.width*.5f-215,Screen.height*.5f-65,440,100),"본관과 운동장에서 열쇠 A·B·C를 찾으세요.\n운동장 남쪽 교문에서 E로 탈출합니다.\nWASD 이동 · Shift 달리기 · E 조사/문 · I 가방",text);
                 if(GUI.Button(new Rect(Screen.width*.5f-215,Screen.height*.5f+60,430,50),"탐방 시작")){started=true;Player.InputEnabled=true;SetPaused(false);Audio.StartAudio();Pursuer.ResetPursuit();}
                 return;
             }
             GUI.Box(new Rect(18,18,360,82),"");
-            GUI.Label(new Rect(32,26,340,30),"폐교탈출    본관 "+Floor+"F",text);
+            GUI.Label(new Rect(32,26,340,30),"폐교탈출    "+(Current.isOutdoor?"운동장":"본관 "+Floor+"F"),text);
             GUI.Label(new Rect(32,58,340,30),Current.isRoom?Current.label+" · 내부":Current.subtitle,new GUIStyle(text){fontSize=14});
             GUI.Label(new Rect(24,112,240,24),"스태미나 "+Mathf.CeilToInt(Player.Stamina)+(Player.Exhausted?" · 숨 고르기":""),new GUIStyle(text){fontSize=14});
             var oldColor=GUI.color;GUI.color=new Color(.12f,.18f,.18f);GUI.DrawTexture(new Rect(24,140,220,10),Texture2D.whiteTexture);
@@ -557,11 +607,13 @@ namespace SchoolEscape
             }
             GUI.Label(new Rect(24,Screen.height-62,Screen.width-40,50),"WASD 이동   Shift 달리기   E 조사/줍기/문   I 인벤토리   계단 자동   Tab 안내도   Esc 정지",text);
             var roomPrompt=NearbyRoom();
+            var portalPrompt=NearbyPortal();
             var itemPrompt=Items?.Nearby();
             if(Opening)GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),"문을 여는 중…",text);
             else if(NearExitGate())GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),"E · 교문에서 열쇠 A·B·C 사용 ("+Items.KeyCount+"/3)",text);
             else if(CanExitRoom())GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),"E · 문 열고 복도로 나가기"+(itemPrompt!=null?"  /  F · "+itemPrompt.label:""),text);
             else if(roomPrompt!=null)GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),"E · "+roomPrompt.label+" 문 열고 입장"+(itemPrompt!=null?"  /  F · "+itemPrompt.label:""),text);
+            else if(portalPrompt!=null)GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),"E · "+portalPrompt.label+(itemPrompt!=null?"  /  F · "+itemPrompt.label:""),text);
             else if(itemPrompt!=null)GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),"E · "+itemPrompt.label,text);
             else if(nearby!=null)GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),arrivalLock==nearby.id?"계단 구역을 벗어난 뒤 다시 진입하세요":nearby.label+"  ·  계단 안으로 이동",text);
             else if(SimulationTime<noticeUntil)GUI.Label(new Rect(Screen.width*.5f-230,110,600,40),notice,text);

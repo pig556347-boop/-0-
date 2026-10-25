@@ -1,6 +1,16 @@
 {
-  "gameRevision": "remaining-main-rooms-2026-10-24",
+  "gameRevision": "playground-gate-2026-10-24",
+  "gameVersion": "0.10",
+  "mapSha256": "d33884ec869d0bace02ae683d24941faf91cd6900745fa9d8a14bea5fed7a7e9",
   "roomCount": 53,
+  "playgroundImplemented": true,
+  "escapeGate": {
+    "spaceId": "playground",
+    "x": 34,
+    "y": 3,
+    "label": "운동장 교문",
+    "range": 1.7
+  },
   "floors": [
     {
       "floor": 1,
@@ -15,26 +25,53 @@
       "rooms": 17
     }
   ],
+  "diagrams": [
+    {
+      "file": "overview.svg",
+      "width": 1200,
+      "height": 1195
+    },
+    {
+      "file": "floor-1.svg",
+      "width": 1204,
+      "height": 1048
+    },
+    {
+      "file": "floor-2.svg",
+      "width": 2036,
+      "height": 1048
+    },
+    {
+      "file": "floor-3.svg",
+      "width": 1204,
+      "height": 1048
+    },
+    {
+      "file": "playground.svg",
+      "width": 1554,
+      "height": 1180
+    }
+  ],
   "entries": [
     {
-      "file": "overview.png",
+      "file": "overview.svg",
       "label": "전체 맵 전개도"
     },
     {
-      "file": "floor-1.png",
+      "file": "floor-1.svg",
       "label": "본관 1층 · 14개 방"
     },
     {
-      "file": "floor-2.png",
+      "file": "floor-2.svg",
       "label": "본관 2층 · 22개 방"
     },
     {
-      "file": "floor-3.png",
+      "file": "floor-3.svg",
       "label": "본관 3층 · 17개 방"
     },
     {
-      "file": "../PlaygroundPlan.png",
-      "label": "운동장 기획 1안"
+      "file": "playground.svg",
+      "label": "운동장 · 실제 시설과 탐색 동선"
     },
     {
       "file": "../RoomPlans/room-f1-0.svg",

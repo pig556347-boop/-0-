@@ -1,10 +1,7 @@
-# 폐교탈출 독립 소스 백업
+# 폐교탈출 0.10 전용 소스 백업
 
-[프로젝트](SchoolEscape/)의 SchoolEscape 폴더만 Unity Hub로 여세요.
+[웹 플레이](https://rawcdn.githack.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/index.html)
 
-[웹 플레이](https://rawcdn.githack.com/pig556347-boop/-0-/7f267cbd0903ab6aeb2e0a9c469026c0c2df469b/index.html) · [운동장 기획](SchoolEscape/Docs/PLAYGROUND_PLAN.md) · [검증](SchoolEscape/Docs/VALIDATION.md)
+본관과 운동장의 열쇠 A/B/C를 모아 운동장 남쪽 교문에서 E로 탈출합니다.
 
-본관53실 구현, 운동장은 기획 단계입니다. Unity C#컴파일 성공, 실제UnityPlay/WebGL은라이선스문제로미검증입니다.
-기존main/다른게임/루트자동배포워크플로와분리한프로젝트스냅샷입니다. 원본작업커밋은 SOURCE_CHECKPOINT.json을참조하세요.
-
-[맵 전개도 전체 보기](https://rawcdn.githack.com/pig556347-boop/-0-/ab240036150fa14bb61608fef9d0150f203eedd5/maps/index.html)
+Unity Hub에서 SchoolEscape 폴더만 여세요. 실제 Unity Play/WebGL은 라이선스 문제로 미검증입니다. 원본 작업 커밋은 SOURCE_CHECKPOINT.json에 기록했습니다. 다른 게임과 루트 배포 워크플로는 포함하지 않습니다.

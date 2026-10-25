@@ -51,14 +51,15 @@ namespace SchoolEscape
         }
         FloorData Map(string id)
         {
-            foreach(var f in Game.Data.floors)if(f.id==id)return f;
-            foreach(var f in Game.Data.roomMaps)if(f.id==id)return f;
-            return null;
+            return Game.Data.FindSpace(id);
         }
+        IEnumerable<FloorData> SpawnMaps()
+        {foreach(var f in Game.Data.AllSpaces())if(!f.isRoom)yield return f;}
         public void Initialize(ExplorationGame game)
         {
             Game=game;BuildVisual();ResetPursuit();
         }
+        public void SyncSpace()=>SyncVisual(0);
         public void SetEnabled(bool enabled)
         {
             bool wasCaught=Caught;
@@ -73,7 +74,7 @@ namespace SchoolEscape
             random=new System.Random(seed??Guid.NewGuid().GetHashCode());
             var candidates=new List<Spawn>();
             Vector2 player=Game.Data.Grid(Game.Player.transform.position);
-            foreach(var f in Game.Data.floors)
+            foreach(var f in SpawnMaps())
             {
                 foreach(var landmark in f.landmarks??Array.Empty<LandmarkData>())
                 {
@@ -85,6 +86,12 @@ namespace SchoolEscape
                         if(Vector2.Distance(point,new Vector2(stair.x,stair.y))*Game.Data.tileSize<3.2f)nearExit=true;
                     foreach(var room in f.rooms??Array.Empty<RoomData>())
                         if(Vector2.Distance(point,new Vector2(room.doorX,room.doorY))*Game.Data.tileSize<2.5f)nearExit=true;
+                    foreach(var portal in f.portals??Array.Empty<PortalData>())
+                        if(Vector2.Distance(point,new Vector2(portal.doorX,portal.doorY)+portal.Outward)*Game.Data.tileSize<4)nearExit=true;
+                    foreach(var other in Game.Data.AllSpaces())foreach(var portal in other.portals??Array.Empty<PortalData>())
+                        if(portal.targetId==f.id&&Vector2.Distance(point,new Vector2(portal.arrivalX,portal.arrivalY))*Game.Data.tileSize<4)nearExit=true;
+                    var gate=Game.Data.escapeGate;
+                    if(gate!=null&&gate.spaceId==f.id&&Vector2.Distance(point,new Vector2(gate.x,gate.y))*Game.Data.tileSize<4)nearExit=true;
                     if(!nearExit)candidates.Add(new Spawn{map=f,point=point});
                 }
             }
@@ -92,7 +99,7 @@ namespace SchoolEscape
             // for an incomplete edited map and still uses a collision-safe cell.
             if(candidates.Count==0)
             {
-                foreach(var f in Game.Data.floors)
+                foreach(var f in SpawnMaps())
                     foreach(var p in Reachable(f,new Vector2(f.landmarks[0].x,f.landmarks[0].y)))
                         if(f.id!=Game.Current.id||Vector2.Distance(p,player)*Game.Data.tileSize>=15)
                             candidates.Add(new Spawn{map=f,point=p});
@@ -140,7 +147,7 @@ namespace SchoolEscape
             if(!seenExit&&!heardExit)return;
             var a=Map(from);var b=Map(to);if(a==null||b==null)return;
             portals.Clear();portals.Add(new Portal{from=from,to=to,source=source,arrival=arrival,
-                kind=a.isRoom||b.isRoom?"door":"stairs",expires=now+12,alerted=true});
+                kind=a.isRoom||b.isRoom||a.isOutdoor||b.isOutdoor?"door":"stairs",expires=now+12,alerted=true});
             path=null;repathAt=0;portalAlerted=true;
         }
         public void Tick(float dt)
@@ -265,6 +272,13 @@ namespace SchoolEscape
                     source=new Vector2(f.exitX,f.exitY+1),arrival=new Vector2(f.returnX,f.returnY),kind="door",expires=expiry});
                 return exits;
             }
+            foreach(var portal in f.portals??Array.Empty<PortalData>())
+            {
+                if(Map(portal.targetId)==null)continue;
+                exits.Add(new Portal{from=f.id,to=portal.targetId,
+                    source=new Vector2(portal.doorX,portal.doorY)+portal.Outward,
+                    arrival=new Vector2(portal.arrivalX,portal.arrivalY),kind="door",expires=expiry});
+            }
             foreach(var s in f.stairs??Array.Empty<StairData>())
                 exits.Add(new Portal{from=f.id,to=Game.Data.floors[s.target-1].id,source=new Vector2(s.x,s.y),
                     arrival=new Vector2(s.arrivalX,s.arrivalY),kind="stairs",expires=expiry});
@@ -320,6 +334,12 @@ namespace SchoolEscape
                 if(door.interiorOpen)continue;
                 var d=door.facing=="north"?Vector2.up:door.facing=="south"?Vector2.down:door.facing=="west"?Vector2.left:Vector2.right;
                 var c=new Vector2(door.doorX,door.doorY)+d*.51f;var half=new Vector2(d.y!=0?1.02f:.14f,d.y!=0?.14f:1.02f)/t*.5f;
+                if(SegmentRectDistance2(a,b,c-half,c+half)<r2)return false;
+            }
+            foreach(var portal in f.portals??Array.Empty<PortalData>())
+            {
+                var d=portal.Outward;var c=new Vector2(portal.doorX,portal.doorY)+d*.51f;
+                var half=new Vector2(d.y!=0?1.02f:.14f,d.y!=0?.14f:1.02f)/t*.5f;
                 if(SegmentRectDistance2(a,b,c-half,c+half)<r2)return false;
             }
             if(f.isRoom)

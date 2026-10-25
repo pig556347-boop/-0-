@@ -189,10 +189,14 @@ reshape_southwest_corridor(f2)
 
 from author_interiors import populate
 room_maps=populate([f1,f2,f3])
+from outdoor_map import connect_playground
+playground=connect_playground([f1,f2,f3])
 
-data=dict(title='폐교탈출',schemaVersion=4,revision='remaining-main-rooms-2026-10-24',tileSize=1.25,walkSpeed=2.6,runSpeed=4.7,
+data=dict(title='폐교탈출',schemaVersion=4,revision='playground-gate-2026-10-24',tileSize=1.25,walkSpeed=2.6,runSpeed=4.7,
           stairEntryHalfWidth=.8,stairEntryHalfDepth=.65,stairExitRadius=3.2,stairCooldown=.75,
-          playerRadius=0.27,spawnFloor=1,spawnX=24,spawnY=5,floors=[f1,f2,f3],roomMaps=room_maps)
+          playerRadius=0.27,spawnFloor=1,spawnX=24,spawnY=5,floors=[f1,f2,f3],roomMaps=room_maps,
+          outdoorMaps=[playground],escapeGate=dict(spaceId='playground',x=34,y=3,
+          label='운동장 교문',range=1.7))
 dest=ROOT/'Assets/Resources/SchoolMap.json'
 dest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 print('Wrote',dest)

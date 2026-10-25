@@ -1,9 +1,10 @@
 {
   "project": "SchoolEscape",
-  "version": "0.9",
-  "sourceBranch": "feat/school-escape-exploration-beta",
-  "sourceCommit": "d93e8f9b49b032bbee01765539a3d8c542eaba0d",
-  "publicGameCommit": "7f267cbd0903ab6aeb2e0a9c469026c0c2df469b",
-  "note": "Project-only snapshot. No sibling games or root automatic workflows are included.",
-  "mapAtlasUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/ab240036150fa14bb61608fef9d0150f203eedd5/maps/index.html"
+  "version": "0.10",
+  "sourceCommit": "d8f77895eecb94b03aa1dc8d7f5aa19b259dad50",
+  "projectTree": "2f38ad489eca8450b4d362d92478596b53135de9",
+  "webCommit": "6e40868697e73f470d0163ce00a14889ef00cb67",
+  "webUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/index.html",
+  "createdUtc": "2026-10-25T16:24:55.192410+00:00",
+  "scope": "SchoolEscape only; original main and other games excluded"
 }

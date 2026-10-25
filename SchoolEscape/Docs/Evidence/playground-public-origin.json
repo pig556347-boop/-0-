@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-25T06:54:35.021227+00:00",
+  "commit": "6e40868697e73f470d0163ce00a14889ef00cb67",
+  "checks": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 6659374,
+      "sha256": "a07f0080b02cbabceb58d4c87550434701fcc69f23983ff173bdcfc2c2b179bd",
+      "matchesLocal": true
+    },
+    {
+      "path": "concepts/playground-gate.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 917480,
+      "sha256": "537bf51c8067669d5bade33f7b45014186fbdb80ac6b43a71709c388c4af1689",
+      "matchesLocal": true
+    },
+    {
+      "path": "maps/playground.png",
+      "status": 200,
+      "contentType": "image/png",
+      "bytes": 204262,
+      "sha256": "a2a0469e72e1a1720378ca39a8fefd398c5ebdab0c5c98db6635088ae6c126dd",
+      "matchesLocal": true
+    }
+  ],
+  "note": "Raw GitHub origin bytes and image checks; raw HTML is not a play link and this is not public Chromium verification."
+}

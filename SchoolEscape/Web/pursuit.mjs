@@ -40,20 +40,25 @@ export class Pursuit {
   }
   designatedSpawns(){
     const g=this.game,tile=g.data.tileSize,candidates=[];
-    for(const f of g.data.floors){
+    for(const f of [...g.data.floors,...(g.data.outdoorMaps||[])]){
       const nav=this.grid(f),same=f.id===g.spaceId;
       const origin=same?this.closestNode(nav,g.x,g.y,false,f):-1;
       const distance=same?this.distances(nav,origin):null;
-      for(let i=0;i<(f.landmarks||[]).length;i++){
-        const landmark=f.landmarks[i],x=landmark.x,y=landmark.y;
+      const mapOrigin=this.closestNode(nav,f.spawnX,f.spawnY,false,f),connected=this.distances(nav,mapOrigin);
+      const specified=(f.enemySpawnPoints||[]).concat((g.data.enemySpawnPoints||[]).filter(point=>point.spaceId===f.id));
+      const points=specified.length?specified:f.landmarks||[];
+      for(let i=0;i<points.length;i++){
+        const landmark=points[i],x=landmark.x,y=landmark.y;
         if(/현관|통로 끝/.test(landmark.label)||g.blocked(x,y,f,this.radius))continue;
-        const id=nav.byKey.get(`${x},${y}`);if(id===undefined)continue;
+        const id=nav.byKey.get(`${x},${y}`);if(id===undefined||!connected.has(id))continue;
         if((f.stairs||[]).some(s=>Math.hypot(s.x-x,s.y-y)*tile<3.2))continue;
         if((f.rooms||[]).some(r=>Math.hypot(r.doorX-x,r.doorY-y)*tile<=2.5))continue;
+        if((f.portals||[]).some(p=>Math.hypot(p.doorX-x,p.doorY-y)*tile<3.2))continue;
         if((f.barriers||[]).some(b=>Math.hypot(b.x-x,b.y-y)*tile<3))continue;
+        if(g.data.escapeGate?.spaceId===f.id&&Math.hypot(g.data.escapeGate.x-x,g.data.escapeGate.y-y)*tile<4)continue;
         const pathDistance=same?(distance.get(id)??-1)*tile:Infinity;
         if(same&&(pathDistance<15||Math.hypot(x-g.x,y-g.y)*tile<15))continue;
-        candidates.push({id:`${f.id}-landmark-${i}`,spaceId:f.id,floor:f.number,x,y,label:landmark.label,pathDistance});
+        candidates.push({id:landmark.id||`${f.id}-landmark-${i}`,spaceId:f.id,floor:f.number,x,y,label:landmark.label,pathDistance});
       }
     }
     return candidates;
@@ -207,6 +212,13 @@ export class Pursuit {
         portals.push({kind:'door',fromId:f.id,toId:r.interiorId,sourceX:r.doorX+dx,sourceY:r.doorY+dy,
           arrivalX:destination.spawnX,arrivalY:destination.spawnY,label:r.label,reason:'roam'});
       }
+    }
+    for(const portal of f.portals||[]){
+      const destination=g.spaces.get(portal.targetId);if(!destination)continue;
+      const [dx,dy]=({north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]})[portal.facing];
+      portals.push({id:portal.id,kind:'door',fromId:f.id,toId:portal.targetId,
+        sourceX:portal.doorX+dx,sourceY:portal.doorY+dy,arrivalX:portal.arrivalX,arrivalY:portal.arrivalY,
+        label:portal.label,reason:'roam'});
     }
     return portals.filter(p=>!g.blocked(p.sourceX,p.sourceY,f,this.radius)&&
       !g.blocked(p.arrivalX,p.arrivalY,g.spaces.get(p.toId),this.radius));

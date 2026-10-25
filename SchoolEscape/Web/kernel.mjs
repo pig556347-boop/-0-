@@ -6,13 +6,13 @@ export class Exploration {
     this.time=0;this.lastTransition=-10;this.transitions=0;this.distance=0;this.speed=0;
     this.direction={x:0,y:-1};this.phase=0;this.lastDelta={x:0,y:0};
     this.autoStairsEnabled=true;this.arrivalLock=null;
-    this.roomId='';this.roomTransitions=0;this.lastDoorTransition=-10;this.pendingDoor=null;
+    this.roomId='';this.currentSpaceId=`floor-${data.spawnFloor}`;this.roomTransitions=0;this.lastDoorTransition=-10;this.pendingDoor=null;
     this.stamina=100;this.exhausted=false;this.isRunning=false;this.lastSprintTime=-10;this.caught=false;
     this.events=[];this.eventSerial=0;this.won=false;this.speedBoostUntil=0;this.noiseDistance=0;
-    this.spaces=new Map([...data.floors,...(data.roomMaps||[])].map(f=>[f.id,f]));
+    this.spaces=new Map([...data.floors,...(data.roomMaps||[]),...(data.outdoorMaps||[])].map(f=>[f.id,f]));
     this.solidFixtures=Object.fromEntries([...this.spaces].map(([id,f])=>[id,(f.fixtures||[]).filter(o=>o.solid)]));
   }
-  get spaceId(){return this.roomId||`floor-${this.floor}`}
+  get spaceId(){return this.currentSpaceId||this.roomId||`floor-${this.floor}`}
   get map(){return this.spaces.get(this.spaceId)}
   open(x,y,f=this.map){return x>=0&&y>=0&&x<f.width&&y<f.height&&f.rows[y][x]==='.'}
   emit(type,detail={}){const event={...detail,id:++this.eventSerial,type,time:this.time};this.events.push(event);if(this.events.length>128)this.events.shift();return event}
@@ -30,7 +30,7 @@ export class Exploration {
     if(!f)return true;const r=radius/this.data.tileSize;
     for(let j=Math.floor(y-r-.5);j<=Math.ceil(y+r+.5);j++)for(let i=Math.floor(x-r-.5);i<=Math.ceil(x+r+.5);i++)
       if(!this.open(i,j,f)&&this.overlaps(x,y,[i-.5,j-.5,i+.5,j+.5],radius))return true;
-    for(const room of f.rooms){
+    for(const room of [...f.rooms,...(f.portals||[])]){
       if(room.interiorOpen)continue;
       const [dx,dy]=directions[room.facing],cx=room.doorX+dx*.51,cy=room.doorY+dy*.51;
       const a=dx? .14/this.data.tileSize/2:1.02/this.data.tileSize/2;
@@ -82,11 +82,12 @@ export class Exploration {
     if(this.autoStairsEnabled)this.updateStairs();
   }
   currentRoom(){return this.roomId?this.map:null}
-  nearby(){return this.roomId?null:this.map.stairs.find(s=>Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<1.55)}
+  nearby(){return this.roomId||this.map.isOutdoor?null:this.map.stairs.find(s=>Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<1.55)}
   nearbyDoor(){
     if(this.pendingDoor)return null;
     const candidates=this.roomId?[{label:'복도로 나가기',exit:true,targetId:`floor-${this.floor}`,doorX:this.map.exitX,doorY:this.map.exitY,facing:'north'}]:
       this.map.rooms.filter(r=>r.interiorId).map(r=>({...r,targetId:r.interiorId,exit:false}));
+    candidates.push(...(this.map.portals||[]).map(portal=>({...portal,portal:true,exit:false})));
     return candidates.map(r=>{const [dx,dy]=directions[r.facing];return {...r,approachX:r.doorX+dx,approachY:r.doorY+dy,dx,dy}})
       .filter(r=>Math.hypot(r.approachX-this.x,r.approachY-this.y)*this.data.tileSize<1.55&&
         (this.x-r.doorX)*r.dx+(this.y-r.doorY)*r.dy>.45&&this.segmentClear(this.x,this.y,r.approachX,r.approachY))
@@ -102,19 +103,24 @@ export class Exploration {
   finishDoor(){
     const door=this.pendingDoor;this.pendingDoor=null;if(!door)return;
     const fromId=this.spaceId,sourceX=door.approachX,sourceY=door.approachY;
-    if(door.exit){const from=this.map;this.setSpace('',from.sourceFloor,from.returnX,from.returnY)}
+    if(door.portal)this.setSpaceId(door.targetId,door.arrivalX,door.arrivalY);
+    else if(door.exit){const from=this.map;this.setSpace('',from.sourceFloor,from.returnX,from.returnY)}
     else{const next=this.spaces.get(door.targetId);this.setSpace(next.id,next.sourceFloor,next.spawnX,next.spawnY)}
     this.roomTransitions++;this.lastDoorTransition=this.time;
     this.emit('transition',{kind:'door',fromId,toId:this.spaceId,sourceX,sourceY,arrivalX:this.x,arrivalY:this.y,label:door.label});
     this.emit('door-close',{spaceId:this.spaceId,label:door.label,x:this.x,y:this.y});
   }
   setSpace(roomId,floor,x,y){
-    const prev={roomId:this.roomId,floor:this.floor,x:this.x,y:this.y};this.roomId=roomId;this.floor=floor;
-    if(!this.map||this.blocked(x,y)){Object.assign(this,prev);throw Error(`Blocked space landing ${roomId||floor}:${x},${y}`)}
+    return this.setSpaceId(roomId||`floor-${floor}`,x,y);
+  }
+  setSpaceId(id,x,y){
+    const next=this.spaces.get(id);
+    if(!next||this.blocked(x,y,next))throw Error(`Blocked space landing ${id}:${x},${y}`);
+    this.currentSpaceId=id;this.roomId=next.isRoom?id:'';this.floor=next.isOutdoor?0:(next.sourceFloor??next.number);
     this.x=x;this.y=y;this.speed=0;this.isRunning=false;this.arrivalLock=null;this.lastDelta={x:0,y:0};
   }
   updateStairs(){
-    if(this.roomId||this.pendingDoor)return false;
+    if(this.roomId||this.map.isOutdoor||this.pendingDoor)return false;
     if(this.arrivalLock){
       const s=this.map.stairs.find(s=>s.id===this.arrivalLock);
       if(s&&Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<=this.data.stairExitRadius)return false;
@@ -131,13 +137,14 @@ export class Exploration {
   }
   warp(floor,x,y){this.pendingDoor=null;this.setSpace('',floor,x,y)}
   warpRoom(id,x,y){const f=this.spaces.get(id);if(!f?.isRoom)throw Error('Unknown room '+id);this.pendingDoor=null;this.setSpace(id,f.sourceFloor,x,y)}
+  warpSpace(id,x,y){this.pendingDoor=null;this.setSpaceId(id,x,y)}
   segmentClear(ax,ay,bx,by,f=this.map,radius=this.data.playerRadius){
     if(!f)return false;const r=radius/this.data.tileSize,r2=r*r-1e-10;
     const hits=rect=>segmentRectDistance2(ax,ay,bx,by,rect)<r2;
     for(let y=Math.floor(Math.min(ay,by)-r-.5);y<=Math.ceil(Math.max(ay,by)+r+.5);y++)
       for(let x=Math.floor(Math.min(ax,bx)-r-.5);x<=Math.ceil(Math.max(ax,bx)+r+.5);x++)
         if(!this.open(x,y,f)&&hits([x-.5,y-.5,x+.5,y+.5]))return false;
-    for(const room of f.rooms){
+    for(const room of [...f.rooms,...(f.portals||[])]){
       if(room.interiorOpen)continue;
       const [dx,dy]=directions[room.facing],cx=room.doorX+dx*.51,cy=room.doorY+dy*.51;
       const a=(dx?.14:1.02)/this.data.tileSize/2,b=(dy?.14:1.02)/this.data.tileSize/2;

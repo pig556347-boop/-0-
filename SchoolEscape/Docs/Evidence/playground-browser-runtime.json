@@ -1,0 +1,3669 @@
+{
+  "kind": "Actual Chromium playground 0.10 input, geometry, loot, compass, pursuit and audible output; NOT Unity Play",
+  "passed": [
+    "Release executes as real browser HTML",
+    "Executed artifact matches final release SHA-256",
+    "Release retains 53 interiors and adds one independent playground",
+    "Actual run has distinct A/B/C in both regions and mixed hiding modes",
+    "Enemy defaults ON and sound waits for public Start",
+    "Public Start unlocks actual audible ambience",
+    "Public mute button silences actual output",
+    "Public developer button turns enemy OFF",
+    "Real walking into closed main entrance cannot enter without E",
+    "Closed portal setup floor-1 to playground",
+    "Actual E begins transition floor-1 to playground",
+    "E arrival is safe and only destination is visible playground",
+    "Held E and idle time do not bounce through the portal playground",
+    "Outdoor location header and key progress remain readable without overlap",
+    "Rendered playground has active entrance and gate lamps",
+    "Yard fixtures are rendered without leaking main-building interiors",
+    "Closed portal setup playground to floor-1",
+    "Actual E begins transition playground to floor-1",
+    "E arrival is safe and only destination is visible floor-1",
+    "Held E and idle time do not bounce through the portal floor-1",
+    "Outdoor return lands at intended main entrance 24,3",
+    "Closed portal setup floor-1 to playground",
+    "Actual E begins transition floor-1 to playground",
+    "E arrival is safe and only destination is visible playground",
+    "Production movement reaches every outdoor landmark from the entrance",
+    "Central and both side routes traverse continuously around real obstacles",
+    "Cover, stage, benches, hut, gate and outer boundary stop the player",
+    "Real keyboard W walk has correct outdoor speed",
+    "Real keyboard W+D diagonal has correct outdoor speed",
+    "Real keyboard Shift+W run has correct outdoor speed",
+    "Diagonal is normalized and outdoor sprint spends stamina",
+    "Actual outdoor audio recording contains a nonzero signal",
+    "Enemy actually sees player before outdoor portal floor-1",
+    "Observed real E transfers player floor-1 to playground",
+    "Observed pursuer physically follows portal floor-1 to playground",
+    "Enemy actually sees player before outdoor portal playground",
+    "Observed real E transfers player playground to floor-1",
+    "Observed pursuer physically follows portal playground to floor-1",
+    "Developer OFF stops movement, contact capture and watch threat output",
+    "Actual outdoor gate E refuses escape before A/B/C",
+    "Reach authored pickup key-b",
+    "Actual KeyE collects key-b in floor-2",
+    "Keys collected only in the building still cannot escape",
+    "Reach authored pickup clock-second-hand",
+    "Actual KeyE collects clock-second-hand in room-f3-9",
+    "Reach authored pickup clock-minute-hand",
+    "Actual KeyE collects clock-minute-hand in room-f1-5",
+    "Reach authored pickup clock-body",
+    "Actual KeyE collects clock-body in room-f2-2",
+    "Real collected clock parts guide the remaining outdoor key through main entrance",
+    "Closed portal setup floor-1 to playground",
+    "Actual E begins transition floor-1 to playground",
+    "E arrival is safe and only destination is visible playground",
+    "Compass switches to the same real key after crossing outdoors",
+    "Reach authored pickup key-a",
+    "Actual KeyE collects key-a in playground",
+    "Reach authored pickup key-c",
+    "Actual KeyE collects key-c in playground",
+    "Main and outdoor searches produce exactly three keys and consume target compass",
+    "Three keys do not create an escape trigger at the former 1F gate",
+    "Actual E at former 1F exit enters the yard without winning or consuming keys",
+    "Outdoor gate interaction requires its authored range",
+    "Actual outdoor gate E consumes A/B/C and displays victory",
+    "Public victory restart clears the run and rerolls keys across both regions",
+    "No browser, console or HTTP errors"
+  ],
+  "failed": [],
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:8811/index.html?qa",
+      "type": "document"
+    }
+  ],
+  "samples": {
+    "Release executes as real browser HTML": {
+      "url": "http://127.0.0.1:8811/index.html?qa",
+      "bytes": 6659374,
+      "sha256": "a07f0080b02cbabceb58d4c87550434701fcc69f23983ff173bdcfc2c2b179bd"
+    },
+    "Release retains 53 interiors and adds one independent playground": {
+      "revision": "playground-gate-2026-10-24",
+      "rooms": 53,
+      "outdoor": [
+        {
+          "id": "playground",
+          "width": 69,
+          "height": 55
+        }
+      ],
+      "gate": {
+        "spaceId": "playground",
+        "x": 34,
+        "y": 3,
+        "label": "운동장 교문",
+        "range": 1.7
+      },
+      "keys": [
+        {
+          "uid": "run-210a3e29-1-key-a",
+          "itemId": "key-a",
+          "spaceId": "playground",
+          "x": 61.5,
+          "y": 17,
+          "displayX": 61.5,
+          "displayY": 16.384,
+          "sourceId": "playground-0223",
+          "hidden": true,
+          "revealed": false,
+          "picked": false
+        },
+        {
+          "uid": "run-210a3e29-2-key-b",
+          "itemId": "key-b",
+          "spaceId": "floor-2",
+          "x": 48,
+          "y": 16,
+          "displayX": 48,
+          "displayY": 16,
+          "sourceId": null,
+          "hidden": false,
+          "revealed": true,
+          "picked": false
+        },
+        {
+          "uid": "run-210a3e29-3-key-c",
+          "itemId": "key-c",
+          "spaceId": "playground",
+          "x": 28,
+          "y": 33,
+          "displayX": 28,
+          "displayY": 33,
+          "sourceId": null,
+          "hidden": false,
+          "revealed": true,
+          "picked": false
+        }
+      ],
+      "enemy": {
+        "enabled": true,
+        "state": "patrol",
+        "alerted": false,
+        "spaceId": "playground",
+        "x": 58,
+        "y": 42,
+        "speed": 0,
+        "caught": false,
+        "transfers": 0,
+        "lastSensed": -100,
+        "lastSeen": -100,
+        "lastHeard": -100,
+        "lastKnown": null,
+        "lastEvidenceKind": "none",
+        "lastSense": {
+          "visible": false,
+          "heard": false
+        },
+        "graceUntil": 4,
+        "radius": 0.31,
+        "seed": 554319401,
+        "initial": {
+          "spaceId": "playground",
+          "x": 58,
+          "y": 42,
+          "spawnId": "playground-landmark-7",
+          "label": "동쪽 우회로 북쪽",
+          "sameSpace": false,
+          "distanceFromPlayer": null,
+          "pathDistanceFromPlayer": null
+        },
+        "spawnCandidates": [
+          {
+            "id": "floor-1-landmark-3",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 40,
+            "y": 22,
+            "label": "동쪽 우회",
+            "pathDistance": 41.25
+          },
+          {
+            "id": "floor-1-landmark-5",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 4,
+            "y": 21,
+            "label": "복도 끝",
+            "pathDistance": 45
+          },
+          {
+            "id": "floor-1-landmark-6",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 9,
+            "y": 38,
+            "label": "북서 복도",
+            "pathDistance": 60
+          },
+          {
+            "id": "floor-2-landmark-0",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 8,
+            "label": "남쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-1",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 34,
+            "y": 23,
+            "label": "서쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-2",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 17,
+            "label": "내부 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-3",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 29,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-7",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 60,
+            "y": 40,
+            "label": "학년 분기 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-8",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 18,
+            "y": 13,
+            "label": "서관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-10",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 82,
+            "y": 13,
+            "label": "별관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-12",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 31,
+            "y": 10,
+            "label": "빈교실 A 앞 꺾임",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-0",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 8,
+            "label": "남쪽 계단홀",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-1",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 15,
+            "y": 14,
+            "label": "서쪽 분기",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-2",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 20,
+            "label": "중앙 교차로",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-4",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 12,
+            "y": 26,
+            "label": "북서 막다른 길",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-5",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 34,
+            "y": 25,
+            "label": "동쪽 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-6",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 30,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-0",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 48,
+            "label": "본관 앞마당",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-2",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 43,
+            "label": "북쪽 가로길",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-3",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 20,
+            "y": 41,
+            "label": "구령대 앞",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-4",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 42,
+            "label": "서쪽 우회로 북쪽",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-5",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 28,
+            "label": "서쪽 우회로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-6",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 10,
+            "label": "서쪽 우회로 남쪽",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-7",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 42,
+            "label": "동쪽 우회로 북쪽",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-8",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 28,
+            "label": "동쪽 우회로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-9",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 10,
+            "label": "동쪽 우회로 남쪽",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-10",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 38,
+            "label": "중앙 북쪽 분기",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-11",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 38,
+            "y": 31,
+            "label": "차폐 화단 A 동쪽",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-12",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 26,
+            "label": "중앙 가로 연결",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-13",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 30,
+            "y": 21,
+            "label": "차폐 화단 B 서쪽",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-14",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 11,
+            "label": "남쪽 가로길",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-16",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 8,
+            "y": 20,
+            "label": "서쪽 휴식 구역",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-17",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 61,
+            "y": 21,
+            "label": "급수대 앞",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-18",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 55,
+            "y": 5,
+            "label": "경비초소 앞",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-19",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 8,
+            "y": 35,
+            "label": "운동장 물품함 앞",
+            "pathDistance": null
+          }
+        ],
+        "rules": {
+          "sightRange": 11,
+          "fovDegrees": 120,
+          "peripheralRange": 1.8,
+          "investigateSpeed": 1.9,
+          "unseenBeforeSearch": 8,
+          "searchSeconds": 4,
+          "memorySeconds": 12,
+          "unreachableSeconds": 3,
+          "exitEvidenceSeconds": 2.5
+        },
+        "lostReason": "",
+        "stuckSeconds": 0,
+        "patrolGoal": null,
+        "patrolWait": 0,
+        "localPatrols": 0,
+        "path": [],
+        "portalTrail": [],
+        "transit": null,
+        "failedTransfers": 0
+      },
+      "audio": {
+        "unlocked": false,
+        "contextState": "uninitialized",
+        "started": false,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 0,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 0,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0,
+        "effectiveGain": 0,
+        "rms": 0,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": false,
+        "lastError": null
+      }
+    },
+    "Actual run has distinct A/B/C in both regions and mixed hiding modes": [
+      {
+        "uid": "run-210a3e29-1-key-a",
+        "itemId": "key-a",
+        "spaceId": "playground",
+        "x": 61.5,
+        "y": 17,
+        "displayX": 61.5,
+        "displayY": 16.384,
+        "sourceId": "playground-0223",
+        "hidden": true,
+        "revealed": false,
+        "picked": false
+      },
+      {
+        "uid": "run-210a3e29-2-key-b",
+        "itemId": "key-b",
+        "spaceId": "floor-2",
+        "x": 48,
+        "y": 16,
+        "displayX": 48,
+        "displayY": 16,
+        "sourceId": null,
+        "hidden": false,
+        "revealed": true,
+        "picked": false
+      },
+      {
+        "uid": "run-210a3e29-3-key-c",
+        "itemId": "key-c",
+        "spaceId": "playground",
+        "x": 28,
+        "y": 33,
+        "displayX": 28,
+        "displayY": 33,
+        "sourceId": null,
+        "hidden": false,
+        "revealed": true,
+        "picked": false
+      }
+    ],
+    "Public Start unlocks actual audible ambience": {
+      "unlocked": true,
+      "contextState": "running",
+      "started": true,
+      "muted": false,
+      "volume": 0.4,
+      "paused": false,
+      "activeVoices": 0,
+      "maxVoices": 36,
+      "scheduledVoices": 0,
+      "footsteps": 0,
+      "stairSteps": 0,
+      "doorOpen": 0,
+      "doorClose": 0,
+      "enemyDoorOpen": 0,
+      "enemyDoorClose": 0,
+      "enemyStairSteps": 0,
+      "stairTransitions": 0,
+      "chaseBeats": 0,
+      "caughtStingers": 0,
+      "processedEvents": 0,
+      "watchBeats": 0,
+      "searchSounds": 0,
+      "itemSounds": 0,
+      "chaseIntensity": 0,
+      "chaseGain": 0,
+      "masterGain": 0.1483667641878128,
+      "effectiveGain": 0.1483667641878128,
+      "rms": 0.0007893845512037063,
+      "watchEquipped": false,
+      "watchBpm": 0,
+      "watchDistance": null,
+      "ambienceActive": true,
+      "lastError": null
+    },
+    "Closed portal setup floor-1 to playground": {
+      "portal": {
+        "id": "main-to-playground",
+        "label": "운동장으로 나가기",
+        "doorX": 24,
+        "doorY": 1,
+        "facing": "north",
+        "targetId": "playground",
+        "arrivalX": 34,
+        "arrivalY": 50
+      },
+      "position": [
+        24,
+        2
+      ],
+      "near": "playground",
+      "safe": true,
+      "closed": true,
+      "view": {
+        "activeIds": [
+          "floor-1"
+        ],
+        "visibleFixtureRoomIds": [],
+        "visibleFixtureSpaceIds": [],
+        "pendingDoor": false,
+        "minimapSpaceId": "floor-1",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      },
+      "visual": true,
+      "closedPosition": [
+        0,
+        0.775,
+        21.862499999999997
+      ]
+    },
+    "E arrival is safe and only destination is visible playground": {
+      "arrived": {
+        "space": "playground",
+        "x": 34,
+        "y": 50,
+        "safe": true,
+        "won": false,
+        "pending": false
+      },
+      "view": {
+        "activeIds": [
+          "playground"
+        ],
+        "visibleFixtureRoomIds": [],
+        "visibleFixtureSpaceIds": [
+          "playground"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "playground",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      }
+    },
+    "Held E and idle time do not bounce through the portal playground": {
+      "space": "playground",
+      "x": 34,
+      "y": 50,
+      "safe": true,
+      "won": false,
+      "pending": false
+    },
+    "Outdoor location header and key progress remain readable without overlap": {
+      "header": {
+        "x": 38,
+        "y": 30,
+        "width": 282.28125,
+        "height": 103,
+        "top": 30,
+        "right": 320.28125,
+        "bottom": 133,
+        "left": 38
+      },
+      "goal": {
+        "x": 38,
+        "y": 148,
+        "width": 163.046875,
+        "height": 16,
+        "top": 148,
+        "right": 201.046875,
+        "bottom": 164,
+        "left": 38
+      },
+      "area": {
+        "x": 38,
+        "y": 116,
+        "width": 282.28125,
+        "height": 17,
+        "top": 116,
+        "right": 320.28125,
+        "bottom": 133,
+        "left": 38
+      },
+      "overlap": false,
+      "text": "운동장 · 남쪽 교문으로 탈출"
+    },
+    "Rendered playground has active entrance and gate lamps": [
+      {
+        "position": [
+          9.500000000000002,
+          2.5,
+          21.875
+        ],
+        "intensity": 9,
+        "distance": 8
+      },
+      {
+        "position": [
+          15.499999999999998,
+          2.5,
+          21.875
+        ],
+        "intensity": 9,
+        "distance": 8
+      },
+      {
+        "position": [
+          12.5,
+          2.5,
+          -41.25
+        ],
+        "intensity": 7,
+        "distance": 7
+      }
+    ],
+    "Closed portal setup playground to floor-1": {
+      "portal": {
+        "id": "playground-to-main",
+        "label": "본관 1층으로 들어가기",
+        "doorX": 34,
+        "doorY": 53,
+        "facing": "south",
+        "targetId": "floor-1",
+        "arrivalX": 24,
+        "arrivalY": 3
+      },
+      "position": [
+        34,
+        52
+      ],
+      "near": "floor-1",
+      "safe": true,
+      "closed": true,
+      "view": {
+        "activeIds": [
+          "playground"
+        ],
+        "visibleFixtureRoomIds": [],
+        "visibleFixtureSpaceIds": [
+          "playground"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "playground",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      },
+      "visual": true,
+      "closedPosition": [
+        12.5,
+        0.775,
+        -41.862500000000004
+      ]
+    },
+    "E arrival is safe and only destination is visible floor-1": {
+      "arrived": {
+        "space": "floor-1",
+        "x": 24,
+        "y": 3,
+        "safe": true,
+        "won": false,
+        "pending": false
+      },
+      "view": {
+        "activeIds": [
+          "floor-1"
+        ],
+        "visibleFixtureRoomIds": [],
+        "visibleFixtureSpaceIds": [],
+        "pendingDoor": false,
+        "minimapSpaceId": "floor-1",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      }
+    },
+    "Held E and idle time do not bounce through the portal floor-1": {
+      "space": "floor-1",
+      "x": 24,
+      "y": 3,
+      "safe": true,
+      "won": false,
+      "pending": false
+    },
+    "Production movement reaches every outdoor landmark from the entrance": [
+      {
+        "label": "본관 앞마당",
+        "ok": true,
+        "distance": 2.5,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "본관 현관 앞",
+        "ok": true,
+        "distance": 2.4999999999999996,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "북쪽 가로길",
+        "ok": true,
+        "distance": 8.75,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "구령대 앞",
+        "ok": true,
+        "distance": 28.73800638972741,
+        "error": 0.004006389727368386,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "서쪽 우회로 북쪽",
+        "ok": true,
+        "distance": 39.99200000000154,
+        "error": 0.008000000000336627,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "서쪽 우회로 중간",
+        "ok": true,
+        "distance": 57.499999999999304,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "서쪽 우회로 남쪽",
+        "ok": true,
+        "distance": 79.99999999998528,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "동쪽 우회로 북쪽",
+        "ok": true,
+        "distance": 39.99999999999574,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "동쪽 우회로 중간",
+        "ok": true,
+        "distance": 57.50000000001131,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "동쪽 우회로 남쪽",
+        "ok": true,
+        "distance": 79.9980015974574,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "중앙 북쪽 분기",
+        "ok": true,
+        "distance": 15.000000000002728,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "차폐 화단 A 동쪽",
+        "ok": true,
+        "distance": 28.726014376754506,
+        "error": 0.01799999999995805,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "중앙 가로 연결",
+        "ok": true,
+        "distance": 32.48800159744877,
+        "error": 0.006004802541497156,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "차폐 화단 B 서쪽",
+        "ok": true,
+        "distance": 43.74202559974566,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "남쪽 가로길",
+        "ok": true,
+        "distance": 53.75000000001046,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "교문 앞",
+        "ok": true,
+        "distance": 61.24400000001185,
+        "error": 0.00599999999995271,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "서쪽 휴식 구역",
+        "ok": true,
+        "distance": 69.98160000001417,
+        "error": 0.018399999999725303,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "급수대 앞",
+        "ok": true,
+        "distance": 70.00000000001387,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "경비초소 앞",
+        "ok": true,
+        "distance": 82.50000000001603,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      },
+      {
+        "label": "운동장 물품함 앞",
+        "ok": true,
+        "distance": 51.24401437675897,
+        "error": 0,
+        "safe": true,
+        "space": "playground"
+      }
+    ],
+    "Central and both side routes traverse continuously around real obstacles": {
+      "landmarks": [
+        {
+          "label": "본관 앞마당",
+          "ok": true,
+          "distance": 2.5,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "본관 현관 앞",
+          "ok": true,
+          "distance": 2.4999999999999996,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "북쪽 가로길",
+          "ok": true,
+          "distance": 8.75,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "구령대 앞",
+          "ok": true,
+          "distance": 28.73800638972741,
+          "error": 0.004006389727368386,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "서쪽 우회로 북쪽",
+          "ok": true,
+          "distance": 39.99200000000154,
+          "error": 0.008000000000336627,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "서쪽 우회로 중간",
+          "ok": true,
+          "distance": 57.499999999999304,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "서쪽 우회로 남쪽",
+          "ok": true,
+          "distance": 79.99999999998528,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "동쪽 우회로 북쪽",
+          "ok": true,
+          "distance": 39.99999999999574,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "동쪽 우회로 중간",
+          "ok": true,
+          "distance": 57.50000000001131,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "동쪽 우회로 남쪽",
+          "ok": true,
+          "distance": 79.9980015974574,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "중앙 북쪽 분기",
+          "ok": true,
+          "distance": 15.000000000002728,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "차폐 화단 A 동쪽",
+          "ok": true,
+          "distance": 28.726014376754506,
+          "error": 0.01799999999995805,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "중앙 가로 연결",
+          "ok": true,
+          "distance": 32.48800159744877,
+          "error": 0.006004802541497156,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "차폐 화단 B 서쪽",
+          "ok": true,
+          "distance": 43.74202559974566,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "남쪽 가로길",
+          "ok": true,
+          "distance": 53.75000000001046,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "교문 앞",
+          "ok": true,
+          "distance": 61.24400000001185,
+          "error": 0.00599999999995271,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "서쪽 휴식 구역",
+          "ok": true,
+          "distance": 69.98160000001417,
+          "error": 0.018399999999725303,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "급수대 앞",
+          "ok": true,
+          "distance": 70.00000000001387,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "경비초소 앞",
+          "ok": true,
+          "distance": 82.50000000001603,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "label": "운동장 물품함 앞",
+          "ok": true,
+          "distance": 51.24401437675897,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        }
+      ],
+      "routes": [
+        {
+          "id": "yard-central",
+          "reached": true,
+          "steps": 1040,
+          "distance": 67.45628234971105,
+          "error": 0,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "id": "yard-west",
+          "reached": true,
+          "steps": 1790,
+          "distance": 116.2300016667649,
+          "error": 0.010000000000047748,
+          "safe": true,
+          "space": "playground"
+        },
+        {
+          "id": "yard-east",
+          "reached": true,
+          "steps": 1790,
+          "distance": 116.23000166676502,
+          "error": 0.010000000000047748,
+          "safe": true,
+          "space": "playground"
+        }
+      ],
+      "unsafe": 0
+    },
+    "Cover, stage, benches, hut, gate and outer boundary stop the player": [
+      {
+        "kind": "yard-cover-planter",
+        "id": "playground-0092",
+        "safe": true,
+        "stoppedBelow": true,
+        "x": 31,
+        "y": 29.558
+      },
+      {
+        "kind": "yard-cover-planter",
+        "id": "playground-0107",
+        "safe": true,
+        "stoppedBelow": true,
+        "x": 37,
+        "y": 19.558
+      },
+      {
+        "kind": "yard-stage",
+        "id": "playground-0122",
+        "safe": true,
+        "stoppedBelow": true,
+        "x": 20,
+        "y": 43.158
+      },
+      {
+        "kind": "bench-storage-cabinet",
+        "id": "playground-0141",
+        "safe": true,
+        "stoppedBelow": true,
+        "x": 4.5,
+        "y": 15.498
+      },
+      {
+        "kind": "yard-guard-hut",
+        "id": "playground-0265",
+        "safe": true,
+        "stoppedBelow": true,
+        "x": 61,
+        "y": 3.4579999999999997
+      },
+      {
+        "kind": "escape-gate-panel",
+        "id": "playground-0071",
+        "safe": true,
+        "stoppedBelow": true,
+        "x": 34,
+        "y": 1.3139999999999998
+      },
+      {
+        "kind": "outer-fence",
+        "safe": true,
+        "stoppedBelow": true,
+        "x": 0.7180000000000001,
+        "y": 20
+      }
+    ],
+    "Real keyboard W walk has correct outdoor speed": {
+      "speed": 2.6000000000015917,
+      "distance": 1.169999999999991,
+      "dx": 0,
+      "dy": 0.9359999999999928,
+      "seconds": 0.4500000000001023,
+      "stamina": 100,
+      "safe": true,
+      "space": "playground"
+    },
+    "Real keyboard W+D diagonal has correct outdoor speed": {
+      "speed": 2.5999999999970442,
+      "distance": 1.169999999999957,
+      "dx": 0.6618519471905842,
+      "dy": 0.6618519471905842,
+      "seconds": 0.4500000000001023,
+      "stamina": 100,
+      "safe": true,
+      "space": "playground"
+    },
+    "Real keyboard Shift+W run has correct outdoor speed": {
+      "speed": 4.699999999996931,
+      "distance": 2.115000000000027,
+      "dx": 0,
+      "dy": 1.6920000000000215,
+      "seconds": 0.4500000000001023,
+      "stamina": 90,
+      "safe": true,
+      "space": "playground"
+    },
+    "Diagonal is normalized and outdoor sprint spends stamina": {
+      "walk": {
+        "speed": 2.6000000000015917,
+        "distance": 1.169999999999991,
+        "dx": 0,
+        "dy": 0.9359999999999928,
+        "seconds": 0.4500000000001023,
+        "stamina": 100,
+        "safe": true,
+        "space": "playground"
+      },
+      "diagonal": {
+        "speed": 2.5999999999970442,
+        "distance": 1.169999999999957,
+        "dx": 0.6618519471905842,
+        "dy": 0.6618519471905842,
+        "seconds": 0.4500000000001023,
+        "stamina": 100,
+        "safe": true,
+        "space": "playground"
+      },
+      "run": {
+        "speed": 4.699999999996931,
+        "distance": 2.115000000000027,
+        "dx": 0,
+        "dy": 1.6920000000000215,
+        "seconds": 0.4500000000001023,
+        "stamina": 90,
+        "safe": true,
+        "space": "playground"
+      }
+    },
+    "Actual outdoor audio recording contains a nonzero signal": {
+      "bytes": 9956,
+      "duration": 0.5999773242630385,
+      "rms": 0.0071889042735585685,
+      "peak": 0.01815888285636902,
+      "audio": {
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 0,
+        "maxVoices": 36,
+        "scheduledVoices": 23,
+        "footsteps": 4,
+        "stairSteps": 0,
+        "doorOpen": 3,
+        "doorClose": 3,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 145,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0.4000000059604645,
+        "effectiveGain": 0.4000000059604645,
+        "rms": 0.01631864371895469,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": true,
+        "lastError": null
+      }
+    },
+    "Enemy actually sees player before outdoor portal floor-1": {
+      "enabled": true,
+      "state": "chase",
+      "alerted": true,
+      "spaceId": "floor-1",
+      "x": 24,
+      "y": 5.934,
+      "speed": 3.299999999999992,
+      "caught": false,
+      "transfers": 0,
+      "lastSensed": 418.7209864931958,
+      "lastSeen": 418.7209864931958,
+      "lastHeard": -100,
+      "lastKnown": {
+        "spaceId": "floor-1",
+        "x": 24,
+        "y": 2
+      },
+      "lastEvidenceKind": "sight",
+      "lastSense": {
+        "visible": true,
+        "heard": false
+      },
+      "graceUntil": 421.9959864931965,
+      "radius": 0.31,
+      "seed": 1943347005,
+      "initial": {
+        "spaceId": "floor-1",
+        "x": 4,
+        "y": 21,
+        "spawnId": "floor-1-landmark-5",
+        "label": "복도 끝",
+        "sameSpace": false,
+        "distanceFromPlayer": null,
+        "pathDistanceFromPlayer": null
+      },
+      "spawnCandidates": [
+        {
+          "id": "floor-1-landmark-1",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 24,
+          "y": 11,
+          "label": "중앙홀",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-1-landmark-3",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 40,
+          "y": 22,
+          "label": "동쪽 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-1-landmark-5",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 4,
+          "y": 21,
+          "label": "복도 끝",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-1-landmark-6",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 9,
+          "y": 38,
+          "label": "북서 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-0",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 8,
+          "label": "남쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-1",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 34,
+          "y": 23,
+          "label": "서쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-2",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 17,
+          "label": "내부 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-3",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 29,
+          "label": "북쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-7",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 60,
+          "y": 40,
+          "label": "학년 분기 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-8",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 18,
+          "y": 13,
+          "label": "서관 연결 통로 중간",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-10",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 82,
+          "y": 13,
+          "label": "별관 연결 통로 중간",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-12",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 31,
+          "y": 10,
+          "label": "빈교실 A 앞 꺾임",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-0",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 8,
+          "label": "남쪽 계단홀",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-1",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 15,
+          "y": 14,
+          "label": "서쪽 분기",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-2",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 20,
+          "label": "중앙 교차로",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-4",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 12,
+          "y": 26,
+          "label": "북서 막다른 길",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-5",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 34,
+          "y": 25,
+          "label": "동쪽 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-6",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 30,
+          "label": "북쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "playground-landmark-0",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 34,
+          "y": 48,
+          "label": "본관 앞마당",
+          "pathDistance": 58.75
+        },
+        {
+          "id": "playground-landmark-2",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 34,
+          "y": 43,
+          "label": "북쪽 가로길",
+          "pathDistance": 52.5
+        },
+        {
+          "id": "playground-landmark-3",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 20,
+          "y": 41,
+          "label": "구령대 앞",
+          "pathDistance": 62.5
+        },
+        {
+          "id": "playground-landmark-4",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 10,
+          "y": 42,
+          "label": "서쪽 우회로 북쪽",
+          "pathDistance": 76.25
+        },
+        {
+          "id": "playground-landmark-5",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 10,
+          "y": 28,
+          "label": "서쪽 우회로 중간",
+          "pathDistance": 58.75
+        },
+        {
+          "id": "playground-landmark-6",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 10,
+          "y": 10,
+          "label": "서쪽 우회로 남쪽",
+          "pathDistance": 36.25
+        },
+        {
+          "id": "playground-landmark-7",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 58,
+          "y": 42,
+          "label": "동쪽 우회로 북쪽",
+          "pathDistance": 76.25
+        },
+        {
+          "id": "playground-landmark-8",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 58,
+          "y": 28,
+          "label": "동쪽 우회로 중간",
+          "pathDistance": 58.75
+        },
+        {
+          "id": "playground-landmark-9",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 58,
+          "y": 10,
+          "label": "동쪽 우회로 남쪽",
+          "pathDistance": 36.25
+        },
+        {
+          "id": "playground-landmark-10",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 34,
+          "y": 38,
+          "label": "중앙 북쪽 분기",
+          "pathDistance": 46.25
+        },
+        {
+          "id": "playground-landmark-11",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 38,
+          "y": 31,
+          "label": "차폐 화단 A 동쪽",
+          "pathDistance": 40
+        },
+        {
+          "id": "playground-landmark-12",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 34,
+          "y": 26,
+          "label": "중앙 가로 연결",
+          "pathDistance": 28.75
+        },
+        {
+          "id": "playground-landmark-13",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 30,
+          "y": 21,
+          "label": "차폐 화단 B 서쪽",
+          "pathDistance": 25
+        },
+        {
+          "id": "playground-landmark-16",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 8,
+          "y": 20,
+          "label": "서쪽 휴식 구역",
+          "pathDistance": 51.25
+        },
+        {
+          "id": "playground-landmark-17",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 61,
+          "y": 21,
+          "label": "급수대 앞",
+          "pathDistance": 53.75
+        },
+        {
+          "id": "playground-landmark-18",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 55,
+          "y": 5,
+          "label": "경비초소 앞",
+          "pathDistance": 26.25
+        },
+        {
+          "id": "playground-landmark-19",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 8,
+          "y": 35,
+          "label": "운동장 물품함 앞",
+          "pathDistance": 70
+        }
+      ],
+      "rules": {
+        "sightRange": 11,
+        "fovDegrees": 120,
+        "peripheralRange": 1.8,
+        "investigateSpeed": 1.9,
+        "unseenBeforeSearch": 8,
+        "searchSeconds": 4,
+        "memorySeconds": 12,
+        "unreachableSeconds": 3,
+        "exitEvidenceSeconds": 2.5
+      },
+      "lostReason": "",
+      "stuckSeconds": 0,
+      "patrolGoal": null,
+      "patrolWait": 0,
+      "localPatrols": 0,
+      "path": [
+        {
+          "x": 24,
+          "y": 2
+        }
+      ],
+      "portalTrail": [],
+      "transit": null,
+      "failedTransfers": 0
+    },
+    "Observed pursuer physically follows portal floor-1 to playground": {
+      "enemy": {
+        "enabled": true,
+        "state": "chase",
+        "alerted": true,
+        "spaceId": "playground",
+        "x": 34,
+        "y": 50,
+        "speed": 0,
+        "caught": false,
+        "transfers": 1,
+        "lastSensed": 418.92098649319564,
+        "lastSeen": 418.92098649319564,
+        "lastHeard": 418.7209864931958,
+        "lastKnown": {
+          "spaceId": "playground",
+          "x": 34,
+          "y": 50
+        },
+        "lastEvidenceKind": "sight",
+        "lastSense": {
+          "visible": false,
+          "heard": false
+        },
+        "graceUntil": 422.12098649319347,
+        "radius": 0.31,
+        "seed": 1943347005,
+        "initial": {
+          "spaceId": "floor-1",
+          "x": 4,
+          "y": 21,
+          "spawnId": "floor-1-landmark-5",
+          "label": "복도 끝",
+          "sameSpace": false,
+          "distanceFromPlayer": null,
+          "pathDistanceFromPlayer": null
+        },
+        "spawnCandidates": [
+          {
+            "id": "floor-1-landmark-1",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 24,
+            "y": 11,
+            "label": "중앙홀",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-1-landmark-3",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 40,
+            "y": 22,
+            "label": "동쪽 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-1-landmark-5",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 4,
+            "y": 21,
+            "label": "복도 끝",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-1-landmark-6",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 9,
+            "y": 38,
+            "label": "북서 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-0",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 8,
+            "label": "남쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-1",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 34,
+            "y": 23,
+            "label": "서쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-2",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 17,
+            "label": "내부 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-3",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 29,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-7",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 60,
+            "y": 40,
+            "label": "학년 분기 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-8",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 18,
+            "y": 13,
+            "label": "서관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-10",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 82,
+            "y": 13,
+            "label": "별관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-12",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 31,
+            "y": 10,
+            "label": "빈교실 A 앞 꺾임",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-0",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 8,
+            "label": "남쪽 계단홀",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-1",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 15,
+            "y": 14,
+            "label": "서쪽 분기",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-2",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 20,
+            "label": "중앙 교차로",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-4",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 12,
+            "y": 26,
+            "label": "북서 막다른 길",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-5",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 34,
+            "y": 25,
+            "label": "동쪽 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-6",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 30,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-0",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 48,
+            "label": "본관 앞마당",
+            "pathDistance": 58.75
+          },
+          {
+            "id": "playground-landmark-2",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 43,
+            "label": "북쪽 가로길",
+            "pathDistance": 52.5
+          },
+          {
+            "id": "playground-landmark-3",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 20,
+            "y": 41,
+            "label": "구령대 앞",
+            "pathDistance": 62.5
+          },
+          {
+            "id": "playground-landmark-4",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 42,
+            "label": "서쪽 우회로 북쪽",
+            "pathDistance": 76.25
+          },
+          {
+            "id": "playground-landmark-5",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 28,
+            "label": "서쪽 우회로 중간",
+            "pathDistance": 58.75
+          },
+          {
+            "id": "playground-landmark-6",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 10,
+            "label": "서쪽 우회로 남쪽",
+            "pathDistance": 36.25
+          },
+          {
+            "id": "playground-landmark-7",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 42,
+            "label": "동쪽 우회로 북쪽",
+            "pathDistance": 76.25
+          },
+          {
+            "id": "playground-landmark-8",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 28,
+            "label": "동쪽 우회로 중간",
+            "pathDistance": 58.75
+          },
+          {
+            "id": "playground-landmark-9",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 10,
+            "label": "동쪽 우회로 남쪽",
+            "pathDistance": 36.25
+          },
+          {
+            "id": "playground-landmark-10",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 38,
+            "label": "중앙 북쪽 분기",
+            "pathDistance": 46.25
+          },
+          {
+            "id": "playground-landmark-11",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 38,
+            "y": 31,
+            "label": "차폐 화단 A 동쪽",
+            "pathDistance": 40
+          },
+          {
+            "id": "playground-landmark-12",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 26,
+            "label": "중앙 가로 연결",
+            "pathDistance": 28.75
+          },
+          {
+            "id": "playground-landmark-13",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 30,
+            "y": 21,
+            "label": "차폐 화단 B 서쪽",
+            "pathDistance": 25
+          },
+          {
+            "id": "playground-landmark-16",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 8,
+            "y": 20,
+            "label": "서쪽 휴식 구역",
+            "pathDistance": 51.25
+          },
+          {
+            "id": "playground-landmark-17",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 61,
+            "y": 21,
+            "label": "급수대 앞",
+            "pathDistance": 53.75
+          },
+          {
+            "id": "playground-landmark-18",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 55,
+            "y": 5,
+            "label": "경비초소 앞",
+            "pathDistance": 26.25
+          },
+          {
+            "id": "playground-landmark-19",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 8,
+            "y": 35,
+            "label": "운동장 물품함 앞",
+            "pathDistance": 70
+          }
+        ],
+        "rules": {
+          "sightRange": 11,
+          "fovDegrees": 120,
+          "peripheralRange": 1.8,
+          "investigateSpeed": 1.9,
+          "unseenBeforeSearch": 8,
+          "searchSeconds": 4,
+          "memorySeconds": 12,
+          "unreachableSeconds": 3,
+          "exitEvidenceSeconds": 2.5
+        },
+        "lostReason": "",
+        "stuckSeconds": 0,
+        "patrolGoal": null,
+        "patrolWait": 0,
+        "localPatrols": 0,
+        "path": [],
+        "portalTrail": [],
+        "transit": null,
+        "failedTransfers": 0
+      },
+      "trace": [
+        {
+          "time": 419.0459864931955,
+          "space": "floor-1",
+          "state": "chase",
+          "x": 24,
+          "y": 5.076000000000002,
+          "transit": false
+        },
+        {
+          "time": 419.34598649319526,
+          "space": "floor-1",
+          "state": "chase",
+          "x": 24,
+          "y": 4.284000000000004,
+          "transit": false
+        },
+        {
+          "time": 419.645986493195,
+          "space": "floor-1",
+          "state": "chase",
+          "x": 24,
+          "y": 3.492000000000006,
+          "transit": false
+        },
+        {
+          "time": 419.9459864931947,
+          "space": "floor-1",
+          "state": "chase",
+          "x": 24,
+          "y": 2.700000000000008,
+          "transit": false
+        },
+        {
+          "time": 420.24598649319444,
+          "space": "floor-1",
+          "state": "transit",
+          "x": 24,
+          "y": 2.436000000000009,
+          "transit": true
+        },
+        {
+          "time": 420.54598649319416,
+          "space": "floor-1",
+          "state": "transit",
+          "x": 24,
+          "y": 2.436000000000009,
+          "transit": true
+        },
+        {
+          "time": 420.8459864931939,
+          "space": "floor-1",
+          "state": "transit",
+          "x": 24,
+          "y": 2.436000000000009,
+          "transit": true
+        },
+        {
+          "time": 421.1459864931936,
+          "space": "floor-1",
+          "state": "transit",
+          "x": 24,
+          "y": 2.436000000000009,
+          "transit": true
+        }
+      ],
+      "caught": false,
+      "events": [
+        {
+          "spaceId": "floor-1",
+          "kind": "door",
+          "x": 24,
+          "y": 2.436000000000009,
+          "reason": "chase",
+          "id": 1325,
+          "type": "enemy-door",
+          "time": 420.0459864931946
+        },
+        {
+          "spaceId": "playground",
+          "kind": "door",
+          "x": 34,
+          "y": 50,
+          "reason": "chase",
+          "id": 1326,
+          "type": "enemy-arrive",
+          "time": 421.32098649319346
+        }
+      ]
+    },
+    "Enemy actually sees player before outdoor portal playground": {
+      "enabled": true,
+      "state": "chase",
+      "alerted": true,
+      "spaceId": "playground",
+      "x": 34,
+      "y": 48.066,
+      "speed": 3.300000000000125,
+      "caught": false,
+      "transfers": 1,
+      "lastSensed": 422.0459864931928,
+      "lastSeen": 422.0459864931928,
+      "lastHeard": -100,
+      "lastKnown": {
+        "spaceId": "playground",
+        "x": 34,
+        "y": 52
+      },
+      "lastEvidenceKind": "sight",
+      "lastSense": {
+        "visible": true,
+        "heard": false
+      },
+      "graceUntil": 423.0209864931928,
+      "radius": 0.31,
+      "seed": 1943347005,
+      "initial": {
+        "spaceId": "floor-1",
+        "x": 4,
+        "y": 21,
+        "spawnId": "floor-1-landmark-5",
+        "label": "복도 끝",
+        "sameSpace": false,
+        "distanceFromPlayer": null,
+        "pathDistanceFromPlayer": null
+      },
+      "spawnCandidates": [
+        {
+          "id": "floor-1-landmark-1",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 24,
+          "y": 11,
+          "label": "중앙홀",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-1-landmark-3",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 40,
+          "y": 22,
+          "label": "동쪽 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-1-landmark-5",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 4,
+          "y": 21,
+          "label": "복도 끝",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-1-landmark-6",
+          "spaceId": "floor-1",
+          "floor": 1,
+          "x": 9,
+          "y": 38,
+          "label": "북서 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-0",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 8,
+          "label": "남쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-1",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 34,
+          "y": 23,
+          "label": "서쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-2",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 17,
+          "label": "내부 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-3",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 50,
+          "y": 29,
+          "label": "북쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-7",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 60,
+          "y": 40,
+          "label": "학년 분기 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-8",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 18,
+          "y": 13,
+          "label": "서관 연결 통로 중간",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-10",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 82,
+          "y": 13,
+          "label": "별관 연결 통로 중간",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-2-landmark-12",
+          "spaceId": "floor-2",
+          "floor": 2,
+          "x": 31,
+          "y": 10,
+          "label": "빈교실 A 앞 꺾임",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-0",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 8,
+          "label": "남쪽 계단홀",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-1",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 15,
+          "y": 14,
+          "label": "서쪽 분기",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-2",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 20,
+          "label": "중앙 교차로",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-4",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 12,
+          "y": 26,
+          "label": "북서 막다른 길",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-5",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 34,
+          "y": 25,
+          "label": "동쪽 우회",
+          "pathDistance": null
+        },
+        {
+          "id": "floor-3-landmark-6",
+          "spaceId": "floor-3",
+          "floor": 3,
+          "x": 24,
+          "y": 30,
+          "label": "북쪽 복도",
+          "pathDistance": null
+        },
+        {
+          "id": "playground-landmark-0",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 34,
+          "y": 48,
+          "label": "본관 앞마당",
+          "pathDistance": 58.75
+        },
+        {
+          "id": "playground-landmark-2",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 34,
+          "y": 43,
+          "label": "북쪽 가로길",
+          "pathDistance": 52.5
+        },
+        {
+          "id": "playground-landmark-3",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 20,
+          "y": 41,
+          "label": "구령대 앞",
+          "pathDistance": 62.5
+        },
+        {
+          "id": "playground-landmark-4",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 10,
+          "y": 42,
+          "label": "서쪽 우회로 북쪽",
+          "pathDistance": 76.25
+        },
+        {
+          "id": "playground-landmark-5",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 10,
+          "y": 28,
+          "label": "서쪽 우회로 중간",
+          "pathDistance": 58.75
+        },
+        {
+          "id": "playground-landmark-6",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 10,
+          "y": 10,
+          "label": "서쪽 우회로 남쪽",
+          "pathDistance": 36.25
+        },
+        {
+          "id": "playground-landmark-7",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 58,
+          "y": 42,
+          "label": "동쪽 우회로 북쪽",
+          "pathDistance": 76.25
+        },
+        {
+          "id": "playground-landmark-8",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 58,
+          "y": 28,
+          "label": "동쪽 우회로 중간",
+          "pathDistance": 58.75
+        },
+        {
+          "id": "playground-landmark-9",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 58,
+          "y": 10,
+          "label": "동쪽 우회로 남쪽",
+          "pathDistance": 36.25
+        },
+        {
+          "id": "playground-landmark-10",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 34,
+          "y": 38,
+          "label": "중앙 북쪽 분기",
+          "pathDistance": 46.25
+        },
+        {
+          "id": "playground-landmark-11",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 38,
+          "y": 31,
+          "label": "차폐 화단 A 동쪽",
+          "pathDistance": 40
+        },
+        {
+          "id": "playground-landmark-12",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 34,
+          "y": 26,
+          "label": "중앙 가로 연결",
+          "pathDistance": 28.75
+        },
+        {
+          "id": "playground-landmark-13",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 30,
+          "y": 21,
+          "label": "차폐 화단 B 서쪽",
+          "pathDistance": 25
+        },
+        {
+          "id": "playground-landmark-16",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 8,
+          "y": 20,
+          "label": "서쪽 휴식 구역",
+          "pathDistance": 51.25
+        },
+        {
+          "id": "playground-landmark-17",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 61,
+          "y": 21,
+          "label": "급수대 앞",
+          "pathDistance": 53.75
+        },
+        {
+          "id": "playground-landmark-18",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 55,
+          "y": 5,
+          "label": "경비초소 앞",
+          "pathDistance": 26.25
+        },
+        {
+          "id": "playground-landmark-19",
+          "spaceId": "playground",
+          "floor": 0,
+          "x": 8,
+          "y": 35,
+          "label": "운동장 물품함 앞",
+          "pathDistance": 70
+        }
+      ],
+      "rules": {
+        "sightRange": 11,
+        "fovDegrees": 120,
+        "peripheralRange": 1.8,
+        "investigateSpeed": 1.9,
+        "unseenBeforeSearch": 8,
+        "searchSeconds": 4,
+        "memorySeconds": 12,
+        "unreachableSeconds": 3,
+        "exitEvidenceSeconds": 2.5
+      },
+      "lostReason": "",
+      "stuckSeconds": 0,
+      "patrolGoal": null,
+      "patrolWait": 0,
+      "localPatrols": 0,
+      "path": [
+        {
+          "x": 34,
+          "y": 52
+        }
+      ],
+      "portalTrail": [],
+      "transit": null,
+      "failedTransfers": 0
+    },
+    "Observed pursuer physically follows portal playground to floor-1": {
+      "enemy": {
+        "enabled": true,
+        "state": "chase",
+        "alerted": true,
+        "spaceId": "floor-1",
+        "x": 24,
+        "y": 3,
+        "speed": 0,
+        "caught": false,
+        "transfers": 2,
+        "lastSensed": 422.2459864931926,
+        "lastSeen": 422.2459864931926,
+        "lastHeard": 422.0459864931928,
+        "lastKnown": {
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 3
+        },
+        "lastEvidenceKind": "sight",
+        "lastSense": {
+          "visible": false,
+          "heard": false
+        },
+        "graceUntil": 425.44598649319045,
+        "radius": 0.31,
+        "seed": 1943347005,
+        "initial": {
+          "spaceId": "floor-1",
+          "x": 4,
+          "y": 21,
+          "spawnId": "floor-1-landmark-5",
+          "label": "복도 끝",
+          "sameSpace": false,
+          "distanceFromPlayer": null,
+          "pathDistanceFromPlayer": null
+        },
+        "spawnCandidates": [
+          {
+            "id": "floor-1-landmark-1",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 24,
+            "y": 11,
+            "label": "중앙홀",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-1-landmark-3",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 40,
+            "y": 22,
+            "label": "동쪽 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-1-landmark-5",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 4,
+            "y": 21,
+            "label": "복도 끝",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-1-landmark-6",
+            "spaceId": "floor-1",
+            "floor": 1,
+            "x": 9,
+            "y": 38,
+            "label": "북서 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-0",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 8,
+            "label": "남쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-1",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 34,
+            "y": 23,
+            "label": "서쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-2",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 17,
+            "label": "내부 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-3",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 50,
+            "y": 29,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-7",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 60,
+            "y": 40,
+            "label": "학년 분기 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-8",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 18,
+            "y": 13,
+            "label": "서관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-10",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 82,
+            "y": 13,
+            "label": "별관 연결 통로 중간",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-2-landmark-12",
+            "spaceId": "floor-2",
+            "floor": 2,
+            "x": 31,
+            "y": 10,
+            "label": "빈교실 A 앞 꺾임",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-0",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 8,
+            "label": "남쪽 계단홀",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-1",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 15,
+            "y": 14,
+            "label": "서쪽 분기",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-2",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 20,
+            "label": "중앙 교차로",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-4",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 12,
+            "y": 26,
+            "label": "북서 막다른 길",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-5",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 34,
+            "y": 25,
+            "label": "동쪽 우회",
+            "pathDistance": null
+          },
+          {
+            "id": "floor-3-landmark-6",
+            "spaceId": "floor-3",
+            "floor": 3,
+            "x": 24,
+            "y": 30,
+            "label": "북쪽 복도",
+            "pathDistance": null
+          },
+          {
+            "id": "playground-landmark-0",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 48,
+            "label": "본관 앞마당",
+            "pathDistance": 58.75
+          },
+          {
+            "id": "playground-landmark-2",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 43,
+            "label": "북쪽 가로길",
+            "pathDistance": 52.5
+          },
+          {
+            "id": "playground-landmark-3",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 20,
+            "y": 41,
+            "label": "구령대 앞",
+            "pathDistance": 62.5
+          },
+          {
+            "id": "playground-landmark-4",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 42,
+            "label": "서쪽 우회로 북쪽",
+            "pathDistance": 76.25
+          },
+          {
+            "id": "playground-landmark-5",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 28,
+            "label": "서쪽 우회로 중간",
+            "pathDistance": 58.75
+          },
+          {
+            "id": "playground-landmark-6",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 10,
+            "y": 10,
+            "label": "서쪽 우회로 남쪽",
+            "pathDistance": 36.25
+          },
+          {
+            "id": "playground-landmark-7",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 42,
+            "label": "동쪽 우회로 북쪽",
+            "pathDistance": 76.25
+          },
+          {
+            "id": "playground-landmark-8",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 28,
+            "label": "동쪽 우회로 중간",
+            "pathDistance": 58.75
+          },
+          {
+            "id": "playground-landmark-9",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 58,
+            "y": 10,
+            "label": "동쪽 우회로 남쪽",
+            "pathDistance": 36.25
+          },
+          {
+            "id": "playground-landmark-10",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 38,
+            "label": "중앙 북쪽 분기",
+            "pathDistance": 46.25
+          },
+          {
+            "id": "playground-landmark-11",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 38,
+            "y": 31,
+            "label": "차폐 화단 A 동쪽",
+            "pathDistance": 40
+          },
+          {
+            "id": "playground-landmark-12",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 34,
+            "y": 26,
+            "label": "중앙 가로 연결",
+            "pathDistance": 28.75
+          },
+          {
+            "id": "playground-landmark-13",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 30,
+            "y": 21,
+            "label": "차폐 화단 B 서쪽",
+            "pathDistance": 25
+          },
+          {
+            "id": "playground-landmark-16",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 8,
+            "y": 20,
+            "label": "서쪽 휴식 구역",
+            "pathDistance": 51.25
+          },
+          {
+            "id": "playground-landmark-17",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 61,
+            "y": 21,
+            "label": "급수대 앞",
+            "pathDistance": 53.75
+          },
+          {
+            "id": "playground-landmark-18",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 55,
+            "y": 5,
+            "label": "경비초소 앞",
+            "pathDistance": 26.25
+          },
+          {
+            "id": "playground-landmark-19",
+            "spaceId": "playground",
+            "floor": 0,
+            "x": 8,
+            "y": 35,
+            "label": "운동장 물품함 앞",
+            "pathDistance": 70
+          }
+        ],
+        "rules": {
+          "sightRange": 11,
+          "fovDegrees": 120,
+          "peripheralRange": 1.8,
+          "investigateSpeed": 1.9,
+          "unseenBeforeSearch": 8,
+          "searchSeconds": 4,
+          "memorySeconds": 12,
+          "unreachableSeconds": 3,
+          "exitEvidenceSeconds": 2.5
+        },
+        "lostReason": "",
+        "stuckSeconds": 0,
+        "patrolGoal": null,
+        "patrolWait": 0,
+        "localPatrols": 0,
+        "path": [],
+        "portalTrail": [],
+        "transit": null,
+        "failedTransfers": 0
+      },
+      "trace": [
+        {
+          "time": 422.3709864931925,
+          "space": "playground",
+          "state": "chase",
+          "x": 34,
+          "y": 48.924000000000035,
+          "transit": false
+        },
+        {
+          "time": 422.67098649319223,
+          "space": "playground",
+          "state": "chase",
+          "x": 34,
+          "y": 49.716000000000065,
+          "transit": false
+        },
+        {
+          "time": 422.97098649319196,
+          "space": "playground",
+          "state": "chase",
+          "x": 34,
+          "y": 50.508000000000095,
+          "transit": false
+        },
+        {
+          "time": 423.2709864931917,
+          "space": "playground",
+          "state": "chase",
+          "x": 34,
+          "y": 51.300000000000125,
+          "transit": false
+        },
+        {
+          "time": 423.5709864931914,
+          "space": "playground",
+          "state": "transit",
+          "x": 34,
+          "y": 51.564000000000135,
+          "transit": true
+        },
+        {
+          "time": 423.87098649319114,
+          "space": "playground",
+          "state": "transit",
+          "x": 34,
+          "y": 51.564000000000135,
+          "transit": true
+        },
+        {
+          "time": 424.17098649319087,
+          "space": "playground",
+          "state": "transit",
+          "x": 34,
+          "y": 51.564000000000135,
+          "transit": true
+        },
+        {
+          "time": 424.4709864931906,
+          "space": "playground",
+          "state": "transit",
+          "x": 34,
+          "y": 51.564000000000135,
+          "transit": true
+        }
+      ],
+      "caught": false,
+      "events": [
+        {
+          "spaceId": "floor-1",
+          "kind": "door",
+          "x": 24,
+          "y": 2.436000000000009,
+          "reason": "chase",
+          "id": 1325,
+          "type": "enemy-door",
+          "time": 420.0459864931946
+        },
+        {
+          "spaceId": "playground",
+          "kind": "door",
+          "x": 34,
+          "y": 50,
+          "reason": "chase",
+          "id": 1326,
+          "type": "enemy-arrive",
+          "time": 421.32098649319346
+        },
+        {
+          "spaceId": "playground",
+          "kind": "door",
+          "x": 34,
+          "y": 51.564000000000135,
+          "reason": "chase",
+          "id": 1332,
+          "type": "enemy-door",
+          "time": 423.3709864931916
+        },
+        {
+          "spaceId": "floor-1",
+          "kind": "door",
+          "x": 24,
+          "y": 3,
+          "reason": "chase",
+          "id": 1333,
+          "type": "enemy-arrive",
+          "time": 424.64598649319043
+        }
+      ]
+    },
+    "Developer OFF stops movement, contact capture and watch threat output": {
+      "before": {
+        "x": 24,
+        "y": 3,
+        "space": "floor-1"
+      },
+      "after": {
+        "x": 24,
+        "y": 3,
+        "space": "floor-1"
+      },
+      "enabled": false,
+      "caught": false,
+      "audio": {
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 9,
+        "maxVoices": 36,
+        "scheduledVoices": 90,
+        "footsteps": 4,
+        "stairSteps": 0,
+        "doorOpen": 7,
+        "doorClose": 7,
+        "enemyDoorOpen": 2,
+        "enemyDoorClose": 2,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 15,
+        "caughtStingers": 0,
+        "processedEvents": 161,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0.0010792243488931903,
+        "chaseGain": 0.24342456459999084,
+        "masterGain": 0.4000000059604645,
+        "effectiveGain": 0.4000000059604645,
+        "rms": 0.007680205920881418,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": true,
+        "lastError": null
+      }
+    },
+    "Reach authored pickup key-b": {
+      "uid": "run-210a3e29-2-key-b",
+      "itemId": "key-b",
+      "space": "floor-2",
+      "hidden": false,
+      "sourceId": null,
+      "matched": true,
+      "safe": true,
+      "key": "KeyE",
+      "visible": {
+        "activeIds": [
+          "floor-2"
+        ],
+        "visibleFixtureRoomIds": [],
+        "visibleFixtureSpaceIds": [],
+        "pendingDoor": false,
+        "minimapSpaceId": "floor-2",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      }
+    },
+    "Actual KeyE collects key-b in floor-2": {
+      "picked": true,
+      "copies": 1,
+      "inventory": [
+        {
+          "uid": "run-210a3e29-2-key-b",
+          "itemId": "key-b"
+        }
+      ],
+      "action": {
+        "ok": true,
+        "message": "열쇠 B 획득",
+        "type": "pickup",
+        "itemId": "key-b",
+        "uid": "run-210a3e29-2-key-b"
+      }
+    },
+    "Reach authored pickup clock-second-hand": {
+      "uid": "run-210a3e29-10-clock-second-hand",
+      "itemId": "clock-second-hand",
+      "space": "room-f3-9",
+      "hidden": true,
+      "sourceId": "room-f3-9-0180",
+      "matched": true,
+      "safe": true,
+      "key": "KeyE",
+      "visible": {
+        "activeIds": [
+          "room-f3-9"
+        ],
+        "visibleFixtureRoomIds": [
+          "room-f3-9"
+        ],
+        "visibleFixtureSpaceIds": [
+          "room-f3-9"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "room-f3-9",
+        "bookShadowsDisabled": true,
+        "bookBatches": 4
+      }
+    },
+    "Actual KeyE collects clock-second-hand in room-f3-9": {
+      "picked": true,
+      "copies": 1,
+      "inventory": [
+        {
+          "uid": "run-210a3e29-2-key-b",
+          "itemId": "key-b"
+        },
+        {
+          "uid": "run-210a3e29-10-clock-second-hand",
+          "itemId": "clock-second-hand"
+        }
+      ],
+      "action": {
+        "ok": true,
+        "message": "시계초침 획득",
+        "type": "pickup",
+        "itemId": "clock-second-hand",
+        "uid": "run-210a3e29-10-clock-second-hand"
+      }
+    },
+    "Reach authored pickup clock-minute-hand": {
+      "uid": "run-210a3e29-11-clock-minute-hand",
+      "itemId": "clock-minute-hand",
+      "space": "room-f1-5",
+      "hidden": false,
+      "sourceId": null,
+      "matched": true,
+      "safe": true,
+      "key": "KeyE",
+      "visible": {
+        "activeIds": [
+          "room-f1-5"
+        ],
+        "visibleFixtureRoomIds": [
+          "room-f1-5"
+        ],
+        "visibleFixtureSpaceIds": [
+          "room-f1-5"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "room-f1-5",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      }
+    },
+    "Actual KeyE collects clock-minute-hand in room-f1-5": {
+      "picked": true,
+      "copies": 1,
+      "inventory": [
+        {
+          "uid": "run-210a3e29-2-key-b",
+          "itemId": "key-b"
+        },
+        {
+          "uid": "run-210a3e29-10-clock-second-hand",
+          "itemId": "clock-second-hand"
+        },
+        {
+          "uid": "run-210a3e29-11-clock-minute-hand",
+          "itemId": "clock-minute-hand"
+        }
+      ],
+      "action": {
+        "ok": true,
+        "message": "시계분침 획득",
+        "type": "pickup",
+        "itemId": "clock-minute-hand",
+        "uid": "run-210a3e29-11-clock-minute-hand"
+      }
+    },
+    "Reach authored pickup clock-body": {
+      "uid": "run-210a3e29-12-clock-body",
+      "itemId": "clock-body",
+      "space": "room-f2-2",
+      "hidden": true,
+      "sourceId": "room-f2-2-0204",
+      "matched": true,
+      "safe": true,
+      "key": "KeyE",
+      "visible": {
+        "activeIds": [
+          "room-f2-2"
+        ],
+        "visibleFixtureRoomIds": [
+          "room-f2-2"
+        ],
+        "visibleFixtureSpaceIds": [
+          "room-f2-2"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "room-f2-2",
+        "bookShadowsDisabled": true,
+        "bookBatches": 4
+      }
+    },
+    "Actual KeyE collects clock-body in room-f2-2": {
+      "picked": true,
+      "copies": 1,
+      "inventory": [
+        {
+          "uid": "run-210a3e29-2-key-b",
+          "itemId": "key-b"
+        },
+        {
+          "uid": "run-210a3e29-14-compass",
+          "itemId": "compass"
+        }
+      ],
+      "action": {
+        "ok": true,
+        "message": "시계 부품 3개가 합쳐져 나침반을 얻었습니다.",
+        "type": "crafted",
+        "itemId": "compass",
+        "uid": "run-210a3e29-14-compass"
+      }
+    },
+    "Real collected clock parts guide the remaining outdoor key through main entrance": {
+      "value": {
+        "active": true,
+        "targetKeyUid": "run-210a3e29-1-key-a",
+        "targetItemId": "key-a",
+        "targetLabel": "열쇠 A",
+        "targetSpaceId": "playground",
+        "spaceId": "floor-1",
+        "x": 24,
+        "y": 2,
+        "dx": 0,
+        "dy": -7,
+        "angle": 3.141592653589793,
+        "distance": 8.75,
+        "via": "door",
+        "label": "운동장으로 나가기",
+        "hops": 1
+      },
+      "visible": true,
+      "bag": [
+        "key-b",
+        "compass"
+      ]
+    },
+    "Compass switches to the same real key after crossing outdoors": {
+      "active": true,
+      "targetKeyUid": "run-210a3e29-1-key-a",
+      "targetItemId": "key-a",
+      "targetLabel": "열쇠 A",
+      "targetSpaceId": "playground",
+      "spaceId": "playground",
+      "x": 61.5,
+      "y": 16.384,
+      "dx": 27.5,
+      "dy": -33.616,
+      "angle": 2.4559344236014846,
+      "distance": 54.28923489053793,
+      "via": "key",
+      "label": "열쇠 A",
+      "hops": 0
+    },
+    "Reach authored pickup key-a": {
+      "uid": "run-210a3e29-1-key-a",
+      "itemId": "key-a",
+      "space": "playground",
+      "hidden": true,
+      "sourceId": "playground-0223",
+      "matched": true,
+      "safe": true,
+      "key": "KeyE",
+      "visible": {
+        "activeIds": [
+          "playground"
+        ],
+        "visibleFixtureRoomIds": [],
+        "visibleFixtureSpaceIds": [
+          "playground"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "playground",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      }
+    },
+    "Actual KeyE collects key-a in playground": {
+      "picked": true,
+      "copies": 1,
+      "inventory": [
+        {
+          "uid": "run-210a3e29-2-key-b",
+          "itemId": "key-b"
+        },
+        {
+          "uid": "run-210a3e29-1-key-a",
+          "itemId": "key-a"
+        }
+      ],
+      "action": {
+        "ok": true,
+        "message": "열쇠 A 획득",
+        "type": "pickup",
+        "itemId": "key-a",
+        "uid": "run-210a3e29-1-key-a"
+      }
+    },
+    "Reach authored pickup key-c": {
+      "uid": "run-210a3e29-3-key-c",
+      "itemId": "key-c",
+      "space": "playground",
+      "hidden": false,
+      "sourceId": null,
+      "matched": true,
+      "safe": true,
+      "key": "KeyE",
+      "visible": {
+        "activeIds": [
+          "playground"
+        ],
+        "visibleFixtureRoomIds": [],
+        "visibleFixtureSpaceIds": [
+          "playground"
+        ],
+        "pendingDoor": false,
+        "minimapSpaceId": "playground",
+        "bookShadowsDisabled": true,
+        "bookBatches": 0
+      }
+    },
+    "Actual KeyE collects key-c in playground": {
+      "picked": true,
+      "copies": 1,
+      "inventory": [
+        {
+          "uid": "run-210a3e29-2-key-b",
+          "itemId": "key-b"
+        },
+        {
+          "uid": "run-210a3e29-1-key-a",
+          "itemId": "key-a"
+        },
+        {
+          "uid": "run-210a3e29-3-key-c",
+          "itemId": "key-c"
+        }
+      ],
+      "action": {
+        "ok": true,
+        "message": "열쇠 C 획득",
+        "type": "pickup",
+        "itemId": "key-c",
+        "uid": "run-210a3e29-3-key-c"
+      }
+    },
+    "Actual outdoor gate E consumes A/B/C and displays victory": {
+      "won": true,
+      "escaped": true,
+      "keys": 0,
+      "seed": 554319401,
+      "space": "playground"
+    },
+    "Public victory restart clears the run and rerolls keys across both regions": {
+      "space": "floor-1",
+      "won": false,
+      "caught": false,
+      "seed": 2595009325,
+      "inventory": 0,
+      "equipped": null,
+      "enabled": false,
+      "keys": [
+        {
+          "uid": "run-9aacb32d-1-key-a",
+          "itemId": "key-a",
+          "spaceId": "room-f1-8",
+          "x": 2,
+          "y": 26,
+          "displayX": 2,
+          "displayY": 26,
+          "sourceId": null,
+          "hidden": false,
+          "revealed": true,
+          "picked": false
+        },
+        {
+          "uid": "run-9aacb32d-2-key-c",
+          "itemId": "key-c",
+          "spaceId": "playground",
+          "x": 6.5,
+          "y": 24,
+          "displayX": 6.5,
+          "displayY": 23.384,
+          "sourceId": "playground-0219",
+          "hidden": true,
+          "revealed": false,
+          "picked": false
+        },
+        {
+          "uid": "run-9aacb32d-3-key-b",
+          "itemId": "key-b",
+          "spaceId": "playground",
+          "x": 54,
+          "y": 53,
+          "displayX": 54,
+          "displayY": 53,
+          "sourceId": null,
+          "hidden": false,
+          "revealed": true,
+          "picked": false
+        }
+      ]
+    },
+    "No browser, console or HTTP errors": []
+  },
+  "screenshots": [
+    "playground-title.png",
+    "playground-main-entrance.png",
+    "playground-north-arrival.png",
+    "playground-central.png",
+    "playground-west.png",
+    "playground-east.png",
+    "playground-gate.png",
+    "playground-pursuer-arrival.png",
+    "playground-gate-locked.png",
+    "playground-compass-building.png",
+    "playground-all-keys.png",
+    "playground-victory.png"
+  ],
+  "utc": "2026-10-24T23:59:36.750Z",
+  "build": {
+    "url": "http://127.0.0.1:8811/index.html?qa",
+    "bytes": 6659374,
+    "sha256": "a07f0080b02cbabceb58d4c87550434701fcc69f23983ff173bdcfc2c2b179bd"
+  },
+  "screenshotSamples": {
+    "playground-title.png": {
+      "space": "floor-1",
+      "player": [
+        24,
+        5
+      ],
+      "projectedPlayer": [
+        0,
+        -2.0898315757650005e-16,
+        -0.62647283001
+      ],
+      "active": [
+        "floor-1"
+      ]
+    },
+    "playground-main-entrance.png": {
+      "space": "floor-1",
+      "player": [
+        24,
+        2
+      ],
+      "projectedPlayer": [
+        0,
+        -0.0000022501396723923255,
+        -0.6264730798998832
+      ],
+      "active": [
+        "floor-1"
+      ]
+    },
+    "playground-north-arrival.png": {
+      "space": "playground",
+      "player": [
+        34,
+        50
+      ],
+      "projectedPlayer": [
+        -1.3061447348531254e-16,
+        0,
+        -0.62647283001
+      ],
+      "active": [
+        "playground"
+      ]
+    },
+    "playground-central.png": {
+      "space": "playground",
+      "player": [
+        34,
+        26
+      ],
+      "projectedPlayer": [
+        -2.320257319610164e-9,
+        -0.000013948119673635935,
+        -0.6264743790222853
+      ],
+      "active": [
+        "playground"
+      ]
+    },
+    "playground-west.png": {
+      "space": "playground",
+      "player": [
+        10,
+        28
+      ],
+      "projectedPlayer": [
+        -0.00001341855092530571,
+        0.0000015000848924858821,
+        -0.6264726634176576
+      ],
+      "active": [
+        "playground"
+      ]
+    },
+    "playground-east.png": {
+      "space": "playground",
+      "player": [
+        58,
+        28
+      ],
+      "projectedPlayer": [
+        0.000026837097779619512,
+        4.545383677288876e-13,
+        -0.6264728300099495
+      ],
+      "active": [
+        "playground"
+      ]
+    },
+    "playground-gate.png": {
+      "space": "playground",
+      "player": [
+        34,
+        5
+      ],
+      "projectedPlayer": [
+        -0.000013418544046494466,
+        -0.00001725107082271941,
+        -0.6264747458324381
+      ],
+      "active": [
+        "playground"
+      ]
+    },
+    "playground-pursuer-arrival.png": {
+      "space": "playground",
+      "player": [
+        34,
+        44
+      ],
+      "projectedPlayer": [
+        -1.3061447348531254e-16,
+        -0.0000031903782124900583,
+        -0.626473184318334
+      ],
+      "active": [
+        "playground"
+      ]
+    },
+    "playground-gate-locked.png": {
+      "space": "playground",
+      "player": [
+        34,
+        3
+      ],
+      "projectedPlayer": [
+        -1.3061447348531254e-16,
+        0,
+        -0.62647283001
+      ],
+      "active": [
+        "playground"
+      ]
+    },
+    "playground-compass-building.png": {
+      "space": "floor-1",
+      "player": [
+        24,
+        9
+      ],
+      "projectedPlayer": [
+        0,
+        -4.179663151530001e-16,
+        -0.62647283001
+      ],
+      "active": [
+        "floor-1"
+      ]
+    },
+    "playground-all-keys.png": {
+      "space": "playground",
+      "player": [
+        28,
+        33
+      ],
+      "projectedPlayer": [
+        -0.000008373916117579918,
+        0.000002880913990607911,
+        -0.6264725100693005
+      ],
+      "active": [
+        "playground"
+      ]
+    },
+    "playground-victory.png": {
+      "space": "playground",
+      "player": [
+        34,
+        3
+      ],
+      "projectedPlayer": [
+        -6.139761379047821e-9,
+        -0.000012839516014985426,
+        -0.6264742559059995
+      ],
+      "active": [
+        "playground"
+      ]
+    }
+  },
+  "ok": true
+}

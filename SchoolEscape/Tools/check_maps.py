@@ -12,7 +12,8 @@ def check(ok,message):
     checks+=1
     if not ok:errors.append(message)
 
-spaces=data['floors']+data.get('roomMaps',[])
+spaces=data['floors']+data.get('roomMaps',[])+data.get('outdoorMaps',[])
+spaces_by_id={s['id']:s for s in spaces}
 rooms_by_id={s['id']:s for s in data.get('roomMaps',[])}
 completion_rooms={
     (1,'창고'):'storage',(1,'대회의실'):'assembly',(1,'설비관리실'):'maintenance',(1,'세미나실'):'seminar',
@@ -38,7 +39,8 @@ def blocked(f,x,y):
     return False
 
 def edge_clear(f,a,b):
-    return all(not blocked(f,a[0]+(b[0]-a[0])*i/8,a[1]+(b[1]-a[1])*i/8) for i in range(1,9))
+    steps=max(8,ceil(((b[0]-a[0])**2+(b[1]-a[1])**2)**.5*data['tileSize']/.1))
+    return all(not blocked(f,a[0]+(b[0]-a[0])*i/steps,a[1]+(b[1]-a[1])*i/steps) for i in range(1,steps+1))
 
 def reachable(open,start,edge=None):
     if start not in open:return set()
@@ -174,6 +176,21 @@ for f in spaces:
             check(bool(books) and bool(bodies),f'{sid} library books/shelves missing')
             check(all(not volume_overlap(fixture_bounds(book),fixture_bounds(body)) for book in books for body in frames),f'{sid} book meshes intersect shelf frames')
             check(len({(o['x'],o['y'],o.get('elevation',0)) for o in books})==len(books),f'{sid} duplicate coplanar book meshes')
+    elif f.get('isOutdoor'):
+        check(f['id']=='playground' and not f.get('rooms') and not f.get('stairs'),f'{sid} outdoor map must remain a separate yard without another building or floor staircase')
+        check(f['width']>=69 and f['height']>=55,f'{sid} yard must retain planned84x66m usable scale')
+        check(bool(f.get('fixtures')) and len(f.get('landmarks',[]))>=5,f'{sid} missing outdoor structures or exploration landmarks')
+        covers=[o for o in f.get('fixtures',[]) if o['kind']=='yard-cover-planter']
+        check(len(covers)==2 and all(o['solid'] and o['width']>=7 and o['depth']>=2.5 for o in covers),f'{sid} needs two substantial staggered cover obstacles')
+        check(len({o['x'] for o in covers})==2 and len({o['y'] for o in covers})==2,f'{sid} cover obstacles must be staggered')
+        sources=[o for o in f.get('fixtures',[]) if o.get('solid') and (o['kind'].endswith('-cabinet') or o['kind'].endswith('-crate'))]
+        check(len(sources)>=6,f'{sid} needs distributed real search furniture for outdoor keys')
+        routes=f.get('explorationRoutes',[])
+        check({r['id'] for r in routes}=={'yard-central','yard-west','yard-east'},f'{sid} needs central and both side exploration routes')
+        for route in routes:
+            check(len(route.get('points',[]))>=3,f"{sid} route needs multiple waypoints: {route['id']}")
+            check(all((p['x'],p['y']) in furniture_reached for p in route.get('points',[])),f"{sid} route waypoint unreachable: {route['id']}")
+            check(all(edge_clear(f,(a['x'],a['y']),(b['x'],b['y'])) for a,b in zip(route['points'],route['points'][1:])),f"{sid} route segment lacks continuous player clearance: {route['id']}")
     else:
         check(not f.get('fixtures') and not f.get('interiorZones'),f'{sid} corridor must not contain room furniture')
         for r in f['rooms']:
@@ -231,6 +248,17 @@ for f in spaces:
             for other in dest['stairs']:
                 distance=((other['x']-point[0])**2+(other['y']-point[1])**2)**.5*data['tileSize']
                 check(distance>1.55,f"Landing inside stair trigger {s['id']}")
+    for portal in f.get('portals',[]):
+        target=spaces_by_id.get(portal['targetId'])
+        dx,dy={'south':(0,-1),'north':(0,1),'west':(-1,0),'east':(1,0)}[portal['facing']]
+        approach=(portal['doorX']+dx,portal['doorY']+dy)
+        check((portal['doorX'],portal['doorY']) not in open,f"{sid} external portal must block movement before E: {portal['id']}")
+        check(approach in furniture_reached and not blocked(f,*approach),f"{sid} external portal approach is blocked: {portal['id']}")
+        check(bool(target),f"{sid} missing external portal target: {portal['id']}")
+        if target:
+            arrival=(portal['arrivalX'],portal['arrivalY'])
+            check(arrival in cells(target) and not blocked(target,*arrival),f"{sid} external portal arrival is unsafe: {portal['id']}")
+            check(any(p['targetId']==sid for p in target.get('portals',[])),f"{sid} external portal has no return connection: {portal['id']}")
     # Building diagrams show closed-room outlines; isolated interiors get separate diagrams.
     w,h=f['width']*16,f['height']*16+80;top=f['height']-1
     title=f.get('label',f"본관{f['number']}F")
@@ -245,9 +273,12 @@ for f in spaces:
     for s in f.get('stairs',[]):
         x=s['x']*16;y=(top-s['y'])*16+50
         parts.append(f'<rect x="{x}" y="{y}" width="16" height="16" fill="#dbbb74"/><text x="{x+20}" y="{y+12}">{s["label"]}</text>')
+    for portal in f.get('portals',[]):
+        x=portal['doorX']*16;y=(top-portal['doorY'])*16+50
+        parts.append(f'<rect x="{x}" y="{y}" width="16" height="16" fill="#8ac7c0"/><text x="{x+20}" y="{y+12}">{portal["label"]}</text>')
     parts.append('</svg>')
     # Keep generated artifacts deterministic and avoid filenames from Korean room labels.
-    dest=ROOT/(f'Docs/RoomPlans/{sid}.svg' if is_room else f'Docs/Floor{f["number"]}.svg')
+    dest=ROOT/(f'Docs/RoomPlans/{sid}.svg' if is_room else ('Docs/Playground.svg' if f.get('isOutdoor') else f'Docs/Floor{f["number"]}.svg'))
     dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(''.join(parts))
 check(set(portal_ids)==set(rooms_by_id),'Unlinked isolated room maps')
 check(len(portal_ids)==len(set(portal_ids)),'Two entrances accidentally share one room instance')
@@ -285,5 +316,25 @@ if converted:check(not any(o['kind'] in {'loan-counter','reading-table'} for o i
 for a,b in [('2학년 1반','2학년 2반'),('2학년 3반','2학년 4반')]:
     ra,rb=find(f2,a),find(f2,b)
     check(max(rb['x0']-ra['x1']-1,ra['x0']-rb['x1']-1,rb['y0']-ra['y1']-1,ra['y0']-rb['y1']-1)>=1,f'Classrooms need spacing: {a}, {b}')
-result={'kind':'static portal maps, large lockers, wing passages and continuous furniture clearance; not Unity execution','checks':checks,'passed':checks-len(errors),'errors':errors}
+yard=spaces_by_id.get('playground')
+gate=data.get('escapeGate',{})
+check(len(data.get('outdoorMaps',[]))==1 and bool(yard) and yard.get('isOutdoor'),'Expected one actual outdoor playground map')
+check(gate.get('spaceId')=='playground','Main escape gate must be only in the playground')
+if yard:
+    start=(yard['spawnX'],yard['spawnY']);clear={p for p in cells(yard) if not blocked(yard,*p)}
+    reached=reachable(clear,start,lambda a,b:edge_clear(yard,a,b))
+    check((gate.get('x'),gate.get('y')) in reached,'Outdoor escape gate interaction position must be reachable from the main entrance')
+    check(not any(b['x']==24 and b['y']==1 for b in data['floors'][0]['barriers']),'Old 1F temporary exit barrier must not seal the playground door')
+    graph={s['id']:[] for s in spaces}
+    for s in spaces:
+        graph[s['id']]+=[p['targetId'] for p in s.get('portals',[])]
+        graph[s['id']]+=[r['interiorId'] for r in s.get('rooms',[]) if r.get('interiorId')]
+        graph[s['id']]+=[f"floor-{st['target']}" for st in s.get('stairs',[])]
+        if s.get('isRoom'):graph[s['id']].append(f"floor-{s['sourceFloor']}")
+    seen={'floor-1'};q=['floor-1']
+    for sid in q:
+        for target in graph[sid]:
+            if target not in seen:seen.add(target);q.append(target)
+    check(seen==set(graph),'Main building, all 53 rooms and playground must form one returnable space graph')
+result={'kind':'static playground, portal maps, 53 room interiors and continuous furniture clearance; not Unity execution','checks':checks,'passed':checks-len(errors),'errors':errors}
 print(json.dumps(result,ensure_ascii=False,indent=2));raise SystemExit(bool(errors))

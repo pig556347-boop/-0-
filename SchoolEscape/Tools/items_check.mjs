@@ -20,7 +20,7 @@ const near=(a,b,tol=1e-6)=>assert(Math.abs(a-b)<tol,`${a} != ${b}`);
 const reset=seed=>{game.reset();game.autoStairsEnabled=false;items.reset(seed??1);};
 const available=id=>items.worldItems.find(i=>i.itemId===id&&!i.picked);
 const collect=id=>{const i=available(id);assert(i,'No available '+id);const r=items._collect(i);assert(r.ok,r.message);return i;};
-const warp=(id,x,y)=>{const f=game.spaces.get(id);assert(f);f.isRoom?game.warpRoom(id,x,y):game.warp(f.number,x,y);};
+const warp=(id,x,y)=>{const f=game.spaces.get(id);assert(f);f.isRoom?game.warpRoom(id,x,y):f.isOutdoor?game.warpSpace(id,x,y):game.warp(f.number,x,y);};
 const age=seconds=>{for(let n=0;n<seconds-1e-9;n+=.025)game.step(0,0,false,Math.min(.025,seconds-n));};
 function check(name,fn){try{checks.push({name,passed:true,details:fn()});}catch(error){checks.push({name,passed:false,error:error.message,stack:error.stack});}}
 const signature=()=>items.worldItems.map(i=>[i.itemId,i.spaceId,i.hidden,i.x,i.y,i.sourceId]);
@@ -30,13 +30,20 @@ function approach(item){
  throw Error('Cannot interact with authored placement '+item.uid);
 }
 
-check('128 seeded runs keep exactly A/B/C, one per floor, and all thirteen items',()=>{
- const signatures=new Set(),keyPositions=new Set();let ground=0,hidden=0,placements=0;
+check('128 seeded runs keep exactly A/B/C split across main building and playground, and all thirteen items',()=>{
+ const signatures=new Set(),keyPositions=new Set(),yardKeyLetters=new Set(),keyRegionSplits=new Set();let ground=0,hidden=0,placements=0,yardKeys=0,mainKeys=0;
  for(let seed=1;seed<=128;seed++){
   reset(seed);assert.equal(items.worldItems.length,13);assert.equal(items.inventory.length,0);assert.equal(items.equipped,null);
   const keyItems=items.worldItems.filter(i=>keys.includes(i.itemId));assert.equal(keyItems.length,3);
   assert.deepEqual([...keyItems.map(i=>i.itemId)].sort(),keys);
-  const floors=keyItems.map(i=>{const f=game.spaces.get(i.spaceId);return f.isRoom?f.sourceFloor:f.number;});assert.deepEqual(floors.sort(),[1,2,3]);
+  const outdoor=keyItems.filter(i=>game.spaces.get(i.spaceId).isOutdoor),main=keyItems.filter(i=>!game.spaces.get(i.spaceId).isOutdoor);
+  assert(outdoor.length>=1&&main.length>=1,'Every run must place keys in both regions');yardKeys+=outdoor.length;mainKeys+=main.length;keyRegionSplits.add(outdoor.length);outdoor.forEach(i=>yardKeyLetters.add(i.itemId));
+  for(const i of keyItems){
+   const anchors=[...(items.connections.get(i.spaceId)||[])];
+   if(items.escapeGate.spaceId===i.spaceId)anchors.push(items.escapeGate);
+   for(const f of game.spaces.values())for(const portal of f.portals||[])if(portal.targetId===i.spaceId)anchors.push({x:portal.arrivalX,y:portal.arrivalY});
+   assert(anchors.every(p=>Math.hypot(i.displayX-p.x,i.displayY-p.y)*data.tileSize>=4-1e-6),'A key is too near a portal or gate approach');
+  }
   assert(keyItems.some(i=>i.hidden)&&keyItems.some(i=>!i.hidden));
   const ids=new Set(items.worldItems.map(i=>i.uid));assert.equal(ids.size,13);
   for(const i of items.worldItems){
@@ -47,9 +54,9 @@ check('128 seeded runs keep exactly A/B/C, one per floor, and all thirteen items
   }
   signatures.add(JSON.stringify(signature()));keyPositions.add(JSON.stringify(keyItems.map(i=>[i.spaceId,i.x,i.y,i.hidden])));
  }
- assert(signatures.size>120);assert(keyPositions.size>100);
+ assert(signatures.size>120);assert(keyPositions.size>100);assert.equal(yardKeyLetters.size,3,'The outdoor key letter must vary');assert.deepEqual([...keyRegionSplits].sort(),[1,2],'The third key must vary between the main building and playground');
  metrics.seededPlacements=placements;metrics.seeds=128;
- return{seeds:128,placements,ground,hidden,uniqueLayouts:signatures.size,uniqueKeyLayouts:keyPositions.size};
+ return{seeds:128,placements,ground,hidden,yardKeys,mainKeys,outdoorLetters:[...yardKeyLetters],outdoorKeyCounts:[...keyRegionSplits].sort(),uniqueLayouts:signatures.size,uniqueKeyLayouts:keyPositions.size};
 });
 
 check('A specified seed reproduces positions; new seeds change positions',()=>{
@@ -172,6 +179,28 @@ check('Restart replaces run items, clears worn inventory and restores a playable
  const old=items.seed;game.reset();items.reset(41);assert(!game.won&&!game.caught);assert.equal(items.inventory.length,0);assert.equal(items.equipped,null);assert.equal(game.speedBoostUntil,0);assert.equal(items.worldItems.length,13);assert.notEqual(items.seed,old);return{oldSeed:old,newSeed:items.seed};
 });
 
+check('Main entrance and playground are closed E portals with safe reversible landings',()=>{
+ reset(51);const yard=game.spaces.get('playground'),main=game.spaces.get('floor-1');assert(yard?.isOutdoor);const outward=main.portals.find(p=>p.targetId===yard.id),inward=yard.portals.find(p=>p.targetId===main.id);assert(outward&&inward);
+ const dir={north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]};const place=p=>{const [dx,dy]=dir[p.facing];warp(p===outward?main.id:yard.id,p.doorX+dx,p.doorY+dy);age(.7);return[dx,dy];};
+ const [dx,dy]=place(outward);for(let i=0;i<40;i++)game.step(-dx,-dy,false,.025);assert.equal(game.spaceId,main.id);assert(!game.blocked(game.x,game.y));assert(game.interact());age(.3);assert.equal(game.spaceId,yard.id);assert.equal(game.roomId,'');assert.equal(game.floor,0);assert(!game.blocked(game.x,game.y));
+ const initial={x:game.x,y:game.y};age(2);assert.equal(game.spaceId,yard.id);near(game.x,initial.x);near(game.y,initial.y);
+ place(inward);assert(game.interact());age(.3);assert.equal(game.spaceId,main.id);assert.equal(game.floor,1);assert(!game.blocked(game.x,game.y));age(1);assert.equal(game.spaceId,main.id);return{outward:outward.id,inward:inward.id,returnX:game.x,returnY:game.y};
+});
+
+check('All keys at the old main entrance cannot win; the E door still leads outdoors',()=>{
+ reset(52);keys.forEach(collect);warp('floor-1',24,2);age(.7);assert(!items.nearbyGate());assert(!items.tryEscape().ok&&!game.won);assert(game.interact());age(.3);assert.equal(game.spaceId,'playground');assert(items.hasAllKeys()&&!game.won);return{oldExitRemoved:true,currentGate:items.escapeGate};
+});
+
+check('Outdoor furniture is searchable and dropped items remain recoverable in the yard',()=>{
+ reset(53);const sources=items.searchTemplate.filter(s=>game.spaces.get(s.spaceId).isOutdoor);assert(sources.length>=6);collect('key-a');const yard=game.spaces.get('playground');warp(yard.id,yard.spawnX,yard.spawnY);assert(items.drop(0).ok);age(.35);const loose=items.worldItems.find(i=>i.itemId==='key-a'&&!i.picked);assert(loose.spaceId===yard.id&&!loose.hidden&&!game.blocked(loose.x,loose.y));assert(items.interact().ok);assert.equal(items.inventory.filter(i=>i.uid===loose.uid).length,1);return{sources:sources.length,recoveredUid:loose.uid};
+});
+
+check('Compass guides a remaining outdoor key through the actual entrance portal',()=>{
+ reset(54);for(const i of items.worldItems.filter(i=>keys.includes(i.itemId)&&!game.spaces.get(i.spaceId).isOutdoor))assert(items._collect(i).ok);
+ warp('floor-1',24,9);parts.forEach(collect);const compass=items.compass();assert(compass.active&&compass.targetSpaceId==='playground');assert.equal(compass.via,'door');assert(compass.hops>=1);const portal=game.map.portals.find(p=>p.targetId==='playground'),d={north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]}[portal.facing];near(compass.x,portal.doorX+d[0]);near(compass.y,portal.doorY+d[1]);
+ const yard=game.spaces.get('playground');warp(yard.id,yard.spawnX,yard.spawnY);const within=items.compass();assert(within.active&&within.via==='key'&&within.targetKeyUid===compass.targetKeyUid);collect(within.targetItemId);assert(!items.compass().active);return{nextPortal:compass.label,targetSpace:compass.targetSpaceId};
+});
+
 const pursuer=new Pursuit(game);
 check('Random designated monster spawns cover multiple safe authored places and are seeded',()=>{
  const spawns=new Set(),floors=new Set();reset(1);
@@ -180,7 +209,7 @@ check('Random designated monster spawns cover multiple safe authored places and 
   if(pursuer.spaceId===game.spaceId)assert(pursuer.initial.distanceFromPlayer>=15&&pursuer.initial.pathDistanceFromPlayer>=15);
   assert(!(f.stairs||[]).some(s=>Math.hypot(s.x-pursuer.x,s.y-pursuer.y)*data.tileSize<3.2));spawns.add(pursuer.initial.spawnId);floors.add(f.number);
  }
- assert(spawns.size>=3&&floors.size===3);pursuer.reset('same');const a=pursuer.initial;pursuer.reset('same');assert.deepEqual(pursuer.initial,a);return{runs:96,spawnCount:spawns.size,floors:[...floors]};
+ assert(spawns.size>=3&&[1,2,3].every(n=>floors.has(n)));assert(floors.has(0),'Safe designated outdoor spawns must be exercised');pursuer.reset('same');const a=pursuer.initial;pursuer.reset('same');assert.deepEqual(pursuer.initial,a);return{runs:96,spawnCount:spawns.size,floors:[...floors]};
 });
 
 check('Development OFF persists through reset and prevents movement or capture',()=>{

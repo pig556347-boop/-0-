@@ -12,7 +12,8 @@ const destination=path.resolve(process.argv[2]||path.join(root,'Builds/Browser/i
  const data=(name,type)=>`data:${type};base64,${fs.readFileSync(path.join(resources,name)).toString('base64')}`;
  const assets={map:JSON.parse(fs.readFileSync(path.join(resources,'SchoolMap.json'),'utf8')),
   '../Assets/Resources/FloorTexture.png':data('FloorTexture.png','image/png'),
-  '../Assets/Resources/WallTexture.png':data('WallTexture.png','image/png')};
+  '../Assets/Resources/WallTexture.png':data('WallTexture.png','image/png'),
+  '../Assets/Resources/YardTexture.png':data('YardTexture.png','image/png')};
  const css=fs.readFileSync(path.join(web,'style.css'),'utf8').replace('../Assets/Resources/SchoolFont.otf',data('SchoolFont.otf','font/otf'));
  const script=('globalThis.SCHOOL_ESCAPE_ASSETS='+JSON.stringify(assets)+';\n'+result.outputFiles[0].text).replace(/<\/script/gi,'<\\/script');
  let html=fs.readFileSync(path.join(web,'index.html'),'utf8').replace('<link rel="stylesheet" href="style.css">',()=>'<style>'+css+'</style>')

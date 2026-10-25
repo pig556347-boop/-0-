@@ -36,7 +36,7 @@ namespace SchoolEscape
         sealed class Portal
         {
             public string from,to,label;
-            public Vector2 point;
+            public Vector2 point,arrival;
         }
         public readonly List<Item> Inventory=new List<Item>();
         public readonly List<Item> WorldItems=new List<Item>();
@@ -54,8 +54,8 @@ namespace SchoolEscape
         public void Initialize(ExplorationGame owner)
         {
             game=owner;
-            foreach(var f in game.Data.floors)maps[f.id]=f;
-            foreach(var f in game.Data.roomMaps)maps[f.id]=f;
+            maps.Clear();reachable.Clear();portals.Clear();Searchables.Clear();
+            foreach(var f in game.Data.AllSpaces())maps[f.id]=f;
             foreach(var f in maps.Values)
             {
                 reachable[f.id]=Reachable(f);
@@ -75,10 +75,11 @@ namespace SchoolEscape
                     }
                     if(at.HasValue)Searchables.Add(new Searchable{id=fixture.id,spaceId=f.id,point=at.Value,label=SearchLabel(fixture.kind)});
                 }
-                if(f.isRoom)portals.Add(new Portal{from=f.id,to="floor-"+f.sourceFloor,point=new Vector2(f.exitX,f.exitY+1),label="복도 출입문"});
+                if(f.isRoom)portals.Add(new Portal{from=f.id,to="floor-"+f.sourceFloor,point=new Vector2(f.exitX,f.exitY+1),arrival=new Vector2(f.returnX,f.returnY),label="복도 출입문"});
                 foreach(var r in f.rooms??Array.Empty<RoomData>())if(!string.IsNullOrEmpty(r.interiorId))
-                    portals.Add(new Portal{from=f.id,to=r.interiorId,point=new Vector2(r.doorX,r.doorY)+Outward(r.facing),label=r.label+" 출입문"});
-                foreach(var s in f.stairs??Array.Empty<StairData>())portals.Add(new Portal{from=f.id,to="floor-"+s.target,point=new Vector2(s.x,s.y),label=s.target+"층 계단"});
+                    portals.Add(new Portal{from=f.id,to=r.interiorId,point=new Vector2(r.doorX,r.doorY)+Outward(r.facing),arrival=new Vector2(maps[r.interiorId].spawnX,maps[r.interiorId].spawnY),label=r.label+" 출입문"});
+                foreach(var s in f.stairs??Array.Empty<StairData>())portals.Add(new Portal{from=f.id,to="floor-"+s.target,point=new Vector2(s.x,s.y),arrival=new Vector2(s.arrivalX,s.arrivalY),label=s.target+"층 계단"});
+                foreach(var p in f.portals??Array.Empty<PortalData>())portals.Add(new Portal{from=f.id,to=p.targetId,point=new Vector2(p.doorX,p.doorY)+Outward(p.facing),arrival=new Vector2(p.arrivalX,p.arrivalY),label=p.label});
             }
             keyMat=Material(new Color(.77f,.63f,.31f));drinkMat=Material(new Color(.41f,.73f,.68f));otherMat=Material(new Color(.72f,.67f,.51f));
             ResetRun();
@@ -96,6 +97,8 @@ namespace SchoolEscape
             if(!f.Clear(p.x,p.y,game.Data.tileSize,game.Data.playerRadius))return false;
             foreach(var r in f.rooms??Array.Empty<RoomData>())
                 if(Vector2.Distance(p,new Vector2(r.doorX,r.doorY))<.55f)return false;
+            foreach(var portal in f.portals??Array.Empty<PortalData>())
+                if(Vector2.Distance(p,new Vector2(portal.doorX,portal.doorY))<.55f)return false;
             return !f.isRoom||Vector2.Distance(p,new Vector2(f.exitX,f.exitY))>=.55f;
         }
         bool Segment(FloorData f,Vector2 a,Vector2 b)
@@ -120,28 +123,61 @@ namespace SchoolEscape
             Seed=seed??Guid.NewGuid().GetHashCode();random=new System.Random(Seed);
             foreach(var i in WorldItems)if(i.visual!=null)Destroy(i.visual);
             WorldItems.Clear();Inventory.Clear();Equipped=null;foreach(var s in Searchables)s.searched=false;
-            // Exactly A/B/C, one per main-building floor; every run mixes a
-            // furniture-hidden key and a loose key rather than only one mode.
-            bool firstHidden=random.Next(2)==0;
-            Spawn("key-a",1,firstHidden);Spawn("key-b",2,!firstHidden);Spawn("key-c",3,random.Next(2)==0);
+            // Every run keeps three unique letters, at least one key in the
+            // playground and one in the main building, with both hiding modes.
+            if(maps.ContainsKey("playground"))
+            {
+                var letters=new List<string>{"key-a","key-b","key-c"};
+                var regions=new List<string>{"playground","main",random.Next(2)==0?"playground":"main"};
+                var modes=new List<bool>{true,false,random.Next(2)==0};
+                Shuffle(letters);Shuffle(regions);Shuffle(modes);
+                for(int n=0;n<3;n++)Spawn(letters[n],regions[n],modes[n]);
+            }
+            else
+            {
+                bool firstHidden=random.Next(2)==0;
+                Spawn("key-a",1,firstHidden);Spawn("key-b",2,!firstHidden);Spawn("key-c",3,random.Next(2)==0);
+            }
             for(int n=0;n<3;n++){Spawn("vitamin-water",n+1,random.Next(2)==0);Spawn("chocolate-bar",n+1,random.Next(2)==0);}
             Spawn("clock-second-hand",1,random.Next(2)==0);Spawn("clock-minute-hand",2,random.Next(2)==0);Spawn("clock-body",3,random.Next(2)==0);
             Spawn("smartwatch",random.Next(1,4),random.Next(2)==0);
             SyncVisuals();
         }
-        void Spawn(string id,int floor,bool hidden)
+        void Shuffle<T>(List<T> values)
         {
-            var item=new Item{uid=Seed+":"+WorldItems.Count,id=id};
-            var options=Searchables.FindAll(s=>FloorOf(maps[s.spaceId])==floor&&!WorldItems.Exists(i=>i.sourceId==s.id));
+            for(int n=values.Count-1;n>0;n--){int other=random.Next(n+1);T value=values[n];values[n]=values[other];values[other]=value;}
+        }
+        void Spawn(string id,int floor,bool hidden)=>Spawn(id,floor.ToString(),hidden);
+        bool SelectedSpace(FloorData f,string region)
+        {
+            if(region=="main")return !f.isOutdoor&&f.id!="playground";
+            int floor;if(int.TryParse(region,out floor))return !f.isOutdoor&&FloorOf(f)==floor;
+            return f.id==region;
+        }
+        bool SafeKeyLocation(FloorData f,Vector2 p)
+        {
+            foreach(var edge in portals)
+            {
+                if(edge.from==f.id&&Vector2.Distance(p,edge.point)*game.Data.tileSize<4)return false;
+                if(edge.to==f.id&&Vector2.Distance(p,edge.arrival)*game.Data.tileSize<4)return false;
+            }
+            var gate=game.Data.escapeGate;
+            return gate==null||gate.spaceId!=f.id||Vector2.Distance(p,new Vector2(gate.x,gate.y))*game.Data.tileSize>=4;
+        }
+        void Spawn(string id,string region,bool hidden)
+        {
+            var item=new Item{uid=Seed+":"+WorldItems.Count,id=id};bool key=id.StartsWith("key-",StringComparison.Ordinal);
+            var options=Searchables.FindAll(s=>SelectedSpace(maps[s.spaceId],region)&&!WorldItems.Exists(i=>i.sourceId==s.id)&&(!key||SafeKeyLocation(maps[s.spaceId],s.point)));
+            if(hidden&&key&&maps.ContainsKey("playground")&&options.Count==0)throw new InvalidOperationException("No safe hidden native key location in "+region);
             if(hidden&&options.Count>0)
             {var source=options[random.Next(options.Count)];item.spaceId=source.spaceId;item.point=source.point;item.sourceId=source.id;item.hidden=true;}
             else
             {
                 var choices=new List<Tuple<string,Vector2>>();
-                foreach(var f in maps.Values)if(FloorOf(f)==floor)
+                foreach(var f in maps.Values)if(SelectedSpace(f,region))
                     foreach(var p in reachable[f.id])
-                        if(!NearPortal(f,p)&&!WorldItems.Exists(i=>i.spaceId==f.id&&Vector2.Distance(i.point,p)<.8f))choices.Add(Tuple.Create(f.id,p));
-                if(choices.Count==0)throw new InvalidOperationException("No reachable native item location on floor "+floor);
+                        if(!NearPortal(f,p)&&(!key||SafeKeyLocation(f,p))&&!WorldItems.Exists(i=>i.spaceId==f.id&&Vector2.Distance(i.point,p)<.8f))choices.Add(Tuple.Create(f.id,p));
+                if(choices.Count==0)throw new InvalidOperationException("No reachable native item location in "+region);
                 var chosen=choices[random.Next(choices.Count)];item.spaceId=chosen.Item1;item.point=chosen.Item2;
             }
             WorldItems.Add(item);CreateVisual(item);
@@ -149,9 +185,7 @@ namespace SchoolEscape
         static int FloorOf(FloorData f)=>f.isRoom?f.sourceFloor:f.number;
         bool NearPortal(FloorData f,Vector2 p)
         {
-            foreach(var s in f.stairs??Array.Empty<StairData>())if(Vector2.Distance(p,new Vector2(s.x,s.y))*game.Data.tileSize<2.2f)return true;
-            if(f.isRoom&&Vector2.Distance(p,new Vector2(f.exitX,f.exitY))*game.Data.tileSize<2)return true;
-            foreach(var r in f.rooms??Array.Empty<RoomData>())if(Vector2.Distance(p,new Vector2(r.doorX,r.doorY))*game.Data.tileSize<2)return true;
+            foreach(var edge in portals)if(edge.from==f.id&&Vector2.Distance(p,edge.point)*game.Data.tileSize<2.2f)return true;
             return false;
         }
         void CreateVisual(Item item)
@@ -236,7 +270,7 @@ namespace SchoolEscape
             if(item.id=="smartwatch")return Equip(index);
             if(item.id=="vitamin-water"){game.Player.ApplyVitamin();game.ShowNotice("비타민워터 · 2초 동안 이동 속도 30% 증가");}
             else if(item.id=="chocolate-bar"){game.Player.RestoreStamina();game.ShowNotice("초코바 · 스태미나 즉시 회복");}
-            else{game.ShowNotice(item.id.StartsWith("key-",StringComparison.Ordinal)?"열쇠 세 개를 모아 1층 현관 교문에서 E로 사용하세요.":item.id=="compass"?"나침반은 소지하는 동안 자동으로 방향을 표시합니다.":"시계 부품 세 개를 모으면 나침반을 자동 획득합니다.");return false;}
+            else{game.ShowNotice(item.id.StartsWith("key-",StringComparison.Ordinal)?"열쇠 세 개를 모아 운동장 교문에서 E로 사용하세요.":item.id=="compass"?"나침반은 소지하는 동안 자동으로 방향을 표시합니다.":"시계 부품 세 개를 모으면 나침반을 자동 획득합니다.");return false;}
             item.consumed=true;Inventory.RemoveAt(index);return true;
         }
         public bool Equip(int index)
@@ -260,7 +294,14 @@ namespace SchoolEscape
         public int KeyCount=>Inventory.FindAll(i=>i.id.StartsWith("key-",StringComparison.Ordinal)).Count;
         public bool ConsumeEscapeKeys()
         {
-            if(!HasAllKeys())return false;foreach(var key in Inventory.FindAll(i=>i.id.StartsWith("key-",StringComparison.Ordinal))){key.consumed=true;Inventory.Remove(key);}return true;
+            if(!AtEscapeGate()||!HasAllKeys())return false;foreach(var key in Inventory.FindAll(i=>i.id.StartsWith("key-",StringComparison.Ordinal))){key.consumed=true;Inventory.Remove(key);}return true;
+        }
+        bool AtEscapeGate()
+        {
+            var gate=game.Data.escapeGate;
+            if(gate==null||game.Current==null||game.Current.id!=gate.spaceId||game.Player==null)return false;
+            Vector2 p=game.Data.Grid(game.Player.transform.position),target=new Vector2(gate.x,gate.y);
+            return Vector2.Distance(p,target)*game.Data.tileSize<=gate.range&&Segment(game.Current,p,target);
         }
         public Guidance Compass()
         {
