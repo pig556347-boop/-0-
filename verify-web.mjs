@@ -38,12 +38,41 @@ async function visitRoom(floor,label){
  check('Real E returns and closes the door: '+label,returned.spaceId===setup.sourceId&&returned.safe&&!returned.pending&&returned.view.activeIds.join()===setup.sourceId&&returned.view.minimapSpaceId===setup.sourceId&&returned.near===label&&returned.closedPosition?.every((n,i)=>Math.abs(n-setup.closedPosition[i])<1e-6),returned);
  return {setup,entered,walked,returned};
 }
+async function visitPlayground(){
+ const setup=await page.evaluate(()=>{
+  const q=escapeQA,g=q.game,base=g.spaces.get('floor-1'),portal=base.portals.find(p=>p.targetId==='playground');
+  const d=({north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]})[portal.facing];
+  q.setManual(true);g.autoStairsEnabled=false;g.warp(1,portal.doorX+d[0],portal.doorY+d[1]);for(let i=0;i<28;i++)q.tick(.025);q.render(0);
+  return {portal,near:g.nearbyDoor()?.targetId,safe:!g.blocked(g.x,g.y),closed:g.blocked(portal.doorX,portal.doorY),active:q.inspectSpace().activeIds};
+ });
+ check('Main entrance remains a closed E door before entering the playground',setup.safe&&setup.closed&&setup.near==='playground'&&setup.active.join()==='floor-1',setup);
+ await page.keyboard.press('KeyE');check('Real E begins playground entry',await page.evaluate(()=>escapeQA.game.pendingDoor?.targetId==='playground'));
+ const entered=await page.evaluate(()=>{
+  const q=escapeQA;for(let i=0;i<12;i++)q.tick(.025);q.render(0);const g=q.game;
+  return {spaceId:g.spaceId,roomId:g.roomId,outdoor:g.map.isOutdoor,safe:!g.blocked(g.x,g.y),view:q.inspectSpace(),fixtures:g.map.fixtures.length,gate:q.items.escapeGate,keys:q.items.inventory.length};
+ });
+ check('Actual playground is furnished and visible as one independent outdoor space',entered.spaceId==='playground'&&!entered.roomId&&entered.outdoor&&entered.safe&&entered.fixtures>0&&entered.view.activeIds.join()==='playground'&&entered.view.minimapSpaceId==='playground'&&entered.view.visibleFixtureSpaceIds?.includes('playground')&&entered.gate.spaceId==='playground',entered);
+ const start=await page.evaluate(()=>{const q=escapeQA;q.setManual(false);return {x:q.game.x,y:q.game.y,time:q.game.time}});
+ await page.keyboard.down('KeyW');try{await page.waitForFunction(t=>escapeQA.game.time>t+.3,start.time)}finally{await page.keyboard.up('KeyW')}
+ const walked=await page.evaluate(p=>{const q=escapeQA,g=q.game;q.setManual(true);return{spaceId:g.spaceId,distance:Math.hypot(g.x-p.x,g.y-p.y)*g.data.tileSize,safe:!g.blocked(g.x,g.y),audio:q.audio.inspect()}},start);
+ check('Real W explores the playground without automatic door transfers',walked.spaceId==='playground'&&walked.distance>.3&&walked.safe,walked);
+ check('Started ambience remains audible in the playground',walked.audio.contextState==='running'&&walked.audio.unlocked&&walked.audio.rms>1e-7,walked.audio);
+ await page.evaluate(()=>{
+  const q=escapeQA,g=q.game,portal=g.map.portals.find(p=>p.targetId==='floor-1'),d=({north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]})[portal.facing];
+  g.warpSpace('playground',portal.doorX+d[0],portal.doorY+d[1]);for(let i=0;i<28;i++)q.tick(.025);q.render(0);
+ });
+ await page.keyboard.press('KeyE');const returned=await page.evaluate(()=>{const q=escapeQA;for(let i=0;i<12;i++)q.tick(.025);q.render(0);return {spaceId:q.game.spaceId,safe:!q.game.blocked(q.game.x,q.game.y),pending:!!q.game.pendingDoor,x:q.game.x,y:q.game.y,view:q.inspectSpace()}});
+ check('Real E returns safely from the playground to the main entrance',returned.spaceId==='floor-1'&&returned.safe&&!returned.pending&&returned.view.activeIds.join()==='floor-1'&&returned.view.minimapSpaceId==='floor-1',returned);
+ const idle=await page.evaluate(()=>{const q=escapeQA;for(let i=0;i<80;i++)q.tick(.025);q.render(0);const g=q.game;return {spaceId:g.spaceId,pending:!!g.pendingDoor,safe:!g.blocked(g.x,g.y),won:g.won}});
+ check('Outdoor return does not loop or escape while idle',idle.spaceId==='floor-1'&&!idle.pending&&!idle.won&&idle.safe,idle);
+ return {setup,entered,walked,returned,idle};
+}
 async function pickup(itemId){
  const setup=await page.evaluate(id=>{
   const q=escapeQA,g=q.game,s=q.items,item=s.worldItems.find(i=>i.itemId===id&&!i.picked);if(!item)throw Error('Missing authored item '+id);
   const f=g.spaces.get(item.spaceId),source=item.sourceId?s.searchById.get(item.sourceId):null;let chosen;
   for(const p of source?source.approaches:[item]){
-   if(f.isRoom)g.warpRoom(f.id,p.x,p.y);else g.warp(f.number,p.x,p.y);
+   if(f.isRoom)g.warpRoom(f.id,p.x,p.y);else if(f.isOutdoor)g.warpSpace(f.id,p.x,p.y);else g.warp(f.number,p.x,p.y);
    const near=s.nearby();if(near&&(near.uid===item.uid||near.itemUid===item.uid)){chosen=p;break;}
   }
   if(!chosen)throw Error('No matching reachable interaction '+id);
@@ -68,7 +97,7 @@ async function verify(){
  check('Only the separate web branch is tested',sourceBranch==='school-escape-web',sourceBranch);
  check('Pinned commit is valid',/^[a-f0-9]{40}$/.test(sourceCommit||''));
  const manifest=JSON.parse(fs.readFileSync('build.json','utf8'));status.build=manifest;
- check('Manifest identifies completed main rooms 0.9',manifest.version==='0.9'&&manifest.featureRevision==='remaining-main-rooms-playground-plan-2026-10-24',manifest.featureRevision);
+ check('Manifest identifies playable playground gate release 0.10',manifest.version==='0.10'&&manifest.featureRevision==='playground-gate-2026-10-24',manifest.featureRevision);
  const response=await fetch(publicURL,{signal:AbortSignal.timeout(30000)}),html=Buffer.from(await response.arrayBuffer());
  status.http={status:response.status,contentType:response.headers.get('content-type'),bytes:html.length,sha256:crypto.createHash('sha256').update(html).digest('hex')};
  check('Public CDN returns HTTP 200',response.status===200,status.http.status);
@@ -76,7 +105,7 @@ async function verify(){
  check('Public HTML matches the tested build',status.http.sha256===manifest.htmlSha256,status.http.sha256);
  browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  page=await browser.newPage({viewport:{width:1280,height:800},deviceScaleFactor:1});page.setDefaultTimeout(20000);
- page.on('pageerror',e=>status.errors.push(e.message));page.on('console',m=>{if(gameReady&&m.type()==='error')status.consoleErrors.push(m.text())});
+ page.on('pageerror',e=>status.errors.push(e.message));page.on('console',m=>{if(m.type()==='error')status.consoleErrors.push(m.text())});
  await page.goto(publicURL+'?qa',{waitUntil:'domcontentloaded',timeout:45000});
  const open=page.getByRole('button',{name:'Open the page',exact:true}).or(page.getByRole('link',{name:'Open the page',exact:true})).first();
  if(await open.count()){await open.click();status.externalContentNoticeConfirmed=true;}
@@ -86,7 +115,7 @@ async function verify(){
   const q=escapeQA,g=q.game,s=q.items,m=g.data.roomMaps;
   return {seed:s.seed,enemy:q.pursuit.inspect(),visual:q.pursuerVisual.inspect(),audio:q.audio.inspect(),capacity:s.capacity,maxEquipped:s.maxEquipped,
    itemCount:s.worldItems.length,keys:s.worldItems.filter(i=>i.itemId.startsWith('key-')).map(i=>({id:i.itemId,hidden:i.hidden,spaceId:i.spaceId})),
-   rooms:m.length,revision:g.data.revision,libraries:m.filter(m=>m.kind==='library').map(m=>m.sourceFloor),
+   outdoorMaps:(g.data.outdoorMaps||[]).map(f=>({id:f.id,isOutdoor:f.isOutdoor,fixtures:f.fixtures?.length||0,portals:f.portals?.length||0})),escapeGate:s.escapeGate,rooms:m.length,revision:g.data.revision,libraries:m.filter(m=>m.kind==='library').map(m=>m.sourceFloor),
    roomCoverage:g.data.floors.flatMap(f=>f.rooms.map(r=>{const interior=g.spaces.get(r.interiorId);return {floor:f.number,label:r.label,id:r.interiorId||'',kind:interior?.kind||'',sourceFloor:interior?.sourceFloor,fixtures:interior?.fixtures.length||0,fixtureKinds:new Set((interior?.fixtures||[]).map(o=>o.kind)).size,solidFixtures:(interior?.fixtures||[]).filter(o=>o.solid).length}})),
    adminDesks:m.filter(m=>m.kind==='administration').flatMap(m=>m.fixtures).filter(o=>o.kind==='admin-desk').length,mirrors:m.flatMap(m=>m.fixtures).filter(o=>o.kind==='mirror-surface').length};
  });status.initial=initial;
@@ -94,7 +123,9 @@ async function verify(){
  check('Inventory has nine carry and one worn slots',initial.capacity===9&&initial.maxEquipped===1);
  check('Run has thirteen real pickups and exactly A B C',initial.itemCount===13&&initial.keys.map(k=>k.id).sort().join()==='key-a,key-b,key-c',initial.keys);
  check('Keys mix furniture and ground locations',initial.keys.some(k=>k.hidden)&&initial.keys.some(k=>!k.hidden),initial.keys);
- check('All 53 rooms and existing facility fixtures remain',initial.rooms===manifest.roomCount&&initial.rooms===53&&initial.revision===manifest.revision&&initial.revision==='remaining-main-rooms-2026-10-24'&&initial.libraries.join()==='2'&&initial.adminDesks===18&&initial.mirrors===12,initial);
+ check('Every run distributes keys between the main building and playground',initial.keys.some(k=>k.spaceId==='playground')&&initial.keys.some(k=>k.spaceId!=='playground'),initial.keys);
+ check('Playable playground owns the only main escape gate',initial.outdoorMaps.length===1&&initial.outdoorMaps[0].id==='playground'&&initial.outdoorMaps[0].isOutdoor&&initial.outdoorMaps[0].fixtures>0&&initial.outdoorMaps[0].portals===1&&initial.escapeGate.spaceId==='playground',initial.outdoorMaps);
+ check('All 53 rooms and existing facility fixtures remain',initial.rooms===manifest.roomCount&&initial.rooms===53&&initial.revision===manifest.revision&&initial.revision==='playground-gate-2026-10-24'&&initial.libraries.join()==='2'&&initial.adminDesks===18&&initial.mirrors===12,initial);
  check('Every main-building door has a furnished interior',initial.roomCoverage.length===53&&initial.roomCoverage.every(r=>r.id&&r.sourceFloor===r.floor&&r.fixtures>0&&r.fixtureKinds>=3&&r.solidFixtures>0),initial.roomCoverage);
  const newRooms=Object.entries(newRoomLabels).flatMap(([floor,labels])=>labels.map(label=>initial.roomCoverage.find(r=>r.floor===Number(floor)&&r.label===label)));
  check('Twelve remaining rooms are furnished on their intended floors',newRooms.length===12&&newRooms.every(r=>r?.id&&r.fixtures>0&&r.fixtureKinds>=3&&r.solidFixtures>0),newRooms);
@@ -107,19 +138,24 @@ async function verify(){
  await page.click('#enemy-toggle');await page.waitForFunction(()=>!escapeQA.pursuit.enabled&&document.getElementById('enemy-toggle').getAttribute('aria-pressed')==='false');
  check('Real developer toggle disables pursuit',await page.evaluate(()=>!escapeQA.pursuit.enabled&&document.getElementById('enemy-toggle').getAttribute('aria-pressed')==='false'));
  const seedBefore=await page.evaluate(()=>escapeQA.items.seed);await page.keyboard.press('Escape');await page.click('#new-run');
- const reset=await page.evaluate(()=>({seed:escapeQA.items.seed,enabled:escapeQA.pursuit.enabled,items:escapeQA.items.worldItems.length,carry:escapeQA.items.inventory.length}));
+ const reset=await page.evaluate(()=>({seed:escapeQA.items.seed,enabled:escapeQA.pursuit.enabled,items:escapeQA.items.worldItems.length,carry:escapeQA.items.inventory.length,keySpaces:escapeQA.items.worldItems.filter(i=>i.itemId.startsWith('key-')).map(i=>i.spaceId)}));
  check('New run rerolls loot and keeps developer OFF',reset.seed!==seedBefore&&!reset.enabled&&reset.items===13&&reset.carry===0,reset);
+ check('Rerolled keys still occupy both main building and playground',reset.keySpaces.includes('playground')&&reset.keySpaces.some(id=>id!=='playground'),reset.keySpaces);
  await page.keyboard.press('KeyI');const time=await page.evaluate(()=>escapeQA.game.time);await page.waitForTimeout(180);
  check('Real I opens nine slots and pauses time',await page.evaluate(t=>escapeQA.inventoryUI.isOpen&&document.querySelectorAll('#inventory-grid button').length===9&&escapeQA.game.time===t,time));
  await page.keyboard.press('Escape');check('Escape closes inventory',!await page.evaluate(()=>escapeQA.inventoryUI.isOpen));
  await page.evaluate(()=>{const q=escapeQA;q.game.autoStairsEnabled=false;q.game.warp(1,24,9);q.game.stamina=100;q.render(0)});
- const start=await page.evaluate(()=>({x:escapeQA.game.x,y:escapeQA.game.y,time:escapeQA.game.time}));
- await page.keyboard.down('ShiftLeft');await page.keyboard.down('KeyW');
- try{await page.waitForFunction(t=>escapeQA.game.time>t+.35,start.time)}finally{await page.keyboard.up('KeyW');await page.keyboard.up('ShiftLeft')}
- const sprint=await page.evaluate(a=>{const g=escapeQA.game;return {speed:Math.hypot(g.x-a.x,g.y-a.y)*g.data.tileSize/(g.time-a.time),stamina:g.stamina,safe:!g.blocked(g.x,g.y)}},start);
+ await page.keyboard.down('ShiftLeft');await page.keyboard.down('KeyW');let sprint;
+ try{
+  await page.waitForFunction(()=>escapeQA.game.isRunning);
+  const start=await page.evaluate(()=>({x:escapeQA.game.x,y:escapeQA.game.y,time:escapeQA.game.time}));
+  await page.waitForFunction(t=>escapeQA.game.time>t+.35,start.time);
+  sprint=await page.evaluate(a=>{const g=escapeQA.game;return {speed:Math.hypot(g.x-a.x,g.y-a.y)*g.data.tileSize/(g.time-a.time),stamina:g.stamina,safe:!g.blocked(g.x,g.y)}},start);
+ }finally{await page.keyboard.up('KeyW');await page.keyboard.up('ShiftLeft')}
  check('Real Shift W sprints and spends stamina',sprint.safe&&Math.abs(sprint.speed-4.7)<.35&&sprint.stamina<95,sprint);await page.evaluate(()=>escapeQA.setManual(true));
  status.newRoomVisits=[];for(const [floor,label] of [[1,'설비관리실'],[2,'자료실'],[3,'교장실'],[3,'중앙통제실']])status.newRoomVisits.push(await visitRoom(floor,label));
- await page.evaluate(()=>{const q=escapeQA,e=q.items.escapeGate;q.game.warp(1,e.x,e.y);q.render(0)});await page.keyboard.press('KeyE');
+ status.playgroundVisit=await visitPlayground();
+ await page.evaluate(()=>{const q=escapeQA,e=q.items.escapeGate;q.game.warpSpace(e.spaceId,e.x,e.y);q.render(0)});await page.keyboard.press('KeyE');
  check('Real gate E cannot win without three keys',await page.evaluate(()=>!escapeQA.game.won&&escapeQA.items.nearbyGate().missing.length===3));status.pickups=[];
  status.pickups.push(await pickup('vitamin-water'));await inventoryAction('vitamin-water','#inventory-use');
  const boost=await page.evaluate(()=>{const q=escapeQA,g=q.game;g.warp(1,24,9);q.tick(.025,1,0,false);const boosted=g.speed;for(let i=0;i<84;i++)q.tick(.025);q.tick(.025,1,0,false);return {boosted,after:g.speed,remaining:g.speedBoostUntil-g.time,safe:!g.blocked(g.x,g.y)};});
@@ -148,10 +184,19 @@ async function verify(){
  }
  check('All three distinct real keys are held',await page.evaluate(()=>escapeQA.items.hasAllKeys()&&escapeQA.items.inventory.filter(i=>i.itemId.startsWith('key-')).length===3));
  const away=await page.evaluate(()=>{const q=escapeQA;q.game.warp(1,24,9);return q.items.tryEscape()});check('Keys cannot win away from the gate',!away.ok&&!await page.evaluate(()=>escapeQA.game.won),away);
- await page.evaluate(()=>{const q=escapeQA,e=q.items.escapeGate;q.game.warp(1,e.x,e.y);q.render(0)});await page.keyboard.press('KeyE');
+ const oldEntrance=await page.evaluate(()=>{
+  const q=escapeQA,g=q.game,portal=g.spaces.get('floor-1').portals.find(p=>p.targetId==='playground'),d=({north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]})[portal.facing];
+  g.warp(1,portal.doorX+d[0],portal.doorY+d[1]);for(let i=0;i<28;i++)q.tick(.025);q.render(0);
+  return {oldGateResult:q.items.tryEscape(),nearGate:!!q.items.nearbyGate(),hasKeys:q.items.hasAllKeys(),nearDoor:g.nearbyDoor()?.targetId};
+ });
+ check('All three keys cannot escape at the former main-building gate',!oldEntrance.oldGateResult.ok&&!oldEntrance.nearGate&&oldEntrance.hasKeys&&oldEntrance.nearDoor==='playground',oldEntrance);
+ await page.keyboard.press('KeyE');const enteredWithKeys=await page.evaluate(()=>{const q=escapeQA;for(let i=0;i<12;i++)q.tick(.025);q.render(0);return {spaceId:q.game.spaceId,won:q.game.won,keys:q.items.hasAllKeys(),safe:!q.game.blocked(q.game.x,q.game.y)}});
+ check('Real E at the old exit enters the playground and preserves the keys',enteredWithKeys.spaceId==='playground'&&!enteredWithKeys.won&&enteredWithKeys.keys&&enteredWithKeys.safe,enteredWithKeys);
+
+ await page.evaluate(()=>{const q=escapeQA,e=q.items.escapeGate;q.game.warpSpace(e.spaceId,e.x,e.y);q.render(0)});await page.keyboard.press('KeyE');
  await page.waitForFunction(()=>escapeQA.game.won&&!document.getElementById('success').hidden);
  const won=await page.evaluate(()=>({won:escapeQA.game.won,escaped:escapeQA.items.escaped,seed:escapeQA.items.seed,keys:escapeQA.items.inventory.filter(i=>i.itemId.startsWith('key-')).length,active:escapeQA.inspectSpace().activeIds}));
- check('Real gate E consumes A B C and shows Escape Success',won.won&&won.escaped&&won.keys===0&&won.active.join()==='floor-1',won);
+ check('Real gate E consumes A B C and shows Escape Success',won.won&&won.escaped&&won.keys===0&&won.active.join()==='playground',won);
  try{await page.screenshot({path:'web-play.png',timeout:15000})}catch(e){status.warnings.push('Optional screenshot: '+e.message)}
  await page.click('#success-restart');const restarted=await page.evaluate(()=>({won:escapeQA.game.won,seed:escapeQA.items.seed,carry:escapeQA.items.inventory.length,equipped:escapeQA.items.equipped,enabled:escapeQA.pursuit.enabled,keys:escapeQA.items.worldItems.filter(i=>i.itemId.startsWith('key-')&&!i.picked).length,spaceId:escapeQA.game.spaceId}));
  check('Real victory restart rerolls loot, clears inventory and keeps OFF',restarted.seed!==won.seed&&!restarted.won&&!restarted.carry&&!restarted.equipped&&!restarted.enabled&&restarted.keys===3&&restarted.spaceId==='floor-1',restarted);
