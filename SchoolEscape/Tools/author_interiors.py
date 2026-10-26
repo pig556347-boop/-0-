@@ -10,7 +10,7 @@ WOOD='#80664b';METAL='#48585a';PAPER='#c6bda4'
 DIRECTIONS={'north':(0,1),'south':(0,-1),'west':(-1,0),'east':(1,0)}
 DIMENSIONS={'classroom':(18,18),'music':(36,34),'art':(26,24),'artStorage':(18,14),'library':(34,32),
             'infirmary':(24,22),'administration':(26,24),'staff':(28,26),'computer':(28,26),
-            'broadcast':(15,15),'studentRestroom':(22,20),'staffRestroom':(18,18),
+            'broadcast':(15,15),'studentRestroom':(16,18),'staffRestroom':(14,16),
             'storage':(22,20),'assembly':(32,28),'maintenance':(22,20),'seminar':(26,24),
             'preparation':(22,20),'archives':(26,24),'lounge':(26,22),'counseling':(24,22),
             'meeting':(28,24),'principal':(28,24),'control':(26,24)}

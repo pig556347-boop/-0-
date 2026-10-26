@@ -88,9 +88,9 @@ namespace SchoolEscape
         static bool SearchableKind(string kind)
         {
             if(string.IsNullOrEmpty(kind))return false;
-            return kind.EndsWith("desk",StringComparison.Ordinal)||kind.EndsWith("cabinet",StringComparison.Ordinal)||kind.EndsWith("-table",StringComparison.Ordinal)||kind.EndsWith("-workbench",StringComparison.Ordinal)||kind.EndsWith("-crate",StringComparison.Ordinal)||kind=="locker-bank"||kind=="shelf-body";
+            return kind=="yard-trash-bin"||kind=="yard-parcel-box"||kind=="yard-water-station"||kind.EndsWith("desk",StringComparison.Ordinal)||kind.EndsWith("cabinet",StringComparison.Ordinal)||kind.EndsWith("-table",StringComparison.Ordinal)||kind.EndsWith("-workbench",StringComparison.Ordinal)||kind.EndsWith("-crate",StringComparison.Ordinal)||kind=="locker-bank"||kind=="shelf-body";
         }
-        static string SearchLabel(string kind)=>kind=="locker-bank"?"사물함":kind=="shelf-body"?"책장":kind.Contains("cabinet")?"캐비넷":kind.Contains("teacher")?"교탁":kind.EndsWith("-workbench",StringComparison.Ordinal)?"작업대":kind.EndsWith("-crate",StringComparison.Ordinal)?"보관 상자":"책상";
+        static string SearchLabel(string kind)=>kind=="yard-trash-bin"?"쓰레기통":kind=="yard-parcel-box"?"택배 상자":kind=="yard-water-station"?"수도 주변":kind=="locker-bank"?"사물함":kind=="shelf-body"?"책장":kind.Contains("cabinet")?"캐비넷":kind.Contains("teacher")?"교탁":kind.EndsWith("-workbench",StringComparison.Ordinal)?"작업대":kind.EndsWith("-crate",StringComparison.Ordinal)?"보관 상자":"책상";
         static Material Material(Color color){var m=new Material(Shader.Find("Standard"));m.color=color;m.SetFloat("_Glossiness",.12f);return m;}
         bool Clear(FloorData f,Vector2 p)
         {

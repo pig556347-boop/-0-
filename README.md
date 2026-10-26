@@ -1,7 +1,5 @@
-# 폐교탈출 0.10 전용 소스 백업
+# 폐교탈출 독립 소스 백업 0.11
 
-[웹 플레이](https://rawcdn.githack.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/index.html)
+SchoolEscape 폴더만 Unity 프로젝트로 여세요. 웹 최신 버전: https://rawcdn.githack.com/pig556347-boop/-0-/c9d689e9e837ca688d97ca99180ccc5a997049cf/index.html
 
-본관과 운동장의 열쇠 A/B/C를 모아 운동장 남쪽 교문에서 E로 탈출합니다.
-
-Unity Hub에서 SchoolEscape 폴더만 여세요. 실제 Unity Play/WebGL은 라이선스 문제로 미검증입니다. 원본 작업 커밋은 SOURCE_CHECKPOINT.json에 기록했습니다. 다른 게임과 루트 배포 워크플로는 포함하지 않습니다.
+세부 기능/Unity 이식 제한은 SchoolEscape/Docs/UPGRADE_011.md, 실행 기록은 Docs/Evidence를 참고하세요.

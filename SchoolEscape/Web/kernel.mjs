@@ -7,7 +7,7 @@ export class Exploration {
     this.direction={x:0,y:-1};this.phase=0;this.lastDelta={x:0,y:0};
     this.autoStairsEnabled=true;this.arrivalLock=null;
     this.roomId='';this.currentSpaceId=`floor-${data.spawnFloor}`;this.roomTransitions=0;this.lastDoorTransition=-10;this.pendingDoor=null;
-    this.stamina=100;this.exhausted=false;this.isRunning=false;this.lastSprintTime=-10;this.caught=false;
+    this.maxStamina=100;this.stamina=100;this.exhausted=false;this.isRunning=false;this.lastSprintTime=-10;this.caught=false;
     this.events=[];this.eventSerial=0;this.won=false;this.speedBoostUntil=0;this.noiseDistance=0;
     this.spaces=new Map([...data.floors,...(data.roomMaps||[]),...(data.outdoorMaps||[])].map(f=>[f.id,f]));
     this.solidFixtures=Object.fromEntries([...this.spaces].map(([id,f])=>[id,(f.fixtures||[]).filter(o=>o.solid)]));
@@ -18,8 +18,8 @@ export class Exploration {
   emit(type,detail={}){const event={...detail,id:++this.eventSerial,type,time:this.time};this.events.push(event);if(this.events.length>128)this.events.shift();return event}
   reset(){const serial=this.eventSerial;Object.assign(this,new Exploration(this.data));this.eventSerial=serial;this.emit('restart')}
   recoverStamina(dt){
-    if(this.time-this.lastSprintTime>=1.5)this.stamina=Math.min(100,this.stamina+18*dt);
-    if(this.exhausted&&this.stamina>=25){this.exhausted=false;this.emit('recovered')}
+    if(this.time-this.lastSprintTime>=1.5)this.stamina=Math.min(this.maxStamina,this.stamina+18*dt);
+    if(this.exhausted&&this.stamina>=this.maxStamina*.25){this.exhausted=false;this.emit('recovered')}
   }
   overlaps(x,y,rect,radius=this.data.playerRadius) {
     const r=radius/this.data.tileSize;

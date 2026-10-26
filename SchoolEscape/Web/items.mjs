@@ -16,7 +16,7 @@ export const ITEMS=ITEM_CATALOG;
 const KEYS=['key-a','key-b','key-c'];
 const PARTS=['clock-second-hand','clock-minute-hand','clock-body'];
 const DIR={north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]};
-const PRIMARY=new Set(['student-desk','teacher-desk','locker-bank','shelf-body','admin-desk','staff-desk','head-teacher-desk','music-desk','music-teacher-desk','old-vocal-desk','computer-workstation','computer-teacher-desk','nurse-desk','broadcast-announcer-desk','broadcast-club-desk','loan-counter','reading-table','individual-reading-desk','library-study-table','art-worktable','art-teacher-workbench','staff-meeting-table','admin-document-worktable','art-sculpture-worktable']);
+const PRIMARY=new Set(['student-desk','teacher-desk','locker-bank','shelf-body','admin-desk','staff-desk','head-teacher-desk','music-desk','music-teacher-desk','old-vocal-desk','computer-workstation','computer-teacher-desk','nurse-desk','broadcast-announcer-desk','broadcast-club-desk','loan-counter','reading-table','individual-reading-desk','library-study-table','art-worktable','art-teacher-workbench','yard-trash-bin','yard-parcel-box','yard-water-station','staff-meeting-table','admin-document-worktable','art-sculpture-worktable']);
 const hashSeed=value=>{if(Number.isFinite(value))return Number(value)>>>0;let h=2166136261;for(const c of String(value)){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0};
 const randomSource=seed=>{let a=seed>>>0;return()=>{a=(a+0x6d2b79f5)|0;let t=Math.imul(a^(a>>>15),1|a);t^=t+Math.imul(t^(t>>>7),61|t);return((t^(t>>>14))>>>0)/4294967296}};
 const shuffle=(array,random)=>{const a=[...array];for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a};
@@ -33,7 +33,7 @@ export class ItemSystem {
  reset(seed){
   if(seed===undefined){const value=new Uint32Array(1);if(globalThis.crypto?.getRandomValues)globalThis.crypto.getRandomValues(value);else value[0]=(Date.now()^Math.floor(Math.random()*4294967296))>>>0;seed=value[0];}
   this.seed=hashSeed(seed);this.random=randomSource(this.seed);this.inventory=[];this.equipped=null;this.worldItems=[];this.consumed=[];this.lastInteraction=-100;
-  this.serial=0;this.escaped=false;this.lastAction=null;this.game.won=false;this.searchables=this.searchTemplate.map(s=>({...s,searched:false,itemUid:null}));
+  this.openSearch=null;this.openCompartment=0;this.serial=0;this.escaped=false;this.lastAction=null;this.game.won=false;this.searchables=this.searchTemplate.map(s=>({...s,searched:false,itemUid:null}));
   this.searchById=new Map(this.searchables.map(s=>[s.id,s]));this.game.speedBoostUntil=0;
   const floors=shuffle([1,2,3],this.random),modes=shuffle(['hidden','ground',this.random()<.5?'hidden':'ground'],this.random);
   if(this.game.spaces.has('playground')){
@@ -78,8 +78,8 @@ export class ItemSystem {
     const points=[{x,y:y0-pad},{x:x1+pad,y},{x,y:y1+pad},{x:x0-pad,y}];
     const approaches=points.filter(p=>!this.game.blocked(p.x,p.y,f)&&nav.available.some(n=>Math.hypot(n.x-p.x,n.y-p.y)<1.5&&this.game.segmentClear(n.x,n.y,p.x,p.y,f)));
     if(!approaches.length)continue;
-    const label=item.kind==='locker-bank'?'사물함':item.kind==='shelf-body'?'책장':item.kind.includes('teacher')?'교탁':item.kind.includes('cabinet')||item.kind==='cleaning-closet'?'캐비넷':item.kind.endsWith('-workbench')?'작업대':item.kind.endsWith('-crate')?'보관 상자':'책상';
-    this.searchTemplate.push({id:item.assembly||item.id,fixtureId:item.id,spaceId:f.id,kind:item.kind,label,x,y,width:(x1-x0)*tile,depth:(y1-y0)*tile,height:item.elevation+item.height,approaches});
+    const label=item.kind==='yard-trash-bin'?'쓰레기통':item.kind==='yard-parcel-box'?'택배 상자':item.kind==='yard-water-station'?'수도 주변':item.kind==='locker-bank'?'사물함':item.kind==='shelf-body'?'책장':item.kind.includes('teacher')?'교탁':item.kind.includes('cabinet')||item.kind==='cleaning-closet'?'캐비넷':item.kind.endsWith('-workbench')?'작업대':item.kind.endsWith('-crate')?'보관 상자':'책상';
+    this.searchTemplate.push({compartments:item.kind==='locker-bank'?8:1,id:item.assembly||item.id,fixtureId:item.id,spaceId:f.id,kind:item.kind,label,x,y,width:(x1-x0)*tile,depth:(y1-y0)*tile,height:item.elevation+item.height,approaches});
    }
    const edges=[];
    if(f.isRoom)edges.push({toId:`floor-${f.sourceFloor}`,x:f.exitX,y:f.exitY+1,label:'복도로 나가기',kind:'door'});
@@ -110,7 +110,7 @@ export class ItemSystem {
    }
   }
   if(!spot)throw Error(`No reachable item placement for ${itemId} in ${selection}`);
-  const item={uid:this._freshUid(itemId),itemId,...spot,picked:false};this.worldItems.push(item);if(source)source.itemUid=item.uid;return item;
+  const item={uid:this._freshUid(itemId),itemId,...spot,compartment:source?Math.floor(this.random()*source.compartments):0,picked:false};this.worldItems.push(item);if(source)source.itemUid=item.uid;return item;
  }
  _action(ok,message,extra={}){return this.lastAction={ok,message,...extra}}
  _canAct(){return!this.game.caught&&!this.game.won&&!this.game.pendingDoor&&!this.escaped}
@@ -131,15 +131,12 @@ export class ItemSystem {
  }
  interact(){
   if(!this._canAct())return this._action(false,'지금은 조사할 수 없습니다.');
-  if(this.game.time-this.lastInteraction<.3)return this._action(false,'잠시 후 다시 조사하세요.');
-  const near=this.nearby();if(!near)return this._action(false,'조사하거나 주울 대상이 없습니다.');this.lastInteraction=this.game.time;
-  if(near.type==='pickup')return this._collect(this.worldItems.find(o=>o.uid===near.uid));
-  const source=this.searchById.get(near.sourceId);source.searched=true;
-  this.game.emit('search',{spaceId:this.game.spaceId,x:this.game.x,y:this.game.y,sourceId:source.id,label:source.label,radius:5});
-  const item=this.worldItems.find(o=>o.uid===source.itemUid&&!o.picked);
-  if(!item)return this._action(true,`${source.label}을 조사했지만 아무것도 없습니다.`,{type:'empty-search',sourceId:source.id});
-  item.revealed=true;return this._collect(item);
+  const near=this.nearby();if(!near)return this._action(false,'가까운 조사 대상이 없습니다.');
+  this.openSearch=near;return this._action(true,'',{type:'open-container',target:near});
  }
+ containerItems(compartment=0){const n=this.openSearch;if(!n)return[];return this.worldItems.filter(i=>!i.picked&&(n.type==='pickup'?i.spaceId===this.game.spaceId&&!i.hidden&&Math.hypot(i.x-n.x,i.y-n.y)*this.game.data.tileSize<.65:i.sourceId===n.sourceId&&(i.compartment||0)===compartment));}
+ take(uid){const i=this.containerItems(this.openCompartment||0).find(i=>i.uid===uid);if(!i||!this._canAct())return this._action(false,'가져올 수 없습니다.');const n=this.nearby();if(this.openSearch.type==='pickup'?!this._within(i):(!n||n.sourceId!==this.openSearch.sourceId))return this._action(false,'대상에서 멀어졌습니다.');return this._collect(i);}
+ selectCompartment(index){const source=this.searchById.get(this.openSearch?.sourceId);this.openCompartment=Math.max(0,Math.min((source?.compartments||1)-1,index));if(source){source.searched=true;this.game.emit('search',{spaceId:this.game.spaceId,x:this.game.x,y:this.game.y,sourceId:source.id});}for(const i of this.containerItems(this.openCompartment))i.revealed=true;}
  _collect(item){
   if(!item||item.picked)return this._action(false,'이미 가져간 아이템입니다.');
   const willCraft=PARTS.includes(item.itemId)&&PARTS.every(id=>id===item.itemId||this.inventory.some(i=>i.itemId===id));
@@ -173,7 +170,7 @@ export class ItemSystem {
   if(!this._canAct())return this._action(false,'지금은 사용할 수 없습니다.');const item=this.inventory[slotIndex];if(!item)return this._action(false,'빈 칸입니다.');
   if(item.itemId==='smartwatch')return this.equip(slotIndex);
   if(item.itemId==='vitamin-water')this.game.speedBoostUntil=this.game.time+2;
-  else if(item.itemId==='chocolate-bar'){this.game.stamina=100;this.game.exhausted=false;this.game.lastSprintTime=-100;}
+  else if(item.itemId==='chocolate-bar'){this.game.stamina=this.game.maxStamina||100;this.game.exhausted=false;this.game.lastSprintTime=-100;}
   else return this._action(false,this.catalog[item.itemId].type==='key'?'교문 앞에서 E로 열쇠를 사용하세요.':'이 아이템은 소지하면 자동으로 작동합니다.');
   this.inventory.splice(slotIndex,1);this.consumed.push(item);this.game.emit('item-used',{itemId:item.itemId,uid:item.uid});return this._action(true,item.itemId==='vitamin-water'?'2초 동안 이동속도가 30% 증가합니다.':'스태미나를 모두 회복했습니다.',{type:'use',itemId:item.itemId});
  }

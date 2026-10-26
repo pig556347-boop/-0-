@@ -139,7 +139,7 @@ def _wash_area(i,staff):
 
 
 def _urinals(i,staff):
-    xs=[11.8,14.5] if staff else [15.0,17.25,19.5]
+    xs=[i.width-4.4,i.width-2.3] if staff else [i.width-5.8,i.width-4.0,i.width-2.2]
     y=i.height-6.2
     for n,x in enumerate(xs):
         i.obj('urinal-body',x,y,.56,.58,.82,CERAMIC,base=.18,solid=True)
@@ -161,8 +161,8 @@ def build_restroom(i):
         west_rows=[6,10]
         east_rows=[] if male else [8]
     else:
-        west_rows=[6,10,14]
-        east_rows=[] if male else [6,10]
+        west_rows=[6,10]
+        east_rows=[] if male else [7]
     index=0
     for west,rows in [(True,west_rows),(False,east_rows)]:
         for y in rows:

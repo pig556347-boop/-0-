@@ -52,20 +52,13 @@ class Schoolyard:
         self.landmarks.append(dict(label=label, x=x, y=y))
         self.zones.append(dict(room='운동장', label=label, x=x, y=y))
 
-    def cabinet(self, x, y, label='운동장 물품 보관함', w=2.0):
-        self.obj('yard-supply-cabinet', x, y, w, .65, 1.55,
-                 '#61776a', solid=True, label=label)
-        for side in [-1, 1]:
-            xx = x + side * w * .245 / T
-            self.obj('yard-cabinet-door', xx, y - .35 / T,
-                     w * .46, .035, 1.34, '#84927b', base=.08)
-            self.obj('yard-cabinet-handle', x + side * .055 / T,
-                     y - .39 / T, .025, .035, .16, '#c7bda0', base=.72)
-        self.obj('yard-cabinet-top', x, y, w + .06, .72, .07,
-                 '#a1a68c', base=1.55)
+    def cabinet(self, x, y, label='야외 쓰레기통', w=2.0):
+        self.obj('yard-trash-bin',x,y,.85,.85,1.05,'#53645a',solid=True,label=label,shape='cylinder')
+        self.obj('yard-bin-rim',x,y,.93,.93,.10,'#829181',base=1.05,shape='cylinder')
+        self.obj('yard-bin-opening',x,y,.64,.64,.025,'#172b25',base=1.155,shape='cylinder')
 
-    def bench(self, x, y, label='벤치 아래 보관함'):
-        self.obj('bench-storage-cabinet', x, y, 3.0, .65, .47,
+    def bench(self, x, y, label='야외 벤치'):
+        self.obj('yard-bench-base', x, y, 3.0, .65, .47,
                  '#526c60', solid=True, label=label)
         self.obj('yard-bench-seat', x, y, 3.10, .72, .09,
                  '#9b8a67', base=.47)
@@ -76,13 +69,13 @@ class Schoolyard:
                      y - .36 / T, .18, .04, .045, '#b9b799', base=.24)
 
     def crate(self, x, y):
-        self.obj('yard-equipment-crate', x, y, .88, .76, .68,
-                 '#837455', solid=True, label='체육용품 상자')
+        self.obj('yard-parcel-box', x, y, .88, .76, .68,
+                 '#837455', solid=True, label='낡은 택배 상자')
         self.obj('yard-crate-lid', x, y, .94, .82, .055,
                  '#a5916c', base=.68)
         for xx in [-.25, .25]:
-            self.obj('yard-crate-band', x + xx / T, y, .05, .84, .025,
-                     '#52685b', base=.735)
+            self.obj('yard-parcel-tape', x + xx / T, y, .05, .84, .025,
+                     '#b9a77a', base=.735)
 
     def cover(self, x, y, label):
         # Eight metres of opaque cover, with both ends accessible.  The body
@@ -192,18 +185,24 @@ class Schoolyard:
         for y in [50.9, 51.3, 51.7]:
             self.obj('yard-entrance-tread-mark', 34, y, 6.0, .045, .015,
                      '#bac2a5', base=.03)
-        self.obj('yard-main-facade', 34, 53.85, 45.0, .20, 3.15,
-                 '#3c5753')
-        self.obj('yard-main-sign', 34, 53.60, 5.0, .06, .62,
-                 '#8ca294', base=2.1, label='본관 1층 현관')
-        for x in [22, 27, 41, 46]:
-            self.obj('yard-main-window', x, 53.69, 3.5, .045, 1.15,
-                     '#29474a', base=1.18)
+        # Exterior silhouettes live outside the closed playable boundary.
+        for name,cx,cy,w,d,floors in [('main',34,56.5,48,6,3),('west',6,58,17,11,3),('annex',62,58,15,10,2)]:
+            self.obj('school-'+name+'-facade',cx,cy,w,d,floors*2.55,'#475b59')
+            self.obj('school-'+name+'-roof',cx,cy,w+.35,d+.35,.22,'#253c40',base=floors*2.55)
+            for floor in range(floors):
+                self.obj('school-floor-band',cx,cy-d/2/T-.03,w,.08,.13,'#7a8a7e',base=floor*2.55+.12)
+                for n in range(int(w/3.2)):
+                    xx=cx+(n-(int(w/3.2)-1)/2)*3.2/T
+                    self.obj('school-window-frame',xx,cy-d/2/T-.08,1.82,.11,1.32,'#81928a',base=floor*2.55+.88)
+                    self.obj('school-window-glass',xx,cy-d/2/T-.14,1.61,.035,1.12,'#1c343b',base=floor*2.55+.98)
+                    self.obj('school-window-mullion',xx,cy-d/2/T-.17,.055,.03,1.12,'#607b77',base=floor*2.55+.98)
+        self.obj('yard-main-sign',34,53.65,5,.09,.62,'#a5b19b',base=2.45,label='본관')
         # Perimeter furnishings deliberately leave the x10/x58 side lanes,
         # y13/y39 cross-connections and the entire gate approach clear.
         for x in [4.5, 63.5]:
             for y in [16, 28, 40]:
                 self.bench(x, y)
+                self.crate(x+1.8 if x<10 else x-1.8,y)
             for y in [7, 21, 34, 47]:
                 self.tree(3 if x < 10 else 65, y)
         for x, y in [(4.5, 35.5), (64, 35.5), (5, 10), (63, 11)]:
@@ -230,8 +229,7 @@ class Schoolyard:
                  '#334c44', base=.07)
         self.obj('guard-hut-window', 62, 3.66, 1.55, .04, .78,
                  '#233f42', base=1.1)
-        self.obj('guard-hut-side-cabinet', 65, 6, 1.7, .65, 1.50,
-                 '#76856f', solid=True, label='경비 물품 보관함')
+        self.cabinet(65,6)
         # Light-coloured ground marks stand above the floor without matching
         # planes.  Dashed loops have no collision and are not narrow rails.
         for n in range(76):
@@ -262,7 +260,7 @@ class Schoolyard:
             ('중앙 가로 연결', 34, 26), ('차폐 화단 B 서쪽', 30, 21),
             ('남쪽 가로길', 34, 11), ('교문 앞', 34, 5),
             ('서쪽 휴식 구역', 8, 20), ('급수대 앞', 61, 21),
-            ('경비초소 앞', 55, 5), ('운동장 물품함 앞', 8, 35),
+            ('경비초소 앞', 55, 5), ('분리수거장 앞', 8, 35),
         ]:
             self.mark(label, x, y)
         self.map['explorationRoutes'] = [

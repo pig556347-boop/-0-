@@ -1,10 +1,9 @@
 {
-  "project": "SchoolEscape",
-  "version": "0.10",
-  "sourceCommit": "d8f77895eecb94b03aa1dc8d7f5aa19b259dad50",
-  "projectTree": "2f38ad489eca8450b4d362d92478596b53135de9",
-  "webCommit": "6e40868697e73f470d0163ce00a14889ef00cb67",
-  "webUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/index.html",
-  "createdUtc": "2026-10-25T16:24:55.192410+00:00",
-  "scope": "SchoolEscape only; original main and other games excluded"
+  "version": "0.11",
+  "sourceCommit": "8feee786b19fd3833461ed33a137660d17f6612d",
+  "projectTree": "2ebcc67ba975d7565290b070244c45c3f3f32e8f",
+  "webCommit": "c9d689e9e837ca688d97ca99180ccc5a997049cf",
+  "webUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/c9d689e9e837ca688d97ca99180ccc5a997049cf/index.html",
+  "date": "2026-10-26",
+  "scope": "SchoolEscape only"
 }

@@ -2,7 +2,7 @@
 <style>text{font-family:"Noto Sans CJK KR","Noto Sans KR",sans-serif}</style>
 <rect x="0" y="0" width="2036" height="1048" fill="#101e27" stroke="none" rx="0" />
 <text x="34" y="44" font-size="29" fill="#e5e9dd" text-anchor="start" font-weight="bold">폐교탈출 · 본관 2층 평면도</text>
-<text x="34" y="75" font-size="17" fill="#b2c1b9" text-anchor="start" font-weight="normal">실행 지도 기준 · 방 22개 · 북쪽 ↑</text>
+<text x="34" y="75" font-size="17" fill="#b2c1b9" text-anchor="start" font-weight="normal">기본 배치 예시 · 방 22개 · 북쪽 ↑</text>
 <text x="34" y="103" font-size="14" fill="#b2c1b9" text-anchor="start" font-weight="normal">방 번호는 오른쪽 목록과 대응 · 실내는 문으로 연결된 독립 공간</text>
 <rect x="34" y="126" width="1616" height="784" fill="#14232d" stroke="#42575e" rx="0" />
 <rect x="802" y="862" width="64" height="16" fill="#718879" stroke="none" rx="0" />

@@ -1,7 +1,7 @@
 {
-  "gameRevision": "playground-gate-2026-10-24",
-  "gameVersion": "0.10",
-  "mapSha256": "d33884ec869d0bace02ae683d24941faf91cd6900745fa9d8a14bea5fed7a7e9",
+  "gameRevision": "guidebook-difficulty-2026-10-26",
+  "gameVersion": "0.11",
+  "mapSha256": "e7dea6f35ff57d2a7b6b2f450a0db830bd0ea57540dc577e2323953230a0580e",
   "roomCount": 53,
   "playgroundImplemented": true,
   "escapeGate": {

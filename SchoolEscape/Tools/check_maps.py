@@ -144,7 +144,7 @@ for f in spaces:
         if f.get('kind') in {'studentRestroom','staffRestroom'}:
             student=f['kind']=='studentRestroom';male=f['label'].endswith(' 남')
             count=lambda kind:sum(o['kind']==kind for o in f['fixtures'])
-            expected_stalls=(3 if male else 5) if student else (2 if male else 3)
+            expected_stalls=(2 if male else 3) if student else (2 if male else 3)
             check(count('toilet-base')==expected_stalls,f'{sid} incorrect toilet stall count for room type/sex')
             check(count('urinal-body')==((3 if student else 2) if male else 0),f'{sid} incorrect urinal facilities for room type/sex')
             check(count('washbasin-bowl')==(4 if student else 2),f'{sid} student/staff basin counts should differ')
@@ -183,7 +183,7 @@ for f in spaces:
         covers=[o for o in f.get('fixtures',[]) if o['kind']=='yard-cover-planter']
         check(len(covers)==2 and all(o['solid'] and o['width']>=7 and o['depth']>=2.5 for o in covers),f'{sid} needs two substantial staggered cover obstacles')
         check(len({o['x'] for o in covers})==2 and len({o['y'] for o in covers})==2,f'{sid} cover obstacles must be staggered')
-        sources=[o for o in f.get('fixtures',[]) if o.get('solid') and (o['kind'].endswith('-cabinet') or o['kind'].endswith('-crate'))]
+        sources=[o for o in f.get('fixtures',[]) if o.get('solid') and o['kind'] in ['yard-trash-bin','yard-parcel-box','yard-water-station']]
         check(len(sources)>=6,f'{sid} needs distributed real search furniture for outdoor keys')
         routes=f.get('explorationRoutes',[])
         check({r['id'] for r in routes}=={'yard-central','yard-west','yard-east'},f'{sid} needs central and both side exploration routes')

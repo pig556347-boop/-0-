@@ -1,0 +1,484 @@
+{
+  "ok": true,
+  "sourceCommit": null,
+  "utc": "2026-10-25T17:27:00.923Z",
+  "kind": "Actual Chromium 0.11 input/loot/difficulty/piano/geometry validation; not Unity WebGL",
+  "checks": [
+    {
+      "name": "HTTP executable HTML",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "contentType": "text/html",
+        "bytes": 6689150,
+        "sha256": "6195c966e832c72f62d9118d1a003a157a37c61233d4b032d7037941f50f8192"
+      }
+    },
+    {
+      "name": "Easy selection gives five lives and 200 stamina",
+      "passed": true
+    },
+    {
+      "name": "Inventory guidebook gives actual detailed keys without consuming carry slots",
+      "passed": true,
+      "actual": "해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.\n\n현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.\n\n열쇠 A: 본관 3층 · 빈교실 3. 책상의 1번 칸을 확인하자.\n\n열쇠 B: 본관 2층 · 준비실 1. 바닥을 확인하자.\n\n열쇠 C: 운동장 · 운동장. 바닥을 확인하자."
+    },
+    {
+      "name": "Outdoor classroom cabinets removed; school wings and outdoor search objects exist",
+      "passed": true
+    },
+    {
+      "name": "Locker presents eight individually selectable compartments and empty slots",
+      "passed": true,
+      "actual": "room-f1-0-rear-locker-0"
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-1-key-a",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-1-key-a",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-2-key-b",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-2-key-b",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-3-key-c",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-3-key-c",
+      "passed": true
+    },
+    {
+      "name": "All three keys collected by clicks from both regions",
+      "passed": true
+    },
+    {
+      "name": "Guide specificity easy",
+      "passed": true,
+      "actual": "해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.\n\n현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.\n\n열쇠 A: 확보했다.\n\n열쇠 B: 확보했다.\n\n열쇠 C: 확보했다."
+    },
+    {
+      "name": "Real pursuer collision removes exactly one life easy",
+      "passed": true,
+      "actual": {
+        "caught": true,
+        "lives": 4,
+        "carry": 3,
+        "drops": [],
+        "death": {
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 9
+        }
+      }
+    },
+    {
+      "name": "Easy keeps carried keys",
+      "passed": true
+    },
+    {
+      "name": "Actual continue safely preserves this run easy",
+      "passed": true
+    },
+    {
+      "name": "Guide specificity normal",
+      "passed": true,
+      "actual": "해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.\n\n현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.\n\n열쇠 A: 확보했다.\n\n열쇠 B: 확보했다.\n\n열쇠 C: 확보했다."
+    },
+    {
+      "name": "Real pursuer collision removes exactly one life normal",
+      "passed": true,
+      "actual": {
+        "caught": true,
+        "lives": 4,
+        "carry": 0,
+        "drops": [
+          {
+            "space": "floor-1",
+            "x": 24,
+            "y": 9
+          },
+          {
+            "space": "floor-1",
+            "x": 24,
+            "y": 9
+          },
+          {
+            "space": "floor-1",
+            "x": 24,
+            "y": 9
+          }
+        ],
+        "death": {
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 9
+        }
+      }
+    },
+    {
+      "name": "Normal drops keys at death point",
+      "passed": true
+    },
+    {
+      "name": "Actual continue safely preserves this run normal",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-1-key-a",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-1-key-a",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-2-key-b",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-2-key-b",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-3-key-c",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-3-key-c",
+      "passed": true
+    },
+    {
+      "name": "Guide specificity hard",
+      "passed": true,
+      "actual": "해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.\n\n현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.\n\n이 난이도에서는 열쇠 위치 단서가 제공되지 않는다."
+    },
+    {
+      "name": "Real pursuer collision removes exactly one life hard",
+      "passed": true,
+      "actual": {
+        "caught": true,
+        "lives": 2,
+        "carry": 0,
+        "drops": [
+          {
+            "space": "floor-1",
+            "x": 23,
+            "y": 10
+          },
+          {
+            "space": "floor-1",
+            "x": 23,
+            "y": 11
+          },
+          {
+            "space": "floor-1",
+            "x": 22,
+            "y": 14
+          }
+        ],
+        "death": {
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 9
+        }
+      }
+    },
+    {
+      "name": "Hard drops remain inside radius and same map",
+      "passed": true
+    },
+    {
+      "name": "Actual continue safely preserves this run hard",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-1-key-a",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-1-key-a",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-2-key-b",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-2-key-b",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-10a2175e-3-key-c",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-10a2175e-3-key-c",
+      "passed": true
+    },
+    {
+      "name": "Guide specificity extreme",
+      "passed": true,
+      "actual": "해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.\n\n현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.\n\n이 난이도에서는 열쇠 위치 단서가 제공되지 않는다."
+    },
+    {
+      "name": "Real pursuer collision removes exactly one life extreme",
+      "passed": true,
+      "actual": {
+        "caught": true,
+        "lives": 0,
+        "carry": 3,
+        "drops": [],
+        "death": {
+          "spaceId": "floor-1",
+          "x": 24,
+          "y": 9
+        }
+      }
+    },
+    {
+      "name": "Extreme has no continue option",
+      "passed": true
+    },
+    {
+      "name": "New round changes room assignment while preserving every floor",
+      "passed": true
+    },
+    {
+      "name": "Normal gives atmospheric location clues",
+      "passed": true,
+      "actual": "해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.\n\n현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.\n\n열쇠 A: 본관 1층에서 목소리를 멀리 보내던 장비 곁에 단서가 있을 것 같다.\n\n열쇠 B: 본관 1층에서 분필 가루와 오래된 공책 냄새. 학생들이 수업을 듣던 곳을 살펴보자.\n\n열쇠 C: 운동장에서 흙과 바깥바람 냄새. 건물 밖을 살펴보자."
+    },
+    {
+      "name": "Distinct piano theme scheduled floor-1",
+      "passed": true,
+      "actual": {
+        "musicTheme": "indoor",
+        "musicNotes": 2,
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 8,
+        "maxVoices": 48,
+        "scheduledVoices": 8,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 1,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0.4000000059604645,
+        "effectiveGain": 0.4000000059604645,
+        "rms": 0.008584339491876545,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": true,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Audio output signal floor-1",
+      "passed": true,
+      "actual": 0.016332894356226892
+    },
+    {
+      "name": "Distinct piano theme scheduled playground",
+      "passed": true,
+      "actual": {
+        "musicTheme": "outdoor",
+        "musicNotes": 4,
+        "unlocked": true,
+        "contextState": "running",
+        "started": true,
+        "muted": false,
+        "volume": 0.4,
+        "paused": false,
+        "activeVoices": 8,
+        "maxVoices": 48,
+        "scheduledVoices": 16,
+        "footsteps": 0,
+        "stairSteps": 0,
+        "doorOpen": 0,
+        "doorClose": 0,
+        "enemyDoorOpen": 0,
+        "enemyDoorClose": 0,
+        "enemyStairSteps": 0,
+        "stairTransitions": 0,
+        "chaseBeats": 0,
+        "caughtStingers": 0,
+        "processedEvents": 1,
+        "watchBeats": 0,
+        "searchSounds": 0,
+        "itemSounds": 0,
+        "chaseIntensity": 0,
+        "chaseGain": 0,
+        "masterGain": 0.4000000059604645,
+        "effectiveGain": 0.4000000059604645,
+        "rms": 0,
+        "watchEquipped": false,
+        "watchBpm": 0,
+        "watchDistance": null,
+        "ambienceActive": true,
+        "lastError": null
+      }
+    },
+    {
+      "name": "Audio output signal playground",
+      "passed": true,
+      "actual": 0.022057740877272015
+    },
+    {
+      "name": "Every interior zone still reachable on a generated run",
+      "passed": true,
+      "actual": 361
+    },
+    {
+      "name": "E opens container without automatic pickup run-8e63547a-1-key-c",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-8e63547a-1-key-c",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-8e63547a-2-key-a",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-8e63547a-2-key-a",
+      "passed": true
+    },
+    {
+      "name": "E opens container without automatic pickup run-8e63547a-3-key-b",
+      "passed": true
+    },
+    {
+      "name": "Click takes exactly one item run-8e63547a-3-key-b",
+      "passed": true
+    },
+    {
+      "name": "Real gate E still escapes after new collection flow",
+      "passed": true
+    },
+    {
+      "name": "No runtime or console errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "publicURL": "http://127.0.0.1:8812/index.html",
+  "http": {
+    "status": 200,
+    "contentType": "text/html",
+    "bytes": 6689150,
+    "sha256": "6195c966e832c72f62d9118d1a003a157a37c61233d4b032d7037941f50f8192"
+  },
+  "initial": {
+    "seed": 279058270,
+    "layout": [
+      [
+        "room-f1-3",
+        "room-f1-1",
+        "room-f1-2",
+        "room-f1-0",
+        "room-f1-4",
+        "room-f1-5",
+        "room-f1-6",
+        "room-f1-7",
+        "room-f1-8",
+        "room-f1-9",
+        "room-f1-10",
+        "room-f1-11",
+        "room-f1-12",
+        "room-f1-13"
+      ],
+      [
+        "room-f2-0",
+        "room-f2-1",
+        "room-f2-12",
+        "room-f2-2",
+        "room-f2-4",
+        "room-f2-5",
+        "room-f2-7",
+        "room-f2-21",
+        "room-f2-3",
+        "room-f2-9",
+        "room-f2-8",
+        "room-f2-6",
+        "room-f2-10",
+        "room-f2-13",
+        "room-f2-14",
+        "room-f2-15",
+        "room-f2-16",
+        "room-f2-17",
+        "room-f2-18",
+        "room-f2-19",
+        "room-f2-20",
+        "room-f2-11"
+      ],
+      [
+        "room-f3-5",
+        "room-f3-1",
+        "room-f3-2",
+        "room-f3-9",
+        "room-f3-4",
+        "room-f3-15",
+        "room-f3-6",
+        "room-f3-7",
+        "room-f3-8",
+        "room-f3-3",
+        "room-f3-10",
+        "room-f3-11",
+        "room-f3-12",
+        "room-f3-14",
+        "room-f3-16",
+        "room-f3-13",
+        "room-f3-0"
+      ]
+    ],
+    "themes": [
+      "파손된 교실",
+      "비어 있는 교실",
+      "핏자국 교실",
+      "파손된 교실",
+      "비어 있는 교실",
+      "핏자국 교실",
+      "일반 교실",
+      "일반 교실",
+      "핏자국 교실",
+      "핏자국 교실",
+      "일반 교실",
+      "비어 있는 교실",
+      "파손된 교실",
+      "비어 있는 교실",
+      "일반 교실",
+      "파손된 교실",
+      "비어 있는 교실",
+      "비어 있는 교실",
+      "핏자국 교실"
+    ]
+  }
+}

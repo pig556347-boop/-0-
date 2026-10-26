@@ -1,6 +1,6 @@
 # 폐교탈출 맵 전개도
 
-현재 0.10 `playground-gate-2026-10-24` 실행 지도에서 생성한 전개도입니다.
+현재 0.11 `guidebook-difficulty-2026-10-26` 실행 지도에서 생성한 전개도입니다.
 
 - `overview.svg`: 본관 3개 층, 운동장 E 연결, 남쪽 탈출 교문과 봉쇄부.
 - `floor-1.svg` ~ `floor-3.svg`: 실제 복도 격자·방 위치·닫힌 문·자동 계단과 방 목록.
@@ -13,4 +13,4 @@
 
 재생성: `python SchoolEscape/Tools/export_map_atlas.py`. `--map`과 `--output`으로 입력 지도와 출력 폴더를 지정할 수 있습니다. 지도 변경 후 다시 생성하면 시설물·출입구·동선·방 목록도 함께 갱신됩니다. `atlas.json`에 원본 지도 SHA-256과 각 SVG 크기를 기록합니다.
 
-`review.json`은 현재 지도 58개 보기의 실제 Chromium 로드 기록입니다. 이 생성기는 브라우저 검증이나 공개 링크 갱신을 수행하지 않습니다.
+`review.json`은 과거 Chromium 로드 기록입니다. 이 생성기는 브라우저 검증이나 공개 링크 갱신을 수행하지 않습니다.
