@@ -79,7 +79,7 @@ namespace SchoolEscape
                 foreach(var r in f.rooms??Array.Empty<RoomData>())if(!string.IsNullOrEmpty(r.interiorId))
                     portals.Add(new Portal{from=f.id,to=r.interiorId,point=new Vector2(r.doorX,r.doorY)+Outward(r.facing),arrival=new Vector2(maps[r.interiorId].spawnX,maps[r.interiorId].spawnY),label=r.label+" 출입문"});
                 foreach(var s in f.stairs??Array.Empty<StairData>())portals.Add(new Portal{from=f.id,to=string.IsNullOrEmpty(s.targetId)?"floor-"+s.target:s.targetId,point=new Vector2(s.x,s.y),arrival=new Vector2(s.arrivalX,s.arrivalY),label=s.target+"층 계단"});
-                foreach(var p in f.portals??Array.Empty<PortalData>())portals.Add(new Portal{from=f.id,to=p.targetId,point=new Vector2(p.doorX,p.doorY)+Outward(p.facing),arrival=new Vector2(p.arrivalX,p.arrivalY),label=p.label});
+                foreach(var p in f.portals??Array.Empty<PortalData>())if(!p.locked)portals.Add(new Portal{from=f.id,to=p.targetId,point=new Vector2(p.doorX,p.doorY)+Outward(p.facing),arrival=new Vector2(p.arrivalX,p.arrivalY),label=p.label});
             }
             keyMat=Material(new Color(.77f,.63f,.31f));drinkMat=Material(new Color(.41f,.73f,.68f));otherMat=Material(new Color(.72f,.67f,.51f));
             ResetRun();
@@ -150,7 +150,7 @@ namespace SchoolEscape
         void Spawn(string id,int floor,bool hidden)=>Spawn(id,floor.ToString(),hidden);
         bool SelectedSpace(FloorData f,string region)
         {
-            if(region=="main")return !f.isOutdoor&&f.building!="annex"&&f.id!="playground";
+            if(region=="main")return !f.isOutdoor&&f.building!="annex"&&f.building!="west"&&f.id!="playground";
             int floor;if(int.TryParse(region,out floor))return !f.isOutdoor&&FloorOf(f)==floor;
             return f.id==region;
         }

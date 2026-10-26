@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "checks": 6,
+  "passed": [
+    "Complete continuous kitchen escape easy",
+    "Complete continuous kitchen escape normal",
+    "Complete continuous kitchen escape hard",
+    "Complete continuous kitchen escape extreme",
+    "Kitchen capture consumes one life and keeps aftermath",
+    "Developer OFF releases scene without trapping player"
+  ],
+  "failures": []
+}

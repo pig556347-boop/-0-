@@ -96,7 +96,10 @@ export class SchoolAudio {
       const id=Number(event.id??event.serial??0);if(!Number.isFinite(id)||id<=this.lastEvent)continue;
       this.lastEvent=id;this.stats.processedEvents++;
       if(!audible)continue;
-      if(event.type==='door-open')this._door(true);
+      if(event.type==='kitchen-collapse'){this._noise(.9,.13,420);this._tone(48,.8,.12,{end:26});}
+      else if(event.type==='kitchen-smash'){this._noise(.18,.065,760);this._tone(65,.18,.05,{end:30});}
+      else if(event.type==='locked-door'){this._noise(.15,.04,1600);}
+      else if(event.type==='door-open')this._door(true);
       else if(event.type==='door-close')this._door(false);
       else if(['enemy-door','enemy-arrive','enemy-door-open','enemy-door-close'].includes(event.type)){
         const sameSpace=!event.spaceId||event.spaceId===state.spaceId;

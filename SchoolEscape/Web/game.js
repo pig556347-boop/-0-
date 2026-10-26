@@ -1,3 +1,4 @@
+import {KitchenSequence,createKitchenVisual} from './kitchen-sequence.mjs';
 import {MODES,prepareRun,Survival} from './run-rules.mjs';
 import {createDiscoveryUI} from './discovery-ui.mjs';
 import * as T from './vendor/three.module.min.js';
@@ -16,7 +17,7 @@ try {
  const originalData=await response.json();const runSeed=new Uint32Array(1);crypto.getRandomValues(runSeed);const data=prepareRun(originalData,runSeed[0]),game=new Exploration(data),tile=data.tileSize;
  function freshSeed(){const seed=new Uint32Array(1);if(globalThis.crypto?.getRandomValues)crypto.getRandomValues(seed);else seed[0]=(Date.now()^Math.floor(Math.random()*4294967296))>>>0;return seed[0]}
  game.runSeed=runSeed[0];
- const pursuit=new Pursuit(game),audio=new SchoolAudio(),items=new ItemSystem(game,{seed:game.runSeed});pursuit.reset(game.runSeed);const survival=new Survival(game,items,pursuit,sessionStorage.getItem('school.mode')||'easy');
+ const pursuit=new Pursuit(game),audio=new SchoolAudio(),items=new ItemSystem(game,{seed:game.runSeed});pursuit.reset(game.runSeed);const survival=new Survival(game,items,pursuit,sessionStorage.getItem('school.mode')||'easy');const kitchen=new KitchenSequence(game,pursuit,survival);
  const canvas=$('world'),renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:false});
  renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;
@@ -51,9 +52,11 @@ try {
    const tiles=[],walls=[],caps=[],lower=[],windows=[],mullions=[],lamps=[],papers=[],trim=[];
    const interiorWall=(x,y)=>f.isRoom;
    const doorCells=new Set([...f.rooms,...(f.portals||[])].map(r=>`${r.doorX},${r.doorY}`)),isDoor=(x,y)=>doorCells.has(`${x},${y}`);
-   box('Ground',root,pos((f.width-1)/2,(f.height-1)/2,-.1),[f.width*tile+2,.2,f.height*tile+2],f.isOutdoor?yardMaterial:f.isRoom?mat({classroom:'#757a66',music:'#79664b',art:'#8c8874',artStorage:'#777762',library:'#786e55',infirmary:'#89988c',administration:'#7c8070',staff:'#7a8274',computer:'#737f7d',broadcast:'#7f7765',studentRestroom:'#83958a',staffRestroom:'#9b9e8c',storage:'#777a67',assembly:'#7e7665',maintenance:'#6b7976',seminar:'#7e8070',preparation:'#858171',archives:'#7d7866',lounge:'#7f806a',counseling:'#828776',meeting:'#7f7b6c',principal:'#7b715f',control:'#6b7e7d'}[f.kind]||'#757a66',{map:floorTexture}):materials.floor);
+   if(!f.voidRects)box('Ground',root,pos((f.width-1)/2,(f.height-1)/2,-.1),[f.width*tile+2,.2,f.height*tile+2],f.isOutdoor?yardMaterial:f.isRoom?mat({classroom:'#757a66',music:'#79664b',art:'#8c8874',artStorage:'#777762',library:'#786e55',infirmary:'#89988c',administration:'#7c8070',staff:'#7a8274',computer:'#737f7d',broadcast:'#7f7765',studentRestroom:'#83958a',staffRestroom:'#9b9e8c',storage:'#777a67',assembly:'#7e7665',maintenance:'#6b7976',seminar:'#7e8070',preparation:'#858171',archives:'#7d7866',lounge:'#7f806a',counseling:'#828776',meeting:'#7f7b6c',principal:'#7b715f',control:'#6b7e7d'}[f.kind]||'#757a66',{map:floorTexture}):materials.floor);
+   const isVoid=(x,y)=>(f.voidRects||[]).some(r=>x>=r[0]&&y>=r[1]&&x<=r[2]&&y<=r[3]);
    for(let y=0;y<f.height;y++)for(let x=0;x<f.width;){
-     if(game.open(x,y,f)){x++;continue}const start=x,cut=isDoor(x,y),interior=interiorWall(x,y);while(x<f.width&&!game.open(x,y,f)&&isDoor(x,y)===cut&&interiorWall(x,y)===interior)x++;
+     if(isVoid(x,y)){x++;continue;}
+     if(game.open(x,y,f)){x++;continue}const start=x,cut=isDoor(x,y),interior=interiorWall(x,y);while(x<f.width&&!isVoid(x,y)&&!game.open(x,y,f)&&isDoor(x,y)===cut&&interiorWall(x,y)===interior)x++;
      const height=cut?.18:f.isOutdoor?.3:interior?(y===f.height-1?1.4:.5):1.6;
      const p=pos((start+x-1)/2,y,height/2);walls.push([p,[(x-start)*tile,height,tile]]);
      caps.push([pos((start+x-1)/2,y,height+.01),[(x-start)*tile,.035,tile]]);
@@ -75,7 +78,7 @@ try {
      }
    }
    instanceBoxes(root,'Worn tiles',tiles,materials.floor);instanceBoxes(root,'Solid room and wall volumes',walls,materials.wall);instanceBoxes(root,'Opaque wall caps',caps,materials.cap);instanceBoxes(root,'Green wainscot',lower,materials.lower);instanceBoxes(root,'Dusty windows',windows,materials.glass);instanceBoxes(root,'Window frames',mullions,materials.metal);instanceBoxes(root,'Abandoned papers',papers,materials.paper);instanceBoxes(root,'Wall trim',trim,materials.metal);
-   const batches=new Map(),geometries={box:unit,sphere:new T.SphereGeometry(.5,10,8),cylinder:new T.CylinderGeometry(.5,.5,1,12),torus:new T.TorusGeometry(.42,.07,8,18).rotateX(Math.PI/2)};
+   const batches=new Map(),geometries={box:unit,sphere:new T.SphereGeometry(.5,10,8),cylinder:new T.CylinderGeometry(.5,.5,1,12),torus:new T.TorusGeometry(.42,.035,8,24).rotateX(Math.PI/2),courtRing:new T.TorusGeometry(.49,.007,6,48).rotateX(Math.PI/2),courtArcEast:new T.TorusGeometry(.5,.003,6,48,Math.PI).rotateX(Math.PI/2).rotateY(Math.PI/2),courtArcWest:new T.TorusGeometry(.5,.003,6,48,Math.PI).rotateX(Math.PI/2).rotateY(-Math.PI/2)};
    for(const item of f.fixtures||[]){
      if(item.kind==='mirror-surface'){
        const mirror=new SchoolMirror(item,f.id,()=>({actor,visual,angle,phase:game.phase,speed:game.speed,
@@ -92,6 +95,7 @@ try {
      for(const lamp of (f.fixtures||[]).filter(o=>o.kind==='escape-gate-lamp')){const light=new T.PointLight('#ecd09a',9,8,2);light.position.copy(pos(lamp.x,lamp.y+.5,2.5));root.add(light)}
      for(const portal of f.portals||[]){const light=new T.PointLight('#c9dfd5',7,7,2);light.position.copy(pos(portal.doorX,portal.doorY-1,2.5));root.add(light)}
    }
+   if(f.kind==='gym')textSprite('HOME 00  |  00 GUEST',root,pos(23,36.5,3.9),5,.5,'#e0d2a6');
    const musicRooms=new Set(f.isRoom&&f.kind==='music'?[f.label]:[]);
    for(const z of f.interiorZones||[])if(musicRooms.has(z.room)&&['보컬 연습실','연결 통로','악기보관창고'].includes(z.label))
      textSprite(z.label,root,pos(z.x,z.y+.65,1.15),z.label==='연결 통로'?1.05:1.55,.26);
@@ -129,6 +133,12 @@ try {
      textSprite(b.label,root,pos(b.x,b.y,1.7),3,.43,'#d6ad86');
    }
  }
+ for(const f of data.roomMaps.filter(f=>f.courtView)){
+   const lower=floorRoots.find(r=>r.userData.spaceId===f.courtView).clone(true);lower.visible=true;lower.position.y=-4.5;
+   lower.traverse(o=>{o.castShadow=false;if(o.userData.fixtureSpaceId)o.userData.fixtureSpaceId=f.id;if(o.userData.fixtureRoomId)o.userData.fixtureRoomId=f.id});
+   floorRoots.find(r=>r.userData.spaceId===f.id).add(lower);
+ }
+ const kitchenVisual=createKitchenVisual(T,kitchen,pos);floorRoots.find(r=>r.userData.spaceId===kitchen.map.id).add(kitchenVisual.root);
  // Entirely new geometric placeholder, authored to the supplied protagonist
  // reference: black fringe, pale uniform jacket, white shirt, dark trousers.
  const actor=new T.Group(),visual=new T.Group();scene.add(actor);actor.add(visual);
@@ -174,24 +184,24 @@ try {
  }
  soundUI();
  function updateAudio(dt=0){
-   const sameSpace=pursuit.enabled&&pursuit.spaceId===game.spaceId;
-   const enemyDistance=sameSpace?Math.hypot(pursuit.x-game.x,pursuit.y-game.y)*tile:Infinity;
-   const alerted=pursuit.enabled&&pursuit.alerted;
+   const cooking=kitchen.active&&game.spaceId===kitchen.map.id,enemy=cooking?kitchen:pursuit;const sameSpace=pursuit.enabled&&(cooking||pursuit.spaceId===game.spaceId);
+   const enemyDistance=sameSpace?Math.hypot(enemy.x-game.x,enemy.y-game.y)*tile:Infinity;
+   const alerted=pursuit.enabled&&(cooking||pursuit.alerted);
    const goal=alerted?(sameSpace?Math.max(.45,1-enemyDistance/22):.4):0;
    chaseIntensity+=(goal-chaseIntensity)*(1-Math.exp(-3*Math.max(dt,.001)));
    const stair=game.nearby(),onStairs=!!stair&&Math.abs(stair.x-game.x)*tile<1.2&&Math.abs(stair.y-game.y)*tile<1.05;
    audio.update(dt,{started,paused:paused||!!inventoryUI?.isOpen,speed:game.speed,isRunning:game.isRunning,stamina:game.stamina,exhausted:game.exhausted,
-     enemyAlerted:alerted,enemyPresent:sameSpace,spaceId:game.spaceId,roomKind:game.map.kind,isOutdoor:!!game.map.isOutdoor,onStairs,chaseIntensity,enemyDistance,enemyMoving:sameSpace&&pursuit.speed>.1,
+     enemyAlerted:alerted,enemyPresent:sameSpace,spaceId:game.spaceId,roomKind:game.map.kind,isOutdoor:!!game.map.isOutdoor,onStairs,chaseIntensity,enemyDistance,enemyMoving:sameSpace&&enemy.speed>.1,
      watchEquipped:items.equipped?.itemId==='smartwatch',caught:game.caught,won:game.won,events:game.events});
  }
  function pumpItemNoise(){for(const event of [...game.events])if(event.id>gameplayEventCursor){gameplayEventCursor=event.id;if(event.type==='search'||event.type==='item-dropped')game.emit('noise',{spaceId:event.spaceId||game.spaceId,x:event.x??game.x,y:event.y??game.y,radius:event.type==='search'?4:2.5,loudness:1,kind:event.type})}}
- function tick(dt,ax=0,ay=0,run=false){game.step(ax,ay,run,dt);items.step();pumpItemNoise();pursuit.step(dt);updateAudio(dt)}
+ function tick(dt,ax=0,ay=0,run=false){game.step(ax,ay,run,dt);items.step();pumpItemNoise();kitchen.step(dt);if(!kitchen.active)pursuit.step(dt);updateAudio(dt)}
  function toggleInventory(){if(inventoryUI.isOpen)inventoryUI.close();else if(started&&!paused&&!game.caught&&!game.won&&!game.pendingDoor)inventoryUI.open();keys.clear();last=performance.now();updateAudio(0)}
  function interact(forceItem=false){
    if(!started||paused||inventoryUI.isOpen||game.caught||game.won)return false;
    let result;
    if(!forceItem&&items.nearbyGate())result=items.tryEscape();
-   else if(!forceItem&&game.nearbyDoor())return game.interact();
+   else if(!forceItem&&game.nearbyDoor()){const door=game.nearbyDoor();if(door.locked){toast('빗장과 자물쇠로 단단히 잠겨 있습니다.');return false;}const message=kitchen.intercept(door);if(message){toast(message);return false;}return game.interact();}
    else{result=items.interact();if(result?.type==='open-container'){discovery.open(result.target);keys.clear();updateAudio(0);return true}}
    if(result?.message)toast(result.message);pumpItemNoise();updateAudio(0);if(game.won){keys.clear();$('success').hidden=false;$('door-prompt').hidden=true;$('stair-prompt').hidden=true;$('interaction-prompt').hidden=true}return !!result?.ok;
  }
@@ -220,8 +230,8 @@ try {
    for(const r of game.map.rooms){ctx.strokeStyle='#475650';ctx.lineWidth=.7;ctx.strokeRect(px(r.x0),py(r.y1),(r.x1-r.x0+1)*s,(r.y1-r.y0+1)*s);ctx.fillStyle='#b69b74';ctx.fillRect(px(r.doorX),py(r.doorY),s,s);
      if($('map-panel').classList.contains('expanded')){ctx.font='10px School,sans-serif';ctx.textAlign='center';ctx.fillStyle='#d1d5c4';ctx.fillText(r.label,px((r.x0+r.x1+1)/2),py((r.y0+r.y1)/2)+s/2,(r.x1-r.x0+1)*s-1)}
    }
-   if(game.map.isOutdoor||$('map-panel').classList.contains('expanded')){ctx.fillStyle=game.map.isOutdoor?'#30463d':'#b2a07b';for(const o of game.solidFixtures[game.spaceId])ctx.fillRect(px(o.x-o.width/tile/2+.5),py(o.y+o.depth/tile/2-.5),o.width/tile*s,o.depth/tile*s)}
-   if(game.roomId){ctx.fillStyle='#b69b74';ctx.fillRect(px(game.map.exitX),py(game.map.exitY),s,s)}
+   if(game.map.isOutdoor||game.map.kitchenSequence||$('map-panel').classList.contains('expanded')){ctx.fillStyle=game.map.isOutdoor?'#30463d':'#b2a07b';for(const o of game.solidFixtures[game.spaceId])ctx.fillRect(px(o.x-o.width/tile/2+.5),py(o.y+o.depth/tile/2-.5),o.width/tile*s,o.depth/tile*s)}
+   if(game.roomId&&!game.map.noExit){ctx.fillStyle='#b69b74';ctx.fillRect(px(game.map.exitX),py(game.map.exitY),s,s)}
    ctx.fillStyle='#91c8c3';for(const p of game.map.portals||[]){ctx.fillRect(px(p.doorX)-1,py(p.doorY)-1,s+2,s+2);if($('map-panel').classList.contains('expanded')){ctx.font='12px School,sans-serif';ctx.textAlign='center';ctx.fillText(p.label,px(p.doorX),py(p.doorY)+(p.facing==='south'?21:-8))}}
    if(game.map.isOutdoor){ctx.font='10px School,sans-serif';ctx.textAlign='left';ctx.fillStyle='#c2d7cb';ctx.fillText('북 ↑',8,15)}
    if(game.spaceId===items.escapeGate.spaceId){const e=items.escapeGate;ctx.fillStyle='#e4c572';ctx.fillRect(px(e.x)-2,py(e.y)-2,s+4,s+4);if($('map-panel').classList.contains('expanded')){ctx.font='12px School,sans-serif';ctx.textAlign='center';ctx.fillText('탈출 교문',px(e.x),py(e.y)+20)}}
@@ -231,7 +241,9 @@ try {
  function render(dt=0){
    if(game.spaceId!==seenFloor)floorChanged();
    actor.position.copy(pos(game.x,game.y));
-   pursuerVisual.root.visible=started&&pursuit.enabled&&pursuit.spaceId===game.spaceId;
+   kitchenVisual.update();
+   if(game.map.kitchenSequence)$('route-note').textContent=kitchen.active?'잔해 사이 비상 유도선을 따라 서쪽 비상문으로 이동하세요.':kitchen.phase==='idle'?'조리실을 조사한 뒤 북쪽 출입문으로 돌아가세요.':'무너진 물건과 배식장이 부순 길이 그대로 남아 있습니다.';
+   pursuerVisual.root.visible=!kitchen.active&&started&&pursuit.enabled&&pursuit.spaceId===game.spaceId;
    const frozen=paused||inventoryUI.isOpen||game.caught||game.won;
    pursuerVisual.root.position.copy(pos(pursuit.x,pursuit.y));pursuerVisual.update(pursuit,started&&!frozen?dt:0);
    const nearbyItem=items.nearby();lootVisuals.update(game.spaceId,nearbyItem);lootVisuals.root.visible=started;
@@ -253,12 +265,12 @@ try {
      enemyDoorAmount=Math.max(0,Math.min(1,(source?game.time-(transit.until-1.25):.35-(transit.until-game.time))/.22));
    }
    for(const d of doorVisuals)if(d.spaceId===game.spaceId){const pending=game.pendingDoor,playerAmount=pending&&pending.doorX===d.doorX&&pending.doorY===d.doorY?Math.min(1,(game.time-pending.started)/.22):0,amount=Math.max(playerAmount,enemyDoor===d?enemyDoorAmount:0);d.pieces.forEach((o,i)=>{o.position.copy(d.bases[i]);if(d.horizontal)o.position.x+=amount*1.15;else o.position.z-=amount*1.15})}
-   $('area').textContent=game.map.isOutdoor?`${game.map.label} · 남쪽 교문으로 탈출`:room?`${room.building==='annex'?'별관':'본관'} ${game.floor}층 · ${room.label}${room.theme?' · '+room.theme:''}`:`본관 ${game.floor}층 · ${game.map.subtitle}`;
+   $('area').textContent=game.map.isOutdoor?`${game.map.label} · 남쪽 교문으로 탈출`:room?`${room.building==='annex'?'별관':room.building==='west'?'서관':'본관'} ${game.floor}층 · ${room.label}${room.theme?' · '+room.theme:''}`:`본관 ${game.floor}층 · ${game.map.subtitle}`;
    survival.capture();$('lives').textContent=survival.rules.label+' · 남은 목숨 '+survival.lives+' / '+survival.rules.lives;const stamina=Math.max(0,Math.min(game.maxStamina,game.stamina));$('stamina-value').textContent=Math.ceil(stamina)+' / '+game.maxStamina;$('stamina-fill').style.transform=`scaleX(${stamina/game.maxStamina})`;
    $('stamina-meter').setAttribute('aria-valuemax',String(game.maxStamina));$('stamina-meter').setAttribute('aria-valuenow',String(Math.round(stamina)));$('vitals').classList.toggle('exhausted',game.exhausted);
    $('stamina-hint').textContent=game.exhausted?'지침 · 25% 회복 후 다시 달릴 수 있습니다':game.isRunning?'달리는 중 · 스태미나 소모':'달리면 소모 · 걸으면 회복';
-   const alerted=pursuit.enabled&&pursuit.alerted;$('threat-status').hidden=!started||!alerted||frozen;$('toast').hidden=false;$('toast').style.top=alerted?'82px':'30px';
-   $('threat-status').textContent=pursuit.state==='transit'?'문 너머로 발소리가 다가옵니다':pursuit.state==='search'?'발소리가 아직 멀어지지 않았습니다':'당직자가 쫓아오고 있습니다';
+   const alerted=pursuit.enabled&&(kitchen.active||pursuit.alerted);$('threat-status').hidden=!started||!alerted||frozen;$('toast').hidden=false;$('toast').style.top=alerted?'82px':'30px';
+   $('threat-status').textContent=kitchen.active?'배식장이 선반을 부수며 쫓아옵니다 · 서쪽 비상문으로':pursuit.state==='transit'?'문 너머로 발소리가 다가옵니다':pursuit.state==='search'?'발소리가 아직 멀어지지 않았습니다':'당직자가 쫓아오고 있습니다';
    $('danger-vignette').style.opacity=started&&!frozen?String(chaseIntensity*.65):'0';
    $('caught').hidden=!game.caught;$('revive').hidden=survival.lives<=0;$('caught-detail').textContent=survival.lives>0?'남은 목숨 '+survival.lives+'개. '+(survival.mode==='easy'?'소지품은 그대로 유지됩니다.':'가이드북을 제외한 소지품을 붙잡힌 공간에 떨어뜨렸습니다.'):'남은 목숨이 없습니다. 새 판을 시작하세요.';$('pause').hidden=!paused||!started||game.caught;
    $('success').hidden=!game.won;
@@ -331,6 +343,6 @@ try {
    return {changedPixels,maximumDelta,roomId:game.spaceId};
  }
  if(new URLSearchParams(location.search).has('qa'))window.escapeQA={game,pursuit,audio,survival,discovery,pursuerVisual,items,inventoryUI,lootVisuals,interact,updateAudio,tick,setPaused,reset:restart,setManual:value=>{manual=!!value;keys.clear()},
-   render,scene,actor,camera,renderer,inspectDoor,inspectSpace,inspectMirrors,checkMirrorPixels,floorRoots,start:()=>{started=true;$('start').hidden=true},keys};
+   kitchen,kitchenVisual,render,scene,actor,camera,renderer,inspectDoor,inspectSpace,inspectMirrors,checkMirrorPixels,floorRoots,start:()=>{started=true;$('start').hidden=true},keys};
  window.escapeLoaded=true;
 }catch(error){console.error(error);$('fatal').hidden=false;$('fatal').textContent='실행을 시작하지 못했습니다.\n'+error.message;}

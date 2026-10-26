@@ -87,12 +87,12 @@ export class ItemSystem {
     for(const s of f.stairs)edges.push({toId:s.targetId||`floor-${s.target}`,x:s.x,y:s.y,label:s.label,kind:'stairs'});
     for(const r of f.rooms)if(r.interiorId){const [dx,dy]=DIR[r.facing];edges.push({toId:r.interiorId,x:r.doorX+dx,y:r.doorY+dy,label:r.label+' 입구',kind:'door'});}
    }
-   for(const p of f.portals||[]){const [dx,dy]=DIR[p.facing];edges.push({toId:p.targetId,x:p.doorX+dx,y:p.doorY+dy,label:p.label,kind:'door'});}
+   for(const p of f.portals||[]){if(p.locked)continue;const [dx,dy]=DIR[p.facing];edges.push({toId:p.targetId,x:p.doorX+dx,y:p.doorY+dy,label:p.label,kind:'door'});}
    this.connections.set(f.id,edges);
   }
  }
  _floor(f){return f.isRoom?f.sourceFloor:f.number}
- _selectedSpace(f,selection){return typeof selection==='number'?this._floor(f)===selection:selection==='main'?!f.isOutdoor&&f.building!=='annex'&&f.id!=='playground':f.id===selection}
+ _selectedSpace(f,selection){if(f.noLoot)return false;return typeof selection==='number'?this._floor(f)===selection:selection==='main'?!f.isOutdoor&&!['annex','west'].includes(f.building)&&f.id!=='playground':f.id===selection}
  _safeKeyLocation(f,p){return!(this.keyExclusions.get(f.id)||[]).some(q=>Math.hypot(q.x-p.x,q.y-p.y)*this.game.data.tileSize<4)}
  _freshUid(itemId){return`run-${this.seed.toString(16)}-${++this.serial}-${itemId}`}
  _spawn(itemId,selection,mode){

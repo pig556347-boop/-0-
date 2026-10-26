@@ -1,3 +1,16 @@
+# 0.13 검증 — 2026-10-26
+
+공개 웹 Chromium38개 검사 통과, 실행/콘솔 오류0. 공개 파일SHA-256이 로컬 최종 검증물과 일치한다. 별도 소스 백업과 배포는 `school-escape-source`, `school-escape-web`에 저장한다.
+
+- 정적 지도:86,754 통과 (`Evidence/expansion-map-check.json`).
+- 확장 런타임:91 통과 (`Evidence/expansion-kernel.json`).
+- 네 난이도 연속 추격 탈출·포획·개발OFF:6 통과 (`Evidence/kitchen-chase-kernel.json`).
+- 실제 로컬 Chromium:37 통과, 실행/콘솔 오류0 (`Evidence/expansion-browser-runtime.json`). 84공간511경로, 실제E 문과 잠김, 자동계단 왕복/안전착지, 연속 조리실 추격/탈출/파괴 유지/새 판 복구, 열쇠 클릭 수집/운동장 탈출을 확인했다.
+- 전개도92보기/PNG8개 실제 로드 완료 (`MapAtlas/review.json`).
+- Unity 실제 시도:C# 컴파일 성공. Play는 `No valid Unity Editor license found.`로 미실행 (`Evidence/expansion-unity-attempt.json`). Unity WebGL 미검증. 조리실 전용 시스템과 관람층 하부 코트 시각화는 현재 웹 구현.
+
+공개 검사는 Evidence/expansion-public-runtime.json과 Deploy/publication.json에 별도로 기록한다. 아래는 이전 버전 기록이다.
+
 # 0.12 검증
 
 공개 고정 주소에서 실제 외부 Chromium **81개 검사 통과**, 실행·콘솔 오류0. 게시된 파일이 로컬 검증 빌드와 SHA-256까지 일치합니다.

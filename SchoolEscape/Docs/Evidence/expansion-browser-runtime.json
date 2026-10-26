@@ -1,0 +1,205 @@
+{
+  "ok": true,
+  "utc": "2026-10-26T13:51:05.284Z",
+  "checks": [
+    {
+      "name": "Executable HTTP HTML",
+      "passed": true
+    },
+    {
+      "name": "84 spaces and three gallery investigation rooms",
+      "passed": true
+    },
+    {
+      "name": "Nine inventory slots and separate guidebook",
+      "passed": true
+    },
+    {
+      "name": "All 84 maps have reachable authored interior routes",
+      "passed": true,
+      "actual": 511
+    },
+    {
+      "name": "Real E enters west-floor-2",
+      "passed": true
+    },
+    {
+      "name": "Real E enters annex-changing",
+      "passed": true
+    },
+    {
+      "name": "West room door west-dining",
+      "passed": true
+    },
+    {
+      "name": "West room door west-prep",
+      "passed": true
+    },
+    {
+      "name": "West room door west-freezer",
+      "passed": true
+    },
+    {
+      "name": "West room door west-dorm",
+      "passed": true
+    },
+    {
+      "name": "West room door west-pantry",
+      "passed": true
+    },
+    {
+      "name": "West room door west-restroom",
+      "passed": true
+    },
+    {
+      "name": "West room door west-control",
+      "passed": true
+    },
+    {
+      "name": "West room door west-records",
+      "passed": true
+    },
+    {
+      "name": "West room door west-surveillance",
+      "passed": true
+    },
+    {
+      "name": "West room door west-server",
+      "passed": true
+    },
+    {
+      "name": "Automatic stair and safe landing annex-gym-to-annex-gallery",
+      "passed": true,
+      "actual": {
+        "space": "annex-gallery",
+        "safe": true
+      }
+    },
+    {
+      "name": "Automatic stair and safe landing annex-gallery-to-annex-gym",
+      "passed": true,
+      "actual": {
+        "space": "annex-gym",
+        "safe": true
+      }
+    },
+    {
+      "name": "Automatic stair and safe landing west-floor-1-to-west-floor-2",
+      "passed": true,
+      "actual": {
+        "space": "west-floor-2",
+        "safe": true
+      }
+    },
+    {
+      "name": "Automatic stair and safe landing west-floor-2-to-west-floor-1",
+      "passed": true,
+      "actual": {
+        "space": "west-floor-1",
+        "safe": true
+      }
+    },
+    {
+      "name": "Automatic stair and safe landing west-floor-2-to-west-floor-3",
+      "passed": true,
+      "actual": {
+        "space": "west-floor-3",
+        "safe": true
+      }
+    },
+    {
+      "name": "Automatic stair and safe landing west-floor-3-to-west-floor-2",
+      "passed": true,
+      "actual": {
+        "space": "west-floor-2",
+        "safe": true
+      }
+    },
+    {
+      "name": "Locked exterior remains sealed cafeteria-exterior",
+      "passed": true
+    },
+    {
+      "name": "Locked exterior remains sealed west-exterior",
+      "passed": true
+    },
+    {
+      "name": "Locked exterior remains sealed yard-annex-locked",
+      "passed": true
+    },
+    {
+      "name": "Locked exterior remains sealed yard-west-locked",
+      "passed": true
+    },
+    {
+      "name": "Kitchen initially open",
+      "passed": true
+    },
+    {
+      "name": "E leaving kitchen triggers collapse",
+      "passed": true
+    },
+    {
+      "name": "Continuous chase escapes every one-cell bend and destroys obstacles",
+      "passed": true,
+      "actual": {
+        "phase": "active",
+        "active": true,
+        "x": 18.413753783255085,
+        "y": 10,
+        "pathIndex": 110,
+        "destroyed": 226,
+        "remaining": 1293,
+        "revision": 133,
+        "monster": "배식장"
+      }
+    },
+    {
+      "name": "Emergency door returns to cafeteria",
+      "passed": true
+    },
+    {
+      "name": "Revisited kitchen retains exact destroyed route",
+      "passed": true,
+      "actual": {
+        "destroyed": 228,
+        "clear": true,
+        "remaining": 1291,
+        "phase": "cleared"
+      }
+    },
+    {
+      "name": "Click collect key run-c368d6be-1-key-b",
+      "passed": true
+    },
+    {
+      "name": "Click collect key run-c368d6be-2-key-c",
+      "passed": true
+    },
+    {
+      "name": "Click collect key run-c368d6be-3-key-a",
+      "passed": true
+    },
+    {
+      "name": "Main escape still succeeds",
+      "passed": true
+    },
+    {
+      "name": "New round restores kitchen and clears destruction ledger",
+      "passed": true
+    },
+    {
+      "name": "No runtime or console errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "publicURL": "http://127.0.0.1:8814/index.html",
+  "http": {
+    "status": 200,
+    "contentType": "text/html",
+    "sha256": "6fb7b9589f8f698ca130c0f16c487143469d74735eb6e5cfec08cbea9accc400",
+    "bytes": 7222039
+  }
+}

@@ -1,9 +1,10 @@
 {
-  "gameRevision": "annex-chase-waltz-2026-10-26",
-  "gameVersion": "0.12",
-  "mapSha256": "95c5d6a99a7952551fa0abab29b418970c722426507584027491b65f939ba5ae",
-  "roomCount": 65,
-  "annexSpaceCount": 12,
+  "gameRevision": "kitchen-west-gallery-2026-10-26",
+  "gameVersion": "0.13",
+  "mapSha256": "5cf06ff99320489a6eee5dd274b3c200bc108957ddc8b430264e98eb3130e34b",
+  "roomCount": 84,
+  "annexSpaceCount": 18,
+  "westSpaceCount": 13,
   "playgroundImplemented": true,
   "escapeGate": {
     "spaceId": "playground",
@@ -56,6 +57,16 @@
       "file": "annex.svg",
       "width": 1400,
       "height": 1000
+    },
+    {
+      "file": "west.svg",
+      "width": 1200,
+      "height": 1000
+    },
+    {
+      "file": "kitchen-route.svg",
+      "width": 1200,
+      "height": 1090
     }
   ],
   "entries": [
@@ -342,6 +353,90 @@
     {
       "file": "../RoomPlans/annex-food-store.svg",
       "label": "별관 1층 / 급식실 창고"
+    },
+    {
+      "file": "../RoomPlans/annex-sports-records.svg",
+      "label": "별관 3층 / 체육 기록실"
+    },
+    {
+      "file": "../RoomPlans/annex-video-analysis.svg",
+      "label": "별관 3층 / 경기 영상분석실"
+    },
+    {
+      "file": "../RoomPlans/annex-sports-club.svg",
+      "label": "별관 3층 / 스포츠 동아리실"
+    },
+    {
+      "file": "../RoomPlans/annex-gallery.svg",
+      "label": "별관 3층 / 체육관 3층 관람통로"
+    },
+    {
+      "file": "../RoomPlans/annex-changing.svg",
+      "label": "별관 2층 / 체조·무용실 탈의실"
+    },
+    {
+      "file": "../RoomPlans/annex-kitchen.svg",
+      "label": "별관 1층 / 급식실 조리실"
+    },
+    {
+      "file": "west.svg",
+      "label": "서관 전체 전개도"
+    },
+    {
+      "file": "kitchen-route.svg",
+      "label": "조리실 붕괴·추격 동선"
+    },
+    {
+      "file": "../RoomPlans/west-floor-1.svg",
+      "label": "서관 1층 / 서관 1층 공용 복도"
+    },
+    {
+      "file": "../RoomPlans/west-floor-2.svg",
+      "label": "서관 2층 / 서관 2층 공용 복도"
+    },
+    {
+      "file": "../RoomPlans/west-floor-3.svg",
+      "label": "서관 3층 / 서관 3층 공용 복도"
+    },
+    {
+      "file": "../RoomPlans/west-dining.svg",
+      "label": "서관 1층 / 서관 직원급식실"
+    },
+    {
+      "file": "../RoomPlans/west-prep.svg",
+      "label": "서관 1층 / 서관 준비조리실"
+    },
+    {
+      "file": "../RoomPlans/west-freezer.svg",
+      "label": "서관 1층 / 냉동창고"
+    },
+    {
+      "file": "../RoomPlans/west-dorm.svg",
+      "label": "서관 2층 / 경비원 기숙사실"
+    },
+    {
+      "file": "../RoomPlans/west-pantry.svg",
+      "label": "서관 2층 / 탕비실"
+    },
+    {
+      "file": "../RoomPlans/west-restroom.svg",
+      "label": "서관 2층 / 교직원 화장실 남"
+    },
+    {
+      "file": "../RoomPlans/west-control.svg",
+      "label": "서관 2층 / 서관 통제실"
+    },
+    {
+      "file": "../RoomPlans/west-records.svg",
+      "label": "서관 3층 / 통제구역 기록실"
+    },
+    {
+      "file": "../RoomPlans/west-surveillance.svg",
+      "label": "서관 3층 / 감시실"
+    },
+    {
+      "file": "../RoomPlans/west-server.svg",
+      "label": "서관 3층 / 서버실"
     }
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-26",
+  "compilationSucceeded": true,
+  "evidence": "Csc Assembly-CSharp.dll and Assembly-CSharp-Editor.dll; no compiler errors",
+  "playValidated": false,
+  "playError": "No valid Unity Editor license found. Please activate your license.",
+  "log": "TestResults/unity-expansion-013.log",
+  "kitchenSetPieceNativeImplemented": false,
+  "galleryLowerCourtNativeImplemented": false,
+  "logExcerpts": [
+    {
+      "line": 242,
+      "text": "[132/138    5s] Csc Library/Bee/artifacts/2400b0aE.dag/Assembly-CSharp.dll (+2 others)"
+    },
+    {
+      "line": 245,
+      "text": "[135/138    0s] Csc Library/Bee/artifacts/2400b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)"
+    },
+    {
+      "line": 390,
+      "text": "No valid Unity Editor license found. Please activate your license."
+    }
+  ]
+}

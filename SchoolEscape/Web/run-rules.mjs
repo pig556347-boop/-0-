@@ -22,7 +22,7 @@ export class Survival {
  capture(){if(!this.game.caught||this.handled)return;this.handled=true;this.lives=Math.max(0,this.lives-1);this.lastDeath={spaceId:this.game.spaceId,x:this.game.x,y:this.game.y};
   if(this.mode!=='easy'&&this.mode!=='extreme'){
    const carried=[...this.items.inventory,...(this.items.equipped?[this.items.equipped]:[])];
-   const points=this.items.navigation.get(this.game.spaceId).available.filter(p=>Math.hypot(p.x-this.game.x,p.y-this.game.y)*this.game.data.tileSize<=8);
+   const points=this.items.navigation.get(this.game.spaceId).available.filter(p=>Math.hypot(p.x-this.game.x,p.y-this.game.y)*this.game.data.tileSize<=8&&!this.game.blocked(p.x,p.y));
    for(const item of carried){let point=this.lastDeath;if(this.mode==='hard'&&points.length)point=points[Math.floor(this.items.random()*points.length)];let world=this.items.worldItems.find(i=>i.uid===item.uid);if(!world){world={...item};this.items.worldItems.push(world)}Object.assign(world,{...item,spaceId:this.lastDeath.spaceId,x:point.x,y:point.y,displayX:point.x,displayY:point.y,picked:false,hidden:false,revealed:true,sourceId:null})}
    this.items.inventory=[];this.items.equipped=null;
   }
@@ -31,7 +31,7 @@ export class Survival {
  guide(){const g=this.game,s=this.items,lines=['해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.','현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.'];
   if(this.rules.hints==='none')return [...lines,'이 난이도에서는 열쇠 위치 단서가 제공되지 않는다.'];
   for(const id of ['key-a','key-b','key-c']){const owned=s.inventory.some(i=>i.itemId===id),item=s.worldItems.find(i=>i.itemId===id&&!i.picked);if(owned){lines.push(s.catalog[id].label+': 확보했다.');continue}if(!item)continue;const map=g.spaces.get(item.spaceId),source=item.sourceId?s.searchById.get(item.sourceId):null;
-   const where=map.isOutdoor?'운동장':`${map.building==='annex'?'별관':'본관'} ${map.sourceFloor||map.number}층`;
+   const where=map.isOutdoor?'운동장':`${map.building==='annex'?'별관':map.building==='west'?'서관':'본관'} ${map.sourceFloor||map.number}층`;
    lines.push(s.catalog[id].label+': '+(this.rules.hints==='exact'?`${where} · ${map.label||map.subtitle}. ${source?source.label+'의 '+(item.compartment+1)+'번 칸':'바닥'}을 확인하자.`:`${where}에서 ${clues[map.kind]||'사람들이 머물던 방의 가구와 주변을 살펴보자.'}`));
   }
   if(this.lastDeath&&this.mode!=='easy')lines.push('떨어뜨린 소지품은 마지막으로 붙잡힌 공간에서 다시 찾을 수 있다.');return lines;

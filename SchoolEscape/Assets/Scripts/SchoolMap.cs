@@ -72,6 +72,7 @@ namespace SchoolEscape
     }
     [Serializable] public sealed class PortalData
     {
+        public bool locked;
         public string id,label,facing,targetId;
         public int doorX,doorY,arrivalX,arrivalY;
         public Vector2 Outward=>facing=="north"?Vector2.up:facing=="south"?Vector2.down:facing=="west"?Vector2.left:Vector2.right;

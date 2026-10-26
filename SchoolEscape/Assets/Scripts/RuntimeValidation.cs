@@ -186,13 +186,14 @@ namespace SchoolEscape
             }
             foreach(var roomMap in Game.Data.roomMaps??Array.Empty<FloorData>())
             {
-                if(roomMap.building=="annex")
+                if(!string.IsNullOrEmpty(roomMap.building))
                 {
                     Game.SwitchSpace(roomMap.id,roomMap.spawnX,roomMap.spawnY);
                     foreach(var zone in roomMap.interiorZones??Array.Empty<InteriorZoneData>())
                         Check(WalkTo(zone.x,zone.y),"Annex interior route: "+roomMap.id+" / "+zone.label);
                     foreach(var annexPortal in roomMap.portals??Array.Empty<PortalData>())
                     {
+                        if(annexPortal.locked)continue;
                         Game.SwitchSpace(roomMap.id,roomMap.spawnX,roomMap.spawnY);
                         var at=new Vector2(annexPortal.doorX,annexPortal.doorY)+annexPortal.Outward;
                         Check(WalkTo(Mathf.RoundToInt(at.x),Mathf.RoundToInt(at.y)),"Annex portal approach: "+annexPortal.id);

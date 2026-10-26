@@ -215,7 +215,7 @@ export class Pursuit {
       }
     }
     for(const portal of f.portals||[]){
-      const destination=g.spaces.get(portal.targetId);if(!destination)continue;
+      const destination=g.spaces.get(portal.targetId);if(!destination||destination.kitchenSequence)continue;
       const [dx,dy]=({north:[0,1],south:[0,-1],west:[-1,0],east:[1,0]})[portal.facing];
       portals.push({id:portal.id,kind:'door',fromId:f.id,toId:portal.targetId,
         sourceX:portal.doorX+dx,sourceY:portal.doorY+dy,arrivalX:portal.arrivalX,arrivalY:portal.arrivalY,

@@ -95,7 +95,7 @@ export class Exploration {
   }
   interact(){
     if(this.won||this.caught||this.pendingDoor||this.time-this.lastDoorTransition<.6)return false;
-    const door=this.nearbyDoor();if(!door)return false;
+    const door=this.nearbyDoor();if(!door)return false;if(door.locked){this.emit('locked-door',{label:door.label});return false;}
     this.pendingDoor={...door,sourceId:this.spaceId,started:this.time,until:this.time+.22};this.speed=0;this.isRunning=false;
     this.emit('door-open',{spaceId:this.spaceId,label:door.label,x:door.doorX,y:door.doorY});
     this.emit('noise',{spaceId:this.spaceId,x:this.x,y:this.y,radius:6,loudness:1,kind:'door'});return true;

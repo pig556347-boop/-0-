@@ -1,7 +1,7 @@
 {
-  "utc": "2026-10-26T08:10:31.516Z",
+  "utc": "2026-10-26T13:44:14.317Z",
   "kind": "Actual Chromium SVG diagram rendering and local atlas loading; not gameplay validation",
-  "mapSha256": "95c5d6a99a7952551fa0abab29b418970c722426507584027491b65f939ba5ae",
+  "mapSha256": "5cf06ff99320489a6eee5dd274b3c200bc108957ddc8b430264e98eb3130e34b",
   "views": [
     {
       "file": "overview.svg",
@@ -286,6 +286,90 @@
     {
       "file": "../RoomPlans/annex-food-store.svg",
       "loaded": true
+    },
+    {
+      "file": "../RoomPlans/annex-sports-records.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/annex-video-analysis.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/annex-sports-club.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/annex-gallery.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/annex-changing.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/annex-kitchen.svg",
+      "loaded": true
+    },
+    {
+      "file": "west.svg",
+      "loaded": true
+    },
+    {
+      "file": "kitchen-route.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-floor-1.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-floor-2.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-floor-3.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-dining.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-prep.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-freezer.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-dorm.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-pantry.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-restroom.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-control.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-records.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-surveillance.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/west-server.svg",
+      "loaded": true
     }
   ],
   "pngs": [
@@ -294,7 +378,9 @@
     "floor-2.png",
     "floor-3.png",
     "playground.png",
-    "annex.png"
+    "annex.png",
+    "west.png",
+    "kitchen-route.png"
   ],
   "errors": [],
   "ok": true

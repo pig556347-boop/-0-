@@ -79,7 +79,7 @@ for f in spaces:
         check(all(o[k]>0 for k in ['width','depth','height']),f"{sid} invalid fixture dimensions {o['id']}")
         check(o.get('elevation',0)>=0,f"{sid} fixture below floor {o['id']}")
     if is_room:
-        check(not f.get('rooms') and (not f.get('stairs') or f.get('building')=='annex') and not f.get('barriers'),f'{sid} contains another building space or staircase')
+        check(not f.get('rooms') and (not f.get('stairs') or f.get('building') in {'annex','west'}) and not f.get('barriers'),f'{sid} contains another building space or staircase')
         check(bool(f.get('fixtures')) and bool(f.get('interiorZones')),f'{sid} missing interior content or landmarks')
         check((f['exitX'],f['exitY']) not in open,f'{sid} exit door must block walking before interaction')
         check((f['exitX'],f['exitY']+1) in furniture_reached,f'{sid} return door approach unreachable')
@@ -254,6 +254,7 @@ for f in spaces:
         approach=(portal['doorX']+dx,portal['doorY']+dy)
         check((portal['doorX'],portal['doorY']) not in open,f"{sid} external portal must block movement before E: {portal['id']}")
         check(approach in furniture_reached and not blocked(f,*approach),f"{sid} external portal approach is blocked: {portal['id']}")
+        if portal.get('locked'):continue
         check(bool(target),f"{sid} missing external portal target: {portal['id']}")
         if target:
             arrival=(portal['arrivalX'],portal['arrivalY'])
@@ -280,14 +281,14 @@ for f in spaces:
     # Keep generated artifacts deterministic and avoid filenames from Korean room labels.
     dest=ROOT/(f'Docs/RoomPlans/{sid}.svg' if is_room else ('Docs/Playground.svg' if f.get('isOutdoor') else f'Docs/Floor{f["number"]}.svg'))
     dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(''.join(parts))
-check(set(portal_ids)=={id for id,r in rooms_by_id.items() if r.get('building')!='annex'},'Unlinked isolated room maps')
+check(set(portal_ids)=={id for id,r in rooms_by_id.items() if r.get('building') not in {'annex','west'}},'Unlinked isolated room maps')
 check(len(portal_ids)==len(set(portal_ids)),'Two entrances accidentally share one room instance')
 for kind,floors in {'infirmary':[1],'administration':[1],'staff':[2,3],'computer':[2],'broadcast':[1],
                     'studentRestroom':[1,1,2,2,3,3],'staffRestroom':[1,1,2,2,3,3],'library':[2]}.items():
-    actual=sorted(r['sourceFloor'] for r in rooms_by_id.values() if r.get('kind')==kind and r.get('building')!='annex')
+    actual=sorted(r['sourceFloor'] for r in rooms_by_id.values() if r.get('kind')==kind and r.get('building') not in {'annex','west'})
     check(actual==floors,f'Requested support room instances missing or misplaced: {kind} {actual}')
 door_count=sum(len(f['rooms']) for f in data['floors'])
-check(len([r for r in rooms_by_id.values() if r.get('building')!='annex'])==door_count,'Every authored main-building room must link to its own independent furnished interior')
+check(len([r for r in rooms_by_id.values() if r.get('building') not in {'annex','west'}])==door_count,'Every authored main-building room must link to its own independent furnished interior')
 check(door_count==53,'Expected53 main-building room entrances after furnishing the remaining twelve rooms')
 for (number,label),kind in completion_rooms.items():
     matches=[r for r in data['floors'][number-1]['rooms'] if r['label']==label]
@@ -327,7 +328,7 @@ if yard:
     check(not any(b['x']==24 and b['y']==1 for b in data['floors'][0]['barriers']),'Old 1F temporary exit barrier must not seal the playground door')
     graph={s['id']:[] for s in spaces}
     for s in spaces:
-        graph[s['id']]+=[p['targetId'] for p in s.get('portals',[])]
+        graph[s['id']]+=[p['targetId'] for p in s.get('portals',[]) if not p.get('locked')]
         graph[s['id']]+=[r['interiorId'] for r in s.get('rooms',[]) if r.get('interiorId')]
         graph[s['id']]+=[st.get('targetId',f"floor-{st['target']}") for st in s.get('stairs',[])]
         if s.get('isRoom') and not s.get('noExit'):graph[s['id']].append(s.get('returnSpaceId',f"floor-{s['sourceFloor']}"))

@@ -1,15 +1,18 @@
 {
   "branch": "school-escape-web",
-  "commit": "6e40868697e73f470d0163ce00a14889ef00cb67",
-  "viewerUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/index.html",
-  "overviewUrl": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/overview.png",
+  "commit": "408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd",
+  "viewerUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/index.html",
+  "overviewUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/overview.png",
   "floorUrls": {
-    "1": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/floor-1.png",
-    "2": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/floor-2.png",
-    "3": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/floor-3.png"
+    "1": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/floor-1.png",
+    "2": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/floor-2.png",
+    "3": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/floor-3.png"
   },
-  "playgroundUrl": "https://raw.githubusercontent.com/pig556347-boop/-0-/6e40868697e73f470d0163ce00a14889ef00cb67/maps/playground.png",
-  "viewCount": 58,
-  "roomCount": 53,
+  "playgroundUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/playground.png",
+  "annexUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/annex.png",
+  "westUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/west.png",
+  "kitchenRouteUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/408515196ca8af18a2d2a0a1d9ba3cb62df9b8fd/maps/kitchen-route.png",
+  "viewCount": 92,
+  "roomCount": 84,
   "playgroundImplemented": true
 }
