@@ -63,7 +63,8 @@ jobs:
           name: school-escape-public-web-proof
           path: |
             published-status.json
-            web-play.png
+            upgrade-*.png
+            failure.png
           if-no-files-found: ignore
           retention-days: 7
       - name: Fail the workflow if public verification failed

@@ -263,17 +263,32 @@
 <g><title>yard-entrance-landing · 장식</title>
 <rect x="538" y="178.4" width="96" height="51.2" fill="#919c86" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-main-facade · 장식</title>
-<rect x="298" y="149.12" width="576" height="2.56" fill="#3c5753" stroke="none" rx="0" opacity="0.4"/>
+<g><title>school-main-facade · 장식</title>
+<rect x="278.8" y="69.6" width="614.4" height="76.8" fill="#475b59" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>벤치 아래 보관함 · 충돌</title>
+<g><title>school-west-facade · 장식</title>
+<rect x="29.2" y="13.6" width="217.6" height="140.8" fill="#475b59" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-annex-facade · 장식</title>
+<rect x="938" y="20" width="192" height="128" fill="#475b59" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>야외 벤치 · 충돌</title>
 <rect x="94.8" y="751.84" width="38.4" height="8.32" fill="#526c60" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>벤치 아래 보관함 · 충돌</title>
+<g><title>낡은 택배 상자 · 충돌</title>
+<rect x="137.168" y="751.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>야외 벤치 · 충돌</title>
 <rect x="94.8" y="559.84" width="38.4" height="8.32" fill="#526c60" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>벤치 아래 보관함 · 충돌</title>
+<g><title>낡은 택배 상자 · 충돌</title>
+<rect x="137.168" y="559.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>야외 벤치 · 충돌</title>
 <rect x="94.8" y="367.84" width="38.4" height="8.32" fill="#526c60" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>낡은 택배 상자 · 충돌</title>
+<rect x="137.168" y="367.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
 <g><title>yard-tree-trunk · 충돌</title>
 <rect x="87.696" y="897.696" width="4.608" height="4.608" fill="#615b43" stroke="#263e35" rx="0" opacity="0.95"/>
@@ -287,14 +302,23 @@
 <g><title>yard-tree-trunk · 충돌</title>
 <rect x="87.696" y="257.696" width="4.608" height="4.608" fill="#615b43" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>벤치 아래 보관함 · 충돌</title>
+<g><title>야외 벤치 · 충돌</title>
 <rect x="1038.8" y="751.84" width="38.4" height="8.32" fill="#526c60" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>벤치 아래 보관함 · 충돌</title>
+<g><title>낡은 택배 상자 · 충돌</title>
+<rect x="1023.57" y="751.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>야외 벤치 · 충돌</title>
 <rect x="1038.8" y="559.84" width="38.4" height="8.32" fill="#526c60" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>벤치 아래 보관함 · 충돌</title>
+<g><title>낡은 택배 상자 · 충돌</title>
+<rect x="1023.57" y="559.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>야외 벤치 · 충돌</title>
 <rect x="1038.8" y="367.84" width="38.4" height="8.32" fill="#526c60" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>낡은 택배 상자 · 충돌</title>
+<rect x="1023.57" y="367.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
 <g><title>yard-tree-trunk · 충돌</title>
 <rect x="1079.7" y="897.696" width="4.608" height="4.608" fill="#615b43" stroke="#263e35" rx="0" opacity="0.95"/>
@@ -308,28 +332,28 @@
 <g><title>yard-tree-trunk · 충돌</title>
 <rect x="1079.7" y="257.696" width="4.608" height="4.608" fill="#615b43" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>운동장 물품 보관함 · 충돌</title>
-<rect x="101.2" y="439.84" width="25.6" height="8.32" fill="#61776a" stroke="#263e35" rx="0" opacity="0.95"/>
+<g><title>야외 쓰레기통 · 충돌</title>
+<rect x="108.56" y="438.56" width="10.88" height="10.88" fill="#53645a" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>운동장 물품 보관함 · 충돌</title>
-<rect x="1053.2" y="439.84" width="25.6" height="8.32" fill="#61776a" stroke="#263e35" rx="0" opacity="0.95"/>
+<g><title>야외 쓰레기통 · 충돌</title>
+<rect x="1060.56" y="438.56" width="10.88" height="10.88" fill="#53645a" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>운동장 물품 보관함 · 충돌</title>
-<rect x="109.2" y="847.84" width="25.6" height="8.32" fill="#61776a" stroke="#263e35" rx="0" opacity="0.95"/>
+<g><title>야외 쓰레기통 · 충돌</title>
+<rect x="116.56" y="846.56" width="10.88" height="10.88" fill="#53645a" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>운동장 물품 보관함 · 충돌</title>
-<rect x="1037.2" y="831.84" width="25.6" height="8.32" fill="#61776a" stroke="#263e35" rx="0" opacity="0.95"/>
+<g><title>야외 쓰레기통 · 충돌</title>
+<rect x="1044.56" y="830.56" width="10.88" height="10.88" fill="#53645a" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>체육용품 상자 · 충돌</title>
+<g><title>낡은 택배 상자 · 충돌</title>
 <rect x="148.368" y="303.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>체육용품 상자 · 충돌</title>
+<g><title>낡은 택배 상자 · 충돌</title>
 <rect x="1004.37" y="335.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>체육용품 상자 · 충돌</title>
+<g><title>낡은 택배 상자 · 충돌</title>
 <rect x="140.368" y="623.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>체육용품 상자 · 충돌</title>
+<g><title>낡은 택배 상자 · 충돌</title>
 <rect x="1020.37" y="735.136" width="11.264" height="9.728" fill="#837455" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
 <g><title>yard-goal-post · 충돌</title>
@@ -383,8 +407,8 @@
 <g><title>경비초소 · 닫힘 · 충돌</title>
 <rect x="979.6" y="895.2" width="76.8" height="57.6" fill="#526d61" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
-<g><title>경비 물품 보관함 · 충돌</title>
-<rect x="1071.12" y="911.84" width="21.76" height="8.32" fill="#76856f" stroke="#263e35" rx="0" opacity="0.95"/>
+<g><title>야외 쓰레기통 · 충돌</title>
+<rect x="1076.56" y="910.56" width="10.88" height="10.88" fill="#53645a" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
 <g><title>yard-track-mark · 장식</title>
 <rect x="984.336" y="578.336" width="3.328" height="3.328" fill="#b0ab87" stroke="none" rx="0" opacity="0.4"/>
@@ -767,30 +791,6 @@
 <g><title>guard-hut-door · 장식</title>
 <rect x="995.28" y="952.992" width="13.44" height="0.576" fill="#334c44" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-door · 장식</title>
-<rect x="101.84" y="448.256" width="11.776" height="0.448" fill="#84927b" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-door · 장식</title>
-<rect x="114.384" y="448.256" width="11.776" height="0.448" fill="#84927b" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-door · 장식</title>
-<rect x="1053.84" y="448.256" width="11.776" height="0.448" fill="#84927b" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-door · 장식</title>
-<rect x="1066.38" y="448.256" width="11.776" height="0.448" fill="#84927b" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-door · 장식</title>
-<rect x="109.84" y="856.256" width="11.776" height="0.448" fill="#84927b" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-door · 장식</title>
-<rect x="122.384" y="856.256" width="11.776" height="0.448" fill="#84927b" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-door · 장식</title>
-<rect x="1037.84" y="840.256" width="11.776" height="0.448" fill="#84927b" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-door · 장식</title>
-<rect x="1050.38" y="840.256" width="11.776" height="0.448" fill="#84927b" stroke="none" rx="0" opacity="0.4"/>
-</g>
 <g><title>escape-gate-bar · 장식</title>
 <rect x="554.928" y="997.312" width="0.704" height="0.896" fill="#a4aa8e" stroke="none" rx="0" opacity="0.4"/>
 </g>
@@ -829,6 +829,15 @@
 </g>
 <g><title>escape-gate-bar · 장식</title>
 <rect x="616.368" y="997.312" width="0.704" height="0.896" fill="#a4aa8e" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-floor-band · 장식</title>
+<rect x="278.8" y="146.368" width="614.4" height="1.024" fill="#7a8a7e" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-floor-band · 장식</title>
+<rect x="29.2" y="154.368" width="217.6" height="1.024" fill="#7a8a7e" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-floor-band · 장식</title>
+<rect x="938" y="147.968" width="192" height="1.024" fill="#7a8a7e" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <g><title>bench-storage-handle · 장식</title>
 <rect x="103.888" y="760.352" width="2.304" height="0.512" fill="#b9b799" stroke="none" rx="0" opacity="0.4"/>
@@ -936,6 +945,24 @@
 <rect x="1038.03" y="368.064" width="39.936" height="0.96" fill="#8a805f" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <g><title>yard-crate-lid · 장식</title>
+<rect x="136.784" y="750.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-crate-lid · 장식</title>
+<rect x="136.784" y="558.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-crate-lid · 장식</title>
+<rect x="136.784" y="366.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-crate-lid · 장식</title>
+<rect x="1023.18" y="750.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-crate-lid · 장식</title>
+<rect x="1023.18" y="558.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-crate-lid · 장식</title>
+<rect x="1023.18" y="366.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-crate-lid · 장식</title>
 <rect x="147.984" y="302.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <g><title>yard-crate-lid · 장식</title>
@@ -947,53 +974,65 @@
 <g><title>yard-crate-lid · 장식</title>
 <rect x="1019.98" y="734.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-handle · 장식</title>
-<rect x="113.136" y="448.768" width="0.32" height="0.448" fill="#c7bda0" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="139.28" y="750.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-handle · 장식</title>
-<rect x="114.544" y="448.768" width="0.32" height="0.448" fill="#c7bda0" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="145.68" y="750.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-handle · 장식</title>
-<rect x="1065.14" y="448.768" width="0.32" height="0.448" fill="#c7bda0" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="139.28" y="558.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-handle · 장식</title>
-<rect x="1066.54" y="448.768" width="0.32" height="0.448" fill="#c7bda0" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="145.68" y="558.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-handle · 장식</title>
-<rect x="121.136" y="856.768" width="0.32" height="0.448" fill="#c7bda0" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="139.28" y="366.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-handle · 장식</title>
-<rect x="122.544" y="856.768" width="0.32" height="0.448" fill="#c7bda0" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="145.68" y="366.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-handle · 장식</title>
-<rect x="1049.14" y="840.768" width="0.32" height="0.448" fill="#c7bda0" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1025.68" y="750.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-handle · 장식</title>
-<rect x="1050.54" y="840.768" width="0.32" height="0.448" fill="#c7bda0" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1032.08" y="750.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-crate-band · 장식</title>
-<rect x="150.48" y="302.624" width="0.64" height="10.752" fill="#52685b" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1025.68" y="558.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-crate-band · 장식</title>
-<rect x="156.88" y="302.624" width="0.64" height="10.752" fill="#52685b" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1032.08" y="558.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-crate-band · 장식</title>
-<rect x="1006.48" y="334.624" width="0.64" height="10.752" fill="#52685b" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1025.68" y="366.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-crate-band · 장식</title>
-<rect x="1012.88" y="334.624" width="0.64" height="10.752" fill="#52685b" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1032.08" y="366.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-crate-band · 장식</title>
-<rect x="142.48" y="622.624" width="0.64" height="10.752" fill="#52685b" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="150.48" y="302.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-crate-band · 장식</title>
-<rect x="148.88" y="622.624" width="0.64" height="10.752" fill="#52685b" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="156.88" y="302.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-crate-band · 장식</title>
-<rect x="1022.48" y="734.624" width="0.64" height="10.752" fill="#52685b" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1006.48" y="334.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-crate-band · 장식</title>
-<rect x="1028.88" y="734.624" width="0.64" height="10.752" fill="#52685b" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1012.88" y="334.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="142.48" y="622.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="148.88" y="622.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1022.48" y="734.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-parcel-tape · 장식</title>
+<rect x="1028.88" y="734.624" width="0.64" height="10.752" fill="#b9a77a" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <g><title>A · 장식</title>
 <rect x="579.152" y="993.216" width="2.944" height="2.048" fill="#d8b56c" stroke="none" rx="0" opacity="0.4"/>
@@ -1021,6 +1060,78 @@
 </g>
 <g><title>yard-water-basin · 장식</title>
 <rect x="1072.02" y="648.288" width="7.168" height="7.424" fill="#c2c6ad" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="287.632" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="328.592" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="369.552" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="410.512" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="451.472" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="492.432" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="533.392" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="574.352" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="615.312" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="656.272" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="697.232" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="738.192" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="779.152" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="820.112" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="861.072" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="44.432" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="85.392" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="126.352" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="167.312" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="208.272" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="960.912" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="1001.87" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="1042.83" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="1083.79" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <g><title>yard-notice-paper · 장식</title>
 <rect x="511.312" y="512" width="9.984" height="0.32" fill="#b8b499" stroke="none" rx="0" opacity="0.4"/>
@@ -1055,6 +1166,165 @@
 <g><title>yard-water-tap · 장식</title>
 <rect x="1075.31" y="647.392" width="0.576" height="0.576" fill="#839d90" stroke="none" rx="0" opacity="0.4"/>
 </g>
+<g><title>school-window-glass · 장식</title>
+<rect x="288.976" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="298.928" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="329.936" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="339.888" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="370.896" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="380.848" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="411.856" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="421.808" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="452.816" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="462.768" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="493.776" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="503.728" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="534.736" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="544.688" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="575.696" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="585.648" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="616.656" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="626.608" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="657.616" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="667.568" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="698.576" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="708.528" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="739.536" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="749.488" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="780.496" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="790.448" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="821.456" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="831.408" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="862.416" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="872.368" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="45.776" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="55.728" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="86.736" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="96.688" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="127.696" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="137.648" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="168.656" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="178.608" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="209.616" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="219.568" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="962.256" y="150.016" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="972.208" y="150.528" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="1003.22" y="150.016" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="1013.17" y="150.528" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="1044.18" y="150.016" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="1054.13" y="150.528" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="1085.14" y="150.016" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="1095.09" y="150.528" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-bin-rim · 장식</title>
+<rect x="108.048" y="438.048" width="11.904" height="11.904" fill="#829181" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-bin-rim · 장식</title>
+<rect x="1060.05" y="438.048" width="11.904" height="11.904" fill="#829181" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-bin-rim · 장식</title>
+<rect x="116.048" y="846.048" width="11.904" height="11.904" fill="#829181" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-bin-rim · 장식</title>
+<rect x="1044.05" y="830.048" width="11.904" height="11.904" fill="#829181" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-bin-rim · 장식</title>
+<rect x="1076.05" y="910.048" width="11.904" height="11.904" fill="#829181" stroke="none" rx="0" opacity="0.4"/>
+</g>
 <g><title>guard-hut-window · 장식</title>
 <rect x="1024.08" y="953.184" width="19.84" height="0.512" fill="#233f42" stroke="none" rx="0" opacity="0.4"/>
 </g>
@@ -1064,17 +1334,20 @@
 <g><title>planter-stone-rim · 장식</title>
 <rect x="582.16" y="656.16" width="103.68" height="39.68" fill="#a2a98a" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-main-window · 장식</title>
-<rect x="371.6" y="152.672" width="44.8" height="0.576" fill="#29474a" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-bin-opening · 장식</title>
+<rect x="109.904" y="439.904" width="8.192" height="8.192" fill="#172b25" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-main-window · 장식</title>
-<rect x="451.6" y="152.672" width="44.8" height="0.576" fill="#29474a" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-bin-opening · 장식</title>
+<rect x="1061.9" y="439.904" width="8.192" height="8.192" fill="#172b25" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-main-window · 장식</title>
-<rect x="675.6" y="152.672" width="44.8" height="0.576" fill="#29474a" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-bin-opening · 장식</title>
+<rect x="117.904" y="847.904" width="8.192" height="8.192" fill="#172b25" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-main-window · 장식</title>
-<rect x="755.6" y="152.672" width="44.8" height="0.576" fill="#29474a" stroke="none" rx="0" opacity="0.4"/>
+<g><title>yard-bin-opening · 장식</title>
+<rect x="1045.9" y="831.904" width="8.192" height="8.192" fill="#172b25" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>yard-bin-opening · 장식</title>
+<rect x="1077.9" y="911.904" width="8.192" height="8.192" fill="#172b25" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <g><title>yard-trimmed-tree-crown · 장식</title>
 <rect x="71.44" y="883.36" width="37.12" height="33.28" fill="#40594b" stroke="none" rx="0" opacity="0.4"/>
@@ -1166,21 +1439,6 @@
 <g><title>yard-fence-rail · 장식</title>
 <rect x="658" y="153.184" width="448" height="0.832" fill="#758d7d" stroke="none" rx="0" opacity="0.4"/>
 </g>
-<g><title>yard-cabinet-top · 장식</title>
-<rect x="100.816" y="439.392" width="26.368" height="9.216" fill="#a1a68c" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-top · 장식</title>
-<rect x="1052.82" y="439.392" width="26.368" height="9.216" fill="#a1a68c" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-top · 장식</title>
-<rect x="108.816" y="847.392" width="26.368" height="9.216" fill="#a1a68c" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>yard-cabinet-top · 장식</title>
-<rect x="1036.82" y="831.392" width="26.368" height="9.216" fill="#a1a68c" stroke="none" rx="0" opacity="0.4"/>
-</g>
-<g><title>본관 1층 현관 · 장식</title>
-<rect x="554" y="154.016" width="64" height="0.768" fill="#8ca294" stroke="none" rx="0" opacity="0.4"/>
-</g>
 <g><title>escape-gate-lamp · 장식</title>
 <rect x="545.04" y="993.44" width="5.12" height="5.12" fill="#e0d6a4" stroke="none" rx="0" opacity="0.4"/>
 </g>
@@ -1195,6 +1453,429 @@
 </g>
 <g><title>guard-hut-roof · 장식</title>
 <rect x="977.68" y="893.28" width="80.64" height="61.44" fill="#7e8c73" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>본관 · 장식</title>
+<rect x="554" y="153.024" width="64" height="1.152" fill="#a5b19b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-floor-band · 장식</title>
+<rect x="278.8" y="146.368" width="614.4" height="1.024" fill="#7a8a7e" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-floor-band · 장식</title>
+<rect x="29.2" y="154.368" width="217.6" height="1.024" fill="#7a8a7e" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-floor-band · 장식</title>
+<rect x="938" y="147.968" width="192" height="1.024" fill="#7a8a7e" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="287.632" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="328.592" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="369.552" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="410.512" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="451.472" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="492.432" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="533.392" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="574.352" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="615.312" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="656.272" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="697.232" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="738.192" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="779.152" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="820.112" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="861.072" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="44.432" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="85.392" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="126.352" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="167.312" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="208.272" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="960.912" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="1001.87" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="1042.83" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="1083.79" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="288.976" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="298.928" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="329.936" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="339.888" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="370.896" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="380.848" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="411.856" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="421.808" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="452.816" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="462.768" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="493.776" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="503.728" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="534.736" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="544.688" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="575.696" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="585.648" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="616.656" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="626.608" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="657.616" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="667.568" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="698.576" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="708.528" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="739.536" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="749.488" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="780.496" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="790.448" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="821.456" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="831.408" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="862.416" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="872.368" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="45.776" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="55.728" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="86.736" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="96.688" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="127.696" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="137.648" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="168.656" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="178.608" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="209.616" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="219.568" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="962.256" y="150.016" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="972.208" y="150.528" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="1003.22" y="150.016" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="1013.17" y="150.528" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="1044.18" y="150.016" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="1054.13" y="150.528" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="1085.14" y="150.016" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="1095.09" y="150.528" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-annex-roof · 장식</title>
+<rect x="935.76" y="17.76" width="196.48" height="132.48" fill="#253c40" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-floor-band · 장식</title>
+<rect x="278.8" y="146.368" width="614.4" height="1.024" fill="#7a8a7e" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-floor-band · 장식</title>
+<rect x="29.2" y="154.368" width="217.6" height="1.024" fill="#7a8a7e" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="287.632" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="328.592" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="369.552" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="410.512" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="451.472" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="492.432" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="533.392" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="574.352" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="615.312" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="656.272" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="697.232" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="738.192" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="779.152" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="820.112" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="861.072" y="146.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="44.432" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="85.392" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="126.352" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="167.312" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-frame · 장식</title>
+<rect x="208.272" y="154.976" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="288.976" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="298.928" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="329.936" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="339.888" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="370.896" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="380.848" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="411.856" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="421.808" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="452.816" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="462.768" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="493.776" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="503.728" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="534.736" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="544.688" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="575.696" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="585.648" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="616.656" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="626.608" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="657.616" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="667.568" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="698.576" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="708.528" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="739.536" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="749.488" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="780.496" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="790.448" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="821.456" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="831.408" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="862.416" y="148.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="872.368" y="148.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="45.776" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="55.728" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="86.736" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="96.688" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="127.696" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="137.648" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="168.656" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="178.608" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-glass · 장식</title>
+<rect x="209.616" y="156.416" width="20.608" height="0.448" fill="#1c343b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-window-mullion · 장식</title>
+<rect x="219.568" y="156.928" width="0.704" height="0.384" fill="#607b77" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-main-roof · 장식</title>
+<rect x="276.56" y="67.36" width="618.88" height="81.28" fill="#253c40" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>school-west-roof · 장식</title>
+<rect x="26.96" y="11.36" width="222.08" height="145.28" fill="#253c40" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <polyline points="586,212 586,404 650,468 650,564 522,596 522,724 586,836 586,932" fill="none" stroke="#101e27" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
 <polyline points="586,212 586,404 650,468 650,564 522,596 522,724 586,836 586,932" fill="none" stroke="#f1cd76" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 4"/>
@@ -1302,7 +1983,7 @@
 <text x="170" y="456" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">20</text>
 <circle cx="1176" cy="691" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="1176" y="695" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">20</text>
-<text x="1194" y="696" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">운동장 물품함 앞</text>
+<text x="1194" y="696" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">분리수거장 앞</text>
 <text x="1166" y="735" font-size="21" fill="#e5e9dd" text-anchor="start" font-weight="bold">탐색 동선</text>
 <polyline points="1166,764 1191,764" fill="none" stroke="#f1cd76" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
 <text x="1201" y="769" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">중앙 차폐 우회 동선</text>
