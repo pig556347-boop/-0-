@@ -186,6 +186,38 @@ namespace SchoolEscape
             }
             foreach(var roomMap in Game.Data.roomMaps??Array.Empty<FloorData>())
             {
+                if(roomMap.building=="annex")
+                {
+                    Game.SwitchSpace(roomMap.id,roomMap.spawnX,roomMap.spawnY);
+                    foreach(var zone in roomMap.interiorZones??Array.Empty<InteriorZoneData>())
+                        Check(WalkTo(zone.x,zone.y),"Annex interior route: "+roomMap.id+" / "+zone.label);
+                    foreach(var annexPortal in roomMap.portals??Array.Empty<PortalData>())
+                    {
+                        Game.SwitchSpace(roomMap.id,roomMap.spawnX,roomMap.spawnY);
+                        var at=new Vector2(annexPortal.doorX,annexPortal.doorY)+annexPortal.Outward;
+                        Check(WalkTo(Mathf.RoundToInt(at.x),Mathf.RoundToInt(at.y)),"Annex portal approach: "+annexPortal.id);
+                        yield return new WaitForSecondsRealtime(.7f);
+                        Check(Game.UsePortal(annexPortal.id),"Annex E portal: "+annexPortal.id);
+                        yield return new WaitForSecondsRealtime(.3f);
+                        Check(Game.Current.id==annexPortal.targetId&&ValidPosition()&&Game.ActiveSpaceCount==1,"Annex safe isolated arrival: "+annexPortal.id);
+                    }
+                    if(!roomMap.noExit)
+                    {
+                        Game.SwitchSpace(roomMap.id,roomMap.exitX,roomMap.exitY+1);
+                        yield return new WaitForSecondsRealtime(.7f);
+                        Check(Game.Interact(),"Annex return E: "+roomMap.id);
+                        yield return new WaitForSecondsRealtime(.3f);
+                        Check(Game.Current.id==roomMap.returnSpaceId&&ValidPosition(),"Annex correct return: "+roomMap.id);
+                    }
+                    foreach(var stair in roomMap.stairs??Array.Empty<StairData>())
+                    {
+                        Game.SwitchSpace(roomMap.id,stair.x,stair.y);
+                        yield return new WaitForSecondsRealtime(.8f);
+                        Game.CheckAutomaticStairs();
+                        Check(Game.Current.id==stair.targetId&&ValidPosition(),"Annex automatic stair: "+stair.id);
+                    }
+                    continue;
+                }
                 var corridor=Game.Data.floors[roomMap.sourceFloor-1];var start=corridor.landmarks[0];
                 Game.SwitchFloor(roomMap.sourceFloor,start.x,start.y,false);
                 var portal=Array.Find(corridor.rooms,r=>r.interiorId==roomMap.id);

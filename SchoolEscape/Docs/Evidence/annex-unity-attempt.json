@@ -1,0 +1,14 @@
+{
+  "kind": "Actual Unity Editor compilation and Play attempt; not WebGL",
+  "date": "2026-10-26",
+  "compilationSucceeded": true,
+  "compilerEvidence": "Csc Assembly-CSharp.dll (+2 others); ExitCode: 0; no error CS diagnostics",
+  "playValidated": false,
+  "playFailure": "No valid Unity Editor license found. Please activate your license.",
+  "firstInvocationIssue": "Initial validation method name was incorrect; rerun with existing SchoolEscape.EditorTools.Validate.",
+  "newAudioNativeParity": false,
+  "finalLog": "TestResults/unity-annex-final-012.log",
+  "finalCompilationSucceeded": true,
+  "finalCompileLog": "TestResults/unity-annex-compile-012.log",
+  "finalCompileProcessExitCode": 0
+}

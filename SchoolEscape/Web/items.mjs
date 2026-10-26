@@ -51,9 +51,9 @@ export class ItemSystem {
   this.keyExclusions=new Map();
   const avoid=(id,x,y)=>{if(!id||!Number.isFinite(x)||!Number.isFinite(y))return;if(!this.keyExclusions.has(id))this.keyExclusions.set(id,[]);this.keyExclusions.get(id).push({x,y});};
   for(const f of this.game.spaces.values()){
-   if(f.isRoom){avoid(f.id,f.spawnX,f.spawnY);avoid(f.id,f.exitX,f.exitY+1);avoid(`floor-${f.sourceFloor}`,f.returnX,f.returnY);}
+   if(f.isRoom){avoid(f.id,f.spawnX,f.spawnY);avoid(f.id,f.exitX,f.exitY+1);avoid(f.returnSpaceId||`floor-${f.sourceFloor}`,f.returnX,f.returnY);}
    for(const r of f.rooms||[])if(r.interiorId){const [dx,dy]=DIR[r.facing],target=this.game.spaces.get(r.interiorId);avoid(f.id,r.doorX+dx,r.doorY+dy);if(target)avoid(target.id,target.spawnX,target.spawnY);}
-   for(const s of f.stairs||[]){avoid(f.id,s.x,s.y);avoid(`floor-${s.target}`,s.arrivalX,s.arrivalY);}
+   for(const s of f.stairs||[]){avoid(f.id,s.x,s.y);avoid(s.targetId||`floor-${s.target}`,s.arrivalX,s.arrivalY);}
    for(const p of f.portals||[]){const [dx,dy]=DIR[p.facing];avoid(f.id,p.doorX+dx,p.doorY+dy);avoid(p.targetId,p.arrivalX,p.arrivalY);}
   }
   avoid(this.escapeGate.spaceId,this.escapeGate.x,this.escapeGate.y);
@@ -82,9 +82,9 @@ export class ItemSystem {
     this.searchTemplate.push({compartments:item.kind==='locker-bank'?8:1,id:item.assembly||item.id,fixtureId:item.id,spaceId:f.id,kind:item.kind,label,x,y,width:(x1-x0)*tile,depth:(y1-y0)*tile,height:item.elevation+item.height,approaches});
    }
    const edges=[];
-   if(f.isRoom)edges.push({toId:`floor-${f.sourceFloor}`,x:f.exitX,y:f.exitY+1,label:'복도로 나가기',kind:'door'});
-   else{
-    for(const s of f.stairs)edges.push({toId:`floor-${s.target}`,x:s.x,y:s.y,label:s.label,kind:'stairs'});
+   if(f.isRoom&&!f.noExit)edges.push({toId:f.returnSpaceId||`floor-${f.sourceFloor}`,x:f.exitX,y:f.exitY+1,label:'복도로 나가기',kind:'door'});
+   {
+    for(const s of f.stairs)edges.push({toId:s.targetId||`floor-${s.target}`,x:s.x,y:s.y,label:s.label,kind:'stairs'});
     for(const r of f.rooms)if(r.interiorId){const [dx,dy]=DIR[r.facing];edges.push({toId:r.interiorId,x:r.doorX+dx,y:r.doorY+dy,label:r.label+' 입구',kind:'door'});}
    }
    for(const p of f.portals||[]){const [dx,dy]=DIR[p.facing];edges.push({toId:p.targetId,x:p.doorX+dx,y:p.doorY+dy,label:p.label,kind:'door'});}
@@ -92,7 +92,7 @@ export class ItemSystem {
   }
  }
  _floor(f){return f.isRoom?f.sourceFloor:f.number}
- _selectedSpace(f,selection){return typeof selection==='number'?this._floor(f)===selection:selection==='main'?!f.isOutdoor&&f.id!=='playground':f.id===selection}
+ _selectedSpace(f,selection){return typeof selection==='number'?this._floor(f)===selection:selection==='main'?!f.isOutdoor&&f.building!=='annex'&&f.id!=='playground':f.id===selection}
  _safeKeyLocation(f,p){return!(this.keyExclusions.get(f.id)||[]).some(q=>Math.hypot(q.x-p.x,q.y-p.y)*this.game.data.tileSize<4)}
  _freshUid(itemId){return`run-${this.seed.toString(16)}-${++this.serial}-${itemId}`}
  _spawn(itemId,selection,mode){

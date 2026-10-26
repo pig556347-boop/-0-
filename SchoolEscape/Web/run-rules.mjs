@@ -15,7 +15,7 @@ export function prepareRun(data,seed){
  }
  return data;
 }
-const clues={classroom:'분필 가루와 오래된 공책 냄새. 학생들이 수업을 듣던 곳을 살펴보자.',staff:'채점하던 종이와 교직원들의 흔적이 남아 있다.',infirmary:'약품 냄새와 하얀 천의 흔적. 몸을 돌보던 방이 떠오른다.',preparation:'약품인지 미술 재료인지 알 수 없는 냄새. 수업 준비 공간이 생각난다.',art:'마른 물감과 석고 가루가 묻어 있다.',artStorage:'물감과 오래 보관한 도구 냄새가 섞여 있다.',music:'건반과 악보, 오래된 악기 소리가 떠오른다.',library:'묵은 종이 냄새가 유난히 짙다.',archives:'오래된 종이와 기록이 쌓여 있는 곳의 흔적이다.',computer:'꺼진 화면과 전선, 먼지 낀 기계 냄새가 남아 있다.',broadcast:'목소리를 멀리 보내던 장비 곁에 단서가 있을 것 같다.',administration:'서류와 도장, 학교의 살림을 맡던 흔적이다.',studentRestroom:'물기와 타일, 넓은 거울이 있는 학생들의 공간.',staffRestroom:'물기와 타일 냄새. 교직원이 쓰던 조용한 공간.',storage:'오래 보관한 상자와 먼지의 냄새.',playground:'흙과 바깥바람 냄새. 건물 밖을 살펴보자.'};
+const clues={gym:'높은 천장 아래 공이 튀던 넓은 마룻바닥의 흔적.',fitness:'무거운 철과 운동기구가 있던 자리.',cafeteria:'식판과 배식대, 오래된 음식 냄새가 남아 있다.',foodStorage:'식자재 상자와 배식 물품을 보관하던 곳.',annexCorridor:'체육 시설을 연결하는 복도와 진열장 부근.',sportsStorage:'공과 체육용품을 보관하던 먼지 낀 공간.',gymControl:'작은 방의 조명과 음향 스위치 곁.',studentLounge:'학생들이 운동 후 쉬던 소파와 책 주변.',sportsClass:'운동 전술을 배우던 칠판과 책상 주변.',sportsPractice:'넓은 매트와 연습용 바가 있던 곳.',classroom:'분필 가루와 오래된 공책 냄새. 학생들이 수업을 듣던 곳을 살펴보자.',staff:'채점하던 종이와 교직원들의 흔적이 남아 있다.',infirmary:'약품 냄새와 하얀 천의 흔적. 몸을 돌보던 방이 떠오른다.',preparation:'약품인지 미술 재료인지 알 수 없는 냄새. 수업 준비 공간이 생각난다.',art:'마른 물감과 석고 가루가 묻어 있다.',artStorage:'물감과 오래 보관한 도구 냄새가 섞여 있다.',music:'건반과 악보, 오래된 악기 소리가 떠오른다.',library:'묵은 종이 냄새가 유난히 짙다.',archives:'오래된 종이와 기록이 쌓여 있는 곳의 흔적이다.',computer:'꺼진 화면과 전선, 먼지 낀 기계 냄새가 남아 있다.',broadcast:'목소리를 멀리 보내던 장비 곁에 단서가 있을 것 같다.',administration:'서류와 도장, 학교의 살림을 맡던 흔적이다.',studentRestroom:'물기와 타일, 넓은 거울이 있는 학생들의 공간.',staffRestroom:'물기와 타일 냄새. 교직원이 쓰던 조용한 공간.',storage:'오래 보관한 상자와 먼지의 냄새.',playground:'흙과 바깥바람 냄새. 건물 밖을 살펴보자.'};
 export class Survival {
  constructor(game,items,pursuit,mode='easy'){this.game=game;this.items=items;this.pursuit=pursuit;this.setMode(mode)}
  setMode(mode){this.mode=MODES[mode]?mode:'easy';this.rules=MODES[this.mode];this.lives=this.rules.lives;this.game.maxStamina=this.rules.stamina;this.game.stamina=this.rules.stamina;this.handled=false;this.lastDeath=null}
@@ -31,7 +31,7 @@ export class Survival {
  guide(){const g=this.game,s=this.items,lines=['해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.','현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.'];
   if(this.rules.hints==='none')return [...lines,'이 난이도에서는 열쇠 위치 단서가 제공되지 않는다.'];
   for(const id of ['key-a','key-b','key-c']){const owned=s.inventory.some(i=>i.itemId===id),item=s.worldItems.find(i=>i.itemId===id&&!i.picked);if(owned){lines.push(s.catalog[id].label+': 확보했다.');continue}if(!item)continue;const map=g.spaces.get(item.spaceId),source=item.sourceId?s.searchById.get(item.sourceId):null;
-   const where=map.isOutdoor?'운동장':`본관 ${map.sourceFloor||map.number}층`;
+   const where=map.isOutdoor?'운동장':`${map.building==='annex'?'별관':'본관'} ${map.sourceFloor||map.number}층`;
    lines.push(s.catalog[id].label+': '+(this.rules.hints==='exact'?`${where} · ${map.label||map.subtitle}. ${source?source.label+'의 '+(item.compartment+1)+'번 칸':'바닥'}을 확인하자.`:`${where}에서 ${clues[map.kind]||'사람들이 머물던 방의 가구와 주변을 살펴보자.'}`));
   }
   if(this.lastDeath&&this.mode!=='easy')lines.push('떨어뜨린 소지품은 마지막으로 붙잡힌 공간에서 다시 찾을 수 있다.');return lines;

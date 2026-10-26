@@ -200,11 +200,12 @@ export class Pursuit {
   }
   portals(f=this.game.spaces.get(this.spaceId)){
     const g=this.game,portals=[];
-    if(f.isRoom){
-      portals.push({kind:'door',fromId:f.id,toId:`floor-${f.sourceFloor}`,sourceX:f.exitX,sourceY:f.exitY+1,
+    if(f.isRoom&&!f.noExit){
+      portals.push({kind:'door',fromId:f.id,toId:f.returnSpaceId||`floor-${f.sourceFloor}`,sourceX:f.exitX,sourceY:f.exitY+1,
         arrivalX:f.returnX,arrivalY:f.returnY,label:'복도로 나가기',reason:'roam'});
-    }else{
-      for(const s of f.stairs||[])portals.push({kind:'stairs',fromId:f.id,toId:`floor-${s.target}`,
+    }
+    {
+      for(const s of f.stairs||[])portals.push({kind:'stairs',fromId:f.id,toId:s.targetId||`floor-${s.target}`,
         sourceX:s.x,sourceY:s.y,arrivalX:s.arrivalX,arrivalY:s.arrivalY,label:s.label,reason:'roam'});
       for(const r of f.rooms||[]){
         const destination=g.spaces.get(r.interiorId);if(!destination)continue;

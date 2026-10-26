@@ -6,7 +6,7 @@ export class SchoolAudio {
     this.paused=false;this.chaseIntensity=0;this.lastEvent=0;this.stepClock=0;this.beatClock=0;
     this.enemyStepClock=0;this.breathClock=0;this.watchClock=0;this.watchBpm=0;this.watchDistance=Infinity;this.watchEquipped=false;this.voices=new Set();this.continuous=[];
     this.stats={scheduledVoices:0,footsteps:0,stairSteps:0,doorOpen:0,doorClose:0,enemyDoorOpen:0,enemyDoorClose:0,enemyStairSteps:0,stairTransitions:0,chaseBeats:0,caughtStingers:0,processedEvents:0,watchBeats:0,searchSounds:0,itemSounds:0};
-    this.musicClock=0;this.musicStep=0;this.musicTheme='indoor';this.musicNotes=0;this.maxVoices=48;this.disposed=false;this._resumePending=false;
+    this.chaseTempo=192;this.chasePulse=0;this.monsterClock=0;this.growlCooldown=0;this.wasAlerted=false;this.stats.chasePianoNotes=0;this.stats.chaseBars=0;this.stats.monsterGrowls=0;this.stats.monsterBreaths=0;this.stats.monsterSteps=0;this.musicClock=0;this.musicStep=0;this.musicTheme='indoor';this.musicNotes=0;this.maxVoices=48;this.disposed=false;this._resumePending=false;
     this._visibility=()=>{if(document.hidden)this._silenceAndSuspend()};
     document.addEventListener('visibilitychange',this._visibility);
   }
@@ -77,12 +77,12 @@ export class SchoolAudio {
     // Vary the sample offset deterministically without creating another buffer.
     s.start(at,(this.stats.scheduledVoices*.173)%2.5);s.stop(at+duration+.02);
   }
-  _piano(midi,gain=.035){
+  _piano(midi,gain=.035,decay=1){
     const hz=440*Math.pow(2,(midi-69)/12);this.musicNotes++;
-    for(const [harmonic,weight,duration] of [[1,1,2.8],[2,.32,1.7],[3,.12,.8],[4,.055,.4]])this._tone(hz*harmonic,duration,gain*weight,{end:hz*harmonic*.999});
+    for(const [harmonic,weight,duration] of [[1,1,2.8],[2,.32,1.7],[3,.12,.8],[4,.055,.4]])this._tone(hz*harmonic,duration*decay,gain*weight,{end:hz*harmonic*.999});
   }
-  _step(stairs=false,running=false,enemy=false,delay=0) {
-    const gain=enemy?.025:running?.075:.052;
+  _step(stairs=false,running=false,enemy=false,delay=0,attenuation=1) {
+    const gain=enemy?.075*attenuation:running?.075:.052;if(enemy)this.stats.monsterSteps++;
     this._noise(stairs?.12:.075,gain,stairs?1650:850,delay);
     this._tone(enemy?58:stairs?155:105,stairs?.14:.085,gain*.9,{end:stairs?88:60,delay});
     if(!enemy){this.stats.footsteps++;if(stairs)this.stats.stairSteps++;}
@@ -145,8 +145,9 @@ export class SchoolAudio {
       this._resumePending=true;this.context.resume().catch(()=>{}).finally(()=>{this._resumePending=false});
     }
     this._masterTarget();
+    const chasing=!!state.enemyAlerted&&!state.caught&&!state.won;
     const theme=state.isOutdoor?'outdoor':'indoor';if(this.musicTheme!==theme){this.musicTheme=theme;this.musicStep=0;this.musicClock=0;}
-    if(audible&&!state.caught&&!state.won){this.musicClock+=dt;const period=theme==='outdoor'?2.15:1.55;if(this.musicClock>=period){this.musicClock-=period;const pattern=theme==='outdoor'?[45,null,52,48,44,null,47,45]:[57,60,64,63,57,null,56,52];const note=pattern[this.musicStep++%pattern.length];if(note!==null)this._piano(note,theme==='outdoor'?.045:.032);if(this.musicStep%8===1)this._piano(theme==='outdoor'?33:45,.022);}}
+    if(audible&&!chasing&&!state.caught&&!state.won){this.musicClock+=dt;const period=theme==='outdoor'?2.15:1.55;if(this.musicClock>=period){this.musicClock-=period;const pattern=theme==='outdoor'?[45,null,52,48,44,null,47,45]:[57,60,64,63,57,null,56,52];const note=pattern[this.musicStep++%pattern.length];if(note!==null)this._piano(note,theme==='outdoor'?.045:.032);if(this.musicStep%8===1)this._piano(theme==='outdoor'?33:45,.022);}}
     const target=state.caught||state.won?0:Math.max(0,Math.min(1,Number(state.chaseIntensity)||0));
     this.chaseIntensity+=(target-this.chaseIntensity)*(1-Math.exp(-dt*(target>this.chaseIntensity?3.5:1.2)));
     this.chaseBus.gain.setTargetAtTime(this.chaseIntensity*.6,this.context.currentTime,.12);
@@ -167,23 +168,42 @@ export class SchoolAudio {
       if(this.stepClock>=period){this.stepClock%=period;this._step(!!state.onStairs,!!state.isRunning);}
     }else this.stepClock=0;
     if(state.enemyMoving&&Number(state.enemyDistance)<13){
-      this.enemyStepClock+=dt;if(this.enemyStepClock>.52){this.enemyStepClock%=.52;this._step(false,false,true);}
+      this.enemyStepClock+=dt;if(this.enemyStepClock>.52){this.enemyStepClock%=.52;this._step(false,false,true,0,Math.max(.08,1-Number(state.enemyDistance)/15));}
     }else this.enemyStepClock=0;
-    if(this.chaseIntensity>.08){
-      this.beatClock+=dt;const period=.56-.20*this.chaseIntensity;
-      if(this.beatClock>=period){
-        this.beatClock%=period;this.stats.chaseBeats++;
-        this._tone(86,.17,.095*this.chaseIntensity,{end:35});
-        const notes=[165,176,220,176],note=notes[(this.stats.chaseBeats-1)%notes.length];
-        this._tone(note,.21,.025*this.chaseIntensity,{end:note*.985});
-        this._noise(.035,.022*this.chaseIntensity,1900,.13);
+    // Six eighth-note pulses per bar: three accented quarter-note beats.
+    if(chasing){
+      if(!this.wasAlerted){this.beatClock=60/this.chaseTempo/2;this.chasePulse=0;}
+      this.beatClock+=dt;const pulse=60/this.chaseTempo/2;
+      while(this.beatClock>=pulse){
+        this.beatClock-=pulse;const step=this.chasePulse%6,bar=Math.floor(this.chasePulse/6);
+        const note=[84,87,91,90,86,89][step]+(bar%4===3?1:0);
+        this._piano(note,step===0?.065:step%2===0?.046:.032,.22);
+        this.stats.chasePianoNotes++;this.lastChaseMidi=note;
+        if(step%2===0)this.stats.chaseBeats++;
+        if(step===0){this.stats.chaseBars++;this._piano(bar%2?60:57,.04,.32);}
+        this.chasePulse++;
       }
-    }else this.beatClock=0;
+    }else{this.beatClock=0;this.chasePulse=0;}
+    const distance=Number(state.enemyDistance),near=!!state.enemyPresent&&distance<16&&!state.caught&&!state.won;
+    this.growlCooldown=Math.max(0,this.growlCooldown-dt);
+    if(near){
+      const strength=Math.max(.08,1-distance/18);this.monsterClock+=dt;
+      if(chasing&&!this.wasAlerted&&this.growlCooldown===0){
+        this.stats.monsterGrowls++;this.growlCooldown=5;
+        this._tone(91,.85,.06*strength,{end:38,type:'sawtooth'});
+        this._tone(96,.7,.035*strength,{end:43,type:'triangle'});this._noise(.8,.085*strength,430);
+      }
+      if(this.monsterClock>=(chasing?1.6:3.1)){
+        this.monsterClock=0;this.stats.monsterBreaths++;
+        this._noise(.75,.065*strength,530);this._tone(47,.55,.035*strength,{end:39,type:'triangle'});
+      }
+    }else this.monsterClock=0;
+    this.wasAlerted=chasing;
   }
   inspect() {
     let rms=0;if(this.analyser&&this.context?.state==='running'){this.analyser.getFloatTimeDomainData(this.samples);for(const value of this.samples)rms+=value*value;rms=Math.sqrt(rms/this.samples.length);}
     const effectiveGain=this.context?.state==='running'&&this.started&&!this.paused&&!this.muted?this.master?.gain.value||0:0;
-    return {musicTheme:this.musicTheme,musicNotes:this.musicNotes,unlocked:this.unlocked,contextState:this.context?.state||'uninitialized',started:this.started,muted:this.muted,volume:this.volume,paused:this.paused,
+    return {chaseMeter:'3/4',chaseTempo:this.chaseTempo,lastChaseMidi:this.lastChaseMidi||null,musicTheme:this.musicTheme,musicNotes:this.musicNotes,unlocked:this.unlocked,contextState:this.context?.state||'uninitialized',started:this.started,muted:this.muted,volume:this.volume,paused:this.paused,
       activeVoices:this.voices.size,maxVoices:this.maxVoices,...this.stats,chaseIntensity:this.chaseIntensity,chaseGain:this.chaseBus?.gain.value||0,
       masterGain:this.master?.gain.value||0,effectiveGain,rms,watchEquipped:this.watchEquipped,watchBpm:this.watchBpm,watchDistance:Number.isFinite(this.watchDistance)?this.watchDistance:null,
       ambienceActive:!!this.context&&this.started&&!this.paused&&!this.muted&&this.context.state==='running',lastError:this.lastError||null};

@@ -1,8 +1,9 @@
 {
-  "gameRevision": "guidebook-difficulty-2026-10-26",
-  "gameVersion": "0.11",
-  "mapSha256": "e7dea6f35ff57d2a7b6b2f450a0db830bd0ea57540dc577e2323953230a0580e",
-  "roomCount": 53,
+  "gameRevision": "annex-chase-waltz-2026-10-26",
+  "gameVersion": "0.12",
+  "mapSha256": "95c5d6a99a7952551fa0abab29b418970c722426507584027491b65f939ba5ae",
+  "roomCount": 65,
+  "annexSpaceCount": 12,
   "playgroundImplemented": true,
   "escapeGate": {
     "spaceId": "playground",
@@ -50,6 +51,11 @@
       "file": "playground.svg",
       "width": 1554,
       "height": 1180
+    },
+    {
+      "file": "annex.svg",
+      "width": 1400,
+      "height": 1000
     }
   ],
   "entries": [
@@ -284,6 +290,58 @@
     {
       "file": "../RoomPlans/room-f3-16.svg",
       "label": "3층 / 빈교실 3 · 실내 배치"
+    },
+    {
+      "file": "annex.svg",
+      "label": "별관 전체 전개도 · 1층 급식실 / 통층 체육관"
+    },
+    {
+      "file": "../RoomPlans/annex-2.svg",
+      "label": "별관 2층 / 별관 2층 공용 복도"
+    },
+    {
+      "file": "../RoomPlans/annex-gym.svg",
+      "label": "별관 2층 / 체육관 · 2~3층 통층"
+    },
+    {
+      "file": "../RoomPlans/annex-fitness.svg",
+      "label": "별관 2층 / 체력단련실"
+    },
+    {
+      "file": "../RoomPlans/annex-equipment.svg",
+      "label": "별관 2층 / 체육용품 창고"
+    },
+    {
+      "file": "../RoomPlans/annex-gym-control.svg",
+      "label": "별관 2층 / 체육관 제어실"
+    },
+    {
+      "file": "../RoomPlans/annex-toilet-m.svg",
+      "label": "별관 2층 / 학생 화장실 남"
+    },
+    {
+      "file": "../RoomPlans/annex-toilet-f.svg",
+      "label": "별관 2층 / 학생 화장실 여"
+    },
+    {
+      "file": "../RoomPlans/annex-student-lounge.svg",
+      "label": "별관 2층 / 학생휴게실"
+    },
+    {
+      "file": "../RoomPlans/annex-sports-class.svg",
+      "label": "별관 2층 / 체육 이론 교실"
+    },
+    {
+      "file": "../RoomPlans/annex-practice.svg",
+      "label": "별관 2층 / 체조·무용 실습실"
+    },
+    {
+      "file": "../RoomPlans/annex-cafeteria.svg",
+      "label": "별관 1층 / 별관 1층 급식실"
+    },
+    {
+      "file": "../RoomPlans/annex-food-store.svg",
+      "label": "별관 1층 / 급식실 창고"
     }
   ]
 }

@@ -192,7 +192,10 @@ room_maps=populate([f1,f2,f3])
 from outdoor_map import connect_playground
 playground=connect_playground([f1,f2,f3])
 
-data=dict(title='폐교탈출',schemaVersion=4,revision='guidebook-difficulty-2026-10-26',tileSize=1.25,walkSpeed=2.6,runSpeed=4.7,
+from annex_map import build_annex
+room_maps += build_annex(f2)
+
+data=dict(title='폐교탈출',schemaVersion=4,revision='annex-chase-waltz-2026-10-26',tileSize=1.25,walkSpeed=2.6,runSpeed=4.7,
           stairEntryHalfWidth=.8,stairEntryHalfDepth=.65,stairExitRadius=3.2,stairCooldown=.75,
           playerRadius=0.27,spawnFloor=1,spawnX=24,spawnY=5,floors=[f1,f2,f3],roomMaps=room_maps,
           outdoorMaps=[playground],escapeGate=dict(spaceId='playground',x=34,y=3,

@@ -31,8 +31,8 @@ namespace SchoolEscape
     [Serializable] public sealed class FloorData
     {
         public int number, width, height;
-        public string id,label,kind;
-        public bool isRoom,isOutdoor;
+        public string id,label,kind,building,returnSpaceId,exitLabel;
+        public bool isRoom,isOutdoor,noExit,doubleHeight;
         public int sourceFloor,spawnX,spawnY,exitX,exitY,returnX,returnY;
         public string subtitle;
         public string[] rows;
@@ -43,7 +43,7 @@ namespace SchoolEscape
         public InteriorZoneData[] interiorZones = Array.Empty<InteriorZoneData>();
         public LandmarkData[] landmarks, barriers;
         public bool Open(int x, int y) => x >= 0 && y >= 0 && x < width && y < height && rows[y][x] == '.';
-        public bool DoorCell(int x, int y) => (isRoom&&x==exitX&&y==exitY)||Array.Exists(rooms??Array.Empty<RoomData>(),r=>r.doorX==x&&r.doorY==y)||Array.Exists(portals??Array.Empty<PortalData>(),p=>p.doorX==x&&p.doorY==y);
+        public bool DoorCell(int x, int y) => (isRoom&&!noExit&&x==exitX&&y==exitY)||Array.Exists(rooms??Array.Empty<RoomData>(),r=>r.doorX==x&&r.doorY==y)||Array.Exists(portals??Array.Empty<PortalData>(),p=>p.doorX==x&&p.doorY==y);
         public RoomData InteriorAt(float x,float y) => Array.Find(rooms,r=>r.interiorOpen&&x>=r.x0-.5f&&x<=r.x1+.5f&&y>=r.y0-.5f&&y<=r.y1+.5f);
         public bool LowInteriorWall(int x,int y) => isRoom||InteriorAt(x,y)!=null;
         // QA navigation tests the same authored wall/fixture clearances as the
@@ -100,7 +100,7 @@ namespace SchoolEscape
     }
     [Serializable] public sealed class StairData
     {
-        public string id, label;
+        public string id, label, targetId;
         public int x, y, target, arrivalX, arrivalY;
     }
     [Serializable] public sealed class LandmarkData

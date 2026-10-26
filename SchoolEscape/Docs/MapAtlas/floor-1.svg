@@ -196,7 +196,7 @@
 <text x="458" y="442" font-size="12" fill="#101e27" text-anchor="middle" font-weight="bold">2F</text>
 <rect x="416" y="881" width="20" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
 <polyline points="426,877 426,849 449,849" fill="none" stroke="#91c8c3" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<text x="454" y="854" font-size="14" fill="#91c8c3" text-anchor="start" font-weight="normal">현관 E ↔ 운동장 북쪽 입구</text>
+<text x="454" y="854" font-size="14" fill="#91c8c3" text-anchor="start" font-weight="normal">운동장으로 나가기 · E</text>
 <rect x="34" y="933" width="16" height="16" fill="#718879" stroke="none" rx="0" />
 <text x="59" y="946" font-size="14" fill="#b2c1b9" text-anchor="start" font-weight="normal">이동 가능한 복도</text>
 <rect x="240" y="933" width="16" height="16" fill="#304b55" stroke="none" rx="0" />

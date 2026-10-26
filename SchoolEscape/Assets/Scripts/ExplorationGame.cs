@@ -206,7 +206,7 @@ namespace SchoolEscape
                 }
             }
             foreach (var r in f.rooms)BuildDoor(r,root.transform,t,string.IsNullOrEmpty(r.interiorId)?f.id+"|"+r.label:r.interiorId);
-            if(f.isRoom)BuildDoor(new RoomData{label="복도로 나가기",facing="north",doorX=f.exitX,doorY=f.exitY},root.transform,t,f.id+":exit");
+            if(f.isRoom&&!f.noExit)BuildDoor(new RoomData{label=f.exitLabel??"복도로 나가기",facing="north",doorX=f.exitX,doorY=f.exitY},root.transform,t,f.id+":exit");
             foreach(var portal in f.portals??Array.Empty<PortalData>())
                 BuildDoor(new RoomData{label=portal.label,facing=portal.facing,doorX=portal.doorX,doorY=portal.doorY},root.transform,t,PortalDoorKey(f,portal));
             foreach(var fixture in f.fixtures??Array.Empty<FixtureData>())
@@ -344,7 +344,7 @@ namespace SchoolEscape
         }
         public bool CheckAutomaticStairs()
         {
-            if(Current.isRoom||Current.isOutdoor||Opening||Caught||Won||Paused)return false;
+            if(Current.isOutdoor||Opening||Caught||Won||Paused)return false;
             if(arrivalLock!=null)
             {
                 var locked=Array.Find(Current.stairs,s=>s.id==arrivalLock);
@@ -355,9 +355,15 @@ namespace SchoolEscape
             foreach(var s in Current.stairs)
                 if(Mathf.Abs(Player.transform.position.x-Data.World(s.x,s.y).x)<Data.stairEntryHalfWidth&&Mathf.Abs(Player.transform.position.z-Data.World(s.x,s.y).z)<Data.stairEntryHalfDepth)
                 {
-                    int previous=Floor;
-                    SwitchFloor(s.target,s.arrivalX,s.arrivalY,true);
-                    arrivalLock=Array.Find(Current.stairs,next=>next.target==previous)?.id;
+                    string previous=Current.id;
+                    if(string.IsNullOrEmpty(s.targetId))SwitchFloor(s.target,s.arrivalX,s.arrivalY,true);
+                    else{
+                        var source=Data.Grid(Player.transform.position);
+                        SwitchSpace(s.targetId,s.arrivalX,s.arrivalY);
+                        Pursuer?.ObserveTransition(previous,Current.id,source,new Vector2(s.arrivalX,s.arrivalY));
+                        Audio?.PlayStairs();lastTransition=SimulationTime;Transitions++;
+                    }
+                    arrivalLock=Array.Find(Current.stairs,next=>(string.IsNullOrEmpty(next.targetId)?"floor-"+next.target:next.targetId)==previous)?.id;
                     return true;
                 }
             return false;
@@ -444,7 +450,7 @@ namespace SchoolEscape
             }
             return nearest;
         }
-        public bool CanExitRoom()=>Current.isRoom&&CloseTo(Current.exitX,Current.exitY+1);
+        public bool CanExitRoom()=>Current.isRoom&&!Current.noExit&&CloseTo(Current.exitX,Current.exitY+1);
         void ResetDoorLeaves(){foreach(var leaf in doorLeaves.Values)leaf.localPosition=Vector3.zero;}
         IEnumerator OpenPortal(FloorData destination,int x,int y,string doorKey,string message)
         {
@@ -479,7 +485,7 @@ namespace SchoolEscape
         {
             if(Caught||Won||Opening||!CanExitRoom()||SimulationTime-lastRoomInteraction<.6f)return false;
             var room=Current;Opening=true;
-            openingRoutine=StartCoroutine(OpenPortal(Data.floors[room.sourceFloor-1],room.returnX,room.returnY,room.id+":exit",room.sourceFloor+"층 복도"));return true;
+            openingRoutine=StartCoroutine(OpenPortal(string.IsNullOrEmpty(room.returnSpaceId)?Data.floors[room.sourceFloor-1]:FindSpace(room.returnSpaceId),room.returnX,room.returnY,room.id+":exit",room.sourceFloor+"층 복도"));return true;
         }
         public bool Interact()
         {

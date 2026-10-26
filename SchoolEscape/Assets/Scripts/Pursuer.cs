@@ -266,11 +266,10 @@ namespace SchoolEscape
         List<Portal> RoamExits(FloorData f)
         {
             var exits=new List<Portal>();float expiry=Game.SimulationTime+180;
-            if(f.isRoom)
+            if(f.isRoom&&!f.noExit)
             {
-                exits.Add(new Portal{from=f.id,to=Game.Data.floors[f.sourceFloor-1].id,
+                exits.Add(new Portal{from=f.id,to=string.IsNullOrEmpty(f.returnSpaceId)?Game.Data.floors[f.sourceFloor-1].id:f.returnSpaceId,
                     source=new Vector2(f.exitX,f.exitY+1),arrival=new Vector2(f.returnX,f.returnY),kind="door",expires=expiry});
-                return exits;
             }
             foreach(var portal in f.portals??Array.Empty<PortalData>())
             {
@@ -280,7 +279,7 @@ namespace SchoolEscape
                     arrival=new Vector2(portal.arrivalX,portal.arrivalY),kind="door",expires=expiry});
             }
             foreach(var s in f.stairs??Array.Empty<StairData>())
-                exits.Add(new Portal{from=f.id,to=Game.Data.floors[s.target-1].id,source=new Vector2(s.x,s.y),
+                exits.Add(new Portal{from=f.id,to=string.IsNullOrEmpty(s.targetId)?Game.Data.floors[s.target-1].id:s.targetId,source=new Vector2(s.x,s.y),
                     arrival=new Vector2(s.arrivalX,s.arrivalY),kind="stairs",expires=expiry});
             // A separate draw gives the stairs a useful share of roaming choices
             // instead of burying them among dozens of classroom doors.

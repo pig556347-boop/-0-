@@ -79,11 +79,11 @@ for f in spaces:
         check(all(o[k]>0 for k in ['width','depth','height']),f"{sid} invalid fixture dimensions {o['id']}")
         check(o.get('elevation',0)>=0,f"{sid} fixture below floor {o['id']}")
     if is_room:
-        check(not f.get('rooms') and not f.get('stairs') and not f.get('barriers'),f'{sid} contains another building space or staircase')
+        check(not f.get('rooms') and (not f.get('stairs') or f.get('building')=='annex') and not f.get('barriers'),f'{sid} contains another building space or staircase')
         check(bool(f.get('fixtures')) and bool(f.get('interiorZones')),f'{sid} missing interior content or landmarks')
         check((f['exitX'],f['exitY']) not in open,f'{sid} exit door must block walking before interaction')
         check((f['exitX'],f['exitY']+1) in furniture_reached,f'{sid} return door approach unreachable')
-        base=data['floors'][f['sourceFloor']-1]
+        base=spaces_by_id.get(f.get('returnSpaceId'),data['floors'][f['sourceFloor']-1])
         check((f['returnX'],f['returnY']) in cells(base) and not blocked(base,f['returnX'],f['returnY']),f'{sid} unsafe corridor return')
         kinds={o['kind'] for o in f['fixtures']}
         if (f['sourceFloor'],f['label']) in completion_rooms:
@@ -258,7 +258,7 @@ for f in spaces:
         if target:
             arrival=(portal['arrivalX'],portal['arrivalY'])
             check(arrival in cells(target) and not blocked(target,*arrival),f"{sid} external portal arrival is unsafe: {portal['id']}")
-            check(any(p['targetId']==sid for p in target.get('portals',[])),f"{sid} external portal has no return connection: {portal['id']}")
+            check(any(p['targetId']==sid for p in target.get('portals',[])) or target.get('returnSpaceId')==sid,f"{sid} external portal has no return connection: {portal['id']}")
     # Building diagrams show closed-room outlines; isolated interiors get separate diagrams.
     w,h=f['width']*16,f['height']*16+80;top=f['height']-1
     title=f.get('label',f"본관{f['number']}F")
@@ -280,14 +280,14 @@ for f in spaces:
     # Keep generated artifacts deterministic and avoid filenames from Korean room labels.
     dest=ROOT/(f'Docs/RoomPlans/{sid}.svg' if is_room else ('Docs/Playground.svg' if f.get('isOutdoor') else f'Docs/Floor{f["number"]}.svg'))
     dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(''.join(parts))
-check(set(portal_ids)==set(rooms_by_id),'Unlinked isolated room maps')
+check(set(portal_ids)=={id for id,r in rooms_by_id.items() if r.get('building')!='annex'},'Unlinked isolated room maps')
 check(len(portal_ids)==len(set(portal_ids)),'Two entrances accidentally share one room instance')
 for kind,floors in {'infirmary':[1],'administration':[1],'staff':[2,3],'computer':[2],'broadcast':[1],
                     'studentRestroom':[1,1,2,2,3,3],'staffRestroom':[1,1,2,2,3,3],'library':[2]}.items():
-    actual=sorted(r['sourceFloor'] for r in rooms_by_id.values() if r.get('kind')==kind)
+    actual=sorted(r['sourceFloor'] for r in rooms_by_id.values() if r.get('kind')==kind and r.get('building')!='annex')
     check(actual==floors,f'Requested support room instances missing or misplaced: {kind} {actual}')
 door_count=sum(len(f['rooms']) for f in data['floors'])
-check(len(rooms_by_id)==door_count,'Every authored main-building room must link to its own independent furnished interior')
+check(len([r for r in rooms_by_id.values() if r.get('building')!='annex'])==door_count,'Every authored main-building room must link to its own independent furnished interior')
 check(door_count==53,'Expected53 main-building room entrances after furnishing the remaining twelve rooms')
 for (number,label),kind in completion_rooms.items():
     matches=[r for r in data['floors'][number-1]['rooms'] if r['label']==label]
@@ -329,12 +329,12 @@ if yard:
     for s in spaces:
         graph[s['id']]+=[p['targetId'] for p in s.get('portals',[])]
         graph[s['id']]+=[r['interiorId'] for r in s.get('rooms',[]) if r.get('interiorId')]
-        graph[s['id']]+=[f"floor-{st['target']}" for st in s.get('stairs',[])]
-        if s.get('isRoom'):graph[s['id']].append(f"floor-{s['sourceFloor']}")
+        graph[s['id']]+=[st.get('targetId',f"floor-{st['target']}") for st in s.get('stairs',[])]
+        if s.get('isRoom') and not s.get('noExit'):graph[s['id']].append(s.get('returnSpaceId',f"floor-{s['sourceFloor']}"))
     seen={'floor-1'};q=['floor-1']
     for sid in q:
         for target in graph[sid]:
             if target not in seen:seen.add(target);q.append(target)
     check(seen==set(graph),'Main building, all 53 rooms and playground must form one returnable space graph')
-result={'kind':'static playground, portal maps, 53 room interiors and continuous furniture clearance; not Unity execution','checks':checks,'passed':checks-len(errors),'errors':errors}
+result={'kind':'static main building, annex, playground, portal rooms and continuous furniture clearance; not Unity execution','checks':checks,'passed':checks-len(errors),'errors':errors}
 print(json.dumps(result,ensure_ascii=False,indent=2));raise SystemExit(bool(errors))

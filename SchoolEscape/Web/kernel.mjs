@@ -82,10 +82,10 @@ export class Exploration {
     if(this.autoStairsEnabled)this.updateStairs();
   }
   currentRoom(){return this.roomId?this.map:null}
-  nearby(){return this.roomId||this.map.isOutdoor?null:this.map.stairs.find(s=>Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<1.55)}
+  nearby(){return this.map.isOutdoor?null:this.map.stairs.find(s=>Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<1.55)}
   nearbyDoor(){
     if(this.pendingDoor)return null;
-    const candidates=this.roomId?[{label:'복도로 나가기',exit:true,targetId:`floor-${this.floor}`,doorX:this.map.exitX,doorY:this.map.exitY,facing:'north'}]:
+    const candidates=this.roomId?(this.map.noExit?[]:[{label:this.map.exitLabel||'복도로 나가기',exit:true,targetId:this.map.returnSpaceId||`floor-${this.floor}`,doorX:this.map.exitX,doorY:this.map.exitY,facing:'north'}]):
       this.map.rooms.filter(r=>r.interiorId).map(r=>({...r,targetId:r.interiorId,exit:false}));
     candidates.push(...(this.map.portals||[]).map(portal=>({...portal,portal:true,exit:false})));
     return candidates.map(r=>{const [dx,dy]=directions[r.facing];return {...r,approachX:r.doorX+dx,approachY:r.doorY+dy,dx,dy}})
@@ -104,7 +104,7 @@ export class Exploration {
     const door=this.pendingDoor;this.pendingDoor=null;if(!door)return;
     const fromId=this.spaceId,sourceX=door.approachX,sourceY=door.approachY;
     if(door.portal)this.setSpaceId(door.targetId,door.arrivalX,door.arrivalY);
-    else if(door.exit){const from=this.map;this.setSpace('',from.sourceFloor,from.returnX,from.returnY)}
+    else if(door.exit){const from=this.map;this.setSpaceId(from.returnSpaceId||`floor-${from.sourceFloor}`,from.returnX,from.returnY)}
     else{const next=this.spaces.get(door.targetId);this.setSpace(next.id,next.sourceFloor,next.spawnX,next.spawnY)}
     this.roomTransitions++;this.lastDoorTransition=this.time;
     this.emit('transition',{kind:'door',fromId,toId:this.spaceId,sourceX,sourceY,arrivalX:this.x,arrivalY:this.y,label:door.label});
@@ -120,7 +120,7 @@ export class Exploration {
     this.x=x;this.y=y;this.speed=0;this.isRunning=false;this.arrivalLock=null;this.lastDelta={x:0,y:0};
   }
   updateStairs(){
-    if(this.roomId||this.map.isOutdoor||this.pendingDoor)return false;
+    if(this.map.isOutdoor||this.pendingDoor)return false;
     if(this.arrivalLock){
       const s=this.map.stairs.find(s=>s.id===this.arrivalLock);
       if(s&&Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<=this.data.stairExitRadius)return false;
@@ -130,8 +130,8 @@ export class Exploration {
     const s=this.map.stairs.find(s=>Math.abs(s.x-this.x)*this.data.tileSize<this.data.stairEntryHalfWidth&&Math.abs(s.y-this.y)*this.data.tileSize<this.data.stairEntryHalfDepth);
     if(!s)return false;
     const previous=this.floor,fromId=this.spaceId;
-    this.warp(s.target,s.arrivalX,s.arrivalY);
-    this.arrivalLock=this.map.stairs.find(s=>s.target===previous)?.id||null;
+    this.warpSpace(s.targetId||`floor-${s.target}`,s.arrivalX,s.arrivalY);
+    this.arrivalLock=this.map.stairs.find(s=>(s.targetId||`floor-${s.target}`)===fromId)?.id||null;
     this.transitions++;this.lastTransition=this.time;
     this.emit('transition',{kind:'stairs',fromId,toId:this.spaceId,sourceX:s.x,sourceY:s.y,arrivalX:this.x,arrivalY:this.y,label:s.label});return true;
   }

@@ -21,15 +21,15 @@
 <rect x="66" y="702" width="560" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="738" y="702" width="128" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="882" y="702" width="64" height="16" fill="#718879" stroke="none" rx="0" />
-<rect x="1058" y="702" width="560" height="16" fill="#718879" stroke="none" rx="0" />
+<rect x="1058" y="702" width="544" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="66" y="686" width="560" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="738" y="686" width="128" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="882" y="686" width="64" height="16" fill="#718879" stroke="none" rx="0" />
-<rect x="1058" y="686" width="560" height="16" fill="#718879" stroke="none" rx="0" />
+<rect x="1058" y="686" width="544" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="66" y="670" width="560" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="738" y="670" width="64" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="882" y="670" width="64" height="16" fill="#718879" stroke="none" rx="0" />
-<rect x="1058" y="670" width="560" height="16" fill="#718879" stroke="none" rx="0" />
+<rect x="1058" y="670" width="544" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="130" y="654" width="336" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="562" y="654" width="64" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="738" y="654" width="64" height="16" fill="#718879" stroke="none" rx="0" />
@@ -289,8 +289,9 @@
 <text x="842" y="346" font-size="12" fill="#101e27" text-anchor="middle" font-weight="bold">3F</text>
 <polyline points="66,686 82,702" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
 <polyline points="82,686 66,702" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<polyline points="1602,686 1618,702" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<polyline points="1618,686 1602,702" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<rect x="1600" y="689" width="20" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
+<polyline points="1610,685 1610,657 1633,657" fill="none" stroke="#91c8c3" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<text x="1638" y="662" font-size="14" fill="#91c8c3" text-anchor="start" font-weight="normal">별관 2층 · 체육관 연결부 · E</text>
 <rect x="34" y="933" width="16" height="16" fill="#718879" stroke="none" rx="0" />
 <text x="59" y="946" font-size="14" fill="#b2c1b9" text-anchor="start" font-weight="normal">이동 가능한 복도</text>
 <rect x="240" y="933" width="16" height="16" fill="#304b55" stroke="none" rx="0" />

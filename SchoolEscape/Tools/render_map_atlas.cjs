@@ -23,7 +23,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'/workspace/escape-tools
    await page.selectOption('#plan',String(i));await page.waitForFunction(file=>{const m=document.getElementById('map');return m.getAttribute('src')===file&&m.complete&&m.naturalWidth>0},atlas.entries[i].file);
    report.views.push({file:atlas.entries[i].file,loaded:true});
   }
-  report.ok=report.views.length===58&&report.pngs.length===5&&!report.errors.length;fs.writeFileSync(path.join(dir,'review.json'),JSON.stringify(report,null,2)+'\n');
+  report.ok=report.views.length===atlas.entries.length&&report.pngs.length===atlas.diagrams.length&&!report.errors.length;fs.writeFileSync(path.join(dir,'review.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({ok:report.ok,views:report.views.length,pngs:report.pngs.length,errors:report.errors}));if(!report.ok)process.exitCode=1;
  }finally{await browser.close();await new Promise(resolve=>server.close(resolve))}
 })().catch(e=>{console.error(e);process.exitCode=1});
