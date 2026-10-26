@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000" role="img"><title>서관 전개도</title>
+<style>text{font-family:"Noto Sans CJK KR","Noto Sans KR",sans-serif}</style>
+<rect x="0" y="0" width="1200" height="1000" fill="#101e27" stroke="none" rx="0" />
+<text x="40" y="50" font-size="30" fill="#e5e9dd" text-anchor="start" font-weight="bold">서관 · 저장된 기획 기반 확장</text>
+<text x="40" y="88" font-size="18" fill="#b2c1b9" text-anchor="start" font-weight="normal">본관2층 서쪽 연결통로에서 E 입장 · 각 층 자동 계단 왕복</text>
+<rect x="185" y="145" width="850" height="185" fill="#304b55" stroke="#91c8c3" rx="8" />
+<text x="220" y="193" font-size="28" fill="#e5e9dd" text-anchor="start" font-weight="bold">서관 3층</text>
+<text x="220" y="245" font-size="22" fill="#e5e9dd" text-anchor="start" font-weight="normal">통제구역 기록실 / 감시실 / 서버실</text>
+<polyline points="610,330 610,395" fill="none" stroke="#e4c572" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<rect x="185" y="400" width="850" height="185" fill="#304b55" stroke="#91c8c3" rx="8" />
+<text x="220" y="448" font-size="28" fill="#e5e9dd" text-anchor="start" font-weight="bold">서관 2층</text>
+<text x="220" y="500" font-size="22" fill="#e5e9dd" text-anchor="start" font-weight="normal">경비원 기숙사실 / 탕비실 / 화장실 / 통제실</text>
+<polyline points="610,585 610,650" fill="none" stroke="#e4c572" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<rect x="185" y="655" width="850" height="185" fill="#304b55" stroke="#91c8c3" rx="8" />
+<text x="220" y="703" font-size="28" fill="#e5e9dd" text-anchor="start" font-weight="bold">서관 1층</text>
+<text x="220" y="755" font-size="22" fill="#e5e9dd" text-anchor="start" font-weight="normal">직원급식실 / 준비조리실 / 냉동창고</text>
+<text x="45" y="970" font-size="19" fill="#e4c572" text-anchor="start" font-weight="normal">외부 출입문은 잠김 · 조리실 추격 장면은 별관 급식실 옆 조리실에 배치</text>
+</svg>

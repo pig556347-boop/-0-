@@ -65,6 +65,7 @@ jobs:
             published-status.json
             upgrade-*.png
             annex-*.png
+            *-013.png
             failure.png
           if-no-files-found: ignore
           retention-days: 7

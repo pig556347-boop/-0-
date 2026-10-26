@@ -57,8 +57,10 @@
 <rect x="50" y="204" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="188" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="172" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
-<rect x="50" y="156" width="528" height="16" fill="#66775b" stroke="none" rx="0" />
-<rect x="594" y="156" width="528" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="50" y="156" width="144" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="210" y="156" width="368" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="594" y="156" width="352" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="962" y="156" width="160" height="16" fill="#66775b" stroke="none" rx="0" />
 <g><title>yard-fence-post · 충돌</title>
 <rect x="49.232" y="979.232" width="1.536" height="1.536" fill="#536e68" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
@@ -944,6 +946,12 @@
 <g><title>yard-bench-back · 장식</title>
 <rect x="1038.03" y="368.064" width="39.936" height="0.96" fill="#8a805f" stroke="none" rx="0" opacity="0.4"/>
 </g>
+<g><title>locked-door-crossbar · 장식</title>
+<rect x="945.68" y="172.512" width="16.64" height="1.536" fill="#68736d" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>locked-door-crossbar · 장식</title>
+<rect x="193.68" y="172.512" width="16.64" height="1.536" fill="#68736d" stroke="none" rx="0" opacity="0.4"/>
+</g>
 <g><title>yard-crate-lid · 장식</title>
 <rect x="136.784" y="750.752" width="12.032" height="10.496" fill="#a5916c" stroke="none" rx="0" opacity="0.4"/>
 </g>
@@ -1132,6 +1140,12 @@
 </g>
 <g><title>school-window-frame · 장식</title>
 <rect x="1083.79" y="148.576" width="23.296" height="1.408" fill="#81928a" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>locked-door-padlock · 장식</title>
+<rect x="952.784" y="173.376" width="2.432" height="2.048" fill="#9b8c5f" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>locked-door-padlock · 장식</title>
+<rect x="200.784" y="173.376" width="2.432" height="2.048" fill="#9b8c5f" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <g><title>yard-notice-paper · 장식</title>
 <rect x="511.312" y="512" width="9.984" height="0.32" fill="#b8b499" stroke="none" rx="0" opacity="0.4"/>
@@ -1378,6 +1392,12 @@
 </g>
 <g><title>planter-soil · 장식</title>
 <rect x="584.72" y="658.72" width="98.56" height="34.56" fill="#4a5140" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>locked-door-crossbar · 장식</title>
+<rect x="945.68" y="172.512" width="16.64" height="1.536" fill="#68736d" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>locked-door-crossbar · 장식</title>
+<rect x="193.68" y="172.512" width="16.64" height="1.536" fill="#68736d" stroke="none" rx="0" opacity="0.4"/>
 </g>
 <g><title>low-planter-shrub · 장식</title>
 <rect x="494.736" y="502.88" width="14.336" height="26.24" fill="#69794f" stroke="none" rx="0" opacity="0.4"/>
@@ -1993,6 +2013,10 @@
 <text x="1201" y="831" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 큰 우회 동선</text>
 <rect x="572" y="159" width="28" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
 <text x="586" y="146" font-size="16" fill="#91c8c3" text-anchor="middle" font-weight="bold">본관 1층 ↔ E 출입</text>
+<rect x="940" y="159" width="28" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
+<text x="954" y="146" font-size="16" fill="#91c8c3" text-anchor="middle" font-weight="bold">본관 1층 ↔ E 출입</text>
+<rect x="188" y="159" width="28" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
+<text x="202" y="146" font-size="16" fill="#91c8c3" text-anchor="middle" font-weight="bold">본관 1층 ↔ E 출입</text>
 <circle cx="586" cy="964" r="14" fill="#e4c572" stroke="#101e27" stroke-width="1.5"/>
 <text x="586" y="968" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">E</text>
 <rect x="436" y="986" width="300" height="31" fill="#101e27" stroke="#e4c572" rx="4" />
