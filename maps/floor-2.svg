@@ -21,15 +21,15 @@
 <rect x="66" y="702" width="560" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="738" y="702" width="128" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="882" y="702" width="64" height="16" fill="#718879" stroke="none" rx="0" />
-<rect x="1058" y="702" width="560" height="16" fill="#718879" stroke="none" rx="0" />
+<rect x="1058" y="702" width="544" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="66" y="686" width="560" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="738" y="686" width="128" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="882" y="686" width="64" height="16" fill="#718879" stroke="none" rx="0" />
-<rect x="1058" y="686" width="560" height="16" fill="#718879" stroke="none" rx="0" />
+<rect x="1058" y="686" width="544" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="66" y="670" width="560" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="738" y="670" width="64" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="882" y="670" width="64" height="16" fill="#718879" stroke="none" rx="0" />
-<rect x="1058" y="670" width="560" height="16" fill="#718879" stroke="none" rx="0" />
+<rect x="1058" y="670" width="544" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="130" y="654" width="336" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="562" y="654" width="64" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="738" y="654" width="64" height="16" fill="#718879" stroke="none" rx="0" />
@@ -104,7 +104,7 @@
 <rect x="978" y="222" width="48" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="610" y="206" width="48" height="16" fill="#718879" stroke="none" rx="0" />
 <rect x="978" y="206" width="48" height="16" fill="#718879" stroke="none" rx="0" />
-<a href="../RoomPlans/room-f2-0.svg"><title>음악실</title>
+<a href="rooms/room-f2-0.svg"><title>음악실</title>
 <rect x="482" y="206" width="128" height="192" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="546" y="307" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">1</text>
 <text x="546" y="329" font-size="13" fill="#e5e9dd" text-anchor="middle" font-weight="normal">음악실</text>
@@ -113,7 +113,7 @@
 <text x="1700.5" y="146" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">1</text>
 <text x="1728" y="146" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">음악실</text>
 </a>
-<a href="../RoomPlans/room-f2-1.svg"><title>도서실</title>
+<a href="rooms/room-f2-1.svg"><title>도서실</title>
 <rect x="658" y="142" width="144" height="256" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="730" y="275" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">2</text>
 <text x="730" y="297" font-size="13" fill="#e5e9dd" text-anchor="middle" font-weight="normal">도서실</text>
@@ -122,7 +122,7 @@
 <text x="1700.5" y="177" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">2</text>
 <text x="1728" y="177" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">도서실</text>
 </a>
-<a href="../RoomPlans/room-f2-2.svg"><title>2학년 3반</title>
+<a href="rooms/room-f2-2.svg"><title>2학년 3반</title>
 <rect x="882" y="270" width="96" height="128" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="930" y="339" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">3</text>
 <rect x="964" y="336" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -130,7 +130,7 @@
 <text x="1700.5" y="208" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">3</text>
 <text x="1728" y="208" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">2학년 3반</text>
 </a>
-<a href="../RoomPlans/room-f2-3.svg"><title>2학년 4반</title>
+<a href="rooms/room-f2-3.svg"><title>2학년 4반</title>
 <rect x="1026" y="206" width="96" height="128" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="1074" y="275" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">4</text>
 <rect x="1028" y="272" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -138,7 +138,7 @@
 <text x="1700.5" y="239" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">4</text>
 <text x="1728" y="239" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">2학년 4반</text>
 </a>
-<a href="../RoomPlans/room-f2-4.svg"><title>미술실</title>
+<a href="rooms/room-f2-4.svg"><title>미술실</title>
 <rect x="1122" y="206" width="112" height="256" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="1178" y="339" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">5</text>
 <rect x="1124" y="416" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -146,7 +146,7 @@
 <text x="1700.5" y="270" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">5</text>
 <text x="1728" y="270" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">미술실</text>
 </a>
-<a href="../RoomPlans/room-f2-5.svg"><title>미술실 창고</title>
+<a href="rooms/room-f2-5.svg"><title>미술실 창고</title>
 <rect x="1122" y="478" width="96" height="64" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="1170" y="515" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">6</text>
 <rect x="1124" y="512" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -154,7 +154,7 @@
 <text x="1700.5" y="301" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">6</text>
 <text x="1728" y="301" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">미술실 창고</text>
 </a>
-<a href="../RoomPlans/room-f2-6.svg"><title>빈교실 A</title>
+<a href="rooms/room-f2-6.svg"><title>빈교실 A</title>
 <rect x="418" y="718" width="96" height="64" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="466" y="755" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">7</text>
 <rect x="500" y="752" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -162,7 +162,7 @@
 <text x="1700.5" y="332" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">7</text>
 <text x="1728" y="332" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">빈교실 A</text>
 </a>
-<a href="../RoomPlans/room-f2-7.svg"><title>2학년 1반</title>
+<a href="rooms/room-f2-7.svg"><title>2학년 1반</title>
 <rect x="466" y="398" width="96" height="128" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="514" y="467" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">8</text>
 <rect x="548" y="464" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -170,7 +170,7 @@
 <text x="1700.5" y="363" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">8</text>
 <text x="1728" y="363" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">2학년 1반</text>
 </a>
-<a href="../RoomPlans/room-f2-8.svg"><title>2학년 2반</title>
+<a href="rooms/room-f2-8.svg"><title>2학년 2반</title>
 <rect x="466" y="542" width="96" height="128" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="514" y="611" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">9</text>
 <rect x="548" y="608" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -178,7 +178,7 @@
 <text x="1700.5" y="394" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">9</text>
 <text x="1728" y="394" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">2학년 2반</text>
 </a>
-<a href="../RoomPlans/room-f2-9.svg"><title>자습실</title>
+<a href="rooms/room-f2-9.svg"><title>자습실</title>
 <rect x="946" y="478" width="112" height="96" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="1002" y="531" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">10</text>
 <rect x="1044" y="512" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -186,7 +186,7 @@
 <text x="1700.5" y="425" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">10</text>
 <text x="1728" y="425" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">자습실</text>
 </a>
-<a href="../RoomPlans/room-f2-10.svg"><title>빈교실 B</title>
+<a href="rooms/room-f2-10.svg"><title>빈교실 B</title>
 <rect x="946" y="654" width="112" height="80" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="1002" y="699" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">11</text>
 <rect x="1012" y="656" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -194,7 +194,7 @@
 <text x="1700.5" y="456" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">11</text>
 <text x="1728" y="456" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">빈교실 B</text>
 </a>
-<a href="../RoomPlans/room-f2-11.svg"><title>빈교실 C</title>
+<a href="rooms/room-f2-11.svg"><title>빈교실 C</title>
 <rect x="626" y="654" width="112" height="80" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="682" y="699" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">12</text>
 <rect x="676" y="656" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -202,7 +202,7 @@
 <text x="1700.5" y="487" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">12</text>
 <text x="1728" y="487" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">빈교실 C</text>
 </a>
-<a href="../RoomPlans/room-f2-12.svg"><title>빈교실 D</title>
+<a href="rooms/room-f2-12.svg"><title>빈교실 D</title>
 <rect x="626" y="478" width="112" height="96" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="682" y="531" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">13</text>
 <rect x="724" y="512" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -210,7 +210,7 @@
 <text x="1700.5" y="518" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">13</text>
 <text x="1728" y="518" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">빈교실 D</text>
 </a>
-<a href="../RoomPlans/room-f2-13.svg"><title>학생 화장실 남</title>
+<a href="rooms/room-f2-13.svg"><title>학생 화장실 남</title>
 <rect x="482" y="798" width="80" height="80" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="522" y="843" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">14</text>
 <rect x="532" y="800" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -218,7 +218,7 @@
 <text x="1700.5" y="549" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">14</text>
 <text x="1728" y="549" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">학생 화장실 남</text>
 </a>
-<a href="../RoomPlans/room-f2-14.svg"><title>학생 화장실 여</title>
+<a href="rooms/room-f2-14.svg"><title>학생 화장실 여</title>
 <rect x="562" y="798" width="80" height="80" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="602" y="843" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">15</text>
 <rect x="596" y="800" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -226,7 +226,7 @@
 <text x="1700.5" y="580" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">15</text>
 <text x="1728" y="580" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">학생 화장실 여</text>
 </a>
-<a href="../RoomPlans/room-f2-15.svg"><title>컴퓨터실</title>
+<a href="rooms/room-f2-15.svg"><title>컴퓨터실</title>
 <rect x="642" y="798" width="96" height="80" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="690" y="843" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">16</text>
 <rect x="692" y="800" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -234,7 +234,7 @@
 <text x="1700.5" y="611" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">16</text>
 <text x="1728" y="611" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">컴퓨터실</text>
 </a>
-<a href="../RoomPlans/room-f2-16.svg"><title>준비실 1</title>
+<a href="rooms/room-f2-16.svg"><title>준비실 1</title>
 <rect x="738" y="798" width="64" height="80" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="770" y="843" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">17</text>
 <rect x="772" y="800" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -242,7 +242,7 @@
 <text x="1700.5" y="642" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">17</text>
 <text x="1728" y="642" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">준비실 1</text>
 </a>
-<a href="../RoomPlans/room-f2-17.svg"><title>자료실</title>
+<a href="rooms/room-f2-17.svg"><title>자료실</title>
 <rect x="882" y="798" width="112" height="80" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="938" y="843" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">18</text>
 <rect x="932" y="800" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -250,7 +250,7 @@
 <text x="1700.5" y="673" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">18</text>
 <text x="1728" y="673" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">자료실</text>
 </a>
-<a href="../RoomPlans/room-f2-18.svg"><title>창고</title>
+<a href="rooms/room-f2-18.svg"><title>창고</title>
 <rect x="994" y="798" width="128" height="80" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="1058" y="843" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">19</text>
 <text x="1058" y="865" font-size="13" fill="#e5e9dd" text-anchor="middle" font-weight="normal">창고</text>
@@ -259,7 +259,7 @@
 <text x="1700.5" y="704" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">19</text>
 <text x="1728" y="704" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">창고</text>
 </a>
-<a href="../RoomPlans/room-f2-19.svg"><title>교직원 화장실 남</title>
+<a href="rooms/room-f2-19.svg"><title>교직원 화장실 남</title>
 <rect x="946" y="574" width="64" height="16" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="978" y="587" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">20</text>
 <rect x="964" y="576" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -267,7 +267,7 @@
 <text x="1700.5" y="735" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">20</text>
 <text x="1728" y="735" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">교직원 화장실 남</text>
 </a>
-<a href="../RoomPlans/room-f2-20.svg"><title>교직원 화장실 여</title>
+<a href="rooms/room-f2-20.svg"><title>교직원 화장실 여</title>
 <rect x="1010" y="574" width="48" height="16" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="1034" y="587" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">21</text>
 <rect x="1028" y="576" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -275,7 +275,7 @@
 <text x="1700.5" y="766" font-size="14" fill="#e4c572" text-anchor="middle" font-weight="bold">21</text>
 <text x="1728" y="766" font-size="17" fill="#e5e9dd" text-anchor="start" font-weight="normal">교직원 화장실 여</text>
 </a>
-<a href="../RoomPlans/room-f2-21.svg"><title>2학년 교무실</title>
+<a href="rooms/room-f2-21.svg"><title>2학년 교무실</title>
 <rect x="1122" y="558" width="112" height="96" fill="#304b55" stroke="#7a979a" rx="0" />
 <text x="1178" y="611" font-size="18" fill="#e4c572" text-anchor="middle" font-weight="bold">22</text>
 <rect x="1124" y="608" width="12" height="12" fill="#91c8c3" stroke="none" rx="0" />
@@ -289,8 +289,9 @@
 <text x="842" y="346" font-size="12" fill="#101e27" text-anchor="middle" font-weight="bold">3F</text>
 <polyline points="66,686 82,702" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
 <polyline points="82,686 66,702" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<polyline points="1602,686 1618,702" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<polyline points="1618,686 1602,702" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<rect x="1600" y="689" width="20" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
+<polyline points="1610,685 1610,657 1633,657" fill="none" stroke="#91c8c3" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<text x="1638" y="662" font-size="14" fill="#91c8c3" text-anchor="start" font-weight="normal">별관 2층 · 체육관 연결부 · E</text>
 <rect x="34" y="933" width="16" height="16" fill="#718879" stroke="none" rx="0" />
 <text x="59" y="946" font-size="14" fill="#b2c1b9" text-anchor="start" font-weight="normal">이동 가능한 복도</text>
 <rect x="240" y="933" width="16" height="16" fill="#304b55" stroke="none" rx="0" />

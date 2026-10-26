@@ -1,7 +1,7 @@
 import fs from 'node:fs';import crypto from 'node:crypto';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const commit=process.env.PUBLIC_GAME_COMMIT||process.env.GITHUB_SHA,url=process.env.ESCAPE_URL||`https://rawcdn.githack.com/${process.env.GITHUB_REPOSITORY}/${commit}/index.html`,out=process.env.ESCAPE_RESULTS_DIR||'.';fs.mkdirSync(out,{recursive:true});
-const report={ok:false,sourceCommit:commit||null,utc:new Date().toISOString(),kind:'Actual Chromium 0.11 input/loot/difficulty/piano/geometry validation; not Unity WebGL',checks:[],errors:[],consoleErrors:[],publicURL:url};let browser,page;
+const report={ok:false,sourceCommit:commit||null,utc:new Date().toISOString(),kind:'Actual Chromium 0.12 annex/chase piano/input/loot/difficulty/piano/geometry validation; not Unity WebGL',checks:[],errors:[],consoleErrors:[],publicURL:url};let browser,page;
 const save=()=>fs.writeFileSync(out+'/published-status.json',JSON.stringify(report,null,2)+'\n');
 function check(name,passed,actual){report.checks.push({name,passed:!!passed,actual});save();if(!passed)throw Error(name)}
 async function image(name){await page.evaluate(()=>{for(let i=0;i<24;i++)escapeQA.render(.05)});await page.screenshot({path:out+'/'+name+'.png'})}
@@ -48,6 +48,32 @@ try{
   await page.waitForTimeout(150);const signal=await page.evaluate(()=>escapeQA.audio.inspect());check('Audio output signal '+space,signal.rms>1e-8,signal.rms);
  }
  const routes=await page.evaluate(()=>{const q=escapeQA,g=q.game;q.setManual(true);let count=0;for(const f of g.data.roomMaps){g.warpRoom(f.id,f.spawnX,f.spawnY);for(const z of f.interiorZones){if(!g.walkTo(z.x,z.y))throw Error(f.id+' '+z.label);count++}}return count});check('Every interior zone still reachable on a generated run',routes>300,routes);
+ // Annex release checks use production controls and actual audio output.
+ await page.evaluate(()=>{escapeQA.inventoryUI.close();escapeQA.pursuit.setEnabled(false);escapeQA.game.warp(2,97,13);escapeQA.render(0)});
+ await page.keyboard.press('KeyE');await page.evaluate(()=>{for(let i=0;i<20;i++)escapeQA.tick(.05);escapeQA.render(0)});
+ check('Main 2F real E enters isolated annex',await page.evaluate(()=>escapeQA.game.spaceId==='annex-2'&&escapeQA.inspectSpace().activeIds.length===1));
+ const annexDoors=await page.evaluate(()=>escapeQA.game.map.portals.map(p=>p.id));
+ for(const id of annexDoors){
+  const dest=await page.evaluate(id=>{const q=escapeQA,g=q.game,p=g.spaces.get('annex-2').portals.find(p=>p.id===id),[dx,dy]=({north:[0,1],south:[0,-1],east:[1,0],west:[-1,0]})[p.facing];g.warpSpace('annex-2',p.doorX+dx,p.doorY+dy);q.tick(.05);q.render(0);return p.targetId},id);
+  await page.keyboard.press('KeyE');await page.evaluate(()=>{for(let i=0;i<20;i++)escapeQA.tick(.05);escapeQA.render(0)});
+  check('Actual annex room entry '+dest,await page.evaluate(dest=>escapeQA.game.spaceId===dest&&escapeQA.inspectSpace().activeIds.join()===dest,dest));
+  if(dest==='annex-gym'){await page.evaluate(()=>{escapeQA.game.warpSpace('annex-gym',23,29);escapeQA.render(0)});await image('annex-gym');}
+  if(dest==='annex-gym-control')await image('annex-small-control');
+  await page.evaluate(()=>{const q=escapeQA,g=q.game;g.warpSpace(g.spaceId,g.map.exitX,g.map.exitY+1);q.render(0)});await page.keyboard.press('KeyE');await page.evaluate(()=>{for(let i=0;i<20;i++)escapeQA.tick(.05);escapeQA.render(0)});
+  check('Actual annex room return '+dest,await page.evaluate(()=>escapeQA.game.spaceId==='annex-2'));
+ }
+ await page.evaluate(()=>{const q=escapeQA;q.game.warpSpace('annex-2',35,7);q.setManual(false)});await page.keyboard.down('KeyS');await page.waitForFunction(()=>escapeQA.game.spaceId==='annex-cafeteria');await page.keyboard.up('KeyS');await page.evaluate(()=>escapeQA.setManual(true));
+ check('Keyboard walk auto descends to cafeteria',await page.evaluate(()=>!escapeQA.game.blocked(escapeQA.game.x,escapeQA.game.y)));await image('annex-cafeteria');
+ await page.evaluate(()=>{for(let i=0;i<40;i++)escapeQA.tick(.05)});check('Cafeteria stair landing does not bounce',await page.evaluate(()=>escapeQA.game.spaceId==='annex-cafeteria'));
+ await page.evaluate(()=>escapeQA.setManual(false));await page.keyboard.down('KeyW');await page.waitForFunction(()=>escapeQA.game.spaceId==='annex-2');await page.keyboard.up('KeyW');await page.evaluate(()=>escapeQA.setManual(true));check('Keyboard walk auto returns to annex 2F',await page.evaluate(()=>!escapeQA.game.blocked(escapeQA.game.x,escapeQA.game.y)));
+ const pursuitTransfer=await page.evaluate(()=>{const q=escapeQA,g=q.game,p=q.pursuit;g.warpSpace('annex-gym',23,2);p.setEnabled(true);p.place(g.spaceId,23,6,'chase');p.direction={x:0,y:-1};p.catchGraceUntil=g.time+40;q.tick(.05);g.interact();for(let i=0;i<500&&p.spaceId==='annex-gym';i++)q.tick(.05);const result={player:g.spaceId,enemy:p.spaceId,transfers:p.transfers};p.setEnabled(false);q.updateAudio(.05);return result});check('Pursuer follows witnessed gym exit through real portal',pursuitTransfer.player==='annex-2'&&pursuitTransfer.enemy==='annex-2',pursuitTransfer);
+ await page.evaluate(async()=>{const q=escapeQA;q.pursuit.setEnabled(false);for(let i=0;i<110;i++){q.updateAudio(.05);await new Promise(r=>setTimeout(r,50));}});
+ await page.evaluate(()=>{const q=escapeQA,g=q.game;g.warpSpace('annex-gym',23,19);q.pursuit.setEnabled(true);q.pursuit.place(g.spaceId,23,24,'chase');q.pursuit.speed=2;});
+ const sound=await page.evaluate(async()=>{const q=escapeQA;await q.audio.unlock();const before=q.audio.inspect();let peak=0;for(let i=0;i<72;i++){q.updateAudio(.05);await new Promise(r=>setTimeout(r,50));peak=Math.max(peak,q.audio.inspect().rms)}return {before,after:q.audio.inspect(),peak}});
+ check('Chase high piano plays fast 3/4 and three beats per bar',sound.after.chaseMeter==='3/4'&&sound.after.chaseTempo===192&&sound.after.lastChaseMidi>=84&&sound.after.chasePianoNotes-sound.before.chasePianoNotes>=20&&sound.after.chaseBars-sound.before.chaseBars>=3,sound);
+ check('Nearby monster growls breathes and footsteps sound',sound.after.monsterGrowls>sound.before.monsterGrowls&&sound.after.monsterBreaths>sound.before.monsterBreaths&&sound.after.monsterSteps>sound.before.monsterSteps&&sound.peak>1e-5,sound.after);
+ const stopped=await page.evaluate(()=>{const q=escapeQA;q.setPaused(true);const a=q.audio.inspect();for(let i=0;i<100;i++)q.updateAudio(.05);const b=q.audio.inspect();q.setPaused(false);q.pursuit.setEnabled(false);return a.chasePianoNotes===b.chasePianoNotes&&a.monsterGrowls===b.monsterGrowls&&b.effectiveGain===0});check('Pause silences chase and monster voices',stopped);
+
  const next=await page.evaluate(()=>escapeQA.items.worldItems.filter(i=>i.itemId.startsWith('key-')).map(i=>i.uid));for(const uid of next)await pickup(uid);
  await page.evaluate(()=>{const q=escapeQA,e=q.items.escapeGate;q.game.warpSpace(e.spaceId,e.x,e.y);q.render(0)});await page.keyboard.press('KeyE');check('Real gate E still escapes after new collection flow',await page.evaluate(()=>escapeQA.game.won));await image('upgrade-victory');
  check('No runtime or console errors',!report.errors.length&&!report.consoleErrors.length);report.ok=true;
