@@ -38,6 +38,7 @@ for kind in ['Floor','Wall','Yard']:
 data=json.loads((res/'SchoolMap.json').read_text())
 text=json.dumps(data,ensure_ascii=False)+'''폐교탈출 탐방 베타 본관 모든 방문은 닫혀 있습니다 이동 달리기 계단 안내도 시작 외부 출입 금지 중앙 분기 남쪽 북쪽 동쪽 서쪽 층 프리셋 후보 막힌 꺾이는 미로 통로 ↑ ↓ → ← WASD Shift Tab E 0123456789F[]·– /'''
 text+=''.join(path.read_text() for directory,pattern in [('Web','*.js'),('Web','*.mjs'),('Assets/Scripts','*.cs')] for path in sorted((root/directory).glob(pattern)))
+text+=(root/'Web/data/student-names.json').read_text()
 text+=(root/'Web/index.html').read_text()+(root/'Assets/Resources/ItemCatalog.json').read_text()
 collection=TTCollection('/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc')
 font=next(f for f in collection.fonts if any('Noto Sans CJK KR' in str(n.toUnicode()) for n in f['name'].names))

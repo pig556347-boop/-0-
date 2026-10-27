@@ -18,7 +18,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,7 +65,7 @@ jobs:
             published-status.json
             upgrade-*.png
             annex-*.png
-            *-013.png
+            *-014.png
             failure.png
           if-no-files-found: ignore
           retention-days: 7

@@ -23,7 +23,7 @@ const shuffle=(array,random)=>{const a=[...array];for(let i=a.length-1;i>0;i--){
 
 export class ItemSystem {
  constructor(game,options={}){
-  this.game=game;this.catalog=ITEM_CATALOG;this.capacity=9;this.maxEquipped=1;this.options=options;
+  this.game=game;this.catalog={...ITEM_CATALOG};this.capacity=9;this.maxEquipped=1;this.options=options;
   const yard=(game.data.outdoorMaps||[]).find(f=>f.id==='playground');
   if(yard&&!game.data.escapeGate)throw Error('Outdoor map requires an authored escape gate');
   this.escapeGate={...(game.data.escapeGate||{spaceId:`floor-${game.data.spawnFloor}`,x:game.data.spawnX,y:Math.max(1,game.data.spawnY-3),label:'교문으로 탈출',range:1.7})};
@@ -79,7 +79,7 @@ export class ItemSystem {
     const approaches=points.filter(p=>!this.game.blocked(p.x,p.y,f)&&nav.available.some(n=>Math.hypot(n.x-p.x,n.y-p.y)<1.5&&this.game.segmentClear(n.x,n.y,p.x,p.y,f)));
     if(!approaches.length)continue;
     const label=item.kind==='yard-trash-bin'?'쓰레기통':item.kind==='yard-parcel-box'?'택배 상자':item.kind==='yard-water-station'?'수도 주변':item.kind==='locker-bank'?'사물함':item.kind==='shelf-body'?'책장':item.kind.includes('teacher')?'교탁':item.kind.includes('cabinet')||item.kind==='cleaning-closet'?'캐비넷':item.kind.endsWith('-workbench')?'작업대':item.kind.endsWith('-crate')?'보관 상자':'책상';
-    this.searchTemplate.push({compartments:item.kind==='locker-bank'?8:1,id:item.assembly||item.id,fixtureId:item.id,spaceId:f.id,kind:item.kind,label,x,y,width:(x1-x0)*tile,depth:(y1-y0)*tile,height:item.elevation+item.height,approaches});
+    this.searchTemplate.push({compartments:item.compartments||(item.kind==='locker-bank'?8:1),id:item.assembly||item.id,fixtureId:item.id,spaceId:f.id,kind:item.kind,label,x,y,width:(x1-x0)*tile,depth:(y1-y0)*tile,height:item.elevation+item.height,approaches});
    }
    const edges=[];
    if(f.isRoom&&!f.noExit)edges.push({toId:f.returnSpaceId||`floor-${f.sourceFloor}`,x:f.exitX,y:f.exitY+1,label:'복도로 나가기',kind:'door'});
@@ -136,7 +136,7 @@ export class ItemSystem {
  }
  containerItems(compartment=0){const n=this.openSearch;if(!n)return[];return this.worldItems.filter(i=>!i.picked&&(n.type==='pickup'?i.spaceId===this.game.spaceId&&!i.hidden&&Math.hypot(i.x-n.x,i.y-n.y)*this.game.data.tileSize<.65:i.sourceId===n.sourceId&&(i.compartment||0)===compartment));}
  take(uid){const i=this.containerItems(this.openCompartment||0).find(i=>i.uid===uid);if(!i||!this._canAct())return this._action(false,'가져올 수 없습니다.');const n=this.nearby();if(this.openSearch.type==='pickup'?!this._within(i):(!n||n.sourceId!==this.openSearch.sourceId))return this._action(false,'대상에서 멀어졌습니다.');return this._collect(i);}
- selectCompartment(index){const source=this.searchById.get(this.openSearch?.sourceId);this.openCompartment=Math.max(0,Math.min((source?.compartments||1)-1,index));if(source){source.searched=true;this.game.emit('search',{spaceId:this.game.spaceId,x:this.game.x,y:this.game.y,sourceId:source.id});}for(const i of this.containerItems(this.openCompartment))i.revealed=true;}
+ selectCompartment(index){const source=this.searchById.get(this.openSearch?.sourceId);this.openCompartment=Math.max(0,Math.min((source?.compartments||1)-1,index));if(source){source.searched=true;this.onSearch?.(source);this.game.emit('search',{spaceId:this.game.spaceId,x:this.game.x,y:this.game.y,sourceId:source.id});}for(const i of this.containerItems(this.openCompartment))i.revealed=true;}
  _collect(item){
   if(!item||item.picked)return this._action(false,'이미 가져간 아이템입니다.');
   const willCraft=PARTS.includes(item.itemId)&&PARTS.every(id=>id===item.itemId||this.inventory.some(i=>i.itemId===id));

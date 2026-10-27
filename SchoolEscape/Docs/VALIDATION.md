@@ -1,3 +1,11 @@
+# 0.14 검증 — 2026-10-27
+
+최종 공개 Chromium36개 통과,실행/콘솔 오류0. 검증 빌드와 공개 파일SHA-256 일치를 확인했다. 웹 게시 커밋 `0e7f81c4b0930c2fc29b17501ed0118b023cfcac`, 소스 구현 체크포인트 `0164cdd7a217021751869517576846c6b993c0ca`.
+
+정적 지도82,677개 통과.8개 시드의 이름/좌석/힌트/진행 의존성,네 난이도 조리실 연속 완주,2회 사망 후3번째 추격,카드 사용/소비와 저장복원 등17개 시스템 검사 통과. Evidence/spec06-kernel.json 참조. 실제 브라우저 및 공개 검사 기록은 Evidence/spec06-browser-runtime.json과 spec06-public-runtime.json에 저장한다.
+
+실제 Unity 실행은 `No valid Unity Editor license found.`로 Play 진입 불가. Unity Play/WebGL 검증과 신규 시스템 네이티브 이식은 남았다. Unity 검사는 브라우저 검사와 구분한다.
+
 # 0.13 검증 — 2026-10-26
 
 공개 웹 Chromium38개 검사 통과, 실행/콘솔 오류0. 공개 파일SHA-256이 로컬 최종 검증물과 일치한다. 별도 소스 백업과 배포는 `school-escape-source`, `school-escape-web`에 저장한다.

@@ -196,8 +196,10 @@ from annex_map import build_annex
 room_maps += build_annex(f2)
 from expansion_013 import expand_school
 expand_school([f1,f2,f3],room_maps,playground)
+from expansion_014 import expand_014
+expand_014([f1,f2,f3],room_maps)
 
-data=dict(title='폐교탈출',schemaVersion=4,revision='kitchen-west-gallery-2026-10-26',tileSize=1.25,walkSpeed=2.6,runSpeed=4.7,
+data=dict(title='폐교탈출',schemaVersion=4,revision='spec06-kitchen-return-2026-10-27',tileSize=1.25,walkSpeed=2.6,runSpeed=4.7,
           stairEntryHalfWidth=.8,stairEntryHalfDepth=.65,stairExitRadius=3.2,stairCooldown=.75,
           playerRadius=0.27,spawnFloor=1,spawnX=24,spawnY=5,floors=[f1,f2,f3],roomMaps=room_maps,
           outdoorMaps=[playground],escapeGate=dict(spaceId='playground',x=34,y=3,

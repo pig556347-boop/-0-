@@ -59,6 +59,7 @@ export class Exploration {
       return;
     }
     const n=Math.hypot(ax,ay);if(n>1){ax/=n;ay/=n}
+    const unlimited=!!this.unlimitedStamina?.();if(unlimited){this.stamina=this.maxStamina;this.exhausted=false;}
     const sprint=!!run&&!this.exhausted&&this.stamina>0&&n>.01;
     const speed=(sprint?this.data.runSpeed:this.data.walkSpeed)*boost;
     let dx=ax*speed*dt/this.data.tileSize,dy=ay*speed*dt/this.data.tileSize;
@@ -71,7 +72,7 @@ export class Exploration {
     this.lastDelta={x:(this.x-ox)*this.data.tileSize,y:(this.y-oy)*this.data.tileSize};
     const distance=Math.hypot(this.lastDelta.x,this.lastDelta.y);
     this.isRunning=sprint&&distance>.0001;
-    if(this.isRunning){
+    if(this.isRunning&&!unlimited){
       this.stamina=Math.max(0,this.stamina-20*dt*Math.min(1,distance/(speed*dt||1)));this.lastSprintTime=this.time;
       if(this.stamina<=.00001){this.stamina=0;this.exhausted=true;this.emit('exhausted')}
     }else this.recoverStamina(dt);
@@ -96,6 +97,7 @@ export class Exploration {
   interact(){
     if(this.won||this.caught||this.pendingDoor||this.time-this.lastDoorTransition<.6)return false;
     const door=this.nearbyDoor();if(!door)return false;if(door.locked){this.emit('locked-door',{label:door.label});return false;}
+    if(this.travelGuard&&!this.travelGuard(door.targetId,'door'))return false;
     this.pendingDoor={...door,sourceId:this.spaceId,started:this.time,until:this.time+.22};this.speed=0;this.isRunning=false;
     this.emit('door-open',{spaceId:this.spaceId,label:door.label,x:door.doorX,y:door.doorY});
     this.emit('noise',{spaceId:this.spaceId,x:this.x,y:this.y,radius:6,loudness:1,kind:'door'});return true;
@@ -129,6 +131,7 @@ export class Exploration {
     if(this.time-this.lastTransition<this.data.stairCooldown)return false;
     const s=this.map.stairs.find(s=>Math.abs(s.x-this.x)*this.data.tileSize<this.data.stairEntryHalfWidth&&Math.abs(s.y-this.y)*this.data.tileSize<this.data.stairEntryHalfDepth);
     if(!s)return false;
+    if(this.travelGuard&&!this.travelGuard(s.targetId||`floor-${s.target}`,'stairs'))return false;
     const previous=this.floor,fromId=this.spaceId;
     this.warpSpace(s.targetId||`floor-${s.target}`,s.arrivalX,s.arrivalY);
     this.arrivalLock=this.map.stairs.find(s=>(s.targetId||`floor-${s.target}`)===fromId)?.id||null;

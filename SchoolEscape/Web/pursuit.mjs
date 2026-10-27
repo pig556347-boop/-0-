@@ -221,7 +221,7 @@ export class Pursuit {
         sourceX:portal.doorX+dx,sourceY:portal.doorY+dy,arrivalX:portal.arrivalX,arrivalY:portal.arrivalY,
         label:portal.label,reason:'roam'});
     }
-    return portals.filter(p=>!g.blocked(p.sourceX,p.sourceY,f,this.radius)&&
+    return portals.filter(p=>(!g.progression||g.progression.allowed(p.toId))&&!g.blocked(p.sourceX,p.sourceY,f,this.radius)&&
       !g.blocked(p.arrivalX,p.arrivalY,g.spaces.get(p.toId),this.radius));
   }
   patrolTarget(){

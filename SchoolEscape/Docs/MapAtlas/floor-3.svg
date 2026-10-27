@@ -219,8 +219,8 @@
 </a>
 <rect x="413" y="844" width="26" height="20" fill="#e4c572" stroke="#f8e9b3" rx="4" />
 <text x="426" y="858" font-size="12" fill="#101e27" text-anchor="middle" font-weight="bold">2F</text>
-<polyline points="418,318 434,334" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<polyline points="434,318 418,334" fill="none" stroke="#d68c7e" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<rect x="413" y="332" width="26" height="20" fill="#e4c572" stroke="#f8e9b3" rx="4" />
+<text x="426" y="346" font-size="12" fill="#101e27" text-anchor="middle" font-weight="bold">4F</text>
 <rect x="34" y="933" width="16" height="16" fill="#718879" stroke="none" rx="0" />
 <text x="59" y="946" font-size="14" fill="#b2c1b9" text-anchor="start" font-weight="normal">이동 가능한 복도</text>
 <rect x="240" y="933" width="16" height="16" fill="#304b55" stroke="none" rx="0" />

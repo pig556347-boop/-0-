@@ -9,6 +9,7 @@ export function prepareRun(data,seed){
  for(const room of data.roomMaps.filter(r=>r.kind==='classroom')){
   const themes=['일반 교실','파손된 교실','핏자국 교실','비어 있는 교실'];room.theme=themes[Math.floor(random()*themes.length)];
   const desks=room.fixtures.filter(o=>o.kind==='student-desk').map(o=>({...o,keep:random()>(room.theme==='비어 있는 교실'?.8:room.theme==='파손된 교실'?.45:.2),dx:(random()-.5)*.36,dy:0}));
+  desks.slice(0,2).forEach(d=>d.keep=true);
   room.fixtures=room.fixtures.filter(o=>{const desk=desks.find(d=>Math.abs(d.x-o.x)<.50&&o.y-d.y>-.92&&o.y-d.y<.4);if(!desk)return true;if(!desk.keep)return false;o.x+=desk.dx;o.y+=desk.dy;if(room.theme==='파손된 교실'&&o.kind==='student-desk')o.color='#514a3e';return true});
   if(room.theme==='파손된 교실')for(let n=0;n<8;n++)room.fixtures.push({id:room.id+'-splinter-'+n,room:room.label,kind:'broken-desk-plank',x:3+random()*12,y:5+random()*9,width:.55+random()*.6,depth:.12,height:.06,elevation:.03,color:'#71604a',solid:false,shape:'box'});
   if(room.theme==='핏자국 교실')for(let n=0;n<6;n++)room.fixtures.push({id:room.id+'-stain-'+n,room:room.label,kind:'old-blood-stain',x:3+random()*12,y:5+random()*9,width:.4+random()*.8,depth:.25+random()*.6,height:.008,elevation:.028,color:'#492b29',solid:false,shape:'sphere'});
@@ -28,7 +29,7 @@ export class Survival {
   }
  }
  revive(){if(!this.handled||this.lives<=0)return false;const g=this.game;g.caught=false;g.pendingDoor=null;g.warp(1,g.data.spawnX,g.data.spawnY);g.stamina=g.maxStamina;g.exhausted=false;g.speedBoostUntil=0;this.pursuit.reset((this.items.seed+this.lives*71)>>>0);this.pursuit.catchGraceUntil=g.time+5;this.handled=false;g.emit('revived');return true}
- guide(){const g=this.game,s=this.items,lines=['해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.','현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.'];
+ guide(){const g=this.game,s=this.items,lines=[...s.progression?.guide(this.rules.hints)||[],'해야 할 일: 본관과 운동장에서 열쇠 A·B·C를 모아 운동장 남쪽 교문에서 E로 사용한다.','현관 E: 본관 ↔ 운동장. 수납함은 E로 연 뒤 칸과 아이템을 직접 클릭한다.'];
   if(this.rules.hints==='none')return [...lines,'이 난이도에서는 열쇠 위치 단서가 제공되지 않는다.'];
   for(const id of ['key-a','key-b','key-c']){const owned=s.inventory.some(i=>i.itemId===id),item=s.worldItems.find(i=>i.itemId===id&&!i.picked);if(owned){lines.push(s.catalog[id].label+': 확보했다.');continue}if(!item)continue;const map=g.spaces.get(item.spaceId),source=item.sourceId?s.searchById.get(item.sourceId):null;
    const where=map.isOutdoor?'운동장':`${map.building==='annex'?'별관':map.building==='west'?'서관':'본관'} ${map.sourceFloor||map.number}층`;

@@ -244,10 +244,11 @@ def kitchen_diagram(data,output):
     for o in f['fixtures']:
         if o.get('solid'):
             x,y=point(o['x'],o['y']);w=o['width']/data['tileSize']*20;h=o['depth']/data['tileSize']*20;svg.rect(x-w/2,y-h/2,w,h,'#94a294')
+    bx,by=point(3,22);svg.marker(bx,by,'箱',GOLD,11);svg.text(bx+20,by-18,'먼저 조사할 보급 상자',16,GOLD)
     route=[point(x,y) for x,y in f['kitchenSequence']['path']];svg.line(route,GOLD,5)
     for p in f['portals']:
-        x,y=point(p['doorX'],p['doorY']);svg.marker(x,y,'E',DOOR,11);svg.text(x+20,y-12,'북쪽: 나가려 할 때 붕괴' if p['id']=='kitchen-entry' else '서쪽: 비상 탈출',16,DOOR)
-    svg.text(40,945,'평소에는 넓은 작업 공간입니다. 북쪽 출입문으로 나가려 할 때 선반과 물건이 떨어집니다.',18,FG)
+        x,y=point(p['doorX'],p['doorY']);svg.marker(x,y,'E',DOOR,11);svg.text(x+20,y-12,'북쪽: 상자 조사 후 귀환 시 붕괴' if p['id']=='kitchen-entry' else '서쪽: 비상 탈출',16,DOOR)
+    svg.text(40,945,'길 끝 상자를 조사하고 북쪽 출입문으로 돌아올 때 붕괴합니다. 추격 중 스태미나 무제한.',18,FG)
     svg.text(40,984,'배식장: 넓은 체형 / 솥뚜껑 같은 얼굴 / 앞치마 / 거대한 팔과 배식 도구',18,FG)
     svg.text(40,1023,'같은 판에서 재방문: 실제로 부순 길만 유지 · 새 판: 원래 탐색 상태로 복구',18,GOLD)
     return svg.save(output/'kitchen-route.svg')
@@ -269,20 +270,21 @@ def main():
     entries += [{'file':f"../RoomPlans/{r['interiorId']}.svg",'label':f"{f['number']}층 / {r['label']} · 실내 배치"} for f,r in rooms]
     entries += [{'file':'annex.svg','label':'별관 전체 전개도 · 1층 급식실 / 통층 체육관'}]
     entries += [{'file':f"../RoomPlans/{r['id']}.svg",'label':f"별관 {r['sourceFloor']}층 / {r['label']}"} for r in data['roomMaps'] if r.get('building')=='annex']
-    entries += [{'file':'west.svg','label':'서관 전체 전개도'},{'file':'kitchen-route.svg','label':'조리실 붕괴·추격 동선'}]
+    entries += [{'file':'west.svg','label':'서관 전체 전개도'},{'file':'kitchen-route.svg','label':'조리실 상자 조사·귀환 추격 동선'}]
     entries += [{'file':f"../RoomPlans/{r['id']}.svg",'label':f"서관 {r['sourceFloor']}층 / {r['label']}"} for r in data['roomMaps'] if r.get('building')=='west']
-    atlas={'gameRevision':data['revision'],'gameVersion':'0.13','mapSha256':hashlib.sha256(raw).hexdigest(),'roomCount':len(data['roomMaps']),'annexSpaceCount':18,'westSpaceCount':13,'playgroundImplemented':True,'escapeGate':data['escapeGate'],'floors':[{'floor':f['number'],'rooms':len(f['rooms'])} for f in data['floors']],'diagrams':diagrams,'entries':entries}
+    entries += [{'file':'../RoomPlans/main-rooftop.svg','label':'본관 옥상 · 카드키 설비 구역'}]
+    atlas={'gameRevision':data['revision'],'gameVersion':'0.14','mapSha256':hashlib.sha256(raw).hexdigest(),'roomCount':len(data['roomMaps']),'annexSpaceCount':18,'westSpaceCount':13,'playgroundImplemented':True,'escapeGate':data['escapeGate'],'floors':[{'floor':f['number'],'rooms':len(f['rooms'])} for f in data['floors']],'diagrams':diagrams,'entries':entries}
     (output/'atlas.json').write_text(json.dumps(atlas,ensure_ascii=False,indent=2)+'\n')
-    viewer='''<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>폐교탈출 맵 전개도</title><style>body{margin:0;background:#101e27;color:#e5e9dd;font-family:system-ui,sans-serif}header{padding:24px;max-width:1200px;margin:auto}h1{margin:0 0 12px}p{color:#b2c1b9;line-height:1.65}select,a{font:inherit}select{max-width:100%;padding:12px;background:#304b55;color:#fff;border:1px solid #89a8a5;border-radius:6px}a{color:#e4c572;margin-left:15px}main{padding:0 14px 24px;text-align:center}img{display:block;max-width:100%;height:auto;margin:auto;background:#101e27;border:1px solid #42575e}</style><header><h1>폐교탈출 맵 전개도 · 0.13</h1><p>본관 1~3층·별관·서관·운동장의 전개도입니다. 별관은 2층 동쪽 연결통로에서 E로 출입합니다. 교실·교무실 위치는 매판 같은 층 안에서 섞이며 플레이 중 안내도와 가이드북이 현재 배치를 반영합니다. 방 외곽은 복도에서의 위치이며, 실제 방은 독립된 확대 공간입니다.<br>1층 현관에서 E로 운동장을 왕복합니다. 본관과 운동장에 나뉜 A·B·C 열쇠를 모아 운동장 남쪽 교문에서 탈출하세요.</p><select id="plan" aria-label="보고 싶은 지도"></select><a id="original" target="_blank" rel="noopener">벡터 원본 열기</a></header><main><img id="map" alt="현재 선택한 맵 전개도"></main><script>const plans=ENTRIES,s=document.getElementById('plan'),m=document.getElementById('map'),a=document.getElementById('original');plans.forEach((p,i)=>s.add(new Option(p.label,i)));function show(){const p=plans[+s.value];m.src=p.file;m.alt=p.label;a.href=p.file;document.title=p.label+' | 폐교탈출'}s.onchange=show;show();</script></html>'''
+    viewer='''<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>폐교탈출 맵 전개도</title><style>body{margin:0;background:#101e27;color:#e5e9dd;font-family:system-ui,sans-serif}header{padding:24px;max-width:1200px;margin:auto}h1{margin:0 0 12px}p{color:#b2c1b9;line-height:1.65}select,a{font:inherit}select{max-width:100%;padding:12px;background:#304b55;color:#fff;border:1px solid #89a8a5;border-radius:6px}a{color:#e4c572;margin-left:15px}main{padding:0 14px 24px;text-align:center}img{display:block;max-width:100%;height:auto;margin:auto;background:#101e27;border:1px solid #42575e}</style><header><h1>폐교탈출 맵 전개도 · 0.14</h1><p>본관 1~3층·별관·서관·운동장의 전개도입니다. 별관은 2층 동쪽 연결통로에서 E로 출입합니다. 교실·교무실 위치는 매판 같은 층 안에서 섞이며 플레이 중 안내도와 가이드북이 현재 배치를 반영합니다. 방 외곽은 복도에서의 위치이며, 실제 방은 독립된 확대 공간입니다.<br>1층 현관에서 E로 운동장을 왕복합니다. 본관과 운동장에 나뉜 A·B·C 열쇠를 모아 운동장 남쪽 교문에서 탈출하세요.</p><select id="plan" aria-label="보고 싶은 지도"></select><a id="original" target="_blank" rel="noopener">벡터 원본 열기</a></header><main><img id="map" alt="현재 선택한 맵 전개도"></main><script>const plans=ENTRIES,s=document.getElementById('plan'),m=document.getElementById('map'),a=document.getElementById('original');plans.forEach((p,i)=>s.add(new Option(p.label,i)));function show(){const p=plans[+s.value];m.src=p.file;m.alt=p.label;a.href=p.file;document.title=p.label+' | 폐교탈출'}s.onchange=show;show();</script></html>'''
     (output/'index.html').write_text(viewer.replace('ENTRIES',json.dumps(entries,ensure_ascii=False).replace('<','\\u003c'))+'\n')
     (output/'README.md').write_text(f'''# 폐교탈출 맵 전개도
 
-현재 0.13 `{data['revision']}` 실행 지도에서 생성한 전개도입니다.
+현재 0.14 `{data['revision']}` 실행 지도에서 생성한 전개도입니다.
 
 - `overview.svg`: 본관 3개 층, 운동장 E 연결, 남쪽 탈출 교문과 봉쇄부.
 - `floor-1.svg` ~ `floor-3.svg`: 실제 복도 격자·방 위치·닫힌 문·자동 계단과 방 목록.
 - `playground.svg`: 실제 운동장 시설물, 북쪽 본관 출입구, 남쪽 탈출 교문, 주요 지점과 3개 탐색 동선.
-- `index.html`: 전체도·층별도·운동장·본관53개·별관18개·서관13개 공간의 배치를 선택하는 92개 보기.
+- `index.html`: 전체도·층별도·운동장·본관53개·별관18개·서관13개·옥상1개 공간의 배치를 선택하는 93개 보기.
 
 본관 1층 현관과 운동장 북쪽 입구는 E로 왕복합니다. A·B·C 열쇠는 본관과 운동장에 나뉘어 배치되며, 탈출은 운동장 남쪽 교문에서만 가능합니다. 별관은 본관2층 동쪽 연결통로로 입장합니다. 별관1층은 급식실,2~3층은 통층 체육관과 주변 시설입니다. 서관은 본관2층 서쪽 통로로 연결됩니다. 건물의 외부 출입문과 옥상은 봉쇄 상태입니다.
 

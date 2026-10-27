@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-27",
+  "playValidated": false,
+  "webGLValidated": false,
+  "newSystemsNativeImplemented": false,
+  "error": "No valid Unity Editor license found.",
+  "log": "TestResults/unity-spec06-014.log",
+  "excerpts": [
+    {
+      "line": 384,
+      "text": "No valid Unity Editor license found. Please activate your license."
+    }
+  ]
+}

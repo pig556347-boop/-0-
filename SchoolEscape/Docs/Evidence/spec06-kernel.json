@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "checks": 17,
+  "passed": [
+    "Seed 1 dependencies, names, locker and clue consistency",
+    "Seed 2 dependencies, names, locker and clue consistency",
+    "Seed 3 dependencies, names, locker and clue consistency",
+    "Seed 14 dependencies, names, locker and clue consistency",
+    "Seed 71 dependencies, names, locker and clue consistency",
+    "Seed 2026 dependencies, names, locker and clue consistency",
+    "Seed 65535 dependencies, names, locker and clue consistency",
+    "Seed 98765 dependencies, names, locker and clue consistency",
+    "Card gate blocks actual automatic stair, consumes card once, return stays open",
+    "Wrong code cannot unlock; matching note answer does; cutter opens at most one room",
+    "Entry and unsearched exit do not trigger; searched return does",
+    "Unlimited stamina continuous kitchen escape easy",
+    "Unlimited stamina continuous kitchen escape normal",
+    "Unlimited stamina continuous kitchen escape hard",
+    "Unlimited stamina continuous kitchen escape extreme",
+    "Two deaths allow second and third chase attempts; destroyed trail remains",
+    "Save/load preserves seed, roster, codes, inventory, unlocks and aftermath"
+  ],
+  "failures": []
+}

@@ -87,7 +87,9 @@ def expand_school(floors,rooms,yard):
         x,y=path[-1]
         while [x,y]!=target:
             x+=(target[0]>x)-(target[0]<x);y+=(target[1]>y)-(target[1]<y);path.append([x,y])
-    kitchen.map['kitchenSequence']=dict(path=path,triggerPortal='kitchen-entry',escapePortal='kitchen-emergency',monster='배식장',leadSeconds=4)
+    kitchen.obj('kitchen-reward-crate',3,22,1.3,.8,.85,'#8a7959',solid=True)
+    kitchen.zone('조사할 보급 상자',3,21)
+    kitchen.map['kitchenSequence']=dict(rewardX=3,rewardY=22,path=path,triggerPortal='kitchen-entry',escapePortal='kitchen-emergency',monster='배식장',leadSeconds=4)
     added.append(kitchen)
     # West wing uses the saved building program, with an independent staff kitchen.
     def west(id,label,kind,w=24,h=22,floor=2):

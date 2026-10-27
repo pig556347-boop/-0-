@@ -79,12 +79,13 @@ for f in spaces:
         check(all(o[k]>0 for k in ['width','depth','height']),f"{sid} invalid fixture dimensions {o['id']}")
         check(o.get('elevation',0)>=0,f"{sid} fixture below floor {o['id']}")
     if is_room:
-        check(not f.get('rooms') and (not f.get('stairs') or f.get('building') in {'annex','west'}) and not f.get('barriers'),f'{sid} contains another building space or staircase')
+        check(not f.get('rooms') and (not f.get('stairs') or (f.get('building') in {'annex','west'} or f.get('kind')=='rooftop')) and not f.get('barriers'),f'{sid} contains another building space or staircase')
         check(bool(f.get('fixtures')) and bool(f.get('interiorZones')),f'{sid} missing interior content or landmarks')
         check((f['exitX'],f['exitY']) not in open,f'{sid} exit door must block walking before interaction')
         check((f['exitX'],f['exitY']+1) in furniture_reached,f'{sid} return door approach unreachable')
-        base=spaces_by_id.get(f.get('returnSpaceId'),data['floors'][f['sourceFloor']-1])
-        check((f['returnX'],f['returnY']) in cells(base) and not blocked(base,f['returnX'],f['returnY']),f'{sid} unsafe corridor return')
+        if not f.get('noExit'):
+            base=spaces_by_id.get(f.get('returnSpaceId')) or data['floors'][f['sourceFloor']-1]
+            check((f['returnX'],f['returnY']) in cells(base) and not blocked(base,f['returnX'],f['returnY']),f'{sid} unsafe corridor return')
         kinds={o['kind'] for o in f['fixtures']}
         if (f['sourceFloor'],f['label']) in completion_rooms:
             check(f['kind']==completion_rooms[(f['sourceFloor'],f['label'])],f'{sid} newly furnished room has wrong functional layout')
@@ -161,9 +162,9 @@ for f in spaces:
                 assembly=bank.get('assembly')
                 compartments=[o for o in lockers if assembly and o.get('assembly')==assembly]
                 check(bool(assembly),f"{sid} locker bank needs an assembly id {bank['id']}")
-                check(len(compartments)==8 and len({o['x'] for o in compartments})==4 and len({o['elevation'] for o in compartments})==2,f"{sid} locker bank must be4columns x2rows {bank['id']}")
-                check(all(o['width']>=.5 and o['height']>=.45 and o['width']*o['height']>=4*.31*.185 for o in compartments),f"{sid} locker compartments too small {bank['id']}")
-            check(len(lockers)==len(banks)*8,f'{sid} ungrouped locker compartments')
+                check(len(compartments)==32 and len({o['x'] for o in compartments})==4 and len({o['elevation'] for o in compartments})==8,f"{sid} locker bank must be4columns x8rows {bank['id']}")
+                check(all(o['width']>=.5 and o['height']>=.18 for o in compartments),f"{sid} locker compartments too small {bank['id']}")
+            check(len(lockers)==len(banks)*32,f'{sid} ungrouped locker compartments')
         if f.get('kind')=='music':
             labels={z['label'] for z in f['interiorZones']}
             check({'보컬 연습실','악기보관창고','연결 통로'}<=labels,f'{sid} music suite zones missing')
@@ -243,7 +244,7 @@ for f in spaces:
                 check(all(edge_clear(f,a,b) for a,b in zip(points,points[1:])),'2F southwest corridor route segments need continuous player clearance')
         for s in f['stairs']:
             check((s['x'],s['y']) in furniture_reached,f"Unreachable stairs {s['id']}")
-            dest=data['floors'][s['target']-1];point=(s['arrivalX'],s['arrivalY'])
+            dest=spaces_by_id.get(s.get('targetId')) or data['floors'][s['target']-1];point=(s['arrivalX'],s['arrivalY'])
             check(point in cells(dest),f"Blocked landing {s['id']}")
             for other in dest['stairs']:
                 distance=((other['x']-point[0])**2+(other['y']-point[1])**2)**.5*data['tileSize']
@@ -281,14 +282,14 @@ for f in spaces:
     # Keep generated artifacts deterministic and avoid filenames from Korean room labels.
     dest=ROOT/(f'Docs/RoomPlans/{sid}.svg' if is_room else ('Docs/Playground.svg' if f.get('isOutdoor') else f'Docs/Floor{f["number"]}.svg'))
     dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(''.join(parts))
-check(set(portal_ids)=={id for id,r in rooms_by_id.items() if r.get('building') not in {'annex','west'}},'Unlinked isolated room maps')
+check(set(portal_ids)=={id for id,r in rooms_by_id.items() if r.get('building') not in {'annex','west'} and r.get('kind')!='rooftop'},'Unlinked isolated room maps')
 check(len(portal_ids)==len(set(portal_ids)),'Two entrances accidentally share one room instance')
 for kind,floors in {'infirmary':[1],'administration':[1],'staff':[2,3],'computer':[2],'broadcast':[1],
                     'studentRestroom':[1,1,2,2,3,3],'staffRestroom':[1,1,2,2,3,3],'library':[2]}.items():
-    actual=sorted(r['sourceFloor'] for r in rooms_by_id.values() if r.get('kind')==kind and r.get('building') not in {'annex','west'})
+    actual=sorted(r['sourceFloor'] for r in rooms_by_id.values() if r.get('kind')==kind and r.get('building') not in {'annex','west'} and r.get('kind')!='rooftop')
     check(actual==floors,f'Requested support room instances missing or misplaced: {kind} {actual}')
 door_count=sum(len(f['rooms']) for f in data['floors'])
-check(len([r for r in rooms_by_id.values() if r.get('building') not in {'annex','west'}])==door_count,'Every authored main-building room must link to its own independent furnished interior')
+check(len([r for r in rooms_by_id.values() if r.get('building') not in {'annex','west'} and r.get('kind')!='rooftop'])==door_count,'Every authored main-building room must link to its own independent furnished interior')
 check(door_count==53,'Expected53 main-building room entrances after furnishing the remaining twelve rooms')
 for (number,label),kind in completion_rooms.items():
     matches=[r for r in data['floors'][number-1]['rooms'] if r['label']==label]

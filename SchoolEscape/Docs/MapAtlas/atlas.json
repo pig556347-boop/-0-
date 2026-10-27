@@ -1,8 +1,8 @@
 {
-  "gameRevision": "kitchen-west-gallery-2026-10-26",
-  "gameVersion": "0.13",
-  "mapSha256": "5cf06ff99320489a6eee5dd274b3c200bc108957ddc8b430264e98eb3130e34b",
-  "roomCount": 84,
+  "gameRevision": "spec06-kitchen-return-2026-10-27",
+  "gameVersion": "0.14",
+  "mapSha256": "627dc065cc592a5754a225d600bf987e142a62ff02392bf4ca61b8c58426614f",
+  "roomCount": 85,
   "annexSpaceCount": 18,
   "westSpaceCount": 13,
   "playgroundImplemented": true,
@@ -384,7 +384,7 @@
     },
     {
       "file": "kitchen-route.svg",
-      "label": "조리실 붕괴·추격 동선"
+      "label": "조리실 상자 조사·귀환 추격 동선"
     },
     {
       "file": "../RoomPlans/west-floor-1.svg",
@@ -437,6 +437,10 @@
     {
       "file": "../RoomPlans/west-server.svg",
       "label": "서관 3층 / 서버실"
+    },
+    {
+      "file": "../RoomPlans/main-rooftop.svg",
+      "label": "본관 옥상 · 카드키 설비 구역"
     }
   ]
 }
