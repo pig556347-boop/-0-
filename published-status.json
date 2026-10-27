@@ -1,0 +1,178 @@
+{
+  "ok": true,
+  "sourceCommit": "0e7f81c4b0930c2fc29b17501ed0118b023cfcac",
+  "checks": [
+    {
+      "name": "Executable HTTP HTML",
+      "passed": true
+    },
+    {
+      "name": "Exact tested build hash",
+      "passed": true
+    },
+    {
+      "name": "85 maps and 19 generated classroom rosters",
+      "passed": true
+    },
+    {
+      "name": "Nine slots plus separate guidebook",
+      "passed": true
+    },
+    {
+      "name": "Guide describes staged cards",
+      "passed": true
+    },
+    {
+      "name": "Unowned card blocks actual automatic upstairs transition",
+      "passed": true
+    },
+    {
+      "name": "First card source is initially reachable",
+      "passed": true
+    },
+    {
+      "name": "Click collection run-ff55c65d-39-card-floor2",
+      "passed": true
+    },
+    {
+      "name": "Collected card unlocks automatic upstairs and is consumed",
+      "passed": true
+    },
+    {
+      "name": "Read directional clue from real investigation",
+      "passed": true
+    },
+    {
+      "name": "Direction storage unlock succeeds",
+      "passed": true
+    },
+    {
+      "name": "Click collection run-ff55c65d-38-room-key-room-f1-0",
+      "passed": true
+    },
+    {
+      "name": "Classroom dedicated key opens real door",
+      "passed": true
+    },
+    {
+      "name": "Roster identifies leader name and number",
+      "passed": true
+    },
+    {
+      "name": "Seat chart has numbers without student names",
+      "passed": true
+    },
+    {
+      "name": "Classroom locker exposes 4 columns by 8 rows",
+      "passed": true
+    },
+    {
+      "name": "Individual bottom locker selection",
+      "passed": true
+    },
+    {
+      "name": "Code record matches this run",
+      "passed": true
+    },
+    {
+      "name": "Wrong password remains locked",
+      "passed": true
+    },
+    {
+      "name": "Correct password unlocks",
+      "passed": true
+    },
+    {
+      "name": "Unlocked coded room can be entered",
+      "passed": true
+    },
+    {
+      "name": "Click collection run-ff55c65d-43-card-roof",
+      "passed": true
+    },
+    {
+      "name": "Rooftop card unlocks actual stairs and safe landing",
+      "passed": true
+    },
+    {
+      "name": "Rooftop return stairs stay available",
+      "passed": true
+    },
+    {
+      "name": "Unsearched kitchen exit is safe",
+      "passed": true,
+      "actual": {
+        "space": "annex-cafeteria",
+        "phase": "idle",
+        "pending": false
+      }
+    },
+    {
+      "name": "Box investigation arms return event without immediate chase",
+      "passed": true
+    },
+    {
+      "name": "Box contains a collectible item",
+      "passed": true
+    },
+    {
+      "name": "Return triggers monster and infinite stamina",
+      "passed": true
+    },
+    {
+      "name": "Monster catches and consumes one normal life",
+      "passed": true
+    },
+    {
+      "name": "Reentry after death restores monster chase attempt two",
+      "passed": true
+    },
+    {
+      "name": "Entire retry chase runs without stamina drain",
+      "passed": true,
+      "actual": {
+        "phase": "active",
+        "active": true,
+        "x": 30,
+        "y": 14.946808510639865,
+        "pathIndex": 88,
+        "destroyed": 182,
+        "remaining": 1336,
+        "revision": 107,
+        "monster": "배식장",
+        "examined": true,
+        "attempts": 2
+      }
+    },
+    {
+      "name": "Escape ends unlimited stamina",
+      "passed": true
+    },
+    {
+      "name": "Successful revisit preserves destruction without forced replay",
+      "passed": true
+    },
+    {
+      "name": "Load preserves names, codes, unlocks, read records and kitchen aftermath",
+      "passed": true
+    },
+    {
+      "name": "New run resets cards and kitchen and changes roster",
+      "passed": true
+    },
+    {
+      "name": "No browser runtime or console errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "publicURL": "https://rawcdn.githack.com/pig556347-boop/-0-/0e7f81c4b0930c2fc29b17501ed0118b023cfcac/index.html",
+  "http": {
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "sha256": "66465450ad7b8b0f608ea402fe1a05775632751d12a179edbb397814d61db79f",
+    "bytes": 6969438
+  },
+  "utc": "2026-10-27T08:45:13.692Z"
+}
