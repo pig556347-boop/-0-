@@ -13,6 +13,6 @@
 <polyline points="610,585 610,650" fill="none" stroke="#e4c572" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
 <rect x="185" y="655" width="850" height="185" fill="#304b55" stroke="#91c8c3" rx="8" />
 <text x="220" y="703" font-size="28" fill="#e5e9dd" text-anchor="start" font-weight="bold">서관 1층</text>
-<text x="220" y="755" font-size="22" fill="#e5e9dd" text-anchor="start" font-weight="normal">직원급식실 / 준비조리실 / 냉동창고</text>
+<text x="220" y="755" font-size="22" fill="#e5e9dd" text-anchor="start" font-weight="normal">직원급식실 / 준비조리실 / 냉동창고 / 매점</text>
 <text x="45" y="970" font-size="19" fill="#e4c572" text-anchor="start" font-weight="normal">외부 출입문은 잠김 · 조리실 추격 장면은 별관 급식실 옆 조리실에 배치</text>
 </svg>

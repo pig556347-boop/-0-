@@ -1,10 +1,10 @@
 {
-  "gameRevision": "four-storey-school-2026-10-28",
+  "gameRevision": "four-storey-school-shop-2026-10-28",
   "gameVersion": "0.15",
-  "mapSha256": "461cd8873a1ad510f614a10803049a9004fb1aa176c3f2459ab7e1a08e741d82",
-  "roomCount": 100,
+  "mapSha256": "774907570e6dd4f9124b002b09e341186cffa70697a0f0d3193d81250c626e70",
+  "roomCount": 101,
   "annexSpaceCount": 18,
-  "westSpaceCount": 13,
+  "westSpaceCount": 14,
   "playgroundImplemented": true,
   "escapeGate": {
     "spaceId": "playground",
@@ -506,6 +506,10 @@
     {
       "file": "rooms/west-server.svg",
       "label": "서관 3층 / 서버실"
+    },
+    {
+      "file": "rooms/west-school-shop.svg",
+      "label": "서관 1층 / 매점"
     },
     {
       "file": "rooms/main-rooftop.svg",
