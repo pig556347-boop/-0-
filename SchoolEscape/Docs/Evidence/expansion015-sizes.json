@@ -1,0 +1,602 @@
+[
+  {
+    "id": "room-f1-0",
+    "label": "빈교실 1",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f1-3",
+    "label": "교직원 휴게실",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      22,
+      19
+    ]
+  },
+  {
+    "id": "room-f1-4",
+    "label": "학생 상담실",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "room-f1-6",
+    "label": "창고",
+    "before": [
+      22,
+      20
+    ],
+    "after": [
+      19,
+      18
+    ]
+  },
+  {
+    "id": "room-f1-7",
+    "label": "행정실",
+    "before": [
+      26,
+      24
+    ],
+    "after": [
+      22,
+      20
+    ]
+  },
+  {
+    "id": "room-f1-8",
+    "label": "대회의실",
+    "before": [
+      32,
+      28
+    ],
+    "after": [
+      27,
+      24
+    ]
+  },
+  {
+    "id": "room-f1-11",
+    "label": "설비관리실",
+    "before": [
+      22,
+      20
+    ],
+    "after": [
+      19,
+      18
+    ]
+  },
+  {
+    "id": "room-f1-12",
+    "label": "세미나실",
+    "before": [
+      26,
+      24
+    ],
+    "after": [
+      22,
+      20
+    ]
+  },
+  {
+    "id": "room-f1-13",
+    "label": "보건실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "room-f2-1",
+    "label": "도서실",
+    "before": [
+      34,
+      32
+    ],
+    "after": [
+      29,
+      27
+    ]
+  },
+  {
+    "id": "room-f2-2",
+    "label": "2학년 3반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f2-3",
+    "label": "2학년 4반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f2-4",
+    "label": "학생 연구실",
+    "before": [
+      26,
+      24
+    ],
+    "after": [
+      22,
+      20
+    ]
+  },
+  {
+    "id": "room-f2-5",
+    "label": "약품 보관실",
+    "before": [
+      18,
+      14
+    ],
+    "after": [
+      19,
+      18
+    ]
+  },
+  {
+    "id": "room-f2-6",
+    "label": "2학년 5반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f2-7",
+    "label": "2학년 1반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f2-8",
+    "label": "2학년 2반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f2-9",
+    "label": "독서 토론실",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      22,
+      20
+    ]
+  },
+  {
+    "id": "room-f2-10",
+    "label": "2학년 6반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f2-11",
+    "label": "과학실",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      19,
+      18
+    ]
+  },
+  {
+    "id": "room-f2-12",
+    "label": "과학 준비실",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      19,
+      18
+    ]
+  },
+  {
+    "id": "room-f2-15",
+    "label": "과학 자료실",
+    "before": [
+      28,
+      26
+    ],
+    "after": [
+      22,
+      20
+    ]
+  },
+  {
+    "id": "room-f2-16",
+    "label": "준비실 1",
+    "before": [
+      22,
+      20
+    ],
+    "after": [
+      19,
+      18
+    ]
+  },
+  {
+    "id": "room-f2-17",
+    "label": "자료실",
+    "before": [
+      26,
+      24
+    ],
+    "after": [
+      22,
+      20
+    ]
+  },
+  {
+    "id": "room-f2-18",
+    "label": "창고",
+    "before": [
+      22,
+      20
+    ],
+    "after": [
+      19,
+      18
+    ]
+  },
+  {
+    "id": "room-f2-21",
+    "label": "2학년 교무실",
+    "before": [
+      28,
+      26
+    ],
+    "after": [
+      18,
+      18
+    ]
+  },
+  {
+    "id": "room-f3-0",
+    "label": "3학년 1반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f3-3",
+    "label": "3학년 4반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f3-4",
+    "label": "컴퓨터실",
+    "before": [
+      26,
+      22
+    ],
+    "after": [
+      24,
+      22
+    ]
+  },
+  {
+    "id": "room-f3-5",
+    "label": "3학년 교무실",
+    "before": [
+      28,
+      26
+    ],
+    "after": [
+      18,
+      18
+    ]
+  },
+  {
+    "id": "room-f3-6",
+    "label": "학부모상담실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "room-f3-7",
+    "label": "메인회의실",
+    "before": [
+      28,
+      24
+    ],
+    "after": [
+      24,
+      20
+    ]
+  },
+  {
+    "id": "room-f3-8",
+    "label": "교장실",
+    "before": [
+      28,
+      24
+    ],
+    "after": [
+      24,
+      20
+    ]
+  },
+  {
+    "id": "room-f3-9",
+    "label": "3학년 5반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f3-10",
+    "label": "중앙통제실",
+    "before": [
+      26,
+      24
+    ],
+    "after": [
+      22,
+      20
+    ]
+  },
+  {
+    "id": "room-f3-13",
+    "label": "3학년 2반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f3-14",
+    "label": "3학년 6반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f3-15",
+    "label": "3학년 3반",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      18,
+      16
+    ]
+  },
+  {
+    "id": "room-f3-16",
+    "label": "미술실",
+    "before": [
+      18,
+      18
+    ],
+    "after": [
+      22,
+      20
+    ]
+  },
+  {
+    "id": "annex-fitness",
+    "label": "체력단련실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "annex-sports-class",
+    "label": "체육 이론 교실",
+    "before": [
+      22,
+      22
+    ],
+    "after": [
+      19,
+      19
+    ]
+  },
+  {
+    "id": "west-dining",
+    "label": "서관 직원급식실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "west-prep",
+    "label": "서관 준비조리실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "west-freezer",
+    "label": "냉동창고",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "west-dorm",
+    "label": "경비원 기숙사실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "west-pantry",
+    "label": "탕비실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "west-control",
+    "label": "서관 통제실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "west-records",
+    "label": "통제구역 기록실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "west-surveillance",
+    "label": "감시실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  },
+  {
+    "id": "west-server",
+    "label": "서버실",
+    "before": [
+      24,
+      22
+    ],
+    "after": [
+      20,
+      19
+    ]
+  }
+]

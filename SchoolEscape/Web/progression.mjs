@@ -1,6 +1,6 @@
 import names from './data/student-names.json' with {type:'json'};
 import {rng} from './run-rules.mjs';
-const zoneLabels={start:'본관 1층',floor2:'본관 2층',floor3:'본관 3층',annex:'별관',west:'서관',roof:'옥상'};
+const zoneLabels={start:'본관 1층',floor2:'본관 2층',floor3:'본관 3층',floor4:'본관 4층',annex:'별관',west:'서관',roof:'옥상'};
 const lockLabels={key:'전용 열쇠',cutter:'쇠사슬 · 절단기',code4:'4자리 비밀번호',code6:'6자리 비밀번호',direction:'방향 자물쇠'};
 export class Progression {
  constructor(game,items){
@@ -9,7 +9,7 @@ export class Progression {
   game.travelGuard=(target,kind)=>this.travel(target,kind);
  }
  shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
- zone(id){const f=this.game.spaces.get(id);return f?.building==='annex'?'annex':f?.building==='west'?'west':f?.id==='main-rooftop'?'roof':(f?.sourceFloor||f?.number)===3?'floor3':(f?.sourceFloor||f?.number)===2?'floor2':'start'}
+ zone(id){const f=this.game.spaces.get(id);return f?.building==='annex'?'annex':f?.building==='west'?'west':f?.id==='main-rooftop'?'roof':(f?.sourceFloor||f?.number)===4?'floor4':(f?.sourceFloor||f?.number)===3?'floor3':(f?.sourceFloor||f?.number)===2?'floor2':'start'}
  register(id,label,type='tool'){this.items.catalog[id]={id,label,name:label,type,description:type==='card'?'해당 구역의 문·계단에서 사용하면 출입 권한이 유지됩니다.':type==='roomKey'?'해당 방문에서 E로 사용합니다. 열면 잠금은 해제된 채 유지됩니다.':'쇠사슬 잠금을 해제하는 도구입니다.',color:'#aebcb1',icon:type==='card'?'카드':'열쇠',usable:false,wearable:false};return id}
  place(id,source){const a=source.approaches[0],item={uid:this.items._freshUid(id),itemId:id,spaceId:source.spaceId,x:source.x,y:source.y,displayX:a.x,displayY:a.y,sourceId:source.id,hidden:true,revealed:false,compartment:Math.floor(this.random()*source.compartments),picked:false};this.items.worldItems.push(item);if(!source.itemUid)source.itemUid=item.uid;return item}
  note(source,id,title,text){const d={id,title,text,sourceId:source.id};(this.documents[source.id]??=[]).push(d);return d}
@@ -22,7 +22,7 @@ export class Progression {
    const lectern=this.items.searchables.find(s=>s.spaceId===room.id&&s.kind.includes('teacher-desk'));if(!lectern)throw Error('No lectern '+room.id);
    this.classes[room.id]={id:room.id,label:room.label,students,lecternId:lectern.id,leader:roles[0].no};
    this.note(lectern,room.id+'-roster','출석부',students.slice().sort((a,b)=>a.no-b.no).map(s=>`${String(s.no).padStart(2,'0')}  ${s.name}  ${s.role}`).join('\n'));
-   const rows=[13,11,9,7,5],columns=[3,5,7,11,13,15];
+   const rows=room.seatRows||[13,11,9,7,5],columns=room.seatColumns||[3,5,7,11,13,15];
    this.note(lectern,room.id+'-seats','자리배치도 · 번호만 표시','칠판 / 교탁 쪽 ↑\n\n'+rows.map(y=>columns.map((x,col)=>{const student=students.find(s=>Math.abs(s.y-y)<.5&&Math.abs(s.x-x)<.5);return (col===3?'  |  ':'')+(student?String(student.no).padStart(2,'0'):'--')}).join('   ')).join('\n\n')+'\n\n-- 책상 없음 · | 중앙 통로\n↓ 출입문 / 사물함');
    this.note(lectern,room.id+'-board','칠판 기록',this.shuffle(['금요일까지 학급 문고 반납.','창문 너머 종소리는 세지 말 것.','다음 주 청소 당번은 부반장.'])[0]+'\n반장 책상에 맡긴 물건을 확인하자.');
   }
@@ -33,7 +33,7 @@ export class Progression {
  generate(){
   const rooms=this.game.data.roomMaps.filter(r=>!['annex','west'].includes(r.building)&&r.id!=='main-rooftop');
   for(const r of rooms.filter(r=>r.kind==='classroom'))this.locks[r.id]={id:r.id,label:r.label,type:'key',need:this.register('room-key-'+r.id,r.label+' 전용 열쇠','roomKey'),unlocked:false};
-  const special=this.shuffle(rooms.filter(r=>['music','art','infirmary','broadcast','storage','archives','preparation','computer','control','staff'].includes(r.kind)));let cutter=false;
+  const special=this.shuffle(rooms.filter(r=>['music','art','infirmary','broadcast','storage','archives','preparation','computer','control','staff','science','technology'].includes(r.kind)));let cutter=false;
   for(let i=0;i<special.length;i++){const r=special[i],type=r.kind==='staff'?'key':(['key','code4','code6','cutter'][i%4]);const t=type==='cutter'&&cutter?'code4':type;if(t==='cutter')cutter=true;
    const lock={id:r.id,label:r.label,type:t,unlocked:false};if(t==='key')lock.need=this.register('room-key-'+r.id,r.label+' 전용 열쇠','roomKey');else if(t==='cutter')lock.need=this.register('bolt-cutter','절단기');else lock.answer=Array.from({length:t==='code4'?4:6},()=>Math.floor(this.random()*10)).join('');this.locks[r.id]=lock;
   }
@@ -53,9 +53,10 @@ export class Progression {
   const direction={id:'container:'+storage.id,label:storage.label+' 방향 잠금',type:'direction',answer:Array.from({length:4},()=>['↑','→','↓','←'][Math.floor(this.random()*4)]).join(''),unlocked:false,sourceId:clue.id};
   this.containerLocks={[storage.id]:direction};this.note(clue,'first-route','처음 교실의 단서',`${first.label} 열쇠는 ${this.game.spaces.get(storage.spaceId).label}의 ${storage.label}에 맡겼다.\n방향 잠금: ${direction.answer}`);
   const firstItem=this.items.worldItems.find(i=>i.uid===first.rewardUid);this.items.worldItems=this.items.worldItems.filter(i=>i!==firstItem);first.rewardUid=this.place(first.need,storage).uid;first.sourceId=storage.id;this.firstClass=first.id;
-  this.cards={};for(const [z,prior] of [['floor2','start'],['floor3','floor2'],['annex','floor2'],['west','floor2'],['roof','floor3']]){
+  this.cards={};for(const [z,prior] of [['floor2','start'],['floor3','floor2'],['floor4','floor3'],['annex','floor2'],['west','floor2'],['roof','floor4']]){
    const id=this.register('card-'+z,zoneLabels[z]+' 카드키','card'),source=this.source(prior),item=this.place(id,source);this.cards[z]={itemId:id,uid:item.uid,sourceId:source.id,prior};
   }
+  const shop=this.items.searchables.find(s=>s.spaceId==='west-school-shop'&&s.kind==='shop-stock-cabinet');if(shop){this.place('chocolate-bar',shop);this.place('vitamin-water',shop);}
   const reward=this.items.searchables.find(s=>s.kind==='kitchen-reward-crate');if(reward){reward.label='조리실 끝 보급 상자';this.place('chocolate-bar',reward);this.note(reward,'kitchen-note','배식 일지','조사를 마쳤다. 들어온 북쪽 출입문으로 돌아가자.\n무슨 일이 생기면 비상 유도선을 따라 서쪽 문으로 달려.');}
  }
  has(id){return this.items.inventory.some(i=>i.itemId===id)}

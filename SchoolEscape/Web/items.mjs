@@ -35,12 +35,12 @@ export class ItemSystem {
   this.seed=hashSeed(seed);this.random=randomSource(this.seed);this.inventory=[];this.equipped=null;this.worldItems=[];this.consumed=[];this.lastInteraction=-100;
   this.openSearch=null;this.openCompartment=0;this.serial=0;this.escaped=false;this.lastAction=null;this.game.won=false;this.searchables=this.searchTemplate.map(s=>({...s,searched:false,itemUid:null}));
   this.searchById=new Map(this.searchables.map(s=>[s.id,s]));this.game.speedBoostUntil=0;
-  const floors=shuffle([1,2,3],this.random),modes=shuffle(['hidden','ground',this.random()<.5?'hidden':'ground'],this.random);
+  const floors=shuffle(this.game.data.floors.map(f=>f.number),this.random),modes=shuffle(['hidden','ground',this.random()<.5?'hidden':'ground'],this.random);
   if(this.game.spaces.has('playground')){
    const regions=shuffle(['playground','main',this.random()<.5?'playground':'main'],this.random);
    shuffle(KEYS,this.random).forEach((id,i)=>this._spawn(id,regions[i],modes[i]));
   }else KEYS.forEach((id,i)=>this._spawn(id,floors[i],modes[i]));
-  for(const floor of [1,2,3]){this._spawn('vitamin-water',floor,this.random()<.6?'hidden':'ground');this._spawn('chocolate-bar',floor,this.random()<.6?'hidden':'ground');}
+  for(const floor of this.game.data.floors.map(f=>f.number)){this._spawn('vitamin-water',floor,this.random()<.6?'hidden':'ground');this._spawn('chocolate-bar',floor,this.random()<.6?'hidden':'ground');}
   shuffle(PARTS,this.random).forEach((id,i)=>this._spawn(id,floors[i],this.random()<.7?'hidden':'ground'));
   this._spawn('smartwatch',1,this.random()<.5?'hidden':'ground');
   return this.inspect();
@@ -79,7 +79,7 @@ export class ItemSystem {
     const approaches=points.filter(p=>!this.game.blocked(p.x,p.y,f)&&nav.available.some(n=>Math.hypot(n.x-p.x,n.y-p.y)<1.5&&this.game.segmentClear(n.x,n.y,p.x,p.y,f)));
     if(!approaches.length)continue;
     const label=item.kind==='yard-trash-bin'?'쓰레기통':item.kind==='yard-parcel-box'?'택배 상자':item.kind==='yard-water-station'?'수도 주변':item.kind==='locker-bank'?'사물함':item.kind==='shelf-body'?'책장':item.kind.includes('teacher')?'교탁':item.kind.includes('cabinet')||item.kind==='cleaning-closet'?'캐비넷':item.kind.endsWith('-workbench')?'작업대':item.kind.endsWith('-crate')?'보관 상자':'책상';
-    this.searchTemplate.push({compartments:item.compartments||(item.kind==='locker-bank'?8:1),id:item.assembly||item.id,fixtureId:item.id,spaceId:f.id,kind:item.kind,label,x,y,width:(x1-x0)*tile,depth:(y1-y0)*tile,height:item.elevation+item.height,approaches});
+    this.searchTemplate.push({compartments:item.compartments||(item.kind==='locker-bank'?8:1),id:item.assembly||item.id,fixtureId:item.id,spaceId:f.id,kind:item.kind,label:item.label||label,x,y,width:(x1-x0)*tile,depth:(y1-y0)*tile,height:item.elevation+item.height,approaches});
    }
    const edges=[];
    if(f.isRoom&&!f.noExit)edges.push({toId:f.returnSpaceId||`floor-${f.sourceFloor}`,x:f.exitX,y:f.exitY+1,label:'복도로 나가기',kind:'door'});

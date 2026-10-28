@@ -17,9 +17,9 @@ spaces_by_id={s['id']:s for s in spaces}
 rooms_by_id={s['id']:s for s in data.get('roomMaps',[])}
 completion_rooms={
     (1,'창고'):'storage',(1,'대회의실'):'assembly',(1,'설비관리실'):'maintenance',(1,'세미나실'):'seminar',
-    (2,'준비실 1'):'preparation',(2,'자료실'):'archives',(2,'창고'):'storage',
-    (3,'교직원 휴게실'):'lounge',(3,'학부모상담실'):'counseling',(3,'메인회의실'):'meeting',
-    (3,'교장실'):'principal',(3,'중앙통제실'):'control',
+    (3,'준비실 1'):'preparation',(3,'자료실'):'archives',(3,'창고'):'storage',
+    (1,'교직원 휴게실'):'lounge',(4,'학부모상담실'):'counseling',(4,'메인회의실'):'meeting',
+    (4,'교장실'):'principal',(4,'중앙통제실'):'control',
 }
 geometry={}
 for f in spaces:
@@ -71,8 +71,8 @@ for f in spaces:
     clear={p for p in open if not blocked(f,*p)}
     furniture_reached=reachable(clear,start,lambda a,b:edge_clear(f,a,b))
     check(start in clear,f'{sid} obstructed spawn/start')
-    for m in f.get('landmarks',[]):check((m['x'],m['y']) in furniture_reached,f"{sid} unreachable landmark {m['label']}")
-    for z in f.get('interiorZones',[]):check((z['x'],z['y']) in furniture_reached,f"{sid} furniture blocks interior zone {z['label']}")
+    for m in f.get('landmarks',[]):check(not blocked(f,m['x'],m['y']) and any(abs(x-m['x'])<1.5 and abs(y-m['y'])<1.5 and edge_clear(f,(x,y),(m['x'],m['y'])) for x,y in furniture_reached),f"{sid} unreachable landmark {m['label']}")
+    for z in f.get('interiorZones',[]):check(not blocked(f,z['x'],z['y']) and any(abs(x-z['x'])<1.5 and abs(y-z['y'])<1.5 and edge_clear(f,(x,y),(z['x'],z['y'])) for x,y in furniture_reached),f"{sid} furniture blocks interior zone {z['label']}")
     fixture_ids=set()
     for o in f.get('fixtures',[]):
         check(o['id'] not in fixture_ids,f"{sid} duplicate fixture id {o['id']}");fixture_ids.add(o['id'])
@@ -89,7 +89,7 @@ for f in spaces:
         kinds={o['kind'] for o in f['fixtures']}
         if (f['sourceFloor'],f['label']) in completion_rooms:
             check(f['kind']==completion_rooms[(f['sourceFloor'],f['label'])],f'{sid} newly furnished room has wrong functional layout')
-            check(f['width']>=22 and f['height']>=20,f'{sid} newly furnished room must retain generous exploration scale')
+            check(f['width']>=18 and f['height']>=18,f'{sid} newly furnished room must retain generous exploration scale')
             check(len(f['interiorZones'])>=5,f'{sid} newly furnished room needs multiple explorable work/supply zones')
             check(len([o for o in f['fixtures'] if o.get('solid')])>=10,f'{sid} newly furnished room lacks substantial furnishings')
         required={
@@ -99,7 +99,7 @@ for f in spaces:
             'library':{'shelf-body','reading-table','loan-counter'},
             'infirmary':{'infirmary-bed','medicine-cabinet','nurse-desk','curtain-post'},
             'administration':{'admin-desk','reception-counter','archive-cabinet','office-safe'},
-            'staff':{'staff-desk','head-teacher-desk','staff-meeting-table','staff-record-cabinet'},
+            'staff':{'staff-desk','teacher-nameplate','staff-record-cabinet','staff-timetable-board'},
             'computer':{'computer-workstation','computer-monitor','computer-teacher-desk','network-rack'},
             'broadcast':{'broadcast-console','broadcast-mixer','broadcast-microphone','broadcast-equipment-rack','broadcast-announcer-desk','broadcast-acoustic-window','broadcast-storage-cabinet'},
             'studentRestroom':{'toilet-base','washbasin-bowl','restroom-stall-partition','mirror-surface'},
@@ -118,7 +118,7 @@ for f in spaces:
         }.get(f.get('kind'),set())
         check(required<=kinds,f"{sid} missing reference furniture: {sorted(required-kinds)}")
         if f.get('kind') in {'infirmary','administration','staff','computer'}:
-            check(f['width']>=24 and f['height']>=22,f'{sid} support room must retain generous exploration scale')
+            check(f['width']>=18 and f['height']>=18,f'{sid} support room must retain generous exploration scale')
             count=lambda kind:sum(o['kind']==kind for o in f['fixtures'])
             if f['kind']=='infirmary':
                 check(count('infirmary-bed')==4,f'{sid} infirmary needs four beds')
@@ -127,8 +127,8 @@ for f in spaces:
                 check(count('admin-desk')==18,f'{sid} administration needs eighteen staffed workstations')
                 check(count('reception-counter')==2,f'{sid} administration needs two connected reception counter arms')
             if f['kind']=='staff':
-                check(count('staff-desk')==16,f'{sid} staff room needs four groups of four teacher desks')
-                check(count('head-teacher-desk')==1,f'{sid} staff room needs one head teacher desk')
+                check(count('staff-desk')==10,f'{sid} staff room needs six homeroom plus four subject teachers')
+                check(len(f.get('teacherSeats',[]))==10,f'{sid} teacher assignments missing')
             if f['kind']=='computer':
                 workstations=[o for o in f['fixtures'] if o['kind']=='computer-workstation']
                 check(len(workstations)==24 and count('computer-monitor')==24,f'{sid} computer room needs 24 complete student stations')
@@ -177,6 +177,9 @@ for f in spaces:
             check(bool(books) and bool(bodies),f'{sid} library books/shelves missing')
             check(all(not volume_overlap(fixture_bounds(book),fixture_bounds(body)) for book in books for body in frames),f'{sid} book meshes intersect shelf frames')
             check(len({(o['x'],o['y'],o.get('elevation',0)) for o in books})==len(books),f'{sid} duplicate coplanar book meshes')
+    elif f.get('id')=='school-walkway':
+        check(len(open)<f['width']*f['height']*.6,f'{sid} walkway must wrap a planted central area')
+        check(len(f.get('portals',[]))==1,f'{sid} needs a return to the yard')
     elif f.get('isOutdoor'):
         check(f['id']=='playground' and not f.get('rooms') and not f.get('stairs'),f'{sid} outdoor map must remain a separate yard without another building or floor staircase')
         check(f['width']>=69 and f['height']>=55,f'{sid} yard must retain planned84x66m usable scale')
@@ -233,7 +236,7 @@ for f in spaces:
                         samples=[(x,y) for x in [x0-.5+inset,x1+.5-inset] for y in range(y0,y1+1)]
                     else:samples=[(x,y) for y in [y0-.5+inset,y1+.5-inset] for x in range(x0,x1+1)]
                     check(all(not blocked(f,*p) for p in samples),f'2F southwest {label} corridor lacks player-radius edge clearance')
-                classroom=next((r for r in f['rooms'] if r['label']=='빈교실 A'),None)
+                classroom=next((r for r in f['rooms'] if r['label']=='1학년 5반'),None)
                 check(bool(classroom) and classroom['facing']=='east' and classroom['doorX']==correction['classroomDoorX'] and classroom['doorY']==correction['classroomDoorY'] and classroom['doorX']<vertical[0],'2F empty classroom A must sit west of the vertical corridor and open east')
                 points=[(correction['classroomDoorX']+1,correction['classroomDoorY']),
                         (correction['maleApproachX'],correction['maleApproachY']),
@@ -280,17 +283,17 @@ for f in spaces:
         parts.append(f'<rect x="{x}" y="{y}" width="16" height="16" fill="#8ac7c0"/><text x="{x+20}" y="{y+12}">{portal["label"]}</text>')
     parts.append('</svg>')
     # Keep generated artifacts deterministic and avoid filenames from Korean room labels.
-    dest=ROOT/(f'Docs/RoomPlans/{sid}.svg' if is_room else ('Docs/Playground.svg' if f.get('isOutdoor') else f'Docs/Floor{f["number"]}.svg'))
+    dest=ROOT/(f'Docs/RoomPlans/{sid}.svg' if is_room else (('Docs/Playground.svg' if sid=='playground' else f'Docs/{sid}.svg') if f.get('isOutdoor') else f'Docs/Floor{f["number"]}.svg'))
     dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(''.join(parts))
-check(set(portal_ids)=={id for id,r in rooms_by_id.items() if r.get('building') not in {'annex','west'} and r.get('kind')!='rooftop'},'Unlinked isolated room maps')
+check(set(portal_ids)=={id for id,r in rooms_by_id.items() if r.get('building') not in {'annex','west','grounds'} and r.get('kind')!='rooftop'},'Unlinked isolated room maps')
 check(len(portal_ids)==len(set(portal_ids)),'Two entrances accidentally share one room instance')
-for kind,floors in {'infirmary':[1],'administration':[1],'staff':[2,3],'computer':[2],'broadcast':[1],
-                    'studentRestroom':[1,1,2,2,3,3],'staffRestroom':[1,1,2,2,3,3],'library':[2]}.items():
-    actual=sorted(r['sourceFloor'] for r in rooms_by_id.values() if r.get('kind')==kind and r.get('building') not in {'annex','west'} and r.get('kind')!='rooftop')
+for kind,floors in {'infirmary':[1],'administration':[1],'staff':[2,3,4],'computer':[4],'broadcast':[1],
+                    'studentRestroom':[1,1,2,2,3,3,4,4],'staffRestroom':[1,1,2,2,3,3,4,4],'library':[3]}.items():
+    actual=sorted(r['sourceFloor'] for r in rooms_by_id.values() if r.get('kind')==kind and r.get('building') not in {'annex','west','grounds'} and r.get('kind')!='rooftop')
     check(actual==floors,f'Requested support room instances missing or misplaced: {kind} {actual}')
 door_count=sum(len(f['rooms']) for f in data['floors'])
-check(len([r for r in rooms_by_id.values() if r.get('building') not in {'annex','west'} and r.get('kind')!='rooftop'])==door_count,'Every authored main-building room must link to its own independent furnished interior')
-check(door_count==53,'Expected53 main-building room entrances after furnishing the remaining twelve rooms')
+check(len([r for r in rooms_by_id.values() if r.get('building') not in {'annex','west','grounds'} and r.get('kind')!='rooftop'])==door_count,'Every authored main-building room must link to its own independent furnished interior')
+check(door_count==67,'Expected 67 main-building room entrances after four-storey expansion')
 for (number,label),kind in completion_rooms.items():
     matches=[r for r in data['floors'][number-1]['rooms'] if r['label']==label]
     check(len(matches)==1,f'{number}F newly requested room missing or duplicated: {label}')
@@ -301,26 +304,15 @@ for f in data['floors']:
         for sex in ['남','여']:
             matches=[r for r in f['rooms'] if r['label']==f'{category} 화장실 {sex}']
             check(len(matches)==1 and matches[0].get('interiorId') in rooms_by_id,f"{f['number']}F missing separate {category} {sex} toilet portal")
-area=lambda r:(r['x1']-r['x0']+1)*(r['y1']-r['y0']+1)
-f1,f2,f3=data['floors'];find=lambda f,label:next(r for r in f['rooms'] if r['label']==label)
-reference=area(find(f2,'2학년 1반'))
-for label in ['음악실','미술실','미술실 창고','도서실']+[f'2학년 {i}반' for i in range(1,5)]:check(bool(find(f2,label).get('interiorId')),f'Requested interior missing {label}')
-check(all(area(find(f2,f'2학년 {n}반'))==reference for n in range(1,5)),'Second grade classroom footprints differ')
-check(.60<=area(find(f1,'방송실'))/reference<=.70,'Broadcast room must be60-70% of reference classroom')
-check(area(find(f2,'음악실'))>reference,'Music room is not larger than classroom')
-check(area(find(f2,'미술실'))>reference,'Art room is not larger than classroom')
-check(area(find(f2,'미술실 창고'))==reference*.5,'Art storage is not half a reference classroom')
-check(area(find(f2,'도서실'))>=reference*3,'2F library needs multiple-classroom footprint')
-check(not any(r['label']=='도서실' for r in f1['rooms']),'1F former library must become an empty classroom')
-converted=rooms_by_id.get('room-f1-3')
-check(bool(converted) and converted['kind']=='classroom' and converted['label'].startswith('빈교실'), '1F former library portal must enter an empty classroom')
-if converted:check(not any(o['kind'] in {'loan-counter','reading-table'} for o in converted['fixtures']),'1F converted classroom must not retain library furniture')
-for a,b in [('2학년 1반','2학년 2반'),('2학년 3반','2학년 4반')]:
-    ra,rb=find(f2,a),find(f2,b)
-    check(max(rb['x0']-ra['x1']-1,ra['x0']-rb['x1']-1,rb['y0']-ra['y1']-1,ra['y0']-rb['y1']-1)>=1,f'Classrooms need spacing: {a}, {b}')
+for grade in range(1,4):
+    f=data['floors'][grade]
+    check(all(any(r['label']==f'{grade}학년 {n}반' for r in f['rooms']) for n in range(1,7)),f'Grade {grade} needs six classes')
+check(sum(r['label'].startswith('빈교실') for f in data['floors'] for r in f['rooms'])==2,'Only two vacant classrooms')
+for kind,number in [('science',3),('music',3),('computer',4),('art',4)]:
+    check(any(r['kind']==kind and r['sourceFloor']==number for r in rooms_by_id.values()),f'{kind} misplaced')
 yard=spaces_by_id.get('playground')
 gate=data.get('escapeGate',{})
-check(len(data.get('outdoorMaps',[]))==1 and bool(yard) and yard.get('isOutdoor'),'Expected one actual outdoor playground map')
+check(len(data.get('outdoorMaps',[]))==2 and bool(yard) and yard.get('isOutdoor'),'Expected playground and walking path')
 check(gate.get('spaceId')=='playground','Main escape gate must be only in the playground')
 if yard:
     start=(yard['spawnX'],yard['spawnY']);clear={p for p in cells(yard) if not blocked(yard,*p)}

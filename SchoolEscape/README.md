@@ -1,3 +1,11 @@
+# 0.15 · 본관 4층 확장 (2026-10-28)
+
+본관 2층 1학년·3층 2학년·4층 3학년 각 6반, 교무실 각 10석. 과학실·음악실 3층, 컴퓨터실·미술실 4층. 서관·별관 연결은 2층 유지. 옥상·산책로·교문 경비실 연결. 서관 1층 매점 추가(과자 진열대·음료 냉장고·계산대·조사 가능한 보관함). 큰 실내 50개 크기 조정, 운동장·음악실·체육관 크기 보존.
+
+[이번 변경·선택·에셋·검증/재개](Docs/EXPANSION_015.md) · [웹 플레이](https://rawcdn.githack.com/pig556347-boop/-0-/9630349b86c32d8e66647ecb3815a6964ff4c73c/index.html) · [전개도](https://rawcdn.githack.com/pig556347-boop/-0-/9630349b86c32d8e66647ecb3815a6964ff4c73c/maps/index.html). 0.15 저장은 이전 판과 분리합니다. 웹판과 Unity 네이티브 이식/Play 검증 상태를 구분합니다.
+
+아래는 이전 릴리스 기록입니다.
+
 # 폐교탈출 0.14 — 조리실 재도전 · 시안서 v0.6 추가 기획
 
 **[웹 플레이](https://rawcdn.githack.com/pig556347-boop/-0-/0e7f81c4b0930c2fc29b17501ed0118b023cfcac/index.html) · [전체 전개도](https://rawcdn.githack.com/pig556347-boop/-0-/0e7f81c4b0930c2fc29b17501ed0118b023cfcac/maps/index.html)**

@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Executable HTTP HTML",
+      "passed": true
+    },
+    {
+      "name": "Four floors, 101 rooms, 14 west spaces",
+      "passed": true
+    },
+    {
+      "name": "Existing west building card still required",
+      "passed": true
+    },
+    {
+      "name": "Shop closed door blocks walking",
+      "passed": true
+    },
+    {
+      "name": "E enters isolated west first-floor shop safely",
+      "passed": true
+    },
+    {
+      "name": "All shop fixtures are investigable",
+      "passed": true
+    },
+    {
+      "name": "Stock displays two clickable consumables",
+      "passed": true
+    },
+    {
+      "name": "Click transfers shop item to inventory",
+      "passed": true
+    },
+    {
+      "name": "E returns to west first floor safely",
+      "passed": true
+    },
+    {
+      "name": "Shop pickup survives save and reload",
+      "passed": true
+    },
+    {
+      "name": "No runtime or console errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "publicURL": "http://127.0.0.1:8816/index.html",
+  "http": {
+    "status": 200,
+    "contentType": "text/html",
+    "sha256": "431e78085ab06e357ed14c1a8e5cfffff7db7d0f17769618491f49be947b20f0",
+    "bytes": 7075397
+  },
+  "utc": "2026-10-28T08:04:14.159Z",
+  "scope": "Final shop addition smoke test and save/load; full public regression uses Deploy/verify-web.mjs"
+}

@@ -186,7 +186,7 @@ class Schoolyard:
             self.obj('yard-entrance-tread-mark', 34, y, 6.0, .045, .015,
                      '#bac2a5', base=.03)
         # Exterior silhouettes live outside the closed playable boundary.
-        for name,cx,cy,w,d,floors in [('main',34,56.5,48,6,3),('west',6,58,17,11,3),('annex',62,58,15,10,2)]:
+        for name,cx,cy,w,d,floors in [('main',34,56.5,48,6,4),('west',6,58,17,11,3),('annex',62,58,15,10,2)]:
             self.obj('school-'+name+'-facade',cx,cy,w,d,floors*2.55,'#475b59')
             self.obj('school-'+name+'-roof',cx,cy,w+.35,d+.35,.22,'#253c40',base=floors*2.55)
             for floor in range(floors):

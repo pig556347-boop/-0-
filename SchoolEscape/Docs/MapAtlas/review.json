@@ -1,7 +1,7 @@
 {
-  "utc": "2026-10-27T08:21:16.835Z",
+  "utc": "2026-10-28T08:04:34.276Z",
   "kind": "Actual Chromium SVG diagram rendering and local atlas loading; not gameplay validation",
-  "mapSha256": "627dc065cc592a5754a225d600bf987e142a62ff02392bf4ca61b8c58426614f",
+  "mapSha256": "774907570e6dd4f9124b002b09e341186cffa70697a0f0d3193d81250c626e70",
   "views": [
     {
       "file": "overview.svg",
@@ -17,6 +17,10 @@
     },
     {
       "file": "floor-3.svg",
+      "loaded": true
+    },
+    {
+      "file": "floor-4.svg",
       "loaded": true
     },
     {
@@ -77,6 +81,62 @@
     },
     {
       "file": "../RoomPlans/room-f1-13.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f1-99.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-0.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-1.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-2.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-3.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-4.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-5.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-6.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-7.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-8.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-9.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-10.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-11.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/room-f20-12.svg",
       "loaded": true
     },
     {
@@ -372,7 +432,19 @@
       "loaded": true
     },
     {
+      "file": "../RoomPlans/west-school-shop.svg",
+      "loaded": true
+    },
+    {
       "file": "../RoomPlans/main-rooftop.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/gatehouse.svg",
+      "loaded": true
+    },
+    {
+      "file": "school-walkway.svg",
       "loaded": true
     }
   ],
@@ -381,6 +453,7 @@
     "floor-1.png",
     "floor-2.png",
     "floor-3.png",
+    "floor-4.png",
     "playground.png",
     "annex.png",
     "west.png",
