@@ -1,21 +1,23 @@
 {
   "game": "폐교탈출",
-  "version": "0.15",
-  "featureRevision": "four-storey-school-shop-2026-10-28",
-  "sourceCommit": "ce2d13783fb1bbbf637f99d28bf9506659c12f17",
-  "westSpaceCount": 14,
-  "htmlSha256": "431e78085ab06e357ed14c1a8e5cfffff7db7d0f17769618491f49be947b20f0",
-  "htmlBytes": 7075397,
+  "version": "0.16",
+  "featureRevision": "subject-encounters-lobby-click-locks-2026-10-28",
+  "sourceCommit": "7038902626fdc86ac2df8c8b75583d4b34123ddb",
+  "htmlSha256": "c803d750f7fe2c8ff92f9f5acf7ed065669ad27d919c2c6afd0f54fee51fcd66",
+  "htmlBytes": 6951365,
   "roomCount": 101,
   "totalSpaces": 107,
   "mainFloors": 4,
-  "mainRoomCount": 67,
-  "browserChecksPassed": 11,
-  "kernelChecksPassed": 17,
-  "staticChecksPassed": 83364,
-  "routeChecksPassed": 3660,
-  "browserErrors": 0,
+  "browserChecks": {
+    "subjects": 32,
+    "lobby": 30,
+    "regression": 77
+  },
+  "kernelChecks": 172,
+  "staticChecks": 81111,
+  "routeChecks": 3663,
   "unityPlayValidated": false,
   "unityWebGL": false,
-  "newGameplaySystemsWebOnly": true
+  "newGameplaySystemsWebOnly": true,
+  "languageScope": "Korean and English menus/settings; in-world documents remain Korean"
 }
