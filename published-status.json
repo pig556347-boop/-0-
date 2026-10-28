@@ -1,0 +1,346 @@
+{
+  "ok": true,
+  "sourceCommit": "9630349b86c32d8e66647ecb3815a6964ff4c73c",
+  "checks": [
+    {
+      "name": "Executable HTTP HTML",
+      "passed": true
+    },
+    {
+      "name": "Exact tested build hash",
+      "passed": true
+    },
+    {
+      "name": "101 rooms, four main floors and 20 classroom rosters",
+      "passed": true
+    },
+    {
+      "name": "Nine slots plus separate guidebook",
+      "passed": true
+    },
+    {
+      "name": "Guide describes staged cards",
+      "passed": true
+    },
+    {
+      "name": "Unowned card blocks actual automatic upstairs transition",
+      "passed": true
+    },
+    {
+      "name": "First card source is initially reachable",
+      "passed": true
+    },
+    {
+      "name": "Click collection run-d86d1e9d-45-card-floor2",
+      "passed": true
+    },
+    {
+      "name": "Collected card unlocks automatic upstairs and is consumed",
+      "passed": true
+    },
+    {
+      "name": "Read directional clue from real investigation",
+      "passed": true
+    },
+    {
+      "name": "Direction storage unlock succeeds",
+      "passed": true
+    },
+    {
+      "name": "Click collection run-d86d1e9d-44-room-key-room-f1-0",
+      "passed": true
+    },
+    {
+      "name": "Classroom dedicated key opens real door",
+      "passed": true
+    },
+    {
+      "name": "Roster identifies leader name and number",
+      "passed": true
+    },
+    {
+      "name": "Seat chart has numbers without student names",
+      "passed": true
+    },
+    {
+      "name": "Classroom locker exposes 4 columns by 8 rows",
+      "passed": true
+    },
+    {
+      "name": "Individual bottom locker selection",
+      "passed": true
+    },
+    {
+      "name": "Code record matches this run",
+      "passed": true
+    },
+    {
+      "name": "Wrong password remains locked",
+      "passed": true
+    },
+    {
+      "name": "Correct password unlocks",
+      "passed": true
+    },
+    {
+      "name": "Unlocked coded room can be entered",
+      "passed": true
+    },
+    {
+      "name": "Click collection run-d86d1e9d-50-card-roof",
+      "passed": true
+    },
+    {
+      "name": "Rooftop card unlocks actual stairs and safe landing",
+      "passed": true
+    },
+    {
+      "name": "Rooftop return stairs stay available",
+      "passed": true
+    },
+    {
+      "name": "Four-storey round trip floor-2",
+      "passed": true
+    },
+    {
+      "name": "Four-storey round trip floor-3",
+      "passed": true
+    },
+    {
+      "name": "Four-storey round trip floor-4",
+      "passed": true
+    },
+    {
+      "name": "Four-storey round trip main-rooftop",
+      "passed": true
+    },
+    {
+      "name": "Four-storey round trip floor-4",
+      "passed": true
+    },
+    {
+      "name": "Four-storey round trip floor-3",
+      "passed": true
+    },
+    {
+      "name": "Four-storey round trip floor-2",
+      "passed": true
+    },
+    {
+      "name": "Four-storey round trip floor-1",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 2학년 6반",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 2학년 6반",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 과학실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 과학실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 2학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Teacher desks retain readable role labels 2학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 2학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 컴퓨터실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 컴퓨터실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 3학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Teacher desks retain readable role labels 3학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 3학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 3학년 6반",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 3학년 6반",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 미술실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 미술실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 1학년 6반",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 1학년 6반",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 학생회실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 학생회실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 기술가정실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 기술가정실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E entry 1학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Teacher desks retain readable role labels 1학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Expanded room E return 1학년 교무실",
+      "passed": true
+    },
+    {
+      "name": "Outdoor addition E entry school-walkway",
+      "passed": true
+    },
+    {
+      "name": "Outdoor location guidance school-walkway",
+      "passed": true
+    },
+    {
+      "name": "Outdoor addition E return school-walkway",
+      "passed": true
+    },
+    {
+      "name": "Outdoor addition E entry gatehouse",
+      "passed": true
+    },
+    {
+      "name": "Outdoor location guidance gatehouse",
+      "passed": true
+    },
+    {
+      "name": "Outdoor addition E return gatehouse",
+      "passed": true
+    },
+    {
+      "name": "West first floor shop E entry",
+      "passed": true
+    },
+    {
+      "name": "Shop stock has chocolate and vitamin water",
+      "passed": true
+    },
+    {
+      "name": "Shop E returns to west first floor",
+      "passed": true
+    },
+    {
+      "name": "Unsearched kitchen exit is safe",
+      "passed": true,
+      "actual": {
+        "space": "annex-cafeteria",
+        "phase": "idle",
+        "pending": false
+      }
+    },
+    {
+      "name": "Box investigation arms return event without immediate chase",
+      "passed": true
+    },
+    {
+      "name": "Box contains a collectible item",
+      "passed": true
+    },
+    {
+      "name": "Return triggers monster and infinite stamina",
+      "passed": true
+    },
+    {
+      "name": "Monster catches and consumes one normal life",
+      "passed": true
+    },
+    {
+      "name": "Reentry after death restores monster chase attempt two",
+      "passed": true
+    },
+    {
+      "name": "Entire retry chase runs without stamina drain",
+      "passed": true,
+      "actual": {
+        "phase": "active",
+        "active": true,
+        "x": 30,
+        "y": 14.946808510639865,
+        "pathIndex": 88,
+        "destroyed": 182,
+        "remaining": 1336,
+        "revision": 107,
+        "monster": "배식장",
+        "examined": true,
+        "attempts": 2
+      }
+    },
+    {
+      "name": "Escape ends unlimited stamina",
+      "passed": true
+    },
+    {
+      "name": "Successful revisit preserves destruction without forced replay",
+      "passed": true
+    },
+    {
+      "name": "Load preserves names, codes, unlocks, read records and kitchen aftermath",
+      "passed": true
+    },
+    {
+      "name": "New run resets cards and kitchen and changes roster",
+      "passed": true
+    },
+    {
+      "name": "No browser runtime or console errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "publicURL": "https://rawcdn.githack.com/pig556347-boop/-0-/9630349b86c32d8e66647ecb3815a6964ff4c73c/index.html",
+  "http": {
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "sha256": "431e78085ab06e357ed14c1a8e5cfffff7db7d0f17769618491f49be947b20f0",
+    "bytes": 7075397
+  },
+  "utc": "2026-10-28T08:08:36.112Z"
+}
