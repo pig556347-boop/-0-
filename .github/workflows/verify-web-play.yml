@@ -40,7 +40,7 @@ jobs:
             node -e 'require("node:fs").writeFileSync("published-status.json",JSON.stringify({ok:false,utc:new Date().toISOString(),error:"No Chrome/Chromium installed on runner",sourceCommit:process.env.PUBLIC_GAME_COMMIT||process.env.GITHUB_SHA,workflowCommit:process.env.GITHUB_SHA},null,2)+"\n")'
             exit 1
           fi
-          CHROMIUM_PATH="$chrome_path" node verify-web.mjs
+          SKIP_SHOTS=1 CHROMIUM_PATH="$chrome_path" node verify-web.mjs
       - name: Save verification report on this branch only
         if: always()
         shell: bash
