@@ -21,6 +21,9 @@
   "commit": "9630349b86c32d8e66647ecb3815a6964ff4c73c",
   "productionUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/9630349b86c32d8e66647ecb3815a6964ff4c73c/index.html",
   "atlasUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/9630349b86c32d8e66647ecb3815a6964ff4c73c/maps/index.html",
-  "publicVerification": "running",
-  "publicWorkflowRun": 40654398524
+  "publicVerification": "success",
+  "publicWorkflowRun": 40654398524,
+  "publicChecksPassed": 78,
+  "publicPageErrors": 0,
+  "publicConsoleErrors": 0
 }

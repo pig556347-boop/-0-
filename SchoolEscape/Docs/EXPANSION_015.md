@@ -66,3 +66,5 @@
 - 4층 확장판의 매점 추가 전 외부 브라우저 75개 검사 통과 증거: `Evidence/expansion015-base-public-runtime.json`. 최종 매점 포함 공개 실행 검증은 `Evidence/expansion015-public-runtime.json` 참조.
 
 매점 추가 후 로컬: 정적 83,364개·경로 3,660개·시드/추격 회귀 17개 통과. 실제 브라우저 매점 검사 11개(출입·문 충돌·진열대 조사·아이템 클릭·저장 복원) 통과, 오류 0. 최종 전개도 111개 보기 정상.
+
+최종 매점 포함 공개 빌드 9630349b86c32d8e66647ecb3815a6964ff4c73c: 외부 Chromium 78개 검사 통과, 페이지/콘솔 오류 0, HTML SHA-256 일치. [실행](https://rawcdn.githack.com/pig556347-boop/-0-/9630349b86c32d8e66647ecb3815a6964ff4c73c/index.html). Unity Play/WebGL 미검증 상태는 동일.
