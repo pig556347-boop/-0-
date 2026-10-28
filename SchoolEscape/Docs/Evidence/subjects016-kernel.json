@@ -1,0 +1,694 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "1 music reachable 입구",
+      "passed": true
+    },
+    {
+      "name": "1 music reachable 메인 음악실",
+      "passed": true
+    },
+    {
+      "name": "1 music reachable 연결 통로",
+      "passed": true
+    },
+    {
+      "name": "1 music reachable 보컬 연습실",
+      "passed": true
+    },
+    {
+      "name": "1 music reachable 악기보관창고",
+      "passed": true
+    },
+    {
+      "name": "1 music reachable 통로 굴절부",
+      "passed": true
+    },
+    {
+      "name": "1 music reachable 합주 공간",
+      "passed": true
+    },
+    {
+      "name": "1 music reachable 피아노 앞",
+      "passed": true
+    },
+    {
+      "name": "1 library reachable 대출 기록대 앞",
+      "passed": true
+    },
+    {
+      "name": "1 library reachable 동쪽 우회 통로",
+      "passed": true
+    },
+    {
+      "name": "1 library reachable 서쪽 우회 통로",
+      "passed": true
+    },
+    {
+      "name": "1 library reachable 안쪽 열람 공간",
+      "passed": true
+    },
+    {
+      "name": "1 science reachable 앞문",
+      "passed": true
+    },
+    {
+      "name": "1 science reachable 동쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "1 science reachable 서쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "1 science reachable 안쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "1 science reachable 뒷문 캐비넷 앞",
+      "passed": true
+    },
+    {
+      "name": "1 equipment blocks science entry",
+      "passed": true
+    },
+    {
+      "name": "1 both held tools allow entry",
+      "passed": true
+    },
+    {
+      "name": "1 light before 10s",
+      "passed": true
+    },
+    {
+      "name": "1 dark at 10s",
+      "passed": true
+    },
+    {
+      "name": "1 player moves in blackout",
+      "passed": true
+    },
+    {
+      "name": "1 light after two seconds",
+      "passed": true
+    },
+    {
+      "name": "1 two shadows after third blackout and footsteps",
+      "passed": true
+    },
+    {
+      "name": "1 shadows frozen in light",
+      "passed": true
+    },
+    {
+      "name": "1 shadows move in next darkness",
+      "passed": true
+    },
+    {
+      "name": "1 shadows respect collision",
+      "passed": true
+    },
+    {
+      "name": "1 rear blocked without specimen",
+      "passed": true
+    },
+    {
+      "name": "1 rear opens after specimen collection",
+      "passed": true
+    },
+    {
+      "name": "1 gear drops outside lab on death",
+      "passed": true
+    },
+    {
+      "name": "1 new visit resets shadow cycle safely",
+      "passed": true
+    },
+    {
+      "name": "1 music has buildup without early spawn",
+      "passed": true
+    },
+    {
+      "name": "1 dissonance then giant-headed musician",
+      "passed": true
+    },
+    {
+      "name": "1 musician walks valid route",
+      "passed": true
+    },
+    {
+      "name": "1 developer OFF stops room monsters",
+      "passed": true
+    },
+    {
+      "name": "1 reward locked before puzzle",
+      "passed": true
+    },
+    {
+      "name": "1 wrong book resets and creates noise",
+      "passed": true
+    },
+    {
+      "name": "1 correct return 600",
+      "passed": true
+    },
+    {
+      "name": "1 correct return 800",
+      "passed": true
+    },
+    {
+      "name": "1 correct return 000",
+      "passed": true
+    },
+    {
+      "name": "1 three returns open reward",
+      "passed": true
+    },
+    {
+      "name": "1 library and specimen saved",
+      "passed": true
+    },
+    {
+      "name": "1 no entry dependency behind science gate",
+      "passed": true
+    },
+    {
+      "name": "16 music reachable 입구",
+      "passed": true
+    },
+    {
+      "name": "16 music reachable 메인 음악실",
+      "passed": true
+    },
+    {
+      "name": "16 music reachable 연결 통로",
+      "passed": true
+    },
+    {
+      "name": "16 music reachable 보컬 연습실",
+      "passed": true
+    },
+    {
+      "name": "16 music reachable 악기보관창고",
+      "passed": true
+    },
+    {
+      "name": "16 music reachable 통로 굴절부",
+      "passed": true
+    },
+    {
+      "name": "16 music reachable 합주 공간",
+      "passed": true
+    },
+    {
+      "name": "16 music reachable 피아노 앞",
+      "passed": true
+    },
+    {
+      "name": "16 library reachable 대출 기록대 앞",
+      "passed": true
+    },
+    {
+      "name": "16 library reachable 동쪽 우회 통로",
+      "passed": true
+    },
+    {
+      "name": "16 library reachable 서쪽 우회 통로",
+      "passed": true
+    },
+    {
+      "name": "16 library reachable 안쪽 열람 공간",
+      "passed": true
+    },
+    {
+      "name": "16 science reachable 앞문",
+      "passed": true
+    },
+    {
+      "name": "16 science reachable 동쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "16 science reachable 서쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "16 science reachable 안쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "16 science reachable 뒷문 캐비넷 앞",
+      "passed": true
+    },
+    {
+      "name": "16 equipment blocks science entry",
+      "passed": true
+    },
+    {
+      "name": "16 both held tools allow entry",
+      "passed": true
+    },
+    {
+      "name": "16 light before 10s",
+      "passed": true
+    },
+    {
+      "name": "16 dark at 10s",
+      "passed": true
+    },
+    {
+      "name": "16 player moves in blackout",
+      "passed": true
+    },
+    {
+      "name": "16 light after two seconds",
+      "passed": true
+    },
+    {
+      "name": "16 two shadows after third blackout and footsteps",
+      "passed": true
+    },
+    {
+      "name": "16 shadows frozen in light",
+      "passed": true
+    },
+    {
+      "name": "16 shadows move in next darkness",
+      "passed": true
+    },
+    {
+      "name": "16 shadows respect collision",
+      "passed": true
+    },
+    {
+      "name": "16 rear blocked without specimen",
+      "passed": true
+    },
+    {
+      "name": "16 rear opens after specimen collection",
+      "passed": true
+    },
+    {
+      "name": "16 gear drops outside lab on death",
+      "passed": true
+    },
+    {
+      "name": "16 new visit resets shadow cycle safely",
+      "passed": true
+    },
+    {
+      "name": "16 music has buildup without early spawn",
+      "passed": true
+    },
+    {
+      "name": "16 dissonance then giant-headed musician",
+      "passed": true
+    },
+    {
+      "name": "16 musician walks valid route",
+      "passed": true
+    },
+    {
+      "name": "16 developer OFF stops room monsters",
+      "passed": true
+    },
+    {
+      "name": "16 reward locked before puzzle",
+      "passed": true
+    },
+    {
+      "name": "16 wrong book resets and creates noise",
+      "passed": true
+    },
+    {
+      "name": "16 correct return 300",
+      "passed": true
+    },
+    {
+      "name": "16 correct return 600",
+      "passed": true
+    },
+    {
+      "name": "16 correct return 900",
+      "passed": true
+    },
+    {
+      "name": "16 three returns open reward",
+      "passed": true
+    },
+    {
+      "name": "16 library and specimen saved",
+      "passed": true
+    },
+    {
+      "name": "16 no entry dependency behind science gate",
+      "passed": true
+    },
+    {
+      "name": "2026 music reachable 입구",
+      "passed": true
+    },
+    {
+      "name": "2026 music reachable 메인 음악실",
+      "passed": true
+    },
+    {
+      "name": "2026 music reachable 연결 통로",
+      "passed": true
+    },
+    {
+      "name": "2026 music reachable 보컬 연습실",
+      "passed": true
+    },
+    {
+      "name": "2026 music reachable 악기보관창고",
+      "passed": true
+    },
+    {
+      "name": "2026 music reachable 통로 굴절부",
+      "passed": true
+    },
+    {
+      "name": "2026 music reachable 합주 공간",
+      "passed": true
+    },
+    {
+      "name": "2026 music reachable 피아노 앞",
+      "passed": true
+    },
+    {
+      "name": "2026 library reachable 대출 기록대 앞",
+      "passed": true
+    },
+    {
+      "name": "2026 library reachable 동쪽 우회 통로",
+      "passed": true
+    },
+    {
+      "name": "2026 library reachable 서쪽 우회 통로",
+      "passed": true
+    },
+    {
+      "name": "2026 library reachable 안쪽 열람 공간",
+      "passed": true
+    },
+    {
+      "name": "2026 science reachable 앞문",
+      "passed": true
+    },
+    {
+      "name": "2026 science reachable 동쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "2026 science reachable 서쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "2026 science reachable 안쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "2026 science reachable 뒷문 캐비넷 앞",
+      "passed": true
+    },
+    {
+      "name": "2026 equipment blocks science entry",
+      "passed": true
+    },
+    {
+      "name": "2026 both held tools allow entry",
+      "passed": true
+    },
+    {
+      "name": "2026 light before 10s",
+      "passed": true
+    },
+    {
+      "name": "2026 dark at 10s",
+      "passed": true
+    },
+    {
+      "name": "2026 player moves in blackout",
+      "passed": true
+    },
+    {
+      "name": "2026 light after two seconds",
+      "passed": true
+    },
+    {
+      "name": "2026 two shadows after third blackout and footsteps",
+      "passed": true
+    },
+    {
+      "name": "2026 shadows frozen in light",
+      "passed": true
+    },
+    {
+      "name": "2026 shadows move in next darkness",
+      "passed": true
+    },
+    {
+      "name": "2026 shadows respect collision",
+      "passed": true
+    },
+    {
+      "name": "2026 rear blocked without specimen",
+      "passed": true
+    },
+    {
+      "name": "2026 rear opens after specimen collection",
+      "passed": true
+    },
+    {
+      "name": "2026 gear drops outside lab on death",
+      "passed": true
+    },
+    {
+      "name": "2026 new visit resets shadow cycle safely",
+      "passed": true
+    },
+    {
+      "name": "2026 music has buildup without early spawn",
+      "passed": true
+    },
+    {
+      "name": "2026 dissonance then giant-headed musician",
+      "passed": true
+    },
+    {
+      "name": "2026 musician walks valid route",
+      "passed": true
+    },
+    {
+      "name": "2026 developer OFF stops room monsters",
+      "passed": true
+    },
+    {
+      "name": "2026 reward locked before puzzle",
+      "passed": true
+    },
+    {
+      "name": "2026 wrong book resets and creates noise",
+      "passed": true
+    },
+    {
+      "name": "2026 correct return 300",
+      "passed": true
+    },
+    {
+      "name": "2026 correct return 400",
+      "passed": true
+    },
+    {
+      "name": "2026 correct return 600",
+      "passed": true
+    },
+    {
+      "name": "2026 three returns open reward",
+      "passed": true
+    },
+    {
+      "name": "2026 library and specimen saved",
+      "passed": true
+    },
+    {
+      "name": "2026 no entry dependency behind science gate",
+      "passed": true
+    },
+    {
+      "name": "541 music reachable 입구",
+      "passed": true
+    },
+    {
+      "name": "541 music reachable 메인 음악실",
+      "passed": true
+    },
+    {
+      "name": "541 music reachable 연결 통로",
+      "passed": true
+    },
+    {
+      "name": "541 music reachable 보컬 연습실",
+      "passed": true
+    },
+    {
+      "name": "541 music reachable 악기보관창고",
+      "passed": true
+    },
+    {
+      "name": "541 music reachable 통로 굴절부",
+      "passed": true
+    },
+    {
+      "name": "541 music reachable 합주 공간",
+      "passed": true
+    },
+    {
+      "name": "541 music reachable 피아노 앞",
+      "passed": true
+    },
+    {
+      "name": "541 library reachable 대출 기록대 앞",
+      "passed": true
+    },
+    {
+      "name": "541 library reachable 동쪽 우회 통로",
+      "passed": true
+    },
+    {
+      "name": "541 library reachable 서쪽 우회 통로",
+      "passed": true
+    },
+    {
+      "name": "541 library reachable 안쪽 열람 공간",
+      "passed": true
+    },
+    {
+      "name": "541 science reachable 앞문",
+      "passed": true
+    },
+    {
+      "name": "541 science reachable 동쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "541 science reachable 서쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "541 science reachable 안쪽 실험 통로",
+      "passed": true
+    },
+    {
+      "name": "541 science reachable 뒷문 캐비넷 앞",
+      "passed": true
+    },
+    {
+      "name": "541 equipment blocks science entry",
+      "passed": true
+    },
+    {
+      "name": "541 both held tools allow entry",
+      "passed": true
+    },
+    {
+      "name": "541 light before 10s",
+      "passed": true
+    },
+    {
+      "name": "541 dark at 10s",
+      "passed": true
+    },
+    {
+      "name": "541 player moves in blackout",
+      "passed": true
+    },
+    {
+      "name": "541 light after two seconds",
+      "passed": true
+    },
+    {
+      "name": "541 two shadows after third blackout and footsteps",
+      "passed": true
+    },
+    {
+      "name": "541 shadows frozen in light",
+      "passed": true
+    },
+    {
+      "name": "541 shadows move in next darkness",
+      "passed": true
+    },
+    {
+      "name": "541 shadows respect collision",
+      "passed": true
+    },
+    {
+      "name": "541 rear blocked without specimen",
+      "passed": true
+    },
+    {
+      "name": "541 rear opens after specimen collection",
+      "passed": true
+    },
+    {
+      "name": "541 gear drops outside lab on death",
+      "passed": true
+    },
+    {
+      "name": "541 new visit resets shadow cycle safely",
+      "passed": true
+    },
+    {
+      "name": "541 music has buildup without early spawn",
+      "passed": true
+    },
+    {
+      "name": "541 dissonance then giant-headed musician",
+      "passed": true
+    },
+    {
+      "name": "541 musician walks valid route",
+      "passed": true
+    },
+    {
+      "name": "541 developer OFF stops room monsters",
+      "passed": true
+    },
+    {
+      "name": "541 reward locked before puzzle",
+      "passed": true
+    },
+    {
+      "name": "541 wrong book resets and creates noise",
+      "passed": true
+    },
+    {
+      "name": "541 correct return 600",
+      "passed": true
+    },
+    {
+      "name": "541 correct return 300",
+      "passed": true
+    },
+    {
+      "name": "541 correct return 900",
+      "passed": true
+    },
+    {
+      "name": "541 three returns open reward",
+      "passed": true
+    },
+    {
+      "name": "541 library and specimen saved",
+      "passed": true
+    },
+    {
+      "name": "541 no entry dependency behind science gate",
+      "passed": true
+    }
+  ],
+  "errors": []
+}

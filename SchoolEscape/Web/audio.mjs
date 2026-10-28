@@ -112,6 +112,18 @@ export class SchoolAudio {
         this.stats.stairTransitions++;this._step(true,false,false,0);this._step(true,false,false,.16);
       }else if(event.type==='caught'){
         this.stats.caughtStingers++;this._tone(82,.65,.08,{end:31});this._tone(88,.52,.04,{end:43});this._noise(.28,.045,500);
+      }else if(event.type==='musician-sting'){
+        this.stats.musicianStings=(this.stats.musicianStings||0)+1;
+        for(const n of [28,29,30,61,62,63,84])this._piano(n,.07,1.3);this._noise(.4,.07,160);
+      }else if(event.type==='shadow-footsteps'){
+        this.stats.shadowCues=(this.stats.shadowCues||0)+1;
+        for(let i=0;i<4;i++)this._step(false,false,true,i*.24,.9);
+      }else if(event.type==='lab-lights-off'||event.type==='lab-lights-on'){
+        this._noise(.08,.035,1900);
+      }else if(event.type==='library-mistake'){
+        this._noise(.45,.09,750);this._tone(95,.3,.05,{end:47});
+      }else if(event.type==='library-correct'){
+        this._tone(event.complete?660:440,.25,.02);
       }else if(event.type==='search'){
         this.stats.searchSounds++;this._noise(.22,.035,1100);this._tone(175,.17,.018,{end:115});
       }else if(['item-picked','item-dropped','item-used','crafted','equipped','unequipped'].includes(event.type)){
@@ -149,8 +161,8 @@ export class SchoolAudio {
     }
     this._masterTarget();
     const chasing=!!state.enemyAlerted&&!state.caught&&!state.won;
-    const theme=state.isOutdoor?'outdoor':'indoor';if(this.musicTheme!==theme){this.musicTheme=theme;this.musicStep=0;this.musicClock=0;}
-    if(audible&&!chasing&&!state.caught&&!state.won){this.musicClock+=dt;const period=theme==='outdoor'?2.15:1.55;if(this.musicClock>=period){this.musicClock-=period;const pattern=theme==='outdoor'?[45,null,52,48,44,null,47,45]:[57,60,64,63,57,null,56,52];const note=pattern[this.musicStep++%pattern.length];if(note!==null)this._piano(note,theme==='outdoor'?.045:.032);if(this.musicStep%8===1)this._piano(theme==='outdoor'?33:45,.022);}}
+    const theme=state.musicEncounter?'music-room':state.isOutdoor?'outdoor':'indoor';if(this.musicTheme!==theme){this.musicTheme=theme;this.musicStep=0;this.musicClock=0;}
+    if(audible&&!chasing&&!state.caught&&!state.won&&(!state.musicEncounter||state.musicPhase==='melody')){this.musicClock+=dt;const period=theme==='music-room'?60/(state.musicTempo||68)/2:theme==='outdoor'?2.15:1.55;if(this.musicClock>=period){this.musicClock-=period;const pattern=theme==='music-room'?[69,72,76,74,71,67,70,73,77,75,72,68,71,74,78,73]:theme==='outdoor'?[45,null,52,48,44,null,47,45]:[57,60,64,63,57,null,56,52];const note=pattern[this.musicStep++%pattern.length];if(theme==='music-room'){this.stats.musicRoomNotes=(this.stats.musicRoomNotes||0)+1;this.stats.musicRoomTempo=state.musicTempo;}if(note!==null)this._piano(note,theme==='outdoor'?.045:.032);if(this.musicStep%8===1)this._piano(theme==='outdoor'?33:45,.022);}}
     const target=state.caught||state.won?0:Math.max(0,Math.min(1,Number(state.chaseIntensity)||0));
     this.chaseIntensity+=(target-this.chaseIntensity)*(1-Math.exp(-dt*(target>this.chaseIntensity?3.5:1.2)));
     this.chaseBus.gain.setTargetAtTime(this.chaseIntensity*.6,this.context.currentTime,.12);

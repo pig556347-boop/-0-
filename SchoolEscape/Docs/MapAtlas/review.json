@@ -1,7 +1,7 @@
 {
-  "utc": "2026-10-28T08:04:34.276Z",
+  "utc": "2026-10-28T13:07:19.889Z",
   "kind": "Actual Chromium SVG diagram rendering and local atlas loading; not gameplay validation",
-  "mapSha256": "774907570e6dd4f9124b002b09e341186cffa70697a0f0d3193d81250c626e70",
+  "mapSha256": "a1c0d233b0e24db8d0bba531cc68e3d2dc80d8da166494837d1c0ba2153ef81f",
   "views": [
     {
       "file": "overview.svg",

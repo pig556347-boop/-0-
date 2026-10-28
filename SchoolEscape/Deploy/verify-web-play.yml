@@ -6,6 +6,8 @@ on:
     paths:
       - index.html
       - verify-web.mjs
+      - verify-subjects.mjs
+      - verify-lobby.mjs
       - .github/workflows/verify-web-play.yml
 
 permissions:
@@ -63,6 +65,7 @@ jobs:
           name: school-escape-public-web-proof
           path: |
             published-status.json
+            proof/**
             upgrade-*.png
             annex-*.png
             *-014.png

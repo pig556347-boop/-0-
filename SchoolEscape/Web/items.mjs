@@ -185,6 +185,7 @@ export class ItemSystem {
  }
  drop(slotIndex){
   if(!this._canAct())return this._action(false,'지금은 내려놓을 수 없습니다.');const item=this.inventory[slotIndex];if(!item)return this._action(false,'빈 칸입니다.');
+  if(this.game.map.subjectEvent==='science'&&['lab-coat','flashlight'].includes(item.itemId))return this._action(false,'과학실 출입 장비는 복도에 나간 뒤 내려놓으세요.');
   const result=this._dropItem(item);if(result.ok)this.inventory.splice(slotIndex,1);return result;
  }
  dropEquipped(){if(!this._canAct()||!this.equipped)return this._action(false,'내려놓을 착용 아이템이 없습니다.');const result=this._dropItem(this.equipped);if(result.ok)this.equipped=null;return result;}

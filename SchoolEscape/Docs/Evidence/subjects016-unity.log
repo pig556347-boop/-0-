@@ -1,0 +1,401 @@
+Unity Editor version:    6000.0.62f1 (f99f05b3e950)
+Branch:                  6000.0/staging
+Build type:              Release
+Batch mode:              YES
+System name:             Linux
+Distro version:          #1 SMP Wed Oct 14 19:45:18 UTC 2026
+Kernel version:          6.18.55
+Architecture:            x86_64
+Available memory:        34087 MB
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Initialize udev device monitor.
+[Licensing::IpcConnector] Channel LicenseClient-agent doesn't exist
+[Licensing::Module] Successfully launched the LicensingClient (PId: 1234)
+CreateDirectory '/home/agent/.cache/unity3d' failed:  (current dir: /workspace/-0-)
+
+COMMAND LINE ARGUMENTS:
+/workspace/escape-tools/unity/Editor/Unity
+-batchmode
+-nographics
+-projectPath
+/workspace/-0-/SchoolEscape
+-executeMethod
+SchoolEscape.EditorTools.Validate
+-escapeValidate
+-logFile
+/workspace/-0-/SchoolEscape/Docs/Evidence/subjects016-unity.log
+Successfully changed project path to: /workspace/-0-/SchoolEscape
+/workspace/-0-/SchoolEscape
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [139736438912384]  Target information:
+
+Player connection [139736438912384]  * "[IP] 172.26.91.245 [Port] 55504 [Flags] 2 [Guid] 2905156628 [EditorId] 2905156628 [Version] 1048832 [Id] LinuxEditor(16,172.26.91.245) [Debug] 1 [PackageName] LinuxEditor [ProjectName] Editor" 
+
+Player connection [139736438912384]  * "[IP] 172.31.0.190 [Port] 55504 [Flags] 2 [Guid] 2905156628 [EditorId] 2905156628 [Version] 1048832 [Id] LinuxEditor(16,172.26.91.245) [Debug] 1 [PackageName] LinuxEditor [ProjectName] Editor" 
+
+Player connection [139736438912384]  * "[IP] 172.17.0.1 [Port] 55504 [Flags] 2 [Guid] 2905156628 [EditorId] 2905156628 [Version] 1048832 [Id] LinuxEditor(16,172.26.91.245) [Debug] 1 [PackageName] LinuxEditor [ProjectName] Editor" 
+
+Player connection [139736438912384] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [139736438912384] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+No logging will be generated. (ENOENT: no such file or directory, mkdir '/home/agent/.config/unity3d')
+[winston] Attempt to write logs with no transports, which can increase memory usage: {"message":"Command-line: /workspace/escape-tools/unity/Editor/Data/Resources/PackageManager/Server/UnityPackageManager -s 1206 -ipc -ipc-path /tmp/Unity-Upm-1206.sock -l 2","level":"info"}
+[winston] Attempt to write logs with no transports, which can increase memory usage: {"message":"Detected environment variables:\n  no_proxy=localhost,127.0.0.1,::1\n  https_proxy=http://proxy:8080\n  NO_PROXY=localhost,127.0.0.1,::1\n  HTTPS_PROXY=http://proxy:8080\n  HTTP_PROXY=http://proxy:8080\n  http_proxy=http://proxy:8080","level":"info"}
+[winston] Attempt to write logs with no transports, which can increase memory usage: {"message":"IPC server started (IPC path=/tmp/Unity-Upm-1206.sock).","level":"info"}
+[winston] Attempt to write logs with no transports, which can increase memory usage: {"message":"Hint: To connect to this UPM instance, launch Unity with the command-line parameter -upmIpcPath Upm-1206.","level":"info"}
+[Package Manager] Connected to IPC stream "Upm-1206" after 0.5 seconds.
+Library Redirect Path: Library/
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+FMOD failed to initialize the output device.: "Error initializing output device. " (60)
+Failed to create secure directory (/home/agent/.config/pulse): Read-only file system
+Forced to initialize FMOD to to the device driver's system output rate 48000, this may impact performance and/or give inconsistent experiences compared to selected sample rate 48000
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1342:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5205:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5728:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2722:(snd_pcm_open_noupdate) Unknown PCM default
+FMOD failed to initialize the output device.: "Error initializing output device. " (60)
+FMOD initialized on nosound output
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+PlayerPrefs - Creating folder: /home/agent/.config/unity3d/School Escape Independent
+CreateDirectory '/home/agent/.config/unity3d' failed:  (current dir: /workspace/-0-/SchoolEscape)
+PlayerPrefs - Creating folder: /home/agent/.config/unity3d/School Escape Independent/폐교탈출 · 탐방 베타
+CreateDirectory '/home/agent/.config/unity3d' failed:  (current dir: /workspace/-0-/SchoolEscape)
+Unable to load player prefs
+Artifact Garbage Collection - Removed 2 unused hashed content filesRefreshing native plugins compatible for Editor in 0.03 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.0.62f1 (f99f05b3e950)
+[Subsystems] Discovering subsystems at path /workspace/escape-tools/unity/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /workspace/-0-/SchoolEscape/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-agent" at "2026-10-28T13:02:40.478843Z"
+[SignatureVerifier] Application signature verification not supported on this platform.
+Initialize mono
+Mono path[0] = '/workspace/escape-tools/unity/Editor/Data/Managed'
+Mono path[1] = '/workspace/escape-tools/unity/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-linux'
+Mono config path = '/workspace/escape-tools/unity/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56206
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.17.2+ff71f16
+  Session Id:              04e18a421a284596bd84ae9b1b42bf82
+  Correlation Id:          3b710a46f84bbd3fbd8d84b4bcf5e090
+  External correlation Id: 5321505262365789982
+  Machine Id:              jDDkWanSn1a401Xa8ltLqXpoeLY=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-agent" (connect: 0.87s, validation: 0.13s, handshake: 0.00s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-agent-notifications" at "2026-10-28T13:02:40.612954Z"
+[Licensing::Module] Connected to LicensingClient (PId: 1234, launch time: 0.00, total connection time: 1.00s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+AcceleratorClientConnectionCallback - disconnected - :0
+[Licensing::Client] Successfully updated license, isAsync: False, time: 0.05
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+[Licensing::Module] Licensing Background thread has ended after 1.07s
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Registered in 0.002165 seconds.
+- Loaded All Assemblies, in  0.601 seconds
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.403 seconds
+Domain Reload Profiling: 1003ms
+	BeginReloadAssembly (230ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (70ms)
+	RebuildNativeTypeToScriptingClass (16ms)
+	initialDomainReloadingComplete (89ms)
+	LoadAllAssembliesAndSetupDomain (196ms)
+		LoadAssemblies (230ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (192ms)
+			TypeCache.Refresh (190ms)
+				TypeCache.ScanAssembly (169ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (403ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (365ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (19ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (79ms)
+			ProcessInitializeOnLoadAttributes (189ms)
+			ProcessInitializeOnLoadMethodAttributes (71ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+Application.AssetDatabase Initial Refresh Start
+Package Manager log level set to [2]
+[Package Manager] Restoring resolved packages state from cache
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 5 packages:
+  Built-in packages:
+    com.unity.modules.audio@1.0.0 (location: /workspace/escape-tools/unity/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.modules.audio)
+    com.unity.modules.physics@1.0.0 (location: /workspace/escape-tools/unity/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.modules.physics)
+    com.unity.modules.imgui@1.0.0 (location: /workspace/escape-tools/unity/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.modules.imgui)
+    com.unity.modules.jsonserialize@1.0.0 (location: /workspace/escape-tools/unity/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.modules.jsonserialize)
+    com.unity.modules.imageconversion@1.0.0 (location: /workspace/escape-tools/unity/Editor/Data/Resources/PackageManager/BuiltInPackages/com.unity.modules.imageconversion)
+[Subsystems] No new subsystems found in resolved package list.
+[Package Manager] Done registering packages in 0.01 seconds
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://unix:/tmp/ilpp.sock-f919f5a44f7e456df18536853869446e
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Content root path: /workspace/-0-/SchoolEscape/
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc -
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /UnityILPP.PostProcessing/Ping'
+[40m[32minfo[39m[22m[49m: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://ilpp/UnityILPP.PostProcessing/Ping application/grpc - - 200 - application/grpc 70.8799ms
+Starting: /workspace/escape-tools/unity/Editor/Data/bee_backend --ipc --defer-dag-verification --dagfile="Library/Bee/2400b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: /workspace/-0-/SchoolEscape
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+DisplayProgressbar: Compiling Scripts
+ExitCode: 0 Duration: 0s105ms
+*** Tundra build success (0.09 seconds), 0 items updated, 138 evaluated
+AssetDatabase: script compilation time: 0.751417s
+Begin MonoManager ReloadAssembly
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+[Licensing::Module] Error: 'com.unity.editor.headless' was not found.
+- Loaded All Assemblies, in  0.268 seconds
+Start importing ProjectSettings/ProjectSettings.asset using Guid(00000000000000004000000000000000) (LibraryAssetImporter) -> (artifact id: '9e8cc0503f191d276aa6ba59ea814700') in 0.023949445 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.450 seconds
+Domain Reload Profiling: 719ms
+	BeginReloadAssembly (180ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (14ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (38ms)
+	RebuildCommonClasses (40ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (26ms)
+	LoadAllAssembliesAndSetupDomain (12ms)
+		LoadAssemblies (89ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (9ms)
+			TypeCache.Refresh (7ms)
+				TypeCache.ScanAssembly (1ms)
+			BuildScriptInfoCaches (1ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (450ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (300ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (9ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (111ms)
+			ProcessInitializeOnLoadAttributes (149ms)
+			ProcessInitializeOnLoadMethodAttributes (21ms)
+			AfterProcessingInitializeOnLoad (5ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Start importing Assets/Resources/SchoolFont.otf using Guid(5f4abaf58165a74d497343b796e8a490) (TrueTypeFontImporter) -> (artifact id: '89444c7b79badb63c3b91a15d743adf5') in 0.015357905 seconds
+Start importing Assets/Resources/SchoolMap.json using Guid(9bf04cb0f42580d0dae4857d9ebac3a8) (TextScriptImporter) -> (artifact id: '77f49e21fe373befe78070b748bcc6ce') in 0.042522739 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=ff8339f57646180159d0ebe2a7d1c993): Total: 1.755 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=3 (actual=3, local cache=0, cache server=0)
+		Asset DB Process Time: managed=5 ms, native=636 ms
+		Asset DB Callback time: managed=63 ms, native=21 ms
+		Scripting: domain reloads=1, domain reload time=269 ms, compile time=754 ms, other=4 ms
+		Project Asset Count: scripts=35, non-scripts=15
+		Asset File Changes: new=0, changed=3, moved=0, deleted=0
+		Scan Filter Count: 1
+	InvokeCustomDependenciesCallbacks: 0.002ms
+	InvokePackagesCallback: 17.026ms
+	ApplyChangesToAssetFolders: 0.077ms
+	Scan: 51.000ms
+	OnSourceAssetsModified: 0.891ms
+	CategorizeAssetsWithTransientArtifact: 0.159ms
+	ProcessAssetsWithTransientArtifactChanges: 0.960ms
+	CategorizeAssets: 0.416ms
+	ImportOutOfDateAssets: 539.882ms (-302.996ms without children)
+		ImportManagerImport: 88.114ms (5.150ms without children)
+			ImportInProcess: 82.936ms
+			UpdateCategorizedAssets: 0.028ms
+		CompileScripts: 753.946ms
+		ReloadNativeAssets: 0.001ms
+		UnloadImportedAssets: 0.314ms
+		ReloadImportedAssets: 0.001ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.017ms
+		InitializingProgressBar: 0.007ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.000ms
+		OnDemandSchedulerStart: 0.477ms
+	PostProcessAllAssets: 67.251ms
+	Hotreload: 0.935ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.012ms
+	UnloadStreamsBegin: 0.202ms
+	PersistCurrentRevisions: 0.099ms
+	UnloadStreamsEnd: 0.002ms
+	GenerateScriptTypeHashes: 0.001ms
+	Untracked: 1076.305ms
+
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 0.554ms
+Initializing Unity extensions:
+CreateDirectory '/home/agent/.config/unity3d' failed:  (current dir: /workspace/-0-/SchoolEscape)
+CreateDirectory '/home/agent/.config/unity3d' failed:  (current dir: /workspace/-0-/SchoolEscape)
+CreateDirectory '/home/agent/.config/unity3d' failed:  (current dir: /workspace/-0-/SchoolEscape)
+CreateDirectory '/home/agent/.config/unity3d' failed:  (current dir: /workspace/-0-/SchoolEscape)
+CreateDirectory '/../../Unity' failed:  (current dir: /workspace/-0-/SchoolEscape)
+UpdateMenuTitleForLanguage: 10
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-폐교탈출 · 탐방 베타
+CreateDirectory '/../../Unity' failed:  (current dir: /workspace/-0-/SchoolEscape)
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 26 unused Assets / (0.7 MB). Loaded Objects now: 524.
+Memory consumption went from 74.2 MB to 73.5 MB.
+Total: 7.355352 ms (FindLiveObjects: 0.029595 ms CreateObjectMapping: 0.003918 ms MarkObjects: 6.708889 ms  DeleteObjects: 0.590274 ms)
+
+Opening scene 'Assets/Scenes/Exploration.unity'
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/Scenes/Exploration.unity'
+	Deserialize:            0.423 ms
+	Integration:            6.523 ms
+	Integration of assets:  0.001 ms
+	Thread Wait Time:       0.050 ms
+	Total Operation Time:   6.998 ms
+Unloading 1 unused Assets / (0.5 KB). Loaded Objects now: 528.
+Memory consumption went from 71.2 MB to 71.2 MB.
+Total: 5.437012 ms (FindLiveObjects: 0.041694 ms CreateObjectMapping: 0.003374 ms MarkObjects: 5.371144 ms  DeleteObjects: 0.019741 ms)
+
+Start importing ProjectSettings/ProjectSettings.asset using Guid(00000000000000004000000000000000) (LibraryAssetImporter) -> (artifact id: 'cb43f71e9ac21323bb900d5ec5c22080') in 0.002166462 seconds
+Refreshing native plugins compatible for Editor in 0.00 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Asset Pipeline Refresh (id=440c1f6cb324fc188b89d3b0148a31f0): Total: 0.023 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+
+(process:1206): GLib-GObject-CRITICAL **: 13:02:43.814: g_object_unref: assertion 'G_IS_OBJECT (object)' failed
+
+(process:1206): GLib-GObject-CRITICAL **: 13:02:43.815: g_object_unref: assertion 'G_IS_OBJECT (object)' failed
+
+(process:1206): GLib-GObject-CRITICAL **: 13:02:43.815: g_object_unref: assertion 'G_IS_OBJECT (object)' failed
+
+(process:1206): Gtk-CRITICAL **: 13:02:43.816: gtk_widget_hide: assertion 'GTK_IS_WIDGET (widget)' failed
+
+(process:1206): Gtk-CRITICAL **: 13:02:43.816: gtk_widget_destroy: assertion 'GTK_IS_WIDGET (widget)' failed
+
+(process:1206): GLib-GObject-CRITICAL **: 13:02:43.816: g_object_unref: assertion 'G_IS_OBJECT (object)' failed
+[Project] Loading completed in 4.221 seconds
+	Project init time: 				4.038 seconds
+		Template init time: 		0.000 seconds
+		Package Manager init time: 		0.472 seconds
+		Asset Database init time: 		0.203 seconds
+		Global illumination init time: 	0.038 seconds
+		Assemblies load time: 			1.055 seconds
+		Unity extensions init time: 	0.000 seconds
+		Asset Database refresh time: 	1.756 seconds
+	Scene opening time: 			0.156 seconds
+##utp:{"type":"ProjectInfo","version":2,"phase":"Immediate","time":1793192563817,"processId":1206,"projectLoad":4.221000503,"projectInit":4.037683745,"templateInit":0.0,"packageManagerInit":0.472280809,"assetDatabaseInit":0.203491613,"globalIlluminationInit":0.037662745,"assembliesLoad":1.055108722,"unityExtensionsInit":0.000318484,"assetDatabaseRefresh":1.755508931,"sceneOpening":0.156396845}
+##utp:{"type":"EditorInfo","version":2,"phase":"Immediate","time":1793192563817,"processId":1206,"editorVersion":"6000.0.62f1 (f99f05b3e950)","branch":"6000.0/staging","buildType":"Release","platform":"Linux"}
+[Licensing::Client] Error: Code 404 while processing request (status: Found 0 entitlement groups and 0 free entitlements matching requested entitlement ids)
+No valid Unity Editor license found. Please activate your license.
+CreateDirectory '/home/agent/.cache/unity3d' failed:  (current dir: /workspace/-0-/SchoolEscape)
+[Physics::Module] Cleanup current backned.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input System polling thread exited.
+Input System module state changed to: Shutdown.
+[Licensing::IpcConnector] LicenseClient-agent-notifications channel disconnected successfully.
+[Licensing::IpcConnector] LicenseClient-agent channel disconnected successfully.
+AcceleratorClientConnectionCallback - disconnected - :0
+[40m[32minfo[39m[22m[49m: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+Cleanup mono
+debugger-agent: Unable to listen on 37
+
+SDL leaked 1 allocations
+[winston] Attempt to write logs with no transports, which can increase memory usage: {"message":"Shutting down UnityPackageManager: parent process [1206] is no longer running.","level":"info"}
+[winston] Attempt to write logs with no transports, which can increase memory usage: {"message":"Exiting with exit code 100. Goodbye!","level":"info"}

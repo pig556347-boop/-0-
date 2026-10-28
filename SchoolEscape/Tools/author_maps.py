@@ -203,7 +203,10 @@ floors=[f1,f2,f3]
 from expansion_015 import expand_015
 walkway=expand_015(floors,room_maps,playground)
 
-data=dict(title='폐교탈출',schemaVersion=4,revision='four-storey-school-shop-2026-10-28',tileSize=1.25,walkSpeed=2.6,runSpeed=4.7,
+from subject_rooms import apply_subject_rooms
+apply_subject_rooms(floors,room_maps)
+
+data=dict(title='폐교탈출',schemaVersion=4,revision='subject-encounters-016-2026-10-28',tileSize=1.25,walkSpeed=2.6,runSpeed=4.7,
           stairEntryHalfWidth=.8,stairEntryHalfDepth=.65,stairExitRadius=3.2,stairCooldown=.75,
           playerRadius=0.27,spawnFloor=1,spawnX=24,spawnY=5,floors=floors,roomMaps=room_maps,
           outdoorMaps=[playground,walkway],escapeGate=dict(spaceId='playground',x=34,y=3,

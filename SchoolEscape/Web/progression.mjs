@@ -28,12 +28,12 @@ export class Progression {
   }
   if(cursor>names.length||new Set(Object.values(this.classes).flatMap(c=>c.students.map(s=>s.name))).size!==cursor)throw Error('Student name pool exhausted');
  }
- sources(zone,openOnly=true){return this.items.searchables.filter(s=>this.zone(s.spaceId)===zone&&!this.game.spaces.get(s.spaceId).noLoot&&(!openOnly||!this.locks[s.spaceId])&&s.kind!=='student-desk')}
+ sources(zone,openOnly=true){return this.items.searchables.filter(s=>this.zone(s.spaceId)===zone&&!this.game.spaces.get(s.spaceId).noLoot&&this.game.spaces.get(s.spaceId).kind!=='science'&&s.kind!=='library-reward-cabinet'&&(!openOnly||!this.locks[s.spaceId])&&s.kind!=='student-desk')}
  source(zone){const a=this.sources(zone).filter(s=>!this.containerLocks?.[s.id]);if(!a.length)throw Error('No prior reachable source '+zone);return this.shuffle(a)[0]}
  generate(){
   const rooms=this.game.data.roomMaps.filter(r=>!['annex','west'].includes(r.building)&&r.id!=='main-rooftop');
   for(const r of rooms.filter(r=>r.kind==='classroom'))this.locks[r.id]={id:r.id,label:r.label,type:'key',need:this.register('room-key-'+r.id,r.label+' 전용 열쇠','roomKey'),unlocked:false};
-  const special=this.shuffle(rooms.filter(r=>['music','art','infirmary','broadcast','storage','archives','preparation','computer','control','staff','science','technology'].includes(r.kind)));let cutter=false;
+  const special=this.shuffle(rooms.filter(r=>['music','art','infirmary','broadcast','storage','archives','preparation','computer','control','staff','technology'].includes(r.kind)));let cutter=false;
   for(let i=0;i<special.length;i++){const r=special[i],type=r.kind==='staff'?'key':(['key','code4','code6','cutter'][i%4]);const t=type==='cutter'&&cutter?'code4':type;if(t==='cutter')cutter=true;
    const lock={id:r.id,label:r.label,type:t,unlocked:false};if(t==='key')lock.need=this.register('room-key-'+r.id,r.label+' 전용 열쇠','roomKey');else if(t==='cutter')lock.need=this.register('bolt-cutter','절단기');else lock.answer=Array.from({length:t==='code4'?4:6},()=>Math.floor(this.random()*10)).join('');this.locks[r.id]=lock;
   }

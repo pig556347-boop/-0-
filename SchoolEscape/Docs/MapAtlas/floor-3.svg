@@ -286,6 +286,9 @@
 <text x="826" y="858" font-size="12" fill="#101e27" text-anchor="middle" font-weight="bold">2F</text>
 <rect x="829" y="332" width="26" height="20" fill="#e4c572" stroke="#f8e9b3" rx="4" />
 <text x="842" y="346" font-size="12" fill="#101e27" text-anchor="middle" font-weight="bold">4F</text>
+<rect x="672" y="721" width="20" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
+<polyline points="682,717 682,689 705,689" fill="none" stroke="#91c8c3" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<text x="710" y="694" font-size="14" fill="#91c8c3" text-anchor="start" font-weight="normal">과학실 뒷문 · 안쪽 잠금 · E</text>
 <rect x="34" y="933" width="16" height="16" fill="#718879" stroke="none" rx="0" />
 <text x="59" y="946" font-size="14" fill="#b2c1b9" text-anchor="start" font-weight="normal">이동 가능한 복도</text>
 <rect x="240" y="933" width="16" height="16" fill="#304b55" stroke="none" rx="0" />

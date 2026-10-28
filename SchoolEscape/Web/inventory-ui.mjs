@@ -56,10 +56,11 @@ export function createInventoryUI({items,game,onClose=()=>{},onAction=()=>{}}) {
   $('inventory-drop').disabled=!item;
  }
  function open(){if(!root.hidden)return;lastFocus=document.activeElement;root.hidden=false;$('inventory-feedback').textContent='';signature='';update();$('inventory-close').focus({preventScroll:true})}
- function close(){if(root.hidden)return;root.hidden=true;onClose();if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true})}
+ function close(){if(root.hidden)return;root.hidden=true;onClose();if(lastFocus?.isConnected&&lastFocus.getClientRects().length&&!root.contains(lastFocus))lastFocus.focus({preventScroll:true});else document.getElementById('world')?.focus()}
  function toggle(){if(root.hidden)open();else close()}
  $('inventory-close').onclick=close;
  root.addEventListener('keydown',event=>{
+  if(root.hidden)return;
   if(event.code==='Escape'){event.preventDefault();event.stopImmediatePropagation();close();return;}
   if(event.code==='Tab'){
    const nodes=[...root.querySelectorAll('button:not([disabled])')].filter(n=>!n.hidden),first=nodes[0],last=nodes.at(-1);

@@ -1,0 +1,143 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Executable HTTP HTML",
+      "passed": true
+    },
+    {
+      "name": "New encounters coexist with all 107 spaces and four floors",
+      "passed": true
+    },
+    {
+      "name": "Real science door rejects missing equipment",
+      "passed": true
+    },
+    {
+      "name": "E enters library safely",
+      "passed": true
+    },
+    {
+      "name": "Readable return record shows the three classification clues",
+      "passed": true
+    },
+    {
+      "name": "Reward cannot be opened before solving",
+      "passed": true
+    },
+    {
+      "name": "Wrong book resets progress and emits audible investigation noise",
+      "passed": true
+    },
+    {
+      "name": "Three correct UI returns solve library",
+      "passed": true
+    },
+    {
+      "name": "Flashlight collected through container click",
+      "passed": true
+    },
+    {
+      "name": "Reward supplies next-room clue",
+      "passed": true
+    },
+    {
+      "name": "Two tools permit real science front-door entry",
+      "passed": true
+    },
+    {
+      "name": "World blacked out and minimap hidden at blackout",
+      "passed": true
+    },
+    {
+      "name": "Blackout covers world with opaque black",
+      "passed": true
+    },
+    {
+      "name": "W movement remains enabled in darkness",
+      "passed": true
+    },
+    {
+      "name": "Pause cannot reveal dark maze",
+      "passed": true
+    },
+    {
+      "name": "World reappears after two-second blackout",
+      "passed": true
+    },
+    {
+      "name": "Exactly two shadows after third blackout and footstep cue",
+      "passed": true
+    },
+    {
+      "name": "Both monsters remain motionless while lights on",
+      "passed": true
+    },
+    {
+      "name": "Darkness moves shadows along collision-safe paths",
+      "passed": true
+    },
+    {
+      "name": "Player can traverse entire maze to rear cabinet",
+      "passed": true
+    },
+    {
+      "name": "Specimen unlocks safe distinct rear exit",
+      "passed": true
+    },
+    {
+      "name": "Rear door cannot bypass the lab entrance",
+      "passed": true
+    },
+    {
+      "name": "Original piano notes accelerate during buildup",
+      "passed": true
+    },
+    {
+      "name": "One dissonant stinger precedes musician spawn",
+      "passed": true
+    },
+    {
+      "name": "Musician pursues with real collision pathfinding",
+      "passed": true
+    },
+    {
+      "name": "Developer OFF stops and hides new monsters",
+      "passed": true
+    },
+    {
+      "name": "Actual shadow contact during darkness captures player",
+      "passed": true
+    },
+    {
+      "name": "Normal-mode entry tools drop outside for recovery",
+      "passed": true
+    },
+    {
+      "name": "Real revive returns to first floor safely",
+      "passed": true
+    },
+    {
+      "name": "Death and reentry produce both shadows again",
+      "passed": true
+    },
+    {
+      "name": "Save restores solved books, tools, and specimen clearance",
+      "passed": true
+    },
+    {
+      "name": "No runtime exceptions or missing asset errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "publicURL": "http://127.0.0.1:8817/index.html",
+  "http": {
+    "status": 200,
+    "contentType": "text/html",
+    "sha256": "cb829028b001f69b7a4667d33fa38355ec279a93909b774650fb77f551415f38",
+    "bytes": 6951124
+  },
+  "utc": "2026-10-28T13:18:55.178Z"
+}
