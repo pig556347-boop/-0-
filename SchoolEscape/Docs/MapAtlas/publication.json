@@ -1,6 +1,7 @@
 {
-  "version": "0.15",
-  "url": "https://rawcdn.githack.com/pig556347-boop/-0-/9630349b86c32d8e66647ecb3815a6964ff4c73c/maps/index.html",
-  "webCommit": "9630349b86c32d8e66647ecb3815a6964ff4c73c",
-  "mapSha256": "774907570e6dd4f9124b002b09e341186cffa70697a0f0d3193d81250c626e70"
+  "version": "0.16",
+  "webCommit": "d42df4539bda3be4e64cd9bf7033f12d1a8832dd",
+  "productionUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/d42df4539bda3be4e64cd9bf7033f12d1a8832dd/maps/index.html",
+  "views": 111,
+  "pngs": 9
 }

@@ -299,3 +299,7 @@
 - 고정공개커밋6e40868697e73f470d0163ce00a14889ef00cb67의 외부Chromium91개 전부통과/실행·콘솔오류0, HTTP200/text-html/최종HTML해시일치를 확인했다. 실행UTC2026-10-25T06:55:44.186Z이며 최종정리일과 구분한다. 로컬전체2,913/운동장65/정적79,795/커널29/로컬게시검사91통과. 외부원문Evidence/public-web-playground.json.
 - 실제UnityC#6항목컴파일성공. Play는라이선스오류exit198; UnityPlay/물리/음향/WebGL은미검증이다.
 - 최신웹주소는Deploy/publication.json. 같은검증HTML과갱신된58보기전개도,폐교탈출전용소스ZIP/소스백업을보존한다. 재개지점은0.10교문탈출판이며 다음남은작업은최종모델/재질/리깅/녹음음향교체와활성화Unity에서의Play/WebGL검증이다.
+
+
+최종 공개 검증: 63개 통과, 실행/콘솔 오류 0. 공개 파일과 검증 빌드 SHA-256 일치. 호스팅 확인 화면을 클릭하고 오디오 재개 완료를 기다린 뒤 실제 Chromium에서 검증했다. 실행: https://rawcdn.githack.com/pig556347-boop/-0-/d42df4539bda3be4e64cd9bf7033f12d1a8832dd/index.html
+다음 재개: 이 공개 빌드와 Evidence/subjects016-public.json 기준. 구현은 완료했으며 남은 제작은 Unity 네이티브 이식·최종 몬스터 모델/모션·녹음 음색 교체·전체 게임 영문 번역이다.

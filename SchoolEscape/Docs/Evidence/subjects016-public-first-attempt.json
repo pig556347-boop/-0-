@@ -1,0 +1,41 @@
+{
+  "ok": false,
+  "utc": "2026-10-28T13:23:43.534Z",
+  "publicURL": "https://rawcdn.githack.com/pig556347-boop/-0-/4848ff303d93b8b31f11657ab1681e7d6eaa2a49/index.html",
+  "sourceCommit": "4848ff303d93b8b31f11657ab1681e7d6eaa2a49",
+  "checks": [
+    {
+      "name": "subjects: Executable HTTP HTML",
+      "passed": true
+    },
+    {
+      "name": "subjects: Public artifact matches tested SHA256",
+      "passed": true
+    }
+  ],
+  "errors": [
+    "subjects: page.waitForFunction: Timeout 90000ms exceeded.\n    at /home/runner/work/-0-/-0-/verify-subjects.mjs:9:504",
+    "lobby: page.waitForFunction: Timeout 90000ms exceeded.\n    at /home/runner/work/-0-/-0-/verify-lobby.mjs:5:627"
+  ],
+  "consoleErrors": [],
+  "suites": [
+    {
+      "name": "subjects",
+      "ok": false,
+      "checks": 2,
+      "hash": "c803d750f7fe2c8ff92f9f5acf7ed065669ad27d919c2c6afd0f54fee51fcd66"
+    },
+    {
+      "name": "lobby",
+      "ok": false,
+      "checks": 0,
+      "hash": "c803d750f7fe2c8ff92f9f5acf7ed065669ad27d919c2c6afd0f54fee51fcd66"
+    }
+  ],
+  "http": {
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "sha256": "c803d750f7fe2c8ff92f9f5acf7ed065669ad27d919c2c6afd0f54fee51fcd66",
+    "bytes": 6951365
+  }
+}
