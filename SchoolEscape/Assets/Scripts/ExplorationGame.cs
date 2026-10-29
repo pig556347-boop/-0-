@@ -18,9 +18,11 @@ namespace SchoolEscape
         public bool Won { get; private set; }
         public bool InventoryOpen { get; private set; }
         public ItemInventory Items { get; private set; }
+        public NativeRun017 Native { get; private set; }
+        public int MapSeed { get; private set; }
         public Vector2 ExitGatePoint=>Data.escapeGate!=null?new Vector2(Data.escapeGate.x,Data.escapeGate.y):new Vector2(Data.spawnX,Mathf.Max(1,Data.spawnY-3));
         public float SimulationTime { get; private set; }
-        public bool Caught => Pursuer != null && Pursuer.Caught;
+        public bool Caught => (Pursuer != null && Pursuer.Caught)||(Native!=null&&Native.Captured);
         public Pursuer Pursuer { get; private set; }
         public SchoolAudio Audio { get; private set; }
         public int ActiveSpaceCount { get { int count=0;foreach(var entry in spaces)if(entry.Value.activeSelf)count++;return count; } }
@@ -54,7 +56,7 @@ namespace SchoolEscape
         void Awake()
         {
             Application.targetFrameRate = 60;
-            Data = MapData.Load();
+            Data = MapData.Load();MapSeed=Guid.NewGuid().GetHashCode();NativeRun017.PrepareMap(Data,MapSeed);
             font = Resources.Load<Font>("SchoolFont");
             RenderSettings.ambientLight = new Color(.38f, .43f, .50f);
             RenderSettings.fog = true;
@@ -91,6 +93,7 @@ namespace SchoolEscape
             Pursuer=new GameObject("Caretaker · original pursuit").AddComponent<Pursuer>();
             Pursuer.Initialize(this);
             Items=gameObject.AddComponent<ItemInventory>();Items.Initialize(this);
+            Native=gameObject.AddComponent<NativeRun017>();Native.Initialize(this);
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "-escapeValidate") >= 0)
             {
                 validationMode=true;started = true; Player.InputEnabled = false;Pursuer.SimulationEnabled=false;ItemInteractionsEnabled=false;
@@ -355,6 +358,7 @@ namespace SchoolEscape
             foreach(var s in Current.stairs)
                 if(Mathf.Abs(Player.transform.position.x-Data.World(s.x,s.y).x)<Data.stairEntryHalfWidth&&Mathf.Abs(Player.transform.position.z-Data.World(s.x,s.y).z)<Data.stairEntryHalfDepth)
                 {
+                    if(Native!=null&&!Native.Travel(string.IsNullOrEmpty(s.targetId)?"floor-"+s.target:s.targetId))return false;
                     string previous=Current.id;
                     if(string.IsNullOrEmpty(s.targetId))SwitchFloor(s.target,s.arrivalX,s.arrivalY,true);
                     else{
@@ -425,7 +429,8 @@ namespace SchoolEscape
         {
             if(Caught||Won||Opening||Paused||SimulationTime-lastRoomInteraction<.6f)return false;
             var portal=NearbyPortal();if(portal==null||portal.id!=id)return false;
-            var destination=FindSpace(portal.targetId);if(destination==null)return false;
+            var destination=FindSpace(portal.targetId);if(destination==null||portal.locked)return false;
+            if(Native!=null&&(Native.InterceptExit(portal.id)||!Native.Travel(destination.id)))return false;
             Opening=true;
             openingRoutine=StartCoroutine(OpenPortal(destination,portal.arrivalX,portal.arrivalY,PortalDoorKey(Current,portal),destination.label));
             return true;
@@ -478,12 +483,14 @@ namespace SchoolEscape
             if(doorway==null||room==null)return false;
             Vector2 target=new Vector2(doorway.doorX,doorway.doorY)+Outward(doorway);
             if(!CloseTo(target.x,target.y))return false;
+            if(Native!=null&&!Native.Travel(id))return false;
             Opening=true;openingRoutine=StartCoroutine(OpenPortal(room,room.spawnX,room.spawnY,id,room.label+" · 내부"));
             return true;
         }
         public bool ExitRoom()
         {
             if(Caught||Won||Opening||!CanExitRoom()||SimulationTime-lastRoomInteraction<.6f)return false;
+            if(Native!=null&&Native.InterceptExit())return false;
             var room=Current;Opening=true;
             openingRoutine=StartCoroutine(OpenPortal(string.IsNullOrEmpty(room.returnSpaceId)?Data.floors[room.sourceFloor-1]:FindSpace(room.returnSpaceId),room.returnX,room.returnY,room.id+":exit",room.sourceFloor+"층 복도"));return true;
         }
@@ -493,14 +500,14 @@ namespace SchoolEscape
             if(ItemInteractionsEnabled&&NearExitGate())
             {
                 if(Items.ConsumeEscapeKeys()){Won=true;Player.InputEnabled=false;Audio?.SetPaused(true);ShowNotice("탈출 성공");}
-                else ShowNotice("교문 잠금 · 열쇠 A, B, C가 모두 필요합니다. ("+Items.KeyCount+"/3)");
+                else ShowNotice("교문에 꽂은 열쇠 "+Items.InsertedKeys.Count+" / 3 · 찾은 열쇠부터 꽂을 수 있습니다.");
                 return true;
             }
             // Authored room exits retain priority when standing directly in the
             // threshold, so nearby rear lockers cannot trap the player inside.
             if(CanExitRoom())return ExitRoom();
-            var room=NearbyRoom();if(room!=null&&EnterRoom(room.interiorId))return true;
-            var portal=NearbyPortal();if(portal!=null&&UsePortal(portal.id))return true;
+            var room=NearbyRoom();if(room!=null){EnterRoom(room.interiorId);return true;}
+            var portal=NearbyPortal();if(portal!=null){UsePortal(portal.id);return true;}
             return InteractItems();
         }
         public bool InteractItems()=>ItemInteractionsEnabled&&!Caught&&!Won&&!Opening&&!Paused&&Items!=null&&Items.Interact();
@@ -517,13 +524,17 @@ namespace SchoolEscape
         void Update()
         {
             if(!started||Won)return;
+            if(Native!=null&&Native.HandleInput())return;
             if(Input.GetKeyDown(KeyCode.I))ToggleInventory();
             if(Input.GetKeyDown(KeyCode.Escape)){if(InventoryOpen)ToggleInventory();else SetPaused(!Paused);}
             if(Paused||Won)return;
+            Native?.Tick(Mathf.Min(Time.deltaTime,.05f));
+            if(Caught)return;
             SimulationTime+=Mathf.Min(Time.deltaTime,.05f);
             Pursuer?.Tick(Mathf.Min(Time.deltaTime,.05f));
             if(Audio!=null)Audio.OnStairs=Array.Exists(Current.stairs,s=>Vector2.Distance(Data.Grid(Player.transform.position),new Vector2(s.x,s.y))*Data.tileSize<1.25f);
-            Audio?.SetState(Player.Speed,Player.IsRunning,Player.Stamina,Pursuer!=null&&Pursuer.IsChasing,Caught);
+            Audio?.Environment(Current.isOutdoor,Current.subjectEvent=="music");
+            Audio?.SetState(Player.Speed,Player.IsRunning,Player.Stamina,Pursuer!=null&&(Pursuer.IsChasing||(Native!=null&&(Native.ThreatActive))),Caught);
             Audio?.SetWatchProximity(Items!=null&&Items.WatchEquipped,Pursuer!=null&&Pursuer.SimulationEnabled&&Pursuer.SpaceId==Current.id?Vector2.Distance(Data.Grid(Player.transform.position),Pursuer.Position)*Data.tileSize:float.PositiveInfinity);
             Items?.SyncVisuals();
             if(Caught)return;
@@ -534,16 +545,22 @@ namespace SchoolEscape
             if(Input.GetKeyDown(KeyCode.E))Interact();
             if(Input.GetKeyDown(KeyCode.F))InteractItems();
         }
-        public void Restart()
+        public void Restart(int? mapSeed=null)
         {
             if(openingRoutine!=null){StopCoroutine(openingRoutine);openingRoutine=null;}
             Opening=false;Won=false;InventoryOpen=false;inventoryPreviousPause=false;inventorySelection=-1;ResetDoorLeaves();RoomTransitions=0;Transitions=0;SimulationTime=0;SetPaused(false);
             lastRoomInteraction=-10;mapVisible=false;arrivalLock=null;
-            Player.ResetState();SwitchFloor(Data.spawnFloor,Data.spawnX,Data.spawnY,false);
+            MapSeed=mapSeed??Guid.NewGuid().GetHashCode();Data=MapData.Load();NativeRun017.PrepareMap(Data,MapSeed);Player.Data=Data;
+            foreach(var root in spaces.Values){root.SetActive(false);Destroy(root);}spaces.Clear();doorLeaves.Clear();doorSlides.Clear();
+            foreach(var f in Data.floors){var root=BuildFloor(f);root.SetActive(false);spaces.Add(f.id,root);}
+            Player.ResetState();SwitchFloor(Data.spawnFloor,Data.spawnX,Data.spawnY,false);Items.Initialize(this);Pursuer.ClearNavigation();
             Pursuer.ResetPursuit();Player.InputEnabled=true;started=true;
-            Items?.ResetRun();
+            Items?.ResetRun();Native?.NewRun();
             Audio?.ResetState();Audio?.StartAudio();notice="본관과 운동장에서 열쇠 A·B·C를 찾아 운동장 교문으로 가세요.";noticeUntil=SimulationTime+4;
         }
+        public void BeginRun(){started=true;Player.InputEnabled=true;SetPaused(false);Audio.StartAudio();Pursuer.ResetPursuit();}
+        public void RestoreClock(float time)=>SimulationTime=time;
+        public void RestorePosition(string id,Vector2 point)=>ActivateSpace(FindSpace(id),point.x,point.y);
         public void SetPaused(bool paused)
         {
             Paused=paused;Audio?.SetPaused(paused);
@@ -559,6 +576,7 @@ namespace SchoolEscape
         void OnGUI()
         {
             GUI.skin.font=font;
+            if(Native!=null&&Native.Draw())return;
             var text=new GUIStyle(GUI.skin.label){fontSize=18,normal={textColor=new Color(.86f,.88f,.82f)}};
             var title=new GUIStyle(text){fontSize=32};
             if(!started)
@@ -574,7 +592,7 @@ namespace SchoolEscape
             GUI.Label(new Rect(32,58,340,30),Current.isRoom?Current.label+" · 내부":Current.subtitle,new GUIStyle(text){fontSize=14});
             GUI.Label(new Rect(24,112,240,24),"스태미나 "+Mathf.CeilToInt(Player.Stamina)+(Player.Exhausted?" · 숨 고르기":""),new GUIStyle(text){fontSize=14});
             var oldColor=GUI.color;GUI.color=new Color(.12f,.18f,.18f);GUI.DrawTexture(new Rect(24,140,220,10),Texture2D.whiteTexture);
-            GUI.color=Player.Exhausted?new Color(.70f,.37f,.26f):new Color(.62f,.74f,.55f);GUI.DrawTexture(new Rect(24,140,220*Player.Stamina/100,10),Texture2D.whiteTexture);GUI.color=oldColor;
+            GUI.color=Player.Exhausted?new Color(.70f,.37f,.26f):new Color(.62f,.74f,.55f);GUI.DrawTexture(new Rect(24,140,220*Player.Stamina/Player.MaximumStamina,10),Texture2D.whiteTexture);GUI.color=oldColor;
             if(Audio!=null&&GUI.Button(new Rect(Screen.width-120,20,100,30),Audio.Muted?"소리 끔":"소리 켬"))Audio.SetMuted(!Audio.Muted);
             if(Pursuer!=null&&GUI.Button(new Rect(Screen.width-350,20,220,30),"개발 · 추적자 "+(Pursuer.SimulationEnabled?"ON":"OFF")))
             {Pursuer.SetEnabled(!Pursuer.SimulationEnabled);if(!Caught&&!Won)Player.InputEnabled=true;}
@@ -623,7 +641,7 @@ namespace SchoolEscape
             else if(itemPrompt!=null)GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),"E · "+itemPrompt.label,text);
             else if(nearby!=null)GUI.Label(new Rect(Screen.width*.5f-210,Screen.height-116,650,40),arrivalLock==nearby.id?"계단 구역을 벗어난 뒤 다시 진입하세요":nearby.label+"  ·  계단 안으로 이동",text);
             else if(SimulationTime<noticeUntil)GUI.Label(new Rect(Screen.width*.5f-230,110,600,40),notice,text);
-            if(mapVisible)DrawMap();
+            if(mapVisible&&Native?.Dark!=true&&Current.subjectEvent!="art")DrawMap();
         }
         void DrawInventory(GUIStyle text,GUIStyle title)
         {

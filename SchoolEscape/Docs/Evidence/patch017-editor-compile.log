@@ -1,0 +1,2 @@
+SchoolEscape/Assets/Scripts/NativeRun017.cs(17,51): warning CS0649: Field 'NativeRun017.Layouts.version' is never assigned to, and will always have its default value 0
+SchoolEscape/Assets/Scripts/NativeRun017.cs(17,73): warning CS0649: Field 'NativeRun017.Layouts.runs' is never assigned to, and will always have its default value null

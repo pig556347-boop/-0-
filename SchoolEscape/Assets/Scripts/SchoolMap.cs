@@ -34,7 +34,7 @@ namespace SchoolEscape
         public string id,label,kind,building,returnSpaceId,exitLabel;
         public bool isRoom,isOutdoor,noExit,doubleHeight;
         public int sourceFloor,spawnX,spawnY,exitX,exitY,returnX,returnY;
-        public string subtitle;
+        public string subtitle,subjectEvent,theme;
         public string[] rows;
         public RoomData[] rooms;
         public StairData[] stairs;
@@ -90,7 +90,8 @@ namespace SchoolEscape
     }
     [Serializable] public sealed class FixtureData
     {
-        public string id,room,kind,label,color,shape;
+        public string id,room,kind,label,color,shape,bookCode,assembly;
+        public int compartments;
         public float x,y,width,depth,height,elevation;
         public bool solid;
     }

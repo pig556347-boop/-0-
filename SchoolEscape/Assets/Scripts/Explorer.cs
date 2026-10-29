@@ -12,6 +12,8 @@ namespace SchoolEscape
         public float Speed { get; private set; }
         public float Distance { get; private set; }
         public float Stamina { get; private set; } = 100;
+        public float MaximumStamina=100;
+        public void SetStamina(float value){Stamina=Mathf.Clamp(value,0,MaximumStamina);Exhausted=Stamina<=0;}
         public bool Exhausted { get; private set; }
         public bool IsRunning { get; private set; }
         public bool CanRun => !Exhausted && Stamina > 0;
@@ -61,7 +63,8 @@ namespace SchoolEscape
                 if(footstepClock>=period){footstepClock%=period;Game.EmitNoise(Game.Current.id,Data.Grid(transform.position),IsRunning?8:2,"footstep");}
             }
             else footstepClock=0;
-            if(IsRunning)
+            if(Game?.Native?.KitchenActive==true){RestoreStamina();}
+            else if(IsRunning)
             {
                 Stamina = Mathf.Max(0, Stamina - 20 * dt);staminaDelay = 1.5f;
                 if(Stamina <= .0001f){Stamina=0;Exhausted=true;}
@@ -69,7 +72,8 @@ namespace SchoolEscape
             else RecoverStamina(dt);
             float moving = Mathf.Clamp01(Speed / Data.walkSpeed);
             phase += Speed * dt * (run ? 4.2f : 5.3f);
-            if (direction.sqrMagnitude > .01f)
+            if(Game.Current.subjectEvent=="art"){var ray=Game.View.ScreenPointToRay(Input.mousePosition);var plane=new Plane(Vector3.up,Vector3.zero);if(plane.Raycast(ray,out float t)){Vector3 aim=ray.GetPoint(t)-transform.position;aim.y=0;if(aim.sqrMagnitude>.01f)Visual.rotation=Quaternion.LookRotation(aim);}}
+            else if (direction.sqrMagnitude > .01f)
                 Visual.rotation = Quaternion.Slerp(Visual.rotation, Quaternion.LookRotation(direction), 1 - Mathf.Exp(-16 * dt));
             float swing = Mathf.Sin(phase) * (run ? 42 : 28) * moving;
             LeftLeg.localRotation = Quaternion.Euler(swing, 0, 0);
@@ -83,16 +87,16 @@ namespace SchoolEscape
         }
         void RecoverStamina(float dt)
         {
-            if(staminaDelay<=0)Stamina=Mathf.Min(100,Stamina+18*dt);
-            if(Exhausted&&Stamina>=25)Exhausted=false;
+            if(staminaDelay<=0)Stamina=Mathf.Min(MaximumStamina,Stamina+18*dt);
+            if(Exhausted&&Stamina>=MaximumStamina*.25f)Exhausted=false;
         }
         public void ResetState()
         {
-            Stamina=100;Exhausted=false;IsRunning=false;staminaDelay=0;
+            Stamina=MaximumStamina;Exhausted=false;IsRunning=false;staminaDelay=0;
             Speed=0;Distance=0;LastDelta=Vector3.zero;phase=0;footstepClock=0;SpeedBoostUntil=-1;
         }
         public void ApplyVitamin()=>SpeedBoostUntil=(Game!=null?Game.SimulationTime:Time.time)+2;
-        public void RestoreStamina(){Stamina=100;Exhausted=false;staminaDelay=0;}
+        public void RestoreStamina(){Stamina=MaximumStamina;Exhausted=false;staminaDelay=0;}
         public void Warp(Vector3 position)
         {
             controller.enabled = false;

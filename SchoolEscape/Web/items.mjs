@@ -33,7 +33,7 @@ export class ItemSystem {
  reset(seed){
   if(seed===undefined){const value=new Uint32Array(1);if(globalThis.crypto?.getRandomValues)globalThis.crypto.getRandomValues(value);else value[0]=(Date.now()^Math.floor(Math.random()*4294967296))>>>0;seed=value[0];}
   this.seed=hashSeed(seed);this.random=randomSource(this.seed);this.inventory=[];this.equipped=null;this.worldItems=[];this.consumed=[];this.lastInteraction=-100;
-  this.openSearch=null;this.openCompartment=0;this.serial=0;this.escaped=false;this.lastAction=null;this.game.won=false;this.searchables=this.searchTemplate.map(s=>({...s,searched:false,itemUid:null}));
+  this.openSearch=null;this.openCompartment=0;this.serial=0;this.escaped=false;this.insertedKeys=[];this.lastAction=null;this.game.won=false;this.searchables=this.searchTemplate.map(s=>({...s,searched:false,itemUid:null}));
   this.searchById=new Map(this.searchables.map(s=>[s.id,s]));this.game.speedBoostUntil=0;
   const floors=shuffle(this.game.data.floors.map(f=>f.number),this.random),modes=shuffle(['hidden','ground',this.random()<.5?'hidden':'ground'],this.random);
   if(this.game.spaces.has('playground')){
@@ -168,6 +168,7 @@ export class ItemSystem {
  }
  use(slotIndex){
   if(!this._canAct())return this._action(false,'지금은 사용할 수 없습니다.');const item=this.inventory[slotIndex];if(!item)return this._action(false,'빈 칸입니다.');
+  if(this.catalog[item.itemId]?.type==='note')return this._action(true,this.catalog[item.itemId].description);
   if(item.itemId==='smartwatch')return this.equip(slotIndex);
   if(item.itemId==='vitamin-water')this.game.speedBoostUntil=this.game.time+2;
   else if(item.itemId==='chocolate-bar'){this.game.stamina=this.game.maxStamina||100;this.game.exhausted=false;this.game.lastSprintTime=-100;}
@@ -212,15 +213,24 @@ export class ItemSystem {
  }
  route(){return this.compass()}
  hasAllKeys(){return KEYS.every(id=>this.inventory.some(i=>i.itemId===id))}
- nearbyGate(){const g=this.game,e=this.escapeGate;return!g.caught&&!g.pendingDoor&&!this.escaped&&g.spaceId===e.spaceId&&Math.hypot(g.x-e.x,g.y-e.y)*g.data.tileSize<=e.range&&g.segmentClear(g.x,g.y,e.x,e.y)?{...e,missing:KEYS.filter(id=>!this.inventory.some(i=>i.itemId===id)).map(id=>id.slice(-1).toUpperCase())}:null}
+ nearbyGate(){const g=this.game,e=this.escapeGate;return!g.caught&&!g.pendingDoor&&!this.escaped&&g.spaceId===e.spaceId&&Math.hypot(g.x-e.x,g.y-e.y)*g.data.tileSize<=e.range&&g.segmentClear(g.x,g.y,e.x,e.y)?{...e,missing:KEYS.filter(id=>!this.insertedKeys.includes(id)).map(id=>id.slice(-1).toUpperCase())}:null}
  tryEscape(){return this.consumeEscapeKeys()}
  consumeEscapeKeys(){
-  const gate=this.nearbyGate();if(!gate)return this._action(false,'운동장 교문 앞에서 사용하세요.',{missing:KEYS.filter(id=>!this.inventory.some(i=>i.itemId===id)).map(id=>id.slice(-1).toUpperCase())});
-  if(!this.hasAllKeys())return this._action(false,`열쇠 ${gate.missing.join('·')}가 필요합니다.`,{missing:gate.missing});
-  const keys=this.inventory.filter(i=>KEYS.includes(i.itemId));this.inventory=this.inventory.filter(i=>!KEYS.includes(i.itemId));this.consumed.push(...keys);this.escaped=true;this.game.won=true;this.game.speed=0;this.game.isRunning=false;this.game.emit('escaped',{keys:KEYS.slice()});return this._action(true,'열쇠 A·B·C로 교문을 열었습니다.',{type:'escaped',missing:[]});
+  if(!this.nearbyGate())return this._action(false,'운동장 교문 앞에서 사용하세요.');
+  const keys=this.inventory.filter(i=>KEYS.includes(i.itemId)&&!this.insertedKeys.includes(i.itemId));
+  for(const key of keys){this.insertedKeys.push(key.itemId);this.consumed.push(key)}
+  this.inventory=this.inventory.filter(i=>!keys.includes(i));
+  if(keys.length)this.game.emit('gate-key-inserted',{count:keys.length});
+  const missing=KEYS.filter(id=>!this.insertedKeys.includes(id)).map(id=>id.slice(-1).toUpperCase());
+  if(missing.length)return this._action(!!keys.length,keys.length?'열쇠를 꽂았습니다. 남은 잠금: '+missing.join(' · '):'아직 꽂지 않은 열쇠: '+missing.join(' · '),{type:'key-inserted',missing});
+  // The final insertion and opening are separate actions, so the player can
+  // inspect three latched locks before choosing to leave the run.
+  if(keys.length)return this._action(true,'세 열쇠를 모두 꽂았습니다. E로 교문을 열어 탈출하세요.',{type:'key-inserted',missing:[]});
+  this.escaped=true;this.game.won=true;this.game.speed=0;this.game.isRunning=false;this.game.emit('escaped',{keys:KEYS.slice()});return this._action(true,'교문을 열고 탈출했습니다.',{type:'escaped',missing:[]});
  }
+
  step(){
   const target=this.inventory.find(i=>i.itemId==='compass')?.targetKeyUid;if(target&&this.inventory.some(i=>i.uid===target))this._expireCompass(target);
  }
- inspect(){return{seed:this.seed,capacity:this.capacity,inventory:this.inventory.map(i=>({...i})),equipped:this.equipped?{...this.equipped}:null,worldItems:this.worldItems.map(i=>({...i})),searchables:this.searchables.map(s=>({...s,approaches:s.approaches.map(p=>({...p}))})),compass:this.compass(),keys:KEYS.map(id=>({id,label:this.catalog[id].label,owned:this.inventory.some(i=>i.itemId===id)})),hasAllKeys:this.hasAllKeys(),escaped:this.escaped,escapeGate:{...this.escapeGate},speedBoostUntil:this.game.speedBoostUntil,lastAction:this.lastAction};}
+ inspect(){return{seed:this.seed,capacity:this.capacity,inventory:this.inventory.map(i=>({...i})),equipped:this.equipped?{...this.equipped}:null,worldItems:this.worldItems.map(i=>({...i})),searchables:this.searchables.map(s=>({...s,approaches:s.approaches.map(p=>({...p}))})),compass:this.compass(),insertedKeys:[...this.insertedKeys],keys:KEYS.map(id=>({id,label:this.catalog[id].label,owned:this.inventory.some(i=>i.itemId===id)})),hasAllKeys:this.hasAllKeys(),escaped:this.escaped,escapeGate:{...this.escapeGate},speedBoostUntil:this.game.speedBoostUntil,lastAction:this.lastAction};}
 }

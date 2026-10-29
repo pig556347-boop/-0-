@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SchoolEscape
@@ -23,7 +24,7 @@ namespace SchoolEscape
         AudioSource ambience, chase, breath;
         AudioSource[] voices;
         AudioClip ambientClip, chaseClip, breathClip, footClip, runClip, stairClip, doorOpenClip, doorCloseClip, caughtClip, heartbeatClip;
-        float stepClock, breathClock,heartbeatClock;
+        float stepClock, breathClock,heartbeatClock;AudioClip outdoorClip;bool outside,musicRoom;
         bool wasCaught;
         const int Rate = 24000;
 
@@ -31,15 +32,9 @@ namespace SchoolEscape
         {
             voices=new AudioSource[10];for(int i=0;i<voices.Length;i++)voices[i]=Source("School sound voice "+i,false);
             ambience=Source("School ambience",true);chase=Source("Original pursuit score",true);breath=Source("Tired breathing",true);
-            ambientClip=Clip("Original school wind and electrical hum",4,(t,n)=>
-                .13f*n+.045f*Sin(47*t)+.022f*Sin(71*t),0x5314,true);
-            chaseClip=Clip("Original urgent pursuit rhythm",8,(t,n)=>
-            {
-                float beat=t%.4f, pulse=Mathf.Exp(-beat*25),hat=Mathf.Exp(-((t+.20f)%.4f)*85);
-                int note=(int)(t/.8f)%4;float hz=note==0?165:note==2?220:176;
-                return .13f*Sin(55*t)+.05f*Sin(82.5f*t)+.22f*pulse*Sin((65-22*beat)*t)+.025f*n*hat+
-                    .025f*Sin(hz*t)*Mathf.Exp(-(t%.8f)*6);
-            },0x6145,true);
+            ambientClip=Clip("Original indoor piano",12,(t,n)=>{int[] notes={57,60,64,63,57,56,52,55};float beat=t%1.5f,hz=440*Mathf.Pow(2,(notes[(int)(t/1.5f)%8]-69)/12f);return .18f*Mathf.Exp(-beat*3)*(Sin(hz*t)+.24f*Sin(hz*2*t)+.1f*Sin(hz*3*t));},0x5314,true);
+            outdoorClip=Clip("Original outdoor piano",16,(t,n)=>{int[] notes={45,52,48,44,47,45,40,43};float beat=t%2,hz=440*Mathf.Pow(2,(notes[(int)(t/2)%8]-69)/12f);return .2f*Mathf.Exp(-beat*2)*(Sin(hz*t)+.2f*Sin(hz*2*t));},0x4411,true);
+            chaseClip=Clip("Original 3/4 urgent piano 192 BPM",7.5f,(t,n)=>{float step=60f/192/2,beat=t%step;int index=(int)(t/step),note=new[]{84,87,91,90,86,89}[index%6];float hz=440*Mathf.Pow(2,(note-69)/12f);return (index%6==0?.25f:.17f)*Mathf.Exp(-beat*18)*(Sin(hz*t)+.28f*Sin(hz*2*t));},0x6145,true);
             breathClip=Clip("Original tired breath",4,(t,n)=>
             {
                 float envelope=Mathf.Pow((1-Mathf.Cos(t*Mathf.PI))/2,2);
@@ -134,7 +129,7 @@ namespace SchoolEscape
         {
             if(!Started||Paused)return;
             float dt=Mathf.Min(Time.unscaledDeltaTime,.1f),level=Muted?0:Volume;
-            ambience.volume=Mathf.MoveTowards(ambience.volume,.18f*level,dt*.3f);
+            ambience.volume=Mathf.MoveTowards(ambience.volume,(musicRoom?0:.18f)*level,dt*.3f);
             chase.volume=Mathf.MoveTowards(chase.volume,chasing&&!caught?.44f*level:0,dt*.5f);
             breathClock+=dt;
             float tired=Mathf.Clamp01((40-stamina)/40),envelope=.35f+.65f*Mathf.Pow((1+Mathf.Sin(breathClock*3.1f))/2,2);
@@ -148,10 +143,23 @@ namespace SchoolEscape
             }
             else stepClock=0;
         }
+        readonly Dictionary<string,AudioClip> cues=new Dictionary<string,AudioClip>();float roomClock,enemyClock;
+        AudioClip Piano(int midi){string id="piano-"+midi;if(!cues.TryGetValue(id,out var clip)){float hz=440*Mathf.Pow(2,(midi-69)/12f);clip=Clip(id,.8f,(t,n)=>Mathf.Exp(-t*5)*.3f*(Sin(hz*t)+.25f*Sin(2*hz*t)+.12f*Sin(3*hz*t)),12,false);cues[id]=clip;}return clip;}
+        public void Environment(bool isOutdoor,bool inMusic){musicRoom=inMusic;if(outside==isOutdoor)return;outside=isOutdoor;ambience.clip=outside?outdoorClip:ambientClip;if(Started&&!Paused)ambience.Play();}
+        public void RoomPiano(float bpm){roomClock+=Mathf.Min(Time.deltaTime,.05f);float interval=60/bpm/2;if(roomClock>=interval){roomClock%=interval;Voice(Piano(new[]{69,72,76,74,71,67,70,73}[roomNote++%8]),.2f);}}
+        int roomNote;
+        public void EnemyStep(bool moving,float distance,float dt){if(!moving||distance>15)return;enemyClock+=dt;if(enemyClock>.48f){enemyClock=0;Voice(stairClip,Mathf.Clamp01(1-distance/16)*.65f,.55f);}}
+        public void Cue(string id,bool ui=false)
+        {
+            if(!Started||Muted||Paused&&!ui)return;
+            if(!cues.TryGetValue(id,out var clip)){float hz=id=="keypad"?1180:id=="unlock"?180:id=="monster"?60:id=="discord"?220:130;clip=Clip(id,id=="discord"?.8f:.22f,(t,n)=>Mathf.Exp(-t*(id=="discord"?4:15))*(.16f*Sin(hz*t)+(id=="discord"?.15f*Sin(233*t):.12f*n)),772,false);cues[id]=clip;}
+            if(ui&&Paused){foreach(var source in voices)if(!source.isPlaying){source.clip=clip;source.pitch=1;source.volume=.45f*Volume;source.Play();break;}}else Voice(clip,.45f);
+        }
         public void ResetState(){wasCaught=false;stepClock=0;heartbeatClock=0;}
         void OnDestroy()
         {
-            foreach(var clip in new[]{ambientClip,chaseClip,breathClip,footClip,runClip,stairClip,doorOpenClip,doorCloseClip,caughtClip,heartbeatClip})
+            foreach(var clip in cues.Values)if(clip!=null)Destroy(clip);
+            foreach(var clip in new[]{ambientClip,outdoorClip,chaseClip,breathClip,footClip,runClip,stairClip,doorOpenClip,doorCloseClip,caughtClip,heartbeatClip})
                 if(clip!=null)Destroy(clip);
         }
     }

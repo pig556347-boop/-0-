@@ -1,0 +1,229 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:8818/",
+  "checks": [
+    {
+      "name": "Playable HTML response",
+      "passed": true
+    },
+    {
+      "name": "Keyboard walk normalized speed",
+      "passed": true
+    },
+    {
+      "name": "Keyboard diagonal normalized speed",
+      "passed": true
+    },
+    {
+      "name": "Keyboard run normalized speed",
+      "passed": true
+    },
+    {
+      "name": "Automatic stairs 1→2→3→4→3→2→1 and safe idle landings",
+      "passed": true
+    },
+    {
+      "name": "Walkway reached and returned entirely within playground",
+      "passed": true
+    },
+    {
+      "name": "Closed doors and boundaries block movement",
+      "passed": true
+    },
+    {
+      "name": "New run grants developer master key",
+      "passed": true
+    },
+    {
+      "name": "Both science tools on third floor",
+      "passed": true
+    },
+    {
+      "name": "Contiguous yard contains walkway without door",
+      "passed": true
+    },
+    {
+      "name": "Password note occupies inventory slot",
+      "passed": true
+    },
+    {
+      "name": "Science preparation exact note code unlocks correct door",
+      "passed": true
+    },
+    {
+      "name": "Note consumed immediately without room entry",
+      "passed": true
+    },
+    {
+      "name": "Keypad audio sounds while investigation pauses world",
+      "passed": true
+    },
+    {
+      "name": "E closes dialog",
+      "passed": true
+    },
+    {
+      "name": "Roster rendered as readable table",
+      "passed": true
+    },
+    {
+      "name": "Guard locker has exactly two named compartments",
+      "passed": true
+    },
+    {
+      "name": "Shelf shows one relevant return action",
+      "passed": true
+    },
+    {
+      "name": "Wrong order produces feedback and reset",
+      "passed": true
+    },
+    {
+      "name": "Three actual UI returns solve library",
+      "passed": true
+    },
+    {
+      "name": "Science equipment collected via UI on same floor",
+      "passed": true
+    },
+    {
+      "name": "Esc freezes recorded play time",
+      "passed": true
+    },
+    {
+      "name": "Resume advances time",
+      "passed": true
+    },
+    {
+      "name": "Statue freezes while visibly watched",
+      "passed": true
+    },
+    {
+      "name": "Statue approaches when looking away",
+      "passed": true
+    },
+    {
+      "name": "Dunkyboy accelerates on straight court route",
+      "passed": true
+    },
+    {
+      "name": "Science spawns exactly two shadows",
+      "passed": true
+    },
+    {
+      "name": "Shadows frozen during light",
+      "passed": true
+    },
+    {
+      "name": "Shadows move only during blackout",
+      "passed": true
+    },
+    {
+      "name": "Music climax spawns giant-headed musician",
+      "passed": true
+    },
+    {
+      "name": "Everyday kitchen is smaller than chase passage",
+      "passed": true
+    },
+    {
+      "name": "Searching end crate arms but does not spawn chef",
+      "passed": true
+    },
+    {
+      "name": "Return route triggers expanded chase passage",
+      "passed": true
+    },
+    {
+      "name": "Standing still is quickly lethal in kitchen",
+      "passed": true
+    },
+    {
+      "name": "Retry starts safely without immediate monster",
+      "passed": true
+    },
+    {
+      "name": "Death, renewed investigation, and return spawn chef again",
+      "passed": true
+    },
+    {
+      "name": "Uninterrupted sprint can complete the entire one-cell chase route",
+      "passed": true
+    },
+    {
+      "name": "Chase exits safely into cafeteria",
+      "passed": true
+    },
+    {
+      "name": "A alone can be installed without escaping",
+      "passed": true
+    },
+    {
+      "name": "Installed key restored from save",
+      "passed": true
+    },
+    {
+      "name": "Three installed keys require explicit final opening",
+      "passed": true
+    },
+    {
+      "name": "Final E action escapes with empty inventory",
+      "passed": true
+    },
+    {
+      "name": "No browser exceptions or asset errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "http": {
+    "status": 200,
+    "contentType": "text/html",
+    "bytes": 6668294
+  },
+  "sha256": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94",
+  "keyboard": [
+    {
+      "name": "walk",
+      "speed": 2.5999999999999797,
+      "before": {
+        "x": 24.104,
+        "y": 9,
+        "t": 0.25
+      },
+      "after": {
+        "x": 25.039999999999992,
+        "y": 9,
+        "t": 0.7000000000000001
+      }
+    },
+    {
+      "name": "diagonal",
+      "speed": 2.599999999999965,
+      "before": {
+        "x": 24.324617315730194,
+        "y": 9.220617315730205,
+        "t": 1.0500000000000003
+      },
+      "after": {
+        "x": 24.986469262920778,
+        "y": 9.882469262920822,
+        "t": 1.5000000000000007
+      }
+    },
+    {
+      "name": "run",
+      "speed": 4.700000000000074,
+      "before": {
+        "x": 24.668000000000006,
+        "y": 9,
+        "t": 1.900000000000001
+      },
+      "after": {
+        "x": 26.54800000000003,
+        "y": 9,
+        "t": 2.3999999999999995
+      }
+    }
+  ]
+}

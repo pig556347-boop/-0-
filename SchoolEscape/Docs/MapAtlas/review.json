@@ -1,7 +1,7 @@
 {
-  "utc": "2026-10-28T13:07:19.889Z",
+  "utc": "2026-10-29T09:25:47.136Z",
   "kind": "Actual Chromium SVG diagram rendering and local atlas loading; not gameplay validation",
-  "mapSha256": "a1c0d233b0e24db8d0bba531cc68e3d2dc80d8da166494837d1c0ba2153ef81f",
+  "mapSha256": "87556aefd0c0b493d669c3d09c9451238d719a38b3306e1944ae36441b6f65fd",
   "views": [
     {
       "file": "overview.svg",
@@ -368,6 +368,18 @@
       "loaded": true
     },
     {
+      "file": "../RoomPlans/annex-kitchen-chase.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/annex-coach-room.svg",
+      "loaded": true
+    },
+    {
+      "file": "../RoomPlans/annex-equipment-records.svg",
+      "loaded": true
+    },
+    {
       "file": "../RoomPlans/annex-kitchen.svg",
       "loaded": true
     },
@@ -444,7 +456,7 @@
       "loaded": true
     },
     {
-      "file": "school-walkway.svg",
+      "file": "../RoomPlans/gatehouse-toilet.svg",
       "loaded": true
     }
   ],

@@ -59,6 +59,7 @@ namespace SchoolEscape
         {
             Game=game;BuildVisual();ResetPursuit();
         }
+        public void ClearNavigation(){navigation.Clear();edges.Clear();}
         public void SyncSpace()=>SyncVisual(0);
         public void SetEnabled(bool enabled)
         {
@@ -106,6 +107,7 @@ namespace SchoolEscape
             }
             SpawnCandidateCount=candidates.Count;
             if(candidates.Count==0)throw new InvalidOperationException("No safe designated caretaker spawn");
+            var local=candidates.FindAll(c=>c.map.id=="floor-1");if(local.Count>0)candidates=local;
             var chosen=candidates[random.Next(candidates.Count)];
             SpaceId=chosen.map.id;Position=chosen.point;InitialSpawnSpace=SpaceId;InitialSpawnPosition=Position;
             State="patrol";Speed=0;Phase=0;Transfers=0;ClearKnowledge();
@@ -154,6 +156,7 @@ namespace SchoolEscape
         {
             dt=Mathf.Clamp(dt,0,.05f);
             if(Game==null||!Game.Started||!SimulationEnabled){if(visual!=null)visual.gameObject.SetActive(false);return;}
+            if(Game.Native!=null&&(Game.Native.RoomEncounter||Game.Native.KitchenActive)){if(visual!=null)visual.gameObject.SetActive(false);return;}
             if(Game.Paused||Game.Won){Speed=0;return;}
             if(Caught){Speed=0;SyncVisual(0);return;}
             float now=Game.SimulationTime;var f=Map(SpaceId);if(f==null)return;

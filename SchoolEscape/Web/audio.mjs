@@ -96,7 +96,9 @@ export class SchoolAudio {
       const id=Number(event.id??event.serial??0);if(!Number.isFinite(id)||id<=this.lastEvent)continue;
       this.lastEvent=id;this.stats.processedEvents++;
       if(!audible)continue;
-      if(event.type==='kitchen-collapse'){this._noise(.9,.13,420);this._tone(48,.8,.12,{end:26});}
+      if(event.type==='keypad-press'){this._tone(1180,.055,.035);this._tone(1540,.04,.018,{delay:.055});}
+      else if(event.type==='lock-unlocked'||event.type==='gate-key-inserted'){this._noise(.13,.07,1800);this._tone(180,.16,.045,{end:70});}
+      else if(event.type==='kitchen-collapse'){this._noise(.9,.13,420);this._tone(48,.8,.12,{end:26});}
       else if(event.type==='kitchen-smash'){this._noise(.18,.065,760);this._tone(65,.18,.05,{end:30});}
       else if(event.type==='locked-door'){this._noise(.15,.04,1600);}
       else if(event.type==='door-open')this._door(true);
@@ -223,11 +225,15 @@ export class SchoolAudio {
       masterGain:this.master?.gain.value||0,effectiveGain,rms,watchEquipped:this.watchEquipped,watchBpm:this.watchBpm,watchDistance:Number.isFinite(this.watchDistance)?this.watchDistance:null,
       ambienceActive:!!this.context&&this.started&&!this.paused&&!this.muted&&this.context.state==='running',lastError:this.lastError||null};
   }
+  async uiCue(kind){
+    if(this.muted||this.volume<=0||document.hidden)return;
+    try{const C=globalThis.AudioContext||globalThis.webkitAudioContext;if(!C)return;const c=this.uiContext??=new C();await c.resume();if(this.muted)return;const o=c.createOscillator(),g=c.createGain(),t=c.currentTime;const hz=kind==='keypad'?1180:kind==='unlock'?180:kind==='pickup'?420:145;o.type=kind==='cabinet'?'triangle':'sine';o.frequency.setValueAtTime(hz,t);o.frequency.exponentialRampToValueAtTime(kind==='keypad'?1520:hz*.55,t+.12);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(this.volume*.07,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+.16);o.connect(g);g.connect(c.destination);o.onended=()=>{o.disconnect();g.disconnect()};o.start();o.stop(t+.18);this.stats.uiCues=(this.stats.uiCues||0)+1;}catch(e){this.lastError=String(e.message)}
+  }
   dispose() {
     if(this.disposed)return;this.disposed=true;
     document.removeEventListener('visibilitychange',this._visibility);
     for(const source of this.voices){try{source.stop()}catch{}}
     for(const node of this.continuous){try{if(node.stop)node.stop();node.disconnect()}catch{}}
-    this.voices.clear();if(this.context)this.context.close().catch(()=>{});
+    this.voices.clear();if(this.uiContext)this.uiContext.close().catch(()=>{});if(this.context)this.context.close().catch(()=>{});
   }
 }

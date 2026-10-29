@@ -1,14 +1,15 @@
 // Original authored set-piece. Broken geometry belongs to the current run only.
 export class KitchenSequence {
- constructor(game,pursuit,survival){this.game=game;this.pursuit=pursuit;this.survival=survival;this.map=[...game.spaces.values()].find(f=>f.kitchenSequence);this.phase='idle';this.blocks=[];this.revision=0;this.destroyed=0;this.path=this.map.kitchenSequence.path;this.x=this.path[0][0];this.y=this.path[0][1]+1.5;this.index=-1;this.distance=0;this.startedAt=0;this.speed=0;this.direction={x:0,y:-1};this.walkPhase=0;this.message='';this.staticSolids=[...game.solidFixtures[this.map.id]];this.lastSpace=game.spaceId;this.examined=false;this.attempts=0;this.eventCursor=game.eventSerial;game.unlimitedStamina=()=>this.active&&game.spaceId===this.map.id&&!game.caught;}
+ constructor(game,pursuit,survival){this.game=game;this.pursuit=pursuit;this.survival=survival;this.map=[...game.spaces.values()].find(f=>f.kitchenSequence);this.normal=game.spaces.get('annex-kitchen');this.phase='idle';this.blocks=[];this.revision=0;this.destroyed=0;this.path=this.map.kitchenSequence.path;this.x=this.path[0][0];this.y=this.path[0][1]+1.5;this.index=-1;this.distance=0;this.startedAt=0;this.speed=0;this.direction={x:0,y:-1};this.walkPhase=0;this.message='';this.staticSolids=[...game.solidFixtures[this.map.id]];this.lastSpace=game.spaceId;this.examined=false;this.attempts=0;this.eventCursor=game.eventSerial;game.unlimitedStamina=()=>this.active&&game.spaceId===this.map.id&&!game.caught;}
  get active(){return this.phase==='active'}
  observeSearch(source){
-  if(source?.spaceId===this.map.id&&source.kind==='kitchen-reward-crate'){
+  if(source?.spaceId===this.normal.id&&source.kind==='kitchen-reward-crate'){
    this.examined=true;if(this.phase==='idle')this.phase='armed';
    this.message='상자를 조사했다. 북쪽 출입문으로 돌아가자.';
   }
  }
  intercept(door){
+  if(this.game.spaceId===this.normal.id&&this.examined&&this.pursuit.enabled&&['armed','failed'].includes(this.phase)){this.begin();return '선반이 무너졌다! 열린 비상 작업 통로를 따라 서쪽 출구로 달려!';}
   if(this.game.spaceId!==this.map.id)return null;
   if(['idle','armed','failed'].includes(this.phase)&&this.pursuit.enabled){
    if(door.id===this.map.kitchenSequence.escapePortal)return '비상문이 걸려 있다. 북쪽 출입문으로 돌아가자.';
@@ -24,6 +25,7 @@ export class KitchenSequence {
    if(keep.has(`${x},${y}`)||g.blocked(x,y,this.map))continue;
    this.blocks.push({id:`collapse-${x}-${y}`,x,y,width:g.data.tileSize,depth:g.data.tileSize,height:1.1+((x*7+y*13)%5)*.16,active:true});
   }
+  g.warpSpace(this.map.id,this.path[0][0],this.path[0][1]);
   this.x=this.path[0][0];this.y=this.path[0][1]+1.5;this.index=-1;this.speed=0;this.distance=0;
   this.phase='active';this.attempts++;this.startedAt=g.time;g.stamina=g.maxStamina;g.exhausted=false;
   this.sync();g.emit('kitchen-collapse',{spaceId:this.map.id,retry:this.attempts>1});return true;
@@ -33,21 +35,21 @@ export class KitchenSequence {
  step(dt){
   const g=this.game;
   for(const e of g.events)if(e.id>this.eventCursor){this.eventCursor=e.id;if(e.type==='search')this.observeSearch(this.survival.items.searchById.get(e.sourceId));}
-  if(this.phase==='failed'&&!g.caught&&g.spaceId===this.map.id&&this.lastSpace!==this.map.id)this.phase='armed';
+  if(this.phase==='failed'&&!g.caught&&g.spaceId===this.normal.id&&this.lastSpace!==this.normal.id)this.phase='idle';
   this.lastSpace=g.spaceId;
-  if(this.phase==='armed'&&this.pursuit.enabled&&g.spaceId===this.map.id&&!g.caught&&g.y>34.65&&Math.abs(g.x-24)<.45)this.begin();
+  if(this.phase==='armed'&&this.pursuit.enabled&&g.spaceId===this.normal.id&&!g.caught&&Math.hypot(g.x-this.normal.exitX,g.y-this.normal.exitY-1)<1.4)this.begin();
   if(!this.active)return;
   if(!this.pursuit.enabled){this.phase='bypassed';this.speed=0;return;}
-  if(g.caught){this.phase='failed';this.speed=0;return;}
+  if(g.caught){this.phase='failed';this.examined=false;this.speed=0;return;}
   if(g.spaceId!==this.map.id){this.phase='cleared';this.speed=0;g.emit('kitchen-escaped');return;}
   if(g.time-this.startedAt<this.map.kitchenSequence.leadSeconds){this.speed=0;return;}
   const gap=Math.hypot(g.x-this.x,g.y-this.y)*g.data.tileSize;
   let playerIndex=0,nearest=Infinity;for(let i=0;i<this.path.length;i++){const q=this.path[i],d=Math.hypot(g.x-q[0],g.y-q[1]);if(d<nearest){nearest=d;playerIndex=i;}}
   const routeGap=(playerIndex-this.index)*g.data.tileSize;
-  this.speed=({easy:2,normal:2.25,hard:2.5,extreme:2.65})[this.survival.mode]+(routeGap>12?1.2:0);
+  this.speed=({easy:4.15,normal:4.4,hard:4.55,extreme:4.65})[this.survival.mode]+(routeGap>12?.6:0);
   let move=this.speed*dt/g.data.tileSize;this.walkPhase+=dt*this.speed*4;
   while(move>0&&this.index<this.path.length-1){const p=this.path[this.index+1],dx=p[0]-this.x,dy=p[1]-this.y,n=Math.hypot(dx,dy),step=Math.min(move,n);if(n){this.direction={x:dx/n,y:dy/n};this.x+=dx/n*step;this.y+=dy/n*step;}this.distance+=step*g.data.tileSize;move-=step;if(n<=step+.00001)this.index++;this.clearAround();}
-  if(Math.hypot(g.x-this.x,g.y-this.y)*g.data.tileSize<1.12){g.caught=true;g.emit('caught',{source:'배식장'});this.phase='failed';this.speed=0;}
+  if(Math.hypot(g.x-this.x,g.y-this.y)*g.data.tileSize<1.12){g.caught=true;g.emit('caught',{source:'배식장'});this.phase='failed';this.examined=false;this.speed=0;}
  }
  inspect(){return{phase:this.phase,active:this.active,x:this.x,y:this.y,pathIndex:this.index,destroyed:this.destroyed,remaining:this.blocks.filter(b=>b.active).length,revision:this.revision,monster:'배식장',examined:this.examined,attempts:this.attempts};}
 }

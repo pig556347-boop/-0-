@@ -46,7 +46,7 @@ export function createInventoryUI({items,game,onClose=()=>{},onAction=()=>{}}) {
   wearButton.classList.toggle('empty',!wear);wearButton.setAttribute('aria-pressed',String(selectWear));wearButton.dataset.itemId=wear?.itemId||'';
   const wearKey=wear?wear.uid+':'+wear.itemId:'empty';if(wearButton.dataset.contentKey!==wearKey){wearButton.innerHTML=(wear?itemIcon(wear.itemId):itemIcon('smartwatch'))+'<span class="inv-slot-name"></span>';wearButton.querySelector('.inv-slot-name').textContent=wearDef?(wearDef.label||wearDef.name):'착용한 아이템 없음';wearButton.dataset.contentKey=wearKey;}
   wearButton.style.setProperty('--item-color',wearDef?.color||'#73867e');wearButton.setAttribute('aria-label','착용 칸 · '+(wearDef?.label||wearDef?.name||'비어 있음'));
-  const item=selectedItem(),def=item&&definition(item.itemId),typeLabels={key:'탈출 열쇠',consumable:'소모품',component:'시계 부품',part:'시계 부품',tool:'도구',wearable:'착용 아이템',equipment:'착용 아이템'};
+  const item=selectedItem(),def=item&&definition(item.itemId),typeLabels={key:'탈출 열쇠',consumable:'소모품',component:'시계 부품',part:'시계 부품',tool:'도구',wearable:'착용 아이템',equipment:'착용 아이템',note:'쪽지 · 잠금 해제 시 소모'};
   $('inventory-detail-icon').innerHTML=item?itemIcon(item.itemId):'';$('inventory-detail-icon').style.setProperty('--item-color',def?.color||'#c3ba93');
   $('inventory-type').textContent=def?(typeLabels[def.type]||'소지품'):'EMPTY';$('inventory-name').textContent=def?(def.label||def.name):selectWear?'착용한 아이템 없음':'빈칸';
   $('inventory-description').textContent=def?def.description:selectWear?'스마트워치를 착용하면 가까워지는 당직자를 심장박동 소리로 알아챌 수 있습니다.':'책상과 수납장 등을 조사하거나 바닥의 아이템을 주워 보세요.';

@@ -29,7 +29,7 @@ namespace SchoolEscape
             PlayerSettings.runInBackground = true;
             PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
             PlayerSettings.WebGL.decompressionFallback = false;
-            PlayerSettings.WebGL.memorySize = 256;
+            PlayerSettings.WebGL.memorySize = 512;
             // Include the runtime-created materials' shader in player builds.
             if (!File.Exists("Assets/Resources/BuildShader.mat"))
                 AssetDatabase.CreateAsset(new Material(Shader.Find("Standard")), "Assets/Resources/BuildShader.mat");
@@ -38,6 +38,8 @@ namespace SchoolEscape
         [MenuItem("School Escape/Build separate WebGL")]
         public static void BuildWebGL()
         {
+            if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.WebGL, BuildTarget.WebGL))
+                throw new InvalidOperationException("Install WebGL Build Support for this Unity Editor before building SchoolEscape.");
             Open(); Settings();
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions {
                 scenes = new[] { Scene }, locationPathName = "Builds/WebGL",

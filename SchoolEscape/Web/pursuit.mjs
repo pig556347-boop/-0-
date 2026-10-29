@@ -30,7 +30,8 @@ export class Pursuit {
     this.searchUntil=-1;this.searchGoal=null;this.stuckSeconds=0;this.failedTransfers=0;this.lostReason='';
     this.hasSeenPlayer=false;this.lastSense={visible:false,heard:false};g.caught=false;
     this.spawnCandidates=this.designatedSpawns();
-    const spawn=this.spawnCandidates[Math.floor(this.random()*this.spawnCandidates.length)];
+    const nearby=this.spawnCandidates.filter(s=>s.spaceId===`floor-${g.data.spawnFloor}`),pool=nearby.length?nearby:this.spawnCandidates;
+    const spawn=pool[Math.floor(this.random()*pool.length)];
     if(!spawn)throw Error('No safe designated caretaker spawn');
     this.spaceId=spawn.spaceId;this.x=spawn.x;this.y=spawn.y;
     const same=this.spaceId===g.spaceId;

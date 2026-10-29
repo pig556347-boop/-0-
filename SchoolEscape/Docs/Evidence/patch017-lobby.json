@@ -1,0 +1,133 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Lobby has start, settings and language",
+      "passed": true
+    },
+    {
+      "name": "Gameplay HUD hidden in lobby",
+      "passed": true
+    },
+    {
+      "name": "Settings change game audio and persist",
+      "passed": true
+    },
+    {
+      "name": "Esc returns to lobby",
+      "passed": true
+    },
+    {
+      "name": "English language changes menu and document language",
+      "passed": true
+    },
+    {
+      "name": "Language and audio survive reload",
+      "passed": true
+    },
+    {
+      "name": "Game start reveals playable HUD",
+      "passed": true
+    },
+    {
+      "name": "E or F opens investigation",
+      "passed": true
+    },
+    {
+      "name": "Second E closes without button",
+      "passed": true
+    },
+    {
+      "name": "Closed investigation can reopen",
+      "passed": true
+    },
+    {
+      "name": "I opens inventory",
+      "passed": true
+    },
+    {
+      "name": "E closes inventory too",
+      "passed": true
+    },
+    {
+      "name": "Directional pad is a visible cross, input readonly",
+      "passed": true
+    },
+    {
+      "name": "Physical arrow keys do not fill direction lock",
+      "passed": true
+    },
+    {
+      "name": "Onscreen directional clicks unlock",
+      "passed": true
+    },
+    {
+      "name": "code4 numeric door lock has ten buttons",
+      "passed": true
+    },
+    {
+      "name": "code4 physical typing is ignored",
+      "passed": true
+    },
+    {
+      "name": "code4 backspace removes exactly one entry",
+      "passed": true
+    },
+    {
+      "name": "code4 incomplete code stays locked",
+      "passed": true
+    },
+    {
+      "name": "code4 onscreen digits unlock correct code",
+      "passed": true
+    },
+    {
+      "name": "code6 numeric door lock has ten buttons",
+      "passed": true
+    },
+    {
+      "name": "code6 physical typing is ignored",
+      "passed": true
+    },
+    {
+      "name": "code6 backspace removes exactly one entry",
+      "passed": true
+    },
+    {
+      "name": "code6 incomplete code stays locked",
+      "passed": true
+    },
+    {
+      "name": "code6 onscreen digits unlock correct code",
+      "passed": true
+    },
+    {
+      "name": "Settings available from pause",
+      "passed": true
+    },
+    {
+      "name": "Return to lobby preserves run",
+      "passed": true
+    },
+    {
+      "name": "Resume returns to same run",
+      "passed": true
+    },
+    {
+      "name": "Narrow lobby menu stays reachable",
+      "passed": true
+    },
+    {
+      "name": "No runtime or asset errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "consoleErrors": [],
+  "publicURL": "http://127.0.0.1:8818/index.html",
+  "http": {
+    "status": 200,
+    "sha256": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94"
+  },
+  "utc": "2026-10-29T14:09:09.684Z"
+}

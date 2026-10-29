@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SchoolEscape
@@ -13,11 +14,14 @@ namespace SchoolEscape
             public string uid,id,spaceId,sourceId,targetKey;
             public Vector2 point;
             public bool hidden,revealed,picked,consumed;
-            public GameObject visual;
+            [NonSerialized] public GameObject visual;
+            public int compartment;
         }
-        public sealed class Searchable
+        [Serializable] public sealed class Searchable
         {
-            public string id,spaceId,label;
+            public string id,spaceId,label,kind,fixtureId;
+            public int compartments=1;
+            public string[] compartmentNames;
             public Vector2 point;
             public bool searched;
         }
@@ -38,6 +42,8 @@ namespace SchoolEscape
             public string from,to,label;
             public Vector2 point,arrival;
         }
+        public readonly HashSet<string> InsertedKeys=new HashSet<string>();
+        public static readonly Dictionary<string,string> Labels=new Dictionary<string,string>();
         public readonly List<Item> Inventory=new List<Item>();
         public readonly List<Item> WorldItems=new List<Item>();
         public readonly List<Searchable> Searchables=new List<Searchable>();
@@ -210,7 +216,7 @@ namespace SchoolEscape
             {
                 if(item.visual==null)continue;
                 item.visual.transform.position=game.Data.World(item.point.x,item.point.y);
-                item.visual.SetActive(game.Current!=null&&item.spaceId==game.Current.id&&!item.picked&&!item.consumed&&(!item.hidden||item.revealed));
+                item.visual.SetActive(game.Current!=null&&item.spaceId==game.Current.id&&!item.picked&&!item.consumed&&!item.hidden);
             }
         }
         public Candidate Nearby()
@@ -218,7 +224,7 @@ namespace SchoolEscape
             if(game.Current==null)return null;Vector2 p=game.Data.Grid(game.Player.transform.position);Candidate best=null;
             foreach(var i in WorldItems)
             {
-                if(i.spaceId!=game.Current.id||i.picked||i.consumed||i.hidden&&!i.revealed)continue;
+                if(i.spaceId!=game.Current.id||i.picked||i.consumed||i.hidden)continue;
                 float distance=Vector2.Distance(p,i.point)*game.Data.tileSize;
                 if(distance<=1.55f&&Segment(game.Current,p,i.point)&&(best==null||distance<best.distance))best=new Candidate{item=i,label=Name(i.id)+" 줍기",distance=distance};
             }
@@ -233,6 +239,7 @@ namespace SchoolEscape
         public bool Interact()
         {
             var near=Nearby();if(near==null)return false;
+            if(game.Native!=null)return game.Native.Search(near);
             if(near.item!=null){Pickup(near.item);return true;}
             var source=near.source;source.searched=true;game.EmitNoise(source.spaceId,source.point,4,"search");
             var found=WorldItems.Find(i=>i.sourceId==source.id&&!i.consumed&&!i.picked);
@@ -246,7 +253,7 @@ namespace SchoolEscape
             if(!IsClock(item.id))return false;
             return (item.id=="clock-second-hand"||Has("clock-second-hand"))&&(item.id=="clock-minute-hand"||Has("clock-minute-hand"))&&(item.id=="clock-body"||Has("clock-body"));
         }
-        bool Pickup(Item item)
+        public bool Pickup(Item item)
         {
             var expired=WorldItems.FindAll(i=>i.id=="compass"&&i.targetKey==item.uid&&!i.consumed);
             int replaced=expired.FindAll(i=>Inventory.Contains(i)).Count;
@@ -286,7 +293,7 @@ namespace SchoolEscape
         }
         public bool Drop(int index)
         {
-            if(index<0||index>=Inventory.Count)return false;var item=Inventory[index];Inventory.RemoveAt(index);
+            if(index<0||index>=Inventory.Count)return false;var item=Inventory[index];if(game.Current.subjectEvent=="science"&&(item.id=="lab-coat"||item.id=="flashlight")){game.ShowNotice("입장 장비는 과학실 밖에서 내려놓으세요.");return false;}Inventory.RemoveAt(index);
             item.spaceId=game.Current.id;item.point=game.Data.Grid(game.Player.transform.position);item.sourceId=null;item.hidden=false;item.revealed=true;item.picked=false;
             if(item.visual==null)CreateVisual(item);SyncVisuals();game.ShowNotice(Name(item.id)+" 내려놓음");return true;
         }
@@ -294,7 +301,9 @@ namespace SchoolEscape
         public int KeyCount=>Inventory.FindAll(i=>i.id.StartsWith("key-",StringComparison.Ordinal)).Count;
         public bool ConsumeEscapeKeys()
         {
-            if(!AtEscapeGate()||!HasAllKeys())return false;foreach(var key in Inventory.FindAll(i=>i.id.StartsWith("key-",StringComparison.Ordinal))){key.consumed=true;Inventory.Remove(key);}return true;
+            if(!AtEscapeGate())return false;
+            var keys=Inventory.FindAll(i=>new[]{"key-a","key-b","key-c"}.Contains(i.id));foreach(var key in keys){InsertedKeys.Add(key.id);key.consumed=true;Inventory.Remove(key);}
+            if(keys.Count>0){game.Audio.Cue("unlock");game.ShowNotice("교문에 열쇠를 꽂았습니다. "+InsertedKeys.Count+" / 3 · 모두 꽂았으면 E로 탈출");return false;}return InsertedKeys.Count==3;
         }
         bool AtEscapeGate()
         {
@@ -318,8 +327,19 @@ namespace SchoolEscape
             }
             return new Guidance{direction=(point-game.Data.Grid(game.Player.transform.position)).normalized,label=label,key=Name(target.id)};
         }
+        public List<Vector2> ReachablePoints(string id)=>reachable[id];
+        public void LoadNative(Item[] items,Searchable[] sources,NativeRun017.Definition[] defs,int seed)
+        {
+            foreach(var i in WorldItems)if(i.visual!=null)Destroy(i.visual);WorldItems.Clear();Inventory.Clear();Equipped=null;InsertedKeys.Clear();Labels.Clear();foreach(var d in defs)Labels[d.id]=d.label;
+            Seed=seed;WorldItems.AddRange(items);Searchables.Clear();Searchables.AddRange(sources);
+            foreach(var i in WorldItems)CreateVisual(i);SyncVisuals();
+        }
+        public void Grant(string id){var i=new Item{uid=Guid.NewGuid().ToString(),id=id,picked=true};WorldItems.Add(i);Inventory.Add(i);}
+        public void RestoreCarry(string[] ids,string wear,string[] inserted){Inventory.Clear();foreach(var id in ids){var i=WorldItems.Find(i=>i.uid==id);if(i!=null)Inventory.Add(i);}Equipped=WorldItems.Find(i=>i.uid==wear);InsertedKeys.Clear();foreach(var id in inserted)InsertedKeys.Add(id);SyncVisuals();}
+        public void DropOnDeath(bool scatter){if(Equipped!=null){Inventory.Add(Equipped);Equipped=null;}var all=Inventory.ToArray();Inventory.Clear();var at=game.Data.Grid(game.Player.transform.position);var points=reachable[game.Current.id].Where(p=>Vector2.Distance(p,at)*game.Data.tileSize<=8).ToArray();foreach(var i in all){i.spaceId=game.Current.id;i.sourceId=null;i.hidden=false;i.revealed=true;i.picked=false;i.point=scatter&&points.Length>0?points[random.Next(points.Length)]:at;if(i.visual==null)CreateVisual(i);}SyncVisuals();}
         public static string Name(string id)
         {
+            if(id!=null&&Labels.TryGetValue(id,out var label))return label;
             switch(id){case "key-a":return "열쇠 A";case "key-b":return "열쇠 B";case "key-c":return "열쇠 C";case "vitamin-water":return "비타민워터";case "chocolate-bar":return "초코바";case "clock-second-hand":return "시계초침";case "clock-minute-hand":return "시계분침";case "clock-body":return "시계본체";case "compass":return "나침반";case "smartwatch":return "스마트워치";default:return id;}
         }
     }

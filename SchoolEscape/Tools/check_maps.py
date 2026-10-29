@@ -162,9 +162,9 @@ for f in spaces:
                 assembly=bank.get('assembly')
                 compartments=[o for o in lockers if assembly and o.get('assembly')==assembly]
                 check(bool(assembly),f"{sid} locker bank needs an assembly id {bank['id']}")
-                check(len(compartments)==32 and len({o['x'] for o in compartments})==4 and len({o['elevation'] for o in compartments})==8,f"{sid} locker bank must be4columns x8rows {bank['id']}")
+                check(len(compartments)==bank['compartments'] and len({o['x'] for o in compartments})==4 and len({o['elevation'] for o in compartments})==2,f"{sid} locker visible slots must match 4 columns x 2 rows {bank['id']}")
                 check(all(o['width']>=.5 and o['height']>=.18 for o in compartments),f"{sid} locker compartments too small {bank['id']}")
-            check(len(lockers)==len(banks)*32,f'{sid} ungrouped locker compartments')
+            check(len(lockers)==sum(b['compartments'] for b in banks),f'{sid} ungrouped locker compartments')
         if f.get('kind')=='music':
             labels={z['label'] for z in f['interiorZones']}
             check({'보컬 연습실','악기보관창고','연결 통로'}<=labels,f'{sid} music suite zones missing')
@@ -263,7 +263,7 @@ for f in spaces:
         if target:
             arrival=(portal['arrivalX'],portal['arrivalY'])
             check(arrival in cells(target) and not blocked(target,*arrival),f"{sid} external portal arrival is unsafe: {portal['id']}")
-            check(any(p['targetId']==sid for p in target.get('portals',[])) or target.get('returnSpaceId')==sid,f"{sid} external portal has no return connection: {portal['id']}")
+            check(any(p['targetId']==sid for p in target.get('portals',[])) or target.get('returnSpaceId')==sid or any(e['targetId']==sid for p in target.get('portals',[]) for e in spaces_by_id.get(p['targetId'],{}).get('eventTransitions',[])),f"{sid} external portal has no return connection: {portal['id']}")
     # Building diagrams show closed-room outlines; isolated interiors get separate diagrams.
     w,h=f['width']*16,f['height']*16+80;top=f['height']-1
     title=f.get('label',f"본관{f['number']}F")
@@ -312,7 +312,7 @@ for kind,number in [('science',3),('music',3),('computer',4),('art',4)]:
     check(any(r['kind']==kind and r['sourceFloor']==number for r in rooms_by_id.values()),f'{kind} misplaced')
 yard=spaces_by_id.get('playground')
 gate=data.get('escapeGate',{})
-check(len(data.get('outdoorMaps',[]))==2 and bool(yard) and yard.get('isOutdoor'),'Expected playground and walking path')
+check(len(data.get('outdoorMaps',[]))==1 and bool(yard) and yard.get('isOutdoor'),'Expected continuous playground including walking path')
 check(gate.get('spaceId')=='playground','Main escape gate must be only in the playground')
 if yard:
     start=(yard['spawnX'],yard['spawnY']);clear={p for p in cells(yard) if not blocked(yard,*p)}
@@ -322,6 +322,7 @@ if yard:
     graph={s['id']:[] for s in spaces}
     for s in spaces:
         graph[s['id']]+=[p['targetId'] for p in s.get('portals',[]) if not p.get('locked')]
+        graph[s['id']]+=[p['targetId'] for p in s.get('eventTransitions',[])]
         graph[s['id']]+=[r['interiorId'] for r in s.get('rooms',[]) if r.get('interiorId')]
         graph[s['id']]+=[st.get('targetId',f"floor-{st['target']}") for st in s.get('stairs',[])]
         if s.get('isRoom') and not s.get('noExit'):graph[s['id']].append(s.get('returnSpaceId',f"floor-{s['sourceFloor']}"))

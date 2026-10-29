@@ -1,0 +1,11 @@
+{
+  "unityVersion": "6000.0.62f1",
+  "project": "SchoolEscape",
+  "attempt": "Editor -batchmode -nographics -executeMethod SchoolEscape.EditorTools.Validate -escapeValidate",
+  "playValidated": false,
+  "webGLValidated": false,
+  "actualError": "No valid Unity Editor license found. Please activate your license.",
+  "webGLModuleDirectoryPresent": false,
+  "exitCode": 198,
+  "attemptDateKST": "2026-10-29"
+}

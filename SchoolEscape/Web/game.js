@@ -167,6 +167,10 @@ try {
    box('Shin',knee,new T.Vector3(0,-.145,0),[.17,.29,.20],dark,true);box('Shoe',knee,new T.Vector3(0,-.36,.055),[.21,.14,.32],hair,true);
    limbs.push({arm,leg,knee,side});
  }
+ const aimRay=new T.Raycaster(),aimPlane=new T.Plane(new T.Vector3(0,1,0),0),aimPoint=new T.Vector3();
+ canvas.addEventListener('pointermove',e=>{if(game.map.subjectEvent!=='art')return;const b=canvas.getBoundingClientRect();aimRay.setFromCamera(new T.Vector2((e.clientX-b.left)/b.width*2-1,1-(e.clientY-b.top)/b.height*2),camera);if(aimRay.ray.intersectPlane(aimPlane,aimPoint)){const dx=aimPoint.x-actor.position.x,dy=actor.position.z-aimPoint.z,n=Math.hypot(dx,dy);if(n>.1)game.lookDirection={x:dx/n,y:dy/n}}});
+ const chains=[];for(const f of game.spaces.values()){const root=floorRoots.find(r=>r.userData.spaceId===f.id);for(const d of [...f.rooms,...f.portals||[]]){const lock=progression.locks[d.interiorId||d.targetId];if(lock?.type!=='cutter')continue;const chain=new T.Group();root.add(chain);chain.position.copy(pos(d.doorX,d.doorY,.9));const horizontal=['north','south'].includes(d.facing);for(let n=0;n<9;n++){const link=new T.Mesh(new T.TorusGeometry(.09,.025,5,10),materials.metal);link.position.set(horizontal?(n-4)*.13:0,Math.sin(n*.9)*.08,horizontal?0:(n-4)*.13);if(!horizontal)link.rotation.y=Math.PI/2;link.rotation.z=n%2*.8;chain.add(link)}box('쇠사슬 자물쇠',chain,new T.Vector3(0,-.13,0),[.18,.23,.14],materials.gold);chains.push({chain,lock})}}
+ const artMask=document.createElement('div');artMask.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:8;display:none';artMask.innerHTML='<svg width="100%" height="100%"><defs><mask id="art-view"><rect width="100%" height="100%" fill="white"/><path id="art-cone" fill="black"/><circle id="art-near" r="55" fill="black"/></mask></defs><rect width="100%" height="100%" fill="#02070b" mask="url(#art-view)"/></svg>';document.body.append(artMask);
  const playerLight=new T.PointLight('#ffe1aa',14,10,1.8);playerLight.position.set(0,3,0);actor.add(playerLight);
  const ring=new T.Mesh(new T.RingGeometry(.31,.34,40),new T.MeshBasicMaterial({color:'#ddd3b0',transparent:true,opacity:.55,side:T.DoubleSide}));ring.rotation.x=-Math.PI/2;ring.position.y=.025;actor.add(ring);
  const pursuerVisual=createPursuerVisual(T);scene.add(pursuerVisual.root);
@@ -174,11 +178,13 @@ try {
  const blackout=document.createElement('div');blackout.id='science-blackout';blackout.style.cssText='position:fixed;inset:0;background:#000;z-index:9;pointer-events:none;display:none';document.body.append(blackout);
  const lootVisuals=createLootVisuals(T,items,pos);scene.add(lootVisuals.root);
  const gateRoot=new T.Group();gateRoot.name='운동장 교문 · 최종 탈출';floorRoots.find(r=>r.userData.spaceId===items.escapeGate.spaceId).add(gateRoot);
+ const gateKeys=['a','b','c'].map((id,n)=>{const key=new T.Group();key.name='교문에 꽂은 열쇠 '+id.toUpperCase();key.position.copy(pos(items.escapeGate.x+(n-1)*.7,items.escapeGate.y-1.5,1.1));box('열쇠 머리',key,new T.Vector3(0,0,0),[.19,.19,.06],materials.gold);box('열쇠 몸통',key,new T.Vector3(0,-.16,0),[.045,.25,.05],materials.gold);gateRoot.add(key);return key});
+ document.querySelector('#escape-goal span').textContent='교문 · ◆ 꽂음 / ● 소지';
  textSprite('탈출 교문 · 열쇠 A / B / C',gateRoot,pos(items.escapeGate.x,items.escapeGate.y-2,2.15),4,.48,'#e4c572');
  let started=false,paused=false,manual=false,keys=new Set(),last=performance.now(),seenFloor='',angle=0,toastTimer,chaseIntensity=0;
  let gameplayEventCursor=game.eventSerial,inventoryUI,discovery;
  const bagUI=createInventoryUI({items,game,onClose:()=>{keys.clear();last=performance.now();updateAudio(0)},onAction:result=>{if(result?.message)toast(result.message);pumpItemNoise();updateAudio(0)}});
- discovery=createDiscoveryUI({items,survival,progression,onClose:()=>{keys.clear();last=performance.now();updateAudio(0)},onAction:()=>{pumpItemNoise();bagUI.update();updateAudio(0)}});
+ discovery=createDiscoveryUI({items,survival,progression,onCue:kind=>audio.uiCue(kind),onClose:()=>{keys.clear();last=performance.now();updateAudio(0)},onAction:()=>{pumpItemNoise();bagUI.update();updateAudio(0)}});
  progression.onLock=lock=>{discovery.lock(lock);keys.clear();updateAudio(0)};progression.onMessage=toast;
  inventoryUI={...bagUI,close(){discovery.close();bagUI.close()},get isOpen(){return bagUI.isOpen||discovery.isOpen}};
  const guideButton=document.createElement('button');guideButton.id='guidebook-open';guideButton.textContent='가이드북 · 분실하지 않는 전용 칸';guideButton.onclick=()=>discovery.guide();bagUI.root.querySelector('.inv-grid').parentElement.append(guideButton);
@@ -188,7 +194,8 @@ try {
  let muted=false,volume=.4;
  try{muted=localStorage.getItem('schoolEscape.muted')==='true';const saved=Number(localStorage.getItem('schoolEscape.volume'));if(localStorage.getItem('schoolEscape.volume')!==null&&Number.isFinite(saved))volume=Math.max(0,Math.min(1,saved))}catch{}
  audio.setMuted(muted);audio.setVolume(volume);$('volume').value=Math.round(volume*100);
- try{if(localStorage.getItem('schoolEscape.enemyEnabled')==='false')pursuit.setEnabled(false)}catch{}
+ // Each fresh run starts with enemies enabled; OFF is an explicit session action.
+ if(!savedRun)pursuit.setEnabled(true);
  function soundUI(){
    $('sound-toggle').textContent=muted?'소리 꺼짐':'소리 켜짐';$('sound-toggle').setAttribute('aria-pressed',String(muted));$('sound-toggle').setAttribute('aria-label',muted?'소리 켜기':'소리 끄기');
  }
@@ -248,23 +255,28 @@ try {
    ctx.fillStyle='#d8b56c';for(const st of game.map.stairs)ctx.fillRect(px(st.x)-1,py(st.y)-1,s+2,s+2);
    ctx.beginPath();ctx.fillStyle='#f0f6e9';ctx.arc(px(game.x)+s/2,py(game.y)+s/2,3,0,Math.PI*2);ctx.fill();
  }
+ const timer=document.createElement('span');timer.id='play-time';timer.style.cssText='position:fixed;left:24px;top:190px;color:#d1d7c5;z-index:5;font-size:13px';document.body.append(timer);
  function render(dt=0){
+   gateKeys.forEach((key,n)=>key.visible=items.insertedKeys.includes('key-'+['a','b','c'][n]));
+   for(const c of chains)c.chain.visible=!c.lock.unlocked;
+   timer.hidden=!started;timer.textContent='플레이 시간 '+new Date(game.time*1000).toISOString().slice(11,19);
    if(game.spaceId!==seenFloor)floorChanged();
    actor.position.copy(pos(game.x,game.y));
    kitchenVisual.update();subjectVisuals.update();
-   const dark=started&&subjects.dark&&!game.caught;blackout.style.display=dark?'block':'none';$('map-panel').style.visibility=dark?'hidden':'';
+   const dark=started&&subjects.dark&&!game.caught;blackout.style.display=dark?'block':'none';$('map-panel').style.visibility=dark||game.map.subjectEvent==='art'?'hidden':'';
    if(subjects.hint)$('route-note').textContent=subjects.hint;
    if(game.map.kitchenSequence)$('route-note').textContent=kitchen.active?'잔해 사이 비상 유도선을 따라 서쪽 비상문으로 이동하세요.':['idle','armed'].includes(kitchen.phase)?(kitchen.examined?'상자 조사를 마쳤습니다. 북쪽 출입문으로 돌아가세요.':'조리실 길 끝의 보급 상자를 조사하세요.'):'무너진 물건과 배식장이 부순 길이 그대로 남아 있습니다.';
    pursuerVisual.root.visible=!subjects.inEncounter&&!kitchen.active&&started&&pursuit.enabled&&pursuit.spaceId===game.spaceId;
    const frozen=paused||inventoryUI.isOpen||game.caught||game.won;
    pursuerVisual.root.position.copy(pos(pursuit.x,pursuit.y));pursuerVisual.update(pursuit,started&&!frozen?dt:0);
    const nearbyItem=items.nearby();lootVisuals.update(game.spaceId,nearbyItem);lootVisuals.root.visible=started;
-   const goal=Math.atan2(game.direction.x,-game.direction.y);angle+=Math.atan2(Math.sin(goal-angle),Math.cos(goal-angle))*(1-Math.exp(-16*dt));visual.rotation.y=angle;
+   const look=game.map.subjectEvent==='art'?(game.lookDirection||game.direction):game.direction;const goal=Math.atan2(look.x,-look.y);angle+=Math.atan2(Math.sin(goal-angle),Math.cos(goal-angle))*(1-Math.exp(-16*dt));visual.rotation.y=angle;
    const running=game.isRunning,moving=frozen?0:Math.min(1,game.speed/data.walkSpeed),swing=Math.sin(game.phase)*(running?.73:.49)*moving;
    for(const l of limbs){l.leg.rotation.x=l.side*swing;l.knee.rotation.x=Math.max(0,l.side*swing)*(running?1.2:.8);l.arm.rotation.x=-l.side*swing*.8;l.arm.rotation.z=l.side*(running?.21:.07)}
    visual.position.y=Math.abs(Math.sin(game.phase))*.045*moving;
    const target=pos(game.x,game.y,16).add(new T.Vector3(0,0,10.4));camera.position.lerp(target,1-Math.exp(-10*Math.max(dt,.001)));
    camera.quaternion.setFromEuler(new T.Euler(-Math.atan2(16,10.4),0,0));
+   artMask.style.display=started&&game.map.subjectEvent==='art'?'block':'none';if(game.map.subjectEvent==='art'){const origin=pos(game.x,game.y).project(camera),facing=game.lookDirection||game.direction,a=Math.atan2(facing.y,facing.x),points=[];const screen=p=>[(p.x+1)*innerWidth/2,(1-p.y)*innerHeight/2];const [cx,cy]=screen(origin);for(let n=0;n<=32;n++){const t=a-Math.PI/3+n/32*Math.PI*2/3,dx=Math.cos(t),dy=Math.sin(t);let d=0;while(d<23&&game.open(Math.round(game.x+dx*d),Math.round(game.y+dy*d)))d+=.25;points.push(screen(pos(game.x+dx*d,game.y+dy*d).project(camera)).join(','))}artMask.querySelector('#art-cone').setAttribute('d',`M${cx},${cy} L${points.join(' L')} Z`);const circle=artMask.querySelector('#art-near');circle.setAttribute('cx',cx);circle.setAttribute('cy',cy);}
    const near=game.nearby();$('stair-prompt').hidden=!near||!started||game.caught;if(near)$('stair-prompt').querySelector('span').textContent=near.label+' 계단';
    if(near)$('stair-prompt').querySelector('small').textContent=progression.describe(near.targetId||`floor-${near.target}`)|| (game.arrivalLock===near.id?'계단 구역을 벗어난 뒤 다시 진입하세요':'계단 안으로 이동하면 자동 전환');
    const room=game.currentRoom();$('room-status').textContent=game.map.isOutdoor?(game.map.id==='playground'?'운동장 탐방 중 · 남쪽 교문 탈출':'산책로 탐방 중 · 연결문 E로 운동장 복귀'):room?room.label+(room.theme?' · '+room.theme:'')+' 탐방 중':'방문 기본 닫힘 · E 입장';
@@ -289,7 +301,7 @@ try {
    if(game.won){$('door-prompt').hidden=true;$('stair-prompt').hidden=true}
    $('enemy-toggle').textContent=pursuit.enabled?'추적자 ON':'추적자 OFF';$('enemy-toggle').setAttribute('aria-pressed',String(pursuit.enabled));
    $('inventory-counter').textContent=`${items.inventory.length} / 9`;
-   $('key-progress').textContent=['a','b','c'].map(k=>`${items.inventory.some(i=>i.itemId==='key-'+k)?'●':'○'} ${k.toUpperCase()}`).join('   ');
+   $('key-progress').textContent=['a','b','c'].map(k=>`${items.insertedKeys.includes('key-'+k)?'◆':items.inventory.some(i=>i.itemId==='key-'+k)?'●':'○'} ${k.toUpperCase()}`).join('   ');
    const gate=items.nearbyGate(),doorNear=game.nearbyDoor();$('interaction-prompt').hidden=!started||frozen||(!nearbyItem&&!gate);
    if(gate){$('interaction-prompt').querySelector('kbd').textContent='E';$('interaction-label').textContent=gate.missing.length?'교문 잠김 · 열쇠 '+gate.missing.join('·')+' 필요':'열쇠 A·B·C 사용 · 탈출'}
    else if(nearbyItem){$('interaction-prompt').querySelector('kbd').textContent=doorNear?'F':'E / F';$('interaction-label').textContent=nearbyItem.label+' · '+nearbyItem.prompt}
@@ -308,7 +320,7 @@ try {
  $('success-restart').onclick=()=>{unlockAudio();restart()};$('new-run').onclick=()=>{unlockAudio();restart()};
  $('inventory-toggle').onclick=toggleInventory;
  const saveButton=document.createElement('button');saveButton.id='save-run';saveButton.textContent='현재 판 저장';$('new-run').after(saveButton);saveButton.onclick=()=>{try{saveRun({game,items,survival,kitchen,progression,pursuit,subjects});toast('현재 판을 저장했습니다. 시작 화면의 저장한 판 계속하기로 이어갈 수 있습니다.')}catch(e){toast(e.message)}};
- const loadButton=document.createElement('button');loadButton.id='load-run';loadButton.textContent='저장한 판 계속하기';$('begin').after(loadButton);loadButton.disabled=!localStorage.getItem('school.save016');loadButton.onclick=()=>{sessionStorage.setItem('school.load016','1');location.reload()};
+ const loadButton=document.createElement('button');loadButton.id='load-run';loadButton.textContent='저장한 판 계속하기';$('begin').after(loadButton);loadButton.disabled=!localStorage.getItem('school.save017');loadButton.onclick=()=>{sessionStorage.setItem('school.load017','1');location.reload()};
  $('enemy-toggle').onclick=()=>{const enabled=!pursuit.enabled;pursuit.setEnabled(enabled);if(enabled)pursuit.reset();$('enemy-toggle').textContent=enabled?'추적자 ON':'추적자 OFF';$('enemy-toggle').setAttribute('aria-pressed',String(enabled));if(!game.caught)$('caught').hidden=true;keys.clear();chaseIntensity=0;updateAudio(0);toast(enabled?'추적자 ON · 지정 지점에서 배회합니다':'추적자 OFF · 개발 중 추격을 멈춥니다');try{localStorage.setItem('schoolEscape.enemyEnabled',String(enabled))}catch{}};
  $('sound-toggle').onclick=()=>{muted=!muted;audio.setMuted(muted);soundUI();if(!muted)unlockAudio();try{localStorage.setItem('schoolEscape.muted',String(muted))}catch{}};
  $('volume').oninput=event=>{volume=Number(event.target.value)/100;audio.setVolume(volume);try{localStorage.setItem('schoolEscape.volume',String(volume))}catch{}};

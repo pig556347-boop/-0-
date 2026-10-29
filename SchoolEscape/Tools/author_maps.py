@@ -211,6 +211,8 @@ data=dict(title='폐교탈출',schemaVersion=4,revision='subject-encounters-016-
           playerRadius=0.27,spawnFloor=1,spawnX=24,spawnY=5,floors=floors,roomMaps=room_maps,
           outdoorMaps=[playground,walkway],escapeGate=dict(spaceId='playground',x=34,y=3,
           label='운동장 교문',range=1.7))
+from patch_017 import apply_017
+apply_017(data)
 dest=ROOT/'Assets/Resources/SchoolMap.json'
 dest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 print('Wrote',dest)

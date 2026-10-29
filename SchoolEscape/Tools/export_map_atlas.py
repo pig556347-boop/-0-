@@ -257,24 +257,23 @@ def main():
     entries += [{'file':'west.svg','label':'서관 전체 전개도'},{'file':'kitchen-route.svg','label':'조리실 상자 조사·귀환 추격 동선'}]
     entries += [{'file':f"../RoomPlans/{r['id']}.svg",'label':f"서관 {r['sourceFloor']}층 / {r['label']}"} for r in data['roomMaps'] if r.get('building')=='west']
     entries += [{'file':'../RoomPlans/main-rooftop.svg','label':'본관 옥상 · 카드키 설비 구역'}]
-    entries += [{'file':'../RoomPlans/gatehouse.svg','label':'교문 경비실'},{'file':'school-walkway.svg','label':'학교 뒤 산책로'}]
-    (output/'school-walkway.svg').write_text((ROOT/'Docs/school-walkway.svg').read_text())
-    atlas={'gameRevision':data['revision'],'gameVersion':'0.16','mapSha256':hashlib.sha256(raw).hexdigest(),'roomCount':len(data['roomMaps']),'annexSpaceCount':18,'westSpaceCount':14,'playgroundImplemented':True,'escapeGate':data['escapeGate'],'floors':[{'floor':f['number'],'rooms':len(f['rooms'])} for f in data['floors']],'diagrams':diagrams,'entries':entries}
+    entries += [{'file':'../RoomPlans/gatehouse.svg','label':'교문 경비실'},{'file':'../RoomPlans/gatehouse-toilet.svg','label':'경비실 화장실'}]
+    atlas={'gameRevision':data['revision'],'gameVersion':'0.17','mapSha256':hashlib.sha256(raw).hexdigest(),'roomCount':len(data['roomMaps']),'annexSpaceCount':sum(r.get('building')=='annex' for r in data['roomMaps']),'westSpaceCount':sum(r.get('building')=='west' for r in data['roomMaps']),'playgroundImplemented':True,'escapeGate':data['escapeGate'],'floors':[{'floor':f['number'],'rooms':len(f['rooms'])} for f in data['floors']],'diagrams':diagrams,'entries':entries}
     (output/'atlas.json').write_text(json.dumps(atlas,ensure_ascii=False,indent=2)+'\n')
-    viewer='''<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>폐교탈출 맵 전개도</title><style>body{margin:0;background:#101e27;color:#e5e9dd;font-family:system-ui,sans-serif}header{padding:24px;max-width:1200px;margin:auto}h1{margin:0 0 12px}p{color:#b2c1b9;line-height:1.65}select,a{font:inherit}select{max-width:100%;padding:12px;background:#304b55;color:#fff;border:1px solid #89a8a5;border-radius:6px}a{color:#e4c572;margin-left:15px}main{padding:0 14px 24px;text-align:center}img{display:block;max-width:100%;height:auto;margin:auto;background:#101e27;border:1px solid #42575e}</style><header><h1>폐교탈출 맵 전개도 · 0.16</h1><p>본관 1~4층·별관·서관·운동장의 전개도입니다. 별관은 2층 동쪽 연결통로에서 E로 출입합니다. 교실·교무실 위치는 매판 같은 층 안에서 섞이며 플레이 중 안내도와 가이드북이 현재 배치를 반영합니다. 방 외곽은 복도에서의 위치이며, 실제 방은 독립된 확대 공간입니다.<br>1층 현관에서 E로 운동장을 왕복합니다. 본관과 운동장에 나뉜 A·B·C 열쇠를 모아 운동장 남쪽 교문에서 탈출하세요.</p><select id="plan" aria-label="보고 싶은 지도"></select><a id="original" target="_blank" rel="noopener">벡터 원본 열기</a></header><main><img id="map" alt="현재 선택한 맵 전개도"></main><script>const plans=ENTRIES,s=document.getElementById('plan'),m=document.getElementById('map'),a=document.getElementById('original');plans.forEach((p,i)=>s.add(new Option(p.label,i)));function show(){const p=plans[+s.value];m.src=p.file;m.alt=p.label;a.href=p.file;document.title=p.label+' | 폐교탈출'}s.onchange=show;show();</script></html>'''
+    viewer='''<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>폐교탈출 맵 전개도</title><style>body{margin:0;background:#101e27;color:#e5e9dd;font-family:system-ui,sans-serif}header{padding:24px;max-width:1200px;margin:auto}h1{margin:0 0 12px}p{color:#b2c1b9;line-height:1.65}select,a{font:inherit}select{max-width:100%;padding:12px;background:#304b55;color:#fff;border:1px solid #89a8a5;border-radius:6px}a{color:#e4c572;margin-left:15px}main{padding:0 14px 24px;text-align:center}img{display:block;max-width:100%;height:auto;margin:auto;background:#101e27;border:1px solid #42575e}</style><header><h1>폐교탈출 맵 전개도 · 0.17</h1><p>본관 1~4층·별관·서관·운동장의 전개도입니다. 별관은 2층 동쪽 연결통로에서 E로 출입합니다. 교실·교무실 위치는 매판 같은 층 안에서 섞이며 플레이 중 안내도와 가이드북이 현재 배치를 반영합니다. 방 외곽은 복도에서의 위치이며, 실제 방은 독립된 확대 공간입니다.<br>1층 현관에서 E로 운동장을 왕복합니다. 본관과 운동장에 나뉜 A·B·C 열쇠를 모아 운동장 남쪽 교문에서 탈출하세요.</p><select id="plan" aria-label="보고 싶은 지도"></select><a id="original" target="_blank" rel="noopener">벡터 원본 열기</a></header><main><img id="map" alt="현재 선택한 맵 전개도"></main><script>const plans=ENTRIES,s=document.getElementById('plan'),m=document.getElementById('map'),a=document.getElementById('original');plans.forEach((p,i)=>s.add(new Option(p.label,i)));function show(){const p=plans[+s.value];m.src=p.file;m.alt=p.label;a.href=p.file;document.title=p.label+' | 폐교탈출'}s.onchange=show;show();</script></html>'''
     (output/'index.html').write_text(viewer.replace('ENTRIES',json.dumps(entries,ensure_ascii=False).replace('<','\\u003c'))+'\n')
     (output/'README.md').write_text(f'''# 폐교탈출 맵 전개도
 
-현재 0.14 `{data['revision']}` 실행 지도에서 생성한 전개도입니다.
+현재 0.17 `{data['revision']}` 실행 지도에서 생성한 전개도입니다.
 
-- `overview.svg`: 본관 3개 층, 운동장 E 연결, 남쪽 탈출 교문과 봉쇄부.
+- `overview.svg`: 본관 4개 층, 운동장 E 연결, 남쪽 탈출 교문과 봉쇄부.
 - `floor-1.svg` ~ `floor-4.svg`: 실제 복도 격자·방 위치·닫힌 문·자동 계단과 방 목록.
 - `playground.svg`: 실제 운동장 시설물, 북쪽 본관 출입구, 남쪽 탈출 교문, 주요 지점과 3개 탐색 동선.
-- `index.html`: 전체도·층별도·운동장·본관53개·별관18개·서관13개·옥상1개 공간의 배치를 선택하는 93개 보기.
+- `index.html`: 실행 지도의 {len(entries)}개 보기. 산책로는 운동장과 연결된 하나의 지도입니다.
 
 본관 1층 현관과 운동장 북쪽 입구는 E로 왕복합니다. A·B·C 열쇠는 본관과 운동장에 나뉘어 배치되며, 탈출은 운동장 남쪽 교문에서만 가능합니다. 별관은 본관2층 동쪽 연결통로로 입장합니다. 별관1층은 급식실,2~3층은 통층 체육관과 주변 시설입니다. 서관은 본관2층 서쪽 통로로 연결됩니다. 서관·별관 외부문은 봉쇄하며 옥상은 본관4층 계단과 카드키로 연결됩니다.
 
-방 외곽은 복도에서의 위치이며 실제 실내 크기와 다릅니다. 53개 실내 링크는 기존 `Docs/RoomPlans`를 참조합니다. 뷰어는 최신 SVG 원본을 직접 엽니다. PNG는 별도 렌더링한 공유용 사본입니다.
+방 외곽은 복도에서의 위치이며 실제 실내 크기와 다릅니다. 실내 링크는 기존 `Docs/RoomPlans`를 참조합니다. 뷰어는 최신 SVG 원본을 직접 엽니다. PNG는 별도 렌더링한 공유용 사본입니다.
 
 재생성: `python SchoolEscape/Tools/export_map_atlas.py`. `--map`과 `--output`으로 입력 지도와 출력 폴더를 지정할 수 있습니다. 지도 변경 후 다시 생성하면 시설물·출입구·동선·방 목록도 함께 갱신됩니다. `atlas.json`에 원본 지도 SHA-256과 각 SVG 크기를 기록합니다.
 
