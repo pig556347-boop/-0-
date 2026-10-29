@@ -1,0 +1,58 @@
+{
+  "ok": false,
+  "url": "http://127.0.0.1:8830/",
+  "checks": [
+    {
+      "name": "Music countdown survives save/load",
+      "passed": false,
+      "actual": {
+        "before": 7.99999999999998,
+        "after": 0.1
+      }
+    },
+    {
+      "name": "Science blackout count survives save/load",
+      "passed": false,
+      "actual": {
+        "before": {
+          "elapsed": 22.500000000000185,
+          "blackouts": 2
+        },
+        "after": {
+          "elapsed": 0.1,
+          "blackouts": 0
+        }
+      }
+    },
+    {
+      "name": "Dunkyboy can catch idle player",
+      "passed": true
+    },
+    {
+      "name": "Developer toggle cannot dismiss death or bypass revive",
+      "passed": false,
+      "actual": {
+        "disabled": false,
+        "lives": 4
+      }
+    },
+    {
+      "name": "Full inventory refuses pickup without losing item",
+      "passed": true,
+      "actual": {
+        "before": 9,
+        "after": 9,
+        "picked": false,
+        "ok": false
+      }
+    },
+    {
+      "name": "No browser exceptions or missing resources",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "method": "Actual Chromium UI with QA placement/time advancement for isolated edge cases.",
+  "sha256": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94"
+}

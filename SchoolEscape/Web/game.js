@@ -299,7 +299,7 @@ try {
    $('caught').hidden=!game.caught;$('revive').hidden=survival.lives<=0;$('caught-detail').textContent=survival.lives>0?'남은 목숨 '+survival.lives+'개. '+(survival.mode==='easy'?'소지품은 그대로 유지됩니다.':'가이드북을 제외한 소지품을 붙잡힌 공간에 떨어뜨렸습니다.'):'남은 목숨이 없습니다. 새 판을 시작하세요.';$('pause').hidden=!paused||!started||game.caught;
    $('success').hidden=!game.won;
    if(game.won){$('door-prompt').hidden=true;$('stair-prompt').hidden=true}
-   $('enemy-toggle').textContent=pursuit.enabled?'추적자 ON':'추적자 OFF';$('enemy-toggle').setAttribute('aria-pressed',String(pursuit.enabled));
+   $('enemy-toggle').disabled=game.caught||game.won;$('enemy-toggle').textContent=pursuit.enabled?'추적자 ON':'추적자 OFF';$('enemy-toggle').setAttribute('aria-pressed',String(pursuit.enabled));
    $('inventory-counter').textContent=`${items.inventory.length} / 9`;
    $('key-progress').textContent=['a','b','c'].map(k=>`${items.insertedKeys.includes('key-'+k)?'◆':items.inventory.some(i=>i.itemId==='key-'+k)?'●':'○'} ${k.toUpperCase()}`).join('   ');
    const gate=items.nearbyGate(),doorNear=game.nearbyDoor();$('interaction-prompt').hidden=!started||frozen||(!nearbyItem&&!gate);
@@ -321,7 +321,7 @@ try {
  $('inventory-toggle').onclick=toggleInventory;
  const saveButton=document.createElement('button');saveButton.id='save-run';saveButton.textContent='현재 판 저장';$('new-run').after(saveButton);saveButton.onclick=()=>{try{saveRun({game,items,survival,kitchen,progression,pursuit,subjects});toast('현재 판을 저장했습니다. 시작 화면의 저장한 판 계속하기로 이어갈 수 있습니다.')}catch(e){toast(e.message)}};
  const loadButton=document.createElement('button');loadButton.id='load-run';loadButton.textContent='저장한 판 계속하기';$('begin').after(loadButton);loadButton.disabled=!localStorage.getItem('school.save017');loadButton.onclick=()=>{sessionStorage.setItem('school.load017','1');location.reload()};
- $('enemy-toggle').onclick=()=>{const enabled=!pursuit.enabled;pursuit.setEnabled(enabled);if(enabled)pursuit.reset();$('enemy-toggle').textContent=enabled?'추적자 ON':'추적자 OFF';$('enemy-toggle').setAttribute('aria-pressed',String(enabled));if(!game.caught)$('caught').hidden=true;keys.clear();chaseIntensity=0;updateAudio(0);toast(enabled?'추적자 ON · 지정 지점에서 배회합니다':'추적자 OFF · 개발 중 추격을 멈춥니다');try{localStorage.setItem('schoolEscape.enemyEnabled',String(enabled))}catch{}};
+ $('enemy-toggle').onclick=()=>{if(game.caught||game.won)return;const enabled=!pursuit.enabled;pursuit.setEnabled(enabled);if(enabled)pursuit.reset();$('enemy-toggle').textContent=enabled?'추적자 ON':'추적자 OFF';$('enemy-toggle').setAttribute('aria-pressed',String(enabled));if(!game.caught)$('caught').hidden=true;keys.clear();chaseIntensity=0;updateAudio(0);toast(enabled?'추적자 ON · 지정 지점에서 배회합니다':'추적자 OFF · 개발 중 추격을 멈춥니다');try{localStorage.setItem('schoolEscape.enemyEnabled',String(enabled))}catch{}};
  $('sound-toggle').onclick=()=>{muted=!muted;audio.setMuted(muted);soundUI();if(!muted)unlockAudio();try{localStorage.setItem('schoolEscape.muted',String(muted))}catch{}};
  $('volume').oninput=event=>{volume=Number(event.target.value)/100;audio.setVolume(volume);try{localStorage.setItem('schoolEscape.volume',String(volume))}catch{}};
  const toggle=()=>$('map-panel').classList.toggle('expanded');$('map-toggle').onclick=toggle;

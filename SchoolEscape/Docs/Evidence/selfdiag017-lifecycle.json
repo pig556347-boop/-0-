@@ -1,0 +1,111 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "music elapsed restored",
+      "passed": true
+    },
+    {
+      "name": "science elapsed restored",
+      "passed": true
+    },
+    {
+      "name": "Blackout count restored",
+      "passed": true
+    },
+    {
+      "name": "Third blackout still spawns two shadows after reload",
+      "passed": true
+    },
+    {
+      "name": "Active special encounter cannot save",
+      "passed": true
+    },
+    {
+      "name": "Developer OFF checkpoint retains existing monsters",
+      "passed": true
+    },
+    {
+      "name": "Chocolate restores full stamina and clears exhaustion",
+      "passed": true
+    },
+    {
+      "name": "Vitamin movement is exactly 130 percent",
+      "passed": true
+    },
+    {
+      "name": "Vitamin expires after two simulation seconds",
+      "passed": true
+    },
+    {
+      "name": "Watch uses separate wear slot",
+      "passed": true
+    },
+    {
+      "name": "Full bag cannot unequip and lose watch",
+      "passed": true
+    },
+    {
+      "name": "Third clock part crafts even with full bag",
+      "passed": true
+    },
+    {
+      "name": "Target key pickup consumes compass",
+      "passed": true
+    },
+    {
+      "name": "easy death charged exactly once",
+      "passed": true
+    },
+    {
+      "name": "Easy preserves carried items",
+      "passed": true
+    },
+    {
+      "name": "easy revive rules",
+      "passed": true
+    },
+    {
+      "name": "normal death charged exactly once",
+      "passed": true
+    },
+    {
+      "name": "normal no carried item lost or duplicated",
+      "passed": true
+    },
+    {
+      "name": "normal science tools recoverable outside locked entry",
+      "passed": true
+    },
+    {
+      "name": "normal revive rules",
+      "passed": true
+    },
+    {
+      "name": "hard death charged exactly once",
+      "passed": true
+    },
+    {
+      "name": "hard no carried item lost or duplicated",
+      "passed": true
+    },
+    {
+      "name": "hard science tools recoverable outside locked entry",
+      "passed": true
+    },
+    {
+      "name": "hard revive rules",
+      "passed": true
+    },
+    {
+      "name": "extreme death charged exactly once",
+      "passed": true
+    },
+    {
+      "name": "extreme revive rules",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "method": "Logic lifecycle tests with explicitly prepared inventories and death state; separate from browser play."
+}

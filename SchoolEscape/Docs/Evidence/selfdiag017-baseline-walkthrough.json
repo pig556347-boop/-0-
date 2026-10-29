@@ -1,0 +1,77 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Collected through actual investigation lab-coat",
+      "passed": true
+    },
+    {
+      "name": "Library solved after reading record and visiting three shelves",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation flashlight",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation lab-sample",
+      "passed": true
+    },
+    {
+      "name": "Science rear exit works after specimen",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation key-a",
+      "passed": true
+    },
+    {
+      "name": "Inserted key-a without needing other keys",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation key-b",
+      "passed": true
+    },
+    {
+      "name": "Inserted key-b without needing other keys",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation key-c",
+      "passed": true
+    },
+    {
+      "name": "Inserted key-c without needing other keys",
+      "passed": true
+    },
+    {
+      "name": "Continuous route reaches actual escape success",
+      "passed": true
+    },
+    {
+      "name": "No browser exception or resource failure",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "visits": [
+    "floor-2",
+    "floor-3",
+    "room-f2-15",
+    "floor-3",
+    "room-f2-1",
+    "floor-3",
+    "room-f2-11",
+    "floor-2",
+    "room-f20-3",
+    "floor-2",
+    "floor-1",
+    "playground"
+  ],
+  "method": "Continuous controller movement, actual E/F and click interactions. Public developer enemy OFF. No teleports, invented items or forced unlocks.",
+  "sha256": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94",
+  "seed": 3458157383,
+  "distanceMeters": 1177.6721973789208,
+  "simulatedSeconds": 353.03670941473337
+}

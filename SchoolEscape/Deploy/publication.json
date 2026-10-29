@@ -1,16 +1,16 @@
 {
   "game": "폐교탈출",
-  "version": "0.17",
-  "featureRevision": "unity-port-017-2026-10-29",
-  "sourceCommit": "3115bd2c3199ed7753875d1383ba6441b903e8f8",
-  "htmlSha256": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94",
-  "htmlBytes": 6668294,
+  "version": "0.17.1",
+  "featureRevision": "self-diagnostic-save-state-2026-10-30",
+  "sourceCommit": "11f593b328001a55b8cbeb9f0d36e32413547ef8",
+  "htmlSha256": "719e5fc4b4b64b3257b28bb19ac831ba9d0da692f225b0123ee7b32482e0d62d",
+  "htmlBytes": 6669166,
   "roomCount": 105,
   "totalSpaces": 110,
   "mainFloors": 4,
   "browserChecks": {
     "browser": 43,
-    "lobby": 30
+    "selfdiag": 7
   },
   "kernelChecks": 2425,
   "staticChecks": 77455,
@@ -22,14 +22,11 @@
   "unityExecutionBlock": "No valid Unity Editor license found",
   "nativeGeneration": "16 authored placement layouts, runtime password/book/classroom randomization",
   "languageScope": "Korean and English menus/settings; in-world records Korean",
-  "productionUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/61d1aafda1a96c56e2c3abeed660868ea567794d/index.html",
-  "webCommit": "61d1aafda1a96c56e2c3abeed660868ea567794d",
+  "productionUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/e72aff59ba289de8b1608162575db8405e9b7037/index.html",
+  "webCommit": "e72aff59ba289de8b1608162575db8405e9b7037",
   "mainCommitUnchanged": "1268055a35266ca70e1c1302c2d5852ba537a2ad",
   "publicVerification": {
-    "status": "success",
-    "workflowRun": 40890294664,
-    "browserChecksPassed": 74,
-    "runtimeErrors": 0,
-    "sha256": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94"
+    "status": "pending",
+    "workflowRun": 40975588740
   }
 }

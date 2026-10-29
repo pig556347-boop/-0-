@@ -15,7 +15,7 @@ namespace SchoolEscape
         [Serializable] public class Document { public string id,title,text,sourceId,itemId,lockId,classLabel; public Student[] roster; }
         [Serializable] public class Run { public int seed; public Definition[] defs; public ItemInventory.Item[] items; public ItemInventory.Searchable[] sources; public Lock[] locks; public Card[] cards; public Document[] documents; public string[] library; }
         [Serializable] class Layouts { public int version; public Run[] runs; }
-        [Serializable] class Saved { public int version=17,lives,mode,bookStep,mapSeed; public float time,stamina; public string spaceId; public Vector2 point; public Run run; public string[] inventory,zones,inserted,read; public string equipped; public bool specimen,kitchenExamined,kitchenCleared; public int[] broken; }
+        [Serializable] class Saved { public int version=17,lives,mode,bookStep,mapSeed; public float time,stamina; public string spaceId; public Vector2 point; public Run run; public string[] inventory,zones,inserted,read; public string equipped; public bool specimen,kitchenExamined,kitchenCleared; public int[] broken; public bool eventStateSaved,eventWasDark; public float eventElapsed,eventShadowAt; public int eventBlackouts; }
         public ExplorationGame Game { get; private set; }
         public Run Content { get; private set; }
         public readonly HashSet<string> Zones=new HashSet<string>{"start"},Read=new HashSet<string>();
@@ -191,13 +191,13 @@ namespace SchoolEscape
         public void Save()
         {
             if(Captured||Game.Caught||Game.Won||kitchenActive||enemies.Count>0||Game.Opening){Feedback="추격·이동 중에는 저장할 수 없습니다.";return;}
-            Content.items=Game.Items.WorldItems.ToArray();var d=new Saved{mapSeed=Game.MapSeed,lives=Lives,mode=Mode,time=Game.SimulationTime,stamina=Game.Player.Stamina,spaceId=Game.Current.id,point=Game.Data.Grid(Game.Player.transform.position),run=Content,inventory=Game.Items.Inventory.Select(i=>i.uid).ToArray(),equipped=Game.Items.Equipped?.uid,zones=Zones.ToArray(),inserted=Game.Items.InsertedKeys.ToArray(),read=Read.ToArray(),bookStep=BookStep,specimen=Specimen,kitchenExamined=KitchenExamined,kitchenCleared=KitchenCleared,broken=broken.ToArray()};
+            Content.items=Game.Items.WorldItems.ToArray();var d=new Saved{eventStateSaved=true,eventElapsed=elapsed,eventBlackouts=blackouts,eventWasDark=wasDark,eventShadowAt=shadowAt,mapSeed=Game.MapSeed,lives=Lives,mode=Mode,time=Game.SimulationTime,stamina=Game.Player.Stamina,spaceId=Game.Current.id,point=Game.Data.Grid(Game.Player.transform.position),run=Content,inventory=Game.Items.Inventory.Select(i=>i.uid).ToArray(),equipped=Game.Items.Equipped?.uid,zones=Zones.ToArray(),inserted=Game.Items.InsertedKeys.ToArray(),read=Read.ToArray(),bookStep=BookStep,specimen=Specimen,kitchenExamined=KitchenExamined,kitchenCleared=KitchenCleared,broken=broken.ToArray()};
             PlayerPrefs.SetString("SchoolEscape.Native017",JsonUtility.ToJson(d));PlayerPrefs.Save();Feedback="현재 판을 저장했습니다.";
         }
         public void Load()
         {
             if(!PlayerPrefs.HasKey("SchoolEscape.Native017"))return;var d=JsonUtility.FromJson<Saved>(PlayerPrefs.GetString("SchoolEscape.Native017"));if(d?.version!=17)return;
-            Game.Restart(d.mapSeed);Content=d.run;Game.Items.LoadNative(Content.items,Content.sources,Content.defs,Content.seed);Game.Items.RestoreCarry(d.inventory,d.equipped,d.inserted);Zones.Clear();foreach(var z in d.zones)Zones.Add(z);Read.Clear();foreach(var id in d.read)Read.Add(id);Mode=d.mode;Lives=d.lives;BookStep=d.bookStep;Specimen=d.specimen;KitchenExamined=d.kitchenExamined;KitchenCleared=d.kitchenCleared;Game.Player.MaximumStamina=MaximumStamina;Game.Player.SetStamina(d.stamina);Game.RestoreClock(d.time);Game.RestorePosition(d.spaceId,d.point);foreach(var n in d.broken)broken.Add(n);if(d.broken.Length>0){BuildRubble();SyncRubble();}Panel="";Game.SetPaused(false);
+            Game.Restart(d.mapSeed);Content=d.run;Game.Items.LoadNative(Content.items,Content.sources,Content.defs,Content.seed);Game.Items.RestoreCarry(d.inventory,d.equipped,d.inserted);Zones.Clear();foreach(var z in d.zones)Zones.Add(z);Read.Clear();foreach(var id in d.read)Read.Add(id);Mode=d.mode;Lives=d.lives;BookStep=d.bookStep;Specimen=d.specimen;KitchenExamined=d.kitchenExamined;KitchenCleared=d.kitchenCleared;Game.Player.MaximumStamina=MaximumStamina;Game.Player.SetStamina(d.stamina);Game.RestoreClock(d.time);Game.RestorePosition(d.spaceId,d.point);if(d.eventStateSaved){lastSpace=d.spaceId;elapsed=d.eventElapsed;blackouts=d.eventBlackouts;wasDark=d.eventWasDark;shadowAt=d.eventShadowAt;BuildChains();}foreach(var n in d.broken)broken.Add(n);if(d.broken.Length>0){BuildRubble();SyncRubble();}Panel="";Game.SetPaused(false);
         }
         public bool Draw()
         {

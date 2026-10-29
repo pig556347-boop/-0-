@@ -102,8 +102,21 @@ export class SubjectEvents {
  get hint(){if(this.game.map.subjectEvent==='art')return '석상 · 바라보면 멈춥니다. 마우스로 시선을 돌리세요.';if(this.game.map.subjectEvent==='gym')return '덩키보이 · 직선에서 빨라집니다. 코너를 활용하세요.';if(this.game.spaceId===this.maps.music.id)return this.music.phase==='chase'?'거두 음악가 · 출입문으로 도망치세요.':'피아노 선율이 점점 빨라집니다…';if(this.game.spaceId===this.maps.science.id)return (this.science.dark?'소등 · 이동할 수 있습니다.':'점등 · 쉐도어는 멈춥니다.')+' 뒷문 캐비넷에서 표본 회수 후 탈출.';return ''}
  guide(hints){if(hints==='none')return[];if(this.game.spaceId===this.maps.library.id){if(!this.progression.readDocuments.has('library-return-log'))return ['도서실: 입구 가까운 대출·반납 기록대에서 E를 눌러 반납 기록을 읽자.'];if(!this.library.solved)return [`도서실 반납 ${this.library.step}/3 · 다음 책: ${this.bookTitles[this.library.sequence[this.library.step]]} · 분류 ${this.library.sequence[this.library.step]}. 같은 번호가 적힌 서가로 가서 E → 반납하기.`];return ['도서실 안쪽 반납 완료 보관함에서 손전등을 가져오자.'];}if(this.game.spaceId===this.maps.science.id)return ['뒷문 옆 캐비넷에서 실험 표본을 가져온 뒤 뒷문으로 나가자.'];return []}
 
- snapshot(){return {library:{...this.library,sequence:[...this.library.sequence]},scienceRewardTaken:this.science.rewardTaken}}
- restore(d){if(!d)return;Object.assign(this.library,d.library);this.science.rewardTaken=!!d.scienceRewardTaken}
+ snapshot(){
+  const monster=m=>m?Object.fromEntries(['kind','index','x','y','direction','speed','distance','phase','grace','charge'].filter(k=>m[k]!==undefined).map(k=>[k,m[k]])):null;
+  return {library:{...this.library,sequence:[...this.library.sequence]},scienceRewardTaken:this.science.rewardTaken,
+   encounter:{spaceId:this.lastSpace,music:{...this.music,monster:monster(this.music.monster)},science:{...this.science,monsters:this.science.monsters.map(monster)},special:Object.fromEntries(Object.entries(this.special).map(([id,m])=>[id,monster(m)]))}};
+ }
+ restore(d){
+  if(!d)return;Object.assign(this.library,d.library);this.science.rewardTaken=!!d.scienceRewardTaken;
+  // Older saves do not contain these clocks. New saves resume the current room
+  // without firing its entry/reset logic again on the first frame after load.
+  const e=d.encounter;if(!e)return;
+  const monster=(v,map)=>v?Object.assign(this.createMonster(map,v.kind,v.index||0),v,{path:[],repath:0}):null;
+  this.lastSpace=e.spaceId;Object.assign(this.music,e.music,{monster:monster(e.music.monster,this.maps.music)});
+  Object.assign(this.science,e.science,{monsters:e.science.monsters.map(v=>monster(v,this.maps.science))});
+  for(const id of ['art','gym'])this.special[id]=monster(e.special?.[id],this.maps[id]);
+ }
  inspect(){return {music:{phase:this.music.phase,elapsed:this.music.elapsed,tempo:this.musicTempo},science:{phase:this.science.phase,elapsed:this.science.elapsed,dark:this.dark,blackouts:this.science.blackouts,rewardTaken:this.science.rewardTaken},library:{...this.library},monsters:this.monsters.map(m=>({kind:m.kind,x:m.x,y:m.y,speed:m.speed,distance:m.distance})),inEncounter:this.inEncounter}}
 }
 
