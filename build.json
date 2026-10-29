@@ -1,16 +1,16 @@
 {
   "game": "폐교탈출",
-  "version": "0.17",
-  "featureRevision": "unity-port-017-2026-10-29",
-  "sourceCommit": "3115bd2c3199ed7753875d1383ba6441b903e8f8",
-  "htmlSha256": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94",
-  "htmlBytes": 6668294,
+  "version": "0.17.1",
+  "featureRevision": "self-diagnostic-save-state-2026-10-30",
+  "sourceCommit": "11f593b328001a55b8cbeb9f0d36e32413547ef8",
+  "htmlSha256": "719e5fc4b4b64b3257b28bb19ac831ba9d0da692f225b0123ee7b32482e0d62d",
+  "htmlBytes": 6669166,
   "roomCount": 105,
   "totalSpaces": 110,
   "mainFloors": 4,
   "browserChecks": {
     "browser": 43,
-    "lobby": 30
+    "selfdiag": 7
   },
   "kernelChecks": 2425,
   "staticChecks": 77455,
