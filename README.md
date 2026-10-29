@@ -1,5 +1,5 @@
-# 폐교탈출 0.16
+# 폐교탈출 0.17
 
-[웹 플레이](index.html) · [전개도](maps/index.html) · [변경·검증·에셋](docs/SUBJECT_ENCOUNTERS_016.md)
+[웹 플레이](index.html) · [전개도](maps/index.html) · [변경·검증·에셋·Unity 제한](docs/PATCH_017.md)
 
-음악가/쉐도어 추격, 도서 반납 퍼즐, 로비/설정/언어와 클릭 도어락. E 조사·닫기, I 가방, Shift 달리기, Esc 일시정지. 새 판으로 시작하세요. 현재 독립 웹판이며 Unity WebGL 빌드가 아닙니다.
+네 특별실 괴물, 휴대 쪽지, 분산 아이템, 교문 개별 열쇠, 연속 산책로, 조리실 재도전. 새 판으로 시작하세요. WASD 이동 / Shift 달리기 / E 조사·닫기 / I 가방 / Esc 정지. 과학실 장비는 모두 본관 3층. 현재 독립 웹판이며 Unity WebGL 빌드는 아닙니다.

@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1554" height="1180" viewBox="0 0 1554 1180" role="img"><title>폐교탈출 실제 운동장 평면도</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="2178" height="1180" viewBox="0 0 2178 1180" role="img"><title>폐교탈출 실제 운동장 평면도</title>
 <style>text{font-family:"Noto Sans CJK KR","Noto Sans KR",sans-serif}</style>
-<rect x="0" y="0" width="1554" height="1180" fill="#101e27" stroke="none" rx="0" />
+<rect x="0" y="0" width="2178" height="1180" fill="#101e27" stroke="none" rx="0" />
 <text x="34" y="44" font-size="29" fill="#e5e9dd" text-anchor="start" font-weight="bold">폐교탈출 · 운동장 평면도</text>
 <text x="34" y="76" font-size="17" fill="#b2c1b9" text-anchor="start" font-weight="normal">실행 지도 기준 · 약 83.75 × 66.25m · 북쪽 ↑</text>
 <text x="34" y="106" font-size="16" fill="#91c8c3" text-anchor="start" font-weight="normal">북쪽 현관은 본관과 E로 왕복 · 남쪽 교문에서 A·B·C 열쇠를 사용해 탈출</text>
-<rect x="34" y="140" width="1104" height="880" fill="#14232d" stroke="#42575e" rx="0" />
+<rect x="34" y="140" width="1728" height="880" fill="#14232d" stroke="#42575e" rx="0" />
 <rect x="50" y="988" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="972" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="956" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
@@ -29,29 +29,60 @@
 <rect x="50" y="668" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="652" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="636" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
-<rect x="50" y="620" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
-<rect x="50" y="604" width="1024" height="16" fill="#66775b" stroke="none" rx="0" />
-<rect x="1090" y="604" width="32" height="16" fill="#66775b" stroke="none" rx="0" />
-<rect x="50" y="588" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
-<rect x="50" y="572" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="50" y="620" width="1696" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="50" y="604" width="1696" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="50" y="588" width="1696" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="50" y="572" width="1696" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="556" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="556" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="556" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="540" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="540" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="540" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="524" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="524" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="524" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="508" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="508" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="508" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="492" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="492" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="492" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="476" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="476" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="476" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="460" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="460" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="460" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="444" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="444" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="444" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="428" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="428" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="428" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="412" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="412" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="412" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="396" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="396" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="396" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="380" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="380" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="380" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="364" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="364" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="364" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="348" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="348" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1666" y="348" width="80" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="332" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="332" width="608" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="316" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="316" width="608" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="300" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="300" width="608" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="284" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
+<rect x="1138" y="284" width="608" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="268" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="252" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
 <rect x="50" y="236" width="1072" height="16" fill="#66775b" stroke="none" rx="0" />
@@ -416,6 +447,48 @@
 </g>
 <g><title>gatehouse-exterior · 충돌</title>
 <rect x="77.2" y="893.6" width="51.2" height="76.8" fill="#465d59" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-bench · 충돌</title>
+<rect x="1293.2" y="608.48" width="25.6" height="7.04" fill="#7a795f" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>yard-trash-bin · 충돌</title>
+<rect x="1301.52" y="303.52" width="8.96" height="8.96" fill="#526858" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-bench · 충돌</title>
+<rect x="1469.2" y="608.48" width="25.6" height="7.04" fill="#7a795f" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>yard-trash-bin · 충돌</title>
+<rect x="1477.52" y="303.52" width="8.96" height="8.96" fill="#526858" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-bench · 충돌</title>
+<rect x="1597.2" y="608.48" width="25.6" height="7.04" fill="#7a795f" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>yard-trash-bin · 충돌</title>
+<rect x="1605.52" y="303.52" width="8.96" height="8.96" fill="#526858" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-tree-trunk · 충돌</title>
+<rect x="1271.44" y="529.44" width="5.12" height="5.12" fill="#655d49" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-tree-trunk · 충돌</title>
+<rect x="1271.44" y="385.44" width="5.12" height="5.12" fill="#655d49" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-tree-trunk · 충돌</title>
+<rect x="1383.44" y="529.44" width="5.12" height="5.12" fill="#655d49" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-tree-trunk · 충돌</title>
+<rect x="1383.44" y="385.44" width="5.12" height="5.12" fill="#655d49" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-tree-trunk · 충돌</title>
+<rect x="1511.44" y="529.44" width="5.12" height="5.12" fill="#655d49" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-tree-trunk · 충돌</title>
+<rect x="1511.44" y="385.44" width="5.12" height="5.12" fill="#655d49" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-tree-trunk · 충돌</title>
+<rect x="1623.44" y="529.44" width="5.12" height="5.12" fill="#655d49" stroke="#263e35" rx="0" opacity="0.95"/>
+</g>
+<g><title>walkway-tree-trunk · 충돌</title>
+<rect x="1623.44" y="385.44" width="5.12" height="5.12" fill="#655d49" stroke="#263e35" rx="0" opacity="0.95"/>
 </g>
 <g><title>yard-track-mark · 장식</title>
 <rect x="984.336" y="578.336" width="3.328" height="3.328" fill="#b0ab87" stroke="none" rx="0" opacity="0.4"/>
@@ -1467,6 +1540,30 @@
 <g><title>yard-fence-rail · 장식</title>
 <rect x="658" y="153.184" width="448" height="0.832" fill="#758d7d" stroke="none" rx="0" opacity="0.4"/>
 </g>
+<g><title>walkway-tree-crown · 장식</title>
+<rect x="1254.8" y="512.8" width="38.4" height="38.4" fill="#3b554b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>walkway-tree-crown · 장식</title>
+<rect x="1254.8" y="368.8" width="38.4" height="38.4" fill="#3b554b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>walkway-tree-crown · 장식</title>
+<rect x="1366.8" y="512.8" width="38.4" height="38.4" fill="#3b554b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>walkway-tree-crown · 장식</title>
+<rect x="1366.8" y="368.8" width="38.4" height="38.4" fill="#3b554b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>walkway-tree-crown · 장식</title>
+<rect x="1494.8" y="512.8" width="38.4" height="38.4" fill="#3b554b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>walkway-tree-crown · 장식</title>
+<rect x="1494.8" y="368.8" width="38.4" height="38.4" fill="#3b554b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>walkway-tree-crown · 장식</title>
+<rect x="1606.8" y="512.8" width="38.4" height="38.4" fill="#3b554b" stroke="none" rx="0" opacity="0.4"/>
+</g>
+<g><title>walkway-tree-crown · 장식</title>
+<rect x="1606.8" y="368.8" width="38.4" height="38.4" fill="#3b554b" stroke="none" rx="0" opacity="0.4"/>
+</g>
 <g><title>escape-gate-lamp · 장식</title>
 <rect x="545.04" y="993.44" width="5.12" height="5.12" fill="#e0d6a4" stroke="none" rx="0" opacity="0.4"/>
 </g>
@@ -2052,122 +2149,165 @@
 <polyline points="586,212 586,324 202,324 202,564 202,852 586,852 586,932" fill="none" stroke="#80cccd" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 4"/>
 <polyline points="586,212 586,324 970,324 970,564 970,852 586,852 586,932" fill="none" stroke="#101e27" stroke-width="7" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
 <polyline points="586,212 586,324 970,324 970,564 970,852 586,852 586,932" fill="none" stroke="#d5a5db" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="8 4"/>
-<text x="1166" y="150" font-size="21" fill="#e5e9dd" text-anchor="start" font-weight="bold">주요 지점</text>
+<text x="1790" y="150" font-size="21" fill="#e5e9dd" text-anchor="start" font-weight="bold">주요 지점</text>
 <circle cx="586" cy="244" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="586" y="248" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">1</text>
-<circle cx="1176" cy="197" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="201" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">1</text>
-<text x="1194" y="202" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">본관 앞마당</text>
+<circle cx="1800" cy="197" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="201" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">1</text>
+<text x="1818" y="202" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">본관 앞마당</text>
 <circle cx="586" cy="180" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="586" y="184" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">2</text>
-<circle cx="1176" cy="223" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="227" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">2</text>
-<text x="1194" y="228" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">본관 현관 앞</text>
+<circle cx="1800" cy="223" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="227" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">2</text>
+<text x="1818" y="228" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">본관 현관 앞</text>
 <circle cx="586" cy="324" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="586" y="328" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">3</text>
-<circle cx="1176" cy="249" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="253" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">3</text>
-<text x="1194" y="254" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">북쪽 가로길</text>
+<circle cx="1800" cy="249" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="253" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">3</text>
+<text x="1818" y="254" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">북쪽 가로길</text>
 <circle cx="362" cy="356" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="362" y="360" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">4</text>
-<circle cx="1176" cy="275" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="279" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">4</text>
-<text x="1194" y="280" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">구령대 앞</text>
+<circle cx="1800" cy="275" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="279" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">4</text>
+<text x="1818" y="280" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">구령대 앞</text>
 <circle cx="202" cy="340" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="202" y="344" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">5</text>
-<circle cx="1176" cy="301" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="305" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">5</text>
-<text x="1194" y="306" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 우회로 북쪽</text>
+<circle cx="1800" cy="301" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="305" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">5</text>
+<text x="1818" y="306" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 우회로 북쪽</text>
 <circle cx="202" cy="564" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="202" y="568" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">6</text>
-<circle cx="1176" cy="327" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="331" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">6</text>
-<text x="1194" y="332" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 우회로 중간</text>
+<circle cx="1800" cy="327" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="331" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">6</text>
+<text x="1818" y="332" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 우회로 중간</text>
 <circle cx="202" cy="852" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="202" y="856" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">7</text>
-<circle cx="1176" cy="353" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="357" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">7</text>
-<text x="1194" y="358" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 우회로 남쪽</text>
+<circle cx="1800" cy="353" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="357" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">7</text>
+<text x="1818" y="358" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 우회로 남쪽</text>
 <circle cx="970" cy="340" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="970" y="344" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">8</text>
-<circle cx="1176" cy="379" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="383" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">8</text>
-<text x="1194" y="384" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 우회로 북쪽</text>
+<circle cx="1800" cy="379" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="383" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">8</text>
+<text x="1818" y="384" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 우회로 북쪽</text>
 <circle cx="970" cy="564" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="970" y="568" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">9</text>
-<circle cx="1176" cy="405" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="409" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">9</text>
-<text x="1194" y="410" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 우회로 중간</text>
+<circle cx="1800" cy="405" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="409" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">9</text>
+<text x="1818" y="410" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 우회로 중간</text>
 <circle cx="970" cy="852" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="970" y="856" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">10</text>
-<circle cx="1176" cy="431" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="435" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">10</text>
-<text x="1194" y="436" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 우회로 남쪽</text>
+<circle cx="1800" cy="431" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="435" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">10</text>
+<text x="1818" y="436" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 우회로 남쪽</text>
 <circle cx="586" cy="404" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="586" y="408" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">11</text>
-<circle cx="1176" cy="457" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="461" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">11</text>
-<text x="1194" y="462" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">중앙 북쪽 분기</text>
+<circle cx="1800" cy="457" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="461" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">11</text>
+<text x="1818" y="462" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">중앙 북쪽 분기</text>
 <circle cx="650" cy="516" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="650" y="520" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">12</text>
-<circle cx="1176" cy="483" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="487" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">12</text>
-<text x="1194" y="488" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">차폐 화단 A 동쪽</text>
+<circle cx="1800" cy="483" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="487" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">12</text>
+<text x="1818" y="488" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">차폐 화단 A 동쪽</text>
 <circle cx="586" cy="596" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="586" y="600" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">13</text>
-<circle cx="1176" cy="509" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="513" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">13</text>
-<text x="1194" y="514" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">중앙 가로 연결</text>
+<circle cx="1800" cy="509" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="513" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">13</text>
+<text x="1818" y="514" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">중앙 가로 연결</text>
 <circle cx="522" cy="676" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="522" y="680" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">14</text>
-<circle cx="1176" cy="535" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="539" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">14</text>
-<text x="1194" y="540" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">차폐 화단 B 서쪽</text>
+<circle cx="1800" cy="535" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="539" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">14</text>
+<text x="1818" y="540" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">차폐 화단 B 서쪽</text>
 <circle cx="586" cy="836" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="586" y="840" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">15</text>
-<circle cx="1176" cy="561" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="565" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">15</text>
-<text x="1194" y="566" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">남쪽 가로길</text>
+<circle cx="1800" cy="561" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="565" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">15</text>
+<text x="1818" y="566" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">남쪽 가로길</text>
 <circle cx="586" cy="932" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="586" y="936" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">16</text>
-<circle cx="1176" cy="587" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="591" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">16</text>
-<text x="1194" y="592" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">교문 앞</text>
+<circle cx="1800" cy="587" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="591" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">16</text>
+<text x="1818" y="592" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">교문 앞</text>
 <circle cx="170" cy="692" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="170" y="696" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">17</text>
-<circle cx="1176" cy="613" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="617" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">17</text>
-<text x="1194" y="618" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 휴식 구역</text>
+<circle cx="1800" cy="613" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="617" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">17</text>
+<text x="1818" y="618" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 휴식 구역</text>
 <circle cx="1018" cy="676" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="1018" y="680" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">18</text>
-<circle cx="1176" cy="639" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="643" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">18</text>
-<text x="1194" y="644" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">급수대 앞</text>
+<circle cx="1800" cy="639" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="643" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">18</text>
+<text x="1818" y="644" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">급수대 앞</text>
 <circle cx="922" cy="932" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="922" y="936" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">19</text>
-<circle cx="1176" cy="665" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="669" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">19</text>
-<text x="1194" y="670" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">경비초소 앞</text>
+<circle cx="1800" cy="665" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="669" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">19</text>
+<text x="1818" y="670" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">경비초소 앞</text>
 <circle cx="170" cy="452" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
 <text x="170" y="456" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">20</text>
-<circle cx="1176" cy="691" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
-<text x="1176" y="695" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">20</text>
-<text x="1194" y="696" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">분리수거장 앞</text>
-<text x="1166" y="735" font-size="21" fill="#e5e9dd" text-anchor="start" font-weight="bold">탐색 동선</text>
-<polyline points="1166,764 1191,764" fill="none" stroke="#f1cd76" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<text x="1201" y="769" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">중앙 차폐 우회 동선</text>
-<polyline points="1166,795 1191,795" fill="none" stroke="#80cccd" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<text x="1201" y="800" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 큰 우회 동선</text>
-<polyline points="1166,826 1191,826" fill="none" stroke="#d5a5db" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
-<text x="1201" y="831" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 큰 우회 동선</text>
+<circle cx="1800" cy="691" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="695" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">20</text>
+<text x="1818" y="696" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">분리수거장 앞</text>
+<circle cx="1178" cy="612" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1178" y="616" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">21</text>
+<circle cx="1800" cy="717" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="721" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">21</text>
+<text x="1818" y="722" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">산책로 입구</text>
+<circle cx="1178" cy="452" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1178" y="456" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">22</text>
+<circle cx="1800" cy="743" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="747" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">22</text>
+<text x="1818" y="748" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 산책길</text>
+<circle cx="1706" cy="452" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1706" y="456" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">23</text>
+<circle cx="1800" cy="769" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="773" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">23</text>
+<text x="1818" y="774" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 산책길</text>
+<circle cx="1450" cy="308" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1450" y="312" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">24</text>
+<circle cx="1800" cy="795" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="799" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">24</text>
+<text x="1818" y="800" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">뒤쪽 산책길</text>
+<circle cx="1450" cy="612" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1450" y="616" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">25</text>
+<circle cx="1800" cy="821" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="825" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">25</text>
+<text x="1818" y="826" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">입구</text>
+<circle cx="1178" cy="452" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1178" y="456" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">26</text>
+<circle cx="1800" cy="847" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="851" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">26</text>
+<text x="1818" y="852" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 산책길</text>
+<circle cx="1706" cy="452" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1706" y="456" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">27</text>
+<circle cx="1800" cy="873" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="877" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">27</text>
+<text x="1818" y="878" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 산책길</text>
+<circle cx="1450" cy="308" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1450" y="312" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">28</text>
+<circle cx="1800" cy="899" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="903" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">28</text>
+<text x="1818" y="904" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">뒤쪽 산책길</text>
+<circle cx="1146" cy="612" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1146" y="616" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">29</text>
+<circle cx="1800" cy="925" r="9" fill="#e5e9dd" stroke="#101e27" stroke-width="1.5"/>
+<text x="1800" y="929" font-size="11" fill="#101e27" text-anchor="middle" font-weight="bold">29</text>
+<text x="1818" y="930" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">산책로 연결부 · 도보</text>
+<text x="1790" y="969" font-size="21" fill="#e5e9dd" text-anchor="start" font-weight="bold">탐색 동선</text>
+<polyline points="1790,998 1815,998" fill="none" stroke="#f1cd76" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<text x="1825" y="1003" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">중앙 차폐 우회 동선</text>
+<polyline points="1790,1029 1815,1029" fill="none" stroke="#80cccd" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<text x="1825" y="1034" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">서쪽 큰 우회 동선</text>
+<polyline points="1790,1060 1815,1060" fill="none" stroke="#d5a5db" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray=""/>
+<text x="1825" y="1065" font-size="14" fill="#e5e9dd" text-anchor="start" font-weight="normal">동쪽 큰 우회 동선</text>
 <rect x="572" y="159" width="28" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
 <text x="586" y="146" font-size="16" fill="#91c8c3" text-anchor="middle" font-weight="bold">본관 1층 ↔ E 출입</text>
 <rect x="940" y="159" width="28" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
 <text x="954" y="146" font-size="16" fill="#91c8c3" text-anchor="middle" font-weight="bold">본관 1층 ↔ E 출입</text>
 <rect x="188" y="159" width="28" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
 <text x="202" y="146" font-size="16" fill="#91c8c3" text-anchor="middle" font-weight="bold">본관 1층 ↔ E 출입</text>
-<rect x="1068" y="607" width="28" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
-<text x="1082" y="594" font-size="16" fill="#91c8c3" text-anchor="middle" font-weight="bold">본관 1층 ↔ E 출입</text>
 <rect x="124" y="927" width="28" height="10" fill="#91c8c3" stroke="#101e27" rx="0" />
 <text x="138" y="914" font-size="16" fill="#91c8c3" text-anchor="middle" font-weight="bold">본관 1층 ↔ E 출입</text>
 <circle cx="586" cy="964" r="14" fill="#e4c572" stroke="#101e27" stroke-width="1.5"/>

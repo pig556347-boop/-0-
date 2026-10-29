@@ -1,9 +1,9 @@
 {
-  "gameRevision": "subject-encounters-016-2026-10-28",
-  "gameVersion": "0.16",
-  "mapSha256": "a1c0d233b0e24db8d0bba531cc68e3d2dc80d8da166494837d1c0ba2153ef81f",
-  "roomCount": 101,
-  "annexSpaceCount": 18,
+  "gameRevision": "unity-port-017-2026-10-29",
+  "gameVersion": "0.17",
+  "mapSha256": "87556aefd0c0b493d669c3d09c9451238d719a38b3306e1944ae36441b6f65fd",
+  "roomCount": 105,
+  "annexSpaceCount": 21,
   "westSpaceCount": 14,
   "playgroundImplemented": true,
   "escapeGate": {
@@ -59,7 +59,7 @@
     },
     {
       "file": "playground.svg",
-      "width": 1554,
+      "width": 2178,
       "height": 1180
     },
     {
@@ -444,6 +444,18 @@
       "label": "별관 2층 / 체조·무용실 탈의실"
     },
     {
+      "file": "rooms/annex-kitchen-chase.svg",
+      "label": "별관 1층 / 조리실 비상 작업 통로"
+    },
+    {
+      "file": "rooms/annex-coach-room.svg",
+      "label": "별관 3층 / 체육 지도교사실"
+    },
+    {
+      "file": "rooms/annex-equipment-records.svg",
+      "label": "별관 3층 / 운동장비 관리실"
+    },
+    {
       "file": "rooms/annex-kitchen.svg",
       "label": "별관 1층 / 급식실 조리실"
     },
@@ -469,15 +481,15 @@
     },
     {
       "file": "rooms/west-dining.svg",
-      "label": "서관 1층 / 서관 직원급식실"
+      "label": "서관 1층 / 직원 카페테리아"
     },
     {
       "file": "rooms/west-prep.svg",
-      "label": "서관 1층 / 서관 준비조리실"
+      "label": "서관 1층 / 시설관리 작업실"
     },
     {
       "file": "rooms/west-freezer.svg",
-      "label": "서관 1층 / 냉동창고"
+      "label": "서관 1층 / 비품창고"
     },
     {
       "file": "rooms/west-dorm.svg",
@@ -520,8 +532,8 @@
       "label": "교문 경비실"
     },
     {
-      "file": "school-walkway.svg",
-      "label": "학교 뒤 산책로"
+      "file": "rooms/gatehouse-toilet.svg",
+      "label": "경비실 화장실"
     }
   ]
 }
