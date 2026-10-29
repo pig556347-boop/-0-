@@ -317,3 +317,7 @@ python3 -m http.server 8792 --directory Builds/WebGL
 
 최종 공개 검증: 63개 통과, 실행/콘솔 오류 0. 공개 파일과 검증 빌드 SHA-256 일치. 호스팅 확인 화면을 클릭하고 오디오 재개 완료를 기다린 뒤 실제 Chromium에서 검증했다. 실행: https://rawcdn.githack.com/pig556347-boop/-0-/d42df4539bda3be4e64cd9bf7033f12d1a8832dd/index.html
 다음 재개: 이 공개 빌드와 Evidence/subjects016-public.json 기준. 구현은 완료했으며 남은 제작은 Unity 네이티브 이식·최종 몬스터 모델/모션·녹음 음색 교체·전체 게임 영문 번역이다.
+
+
+최종 공개 Chromium 검증: 74개 통과, 실행·콘솔 오류 0. 공개 파일과 로컬 검증 빌드 SHA-256 일치. 새 웹 주소: https://rawcdn.githack.com/pig556347-boop/-0-/61d1aafda1a96c56e2c3abeed660868ea567794d/index.html
+구현 체크포인트 `3115bd2c3199ed7753875d1383ba6441b903e8f8`, 전용 웹 커밋 `61d1aafda1a96c56e2c3abeed660868ea567794d`. 다음 재개: 활성화된 Unity Editor에서 새 C# 런타임 Play와 WebGL 검사, 최종 몬스터/음향 에셋 교체. main과 다른 게임 배포는 변경하지 않았다.

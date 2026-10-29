@@ -2,7 +2,7 @@
 
 쪽지 휴대/해제 즉시 소비, 열쇠 A/B/C 개별 삽입, 네 특별실 괴물, 조리실 재도전, 산책로 통합과 아이템 분산을 반영했다. 실험복·손전등은 모두 본관 3층. 새 판은 개발용 마스터키를 지급한다.
 
-[변경·실행·검증·추가 에셋](PATCH_017.md). 공개 주소는 배포 후 이 문서와 `Deploy/publication.json`에 기록한다. 현재 플레이 빌드는 독립 웹판이며 Unity WebGL이 아니다. Unity 네이티브 C# 이식 코드는 컴파일했으나 실제 Play/WebGL은 라이선스 오류로 미검증이다.
+[변경·실행·검증·추가 에셋](PATCH_017.md). **[웹 플레이](https://rawcdn.githack.com/pig556347-boop/-0-/61d1aafda1a96c56e2c3abeed660868ea567794d/index.html) · [전개도](https://rawcdn.githack.com/pig556347-boop/-0-/61d1aafda1a96c56e2c3abeed660868ea567794d/maps/index.html)**. 공개 주소 브라우저 검증 결과는 `Deploy/publication.json`에 기록한다. 현재 플레이 빌드는 독립 웹판이며 Unity WebGL이 아니다. Unity 네이티브 C# 이식 코드는 컴파일했으나 실제 Play/WebGL은 라이선스 오류로 미검증이다.
 
 아래는 이전 버전 기록이다.
 

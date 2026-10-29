@@ -1,0 +1,319 @@
+{
+  "ok": true,
+  "utc": "2026-10-29T14:19:28.080Z",
+  "sourceCommit": "61d1aafda1a96c56e2c3abeed660868ea567794d",
+  "publicURL": "https://rawcdn.githack.com/pig556347-boop/-0-/61d1aafda1a96c56e2c3abeed660868ea567794d/index.html",
+  "checks": [
+    {
+      "name": "patch017: Playable HTML response",
+      "passed": true
+    },
+    {
+      "name": "patch017: Published HTML matches tested build",
+      "passed": true
+    },
+    {
+      "name": "patch017: Keyboard walk normalized speed",
+      "passed": true
+    },
+    {
+      "name": "patch017: Keyboard diagonal normalized speed",
+      "passed": true
+    },
+    {
+      "name": "patch017: Keyboard run normalized speed",
+      "passed": true
+    },
+    {
+      "name": "patch017: Automatic stairs 1→2→3→4→3→2→1 and safe idle landings",
+      "passed": true
+    },
+    {
+      "name": "patch017: Walkway reached and returned entirely within playground",
+      "passed": true
+    },
+    {
+      "name": "patch017: Closed doors and boundaries block movement",
+      "passed": true
+    },
+    {
+      "name": "patch017: New run grants developer master key",
+      "passed": true
+    },
+    {
+      "name": "patch017: Both science tools on third floor",
+      "passed": true
+    },
+    {
+      "name": "patch017: Contiguous yard contains walkway without door",
+      "passed": true
+    },
+    {
+      "name": "patch017: Password note occupies inventory slot",
+      "passed": true
+    },
+    {
+      "name": "patch017: Science preparation exact note code unlocks correct door",
+      "passed": true
+    },
+    {
+      "name": "patch017: Note consumed immediately without room entry",
+      "passed": true
+    },
+    {
+      "name": "patch017: Keypad audio sounds while investigation pauses world",
+      "passed": true
+    },
+    {
+      "name": "patch017: E closes dialog",
+      "passed": true
+    },
+    {
+      "name": "patch017: Roster rendered as readable table",
+      "passed": true
+    },
+    {
+      "name": "patch017: Guard locker has exactly two named compartments",
+      "passed": true
+    },
+    {
+      "name": "patch017: Shelf shows one relevant return action",
+      "passed": true
+    },
+    {
+      "name": "patch017: Wrong order produces feedback and reset",
+      "passed": true
+    },
+    {
+      "name": "patch017: Three actual UI returns solve library",
+      "passed": true
+    },
+    {
+      "name": "patch017: Science equipment collected via UI on same floor",
+      "passed": true
+    },
+    {
+      "name": "patch017: Esc freezes recorded play time",
+      "passed": true
+    },
+    {
+      "name": "patch017: Resume advances time",
+      "passed": true
+    },
+    {
+      "name": "patch017: Statue freezes while visibly watched",
+      "passed": true
+    },
+    {
+      "name": "patch017: Statue approaches when looking away",
+      "passed": true
+    },
+    {
+      "name": "patch017: Dunkyboy accelerates on straight court route",
+      "passed": true
+    },
+    {
+      "name": "patch017: Science spawns exactly two shadows",
+      "passed": true
+    },
+    {
+      "name": "patch017: Shadows frozen during light",
+      "passed": true
+    },
+    {
+      "name": "patch017: Shadows move only during blackout",
+      "passed": true
+    },
+    {
+      "name": "patch017: Music climax spawns giant-headed musician",
+      "passed": true
+    },
+    {
+      "name": "patch017: Everyday kitchen is smaller than chase passage",
+      "passed": true
+    },
+    {
+      "name": "patch017: Searching end crate arms but does not spawn chef",
+      "passed": true
+    },
+    {
+      "name": "patch017: Return route triggers expanded chase passage",
+      "passed": true
+    },
+    {
+      "name": "patch017: Standing still is quickly lethal in kitchen",
+      "passed": true
+    },
+    {
+      "name": "patch017: Retry starts safely without immediate monster",
+      "passed": true
+    },
+    {
+      "name": "patch017: Death, renewed investigation, and return spawn chef again",
+      "passed": true
+    },
+    {
+      "name": "patch017: Uninterrupted sprint can complete the entire one-cell chase route",
+      "passed": true
+    },
+    {
+      "name": "patch017: Chase exits safely into cafeteria",
+      "passed": true
+    },
+    {
+      "name": "patch017: A alone can be installed without escaping",
+      "passed": true
+    },
+    {
+      "name": "patch017: Installed key restored from save",
+      "passed": true
+    },
+    {
+      "name": "patch017: Three installed keys require explicit final opening",
+      "passed": true
+    },
+    {
+      "name": "patch017: Final E action escapes with empty inventory",
+      "passed": true
+    },
+    {
+      "name": "patch017: No browser exceptions or asset errors",
+      "passed": true
+    },
+    {
+      "name": "lobby: Lobby has start, settings and language",
+      "passed": true
+    },
+    {
+      "name": "lobby: Gameplay HUD hidden in lobby",
+      "passed": true
+    },
+    {
+      "name": "lobby: Settings change game audio and persist",
+      "passed": true
+    },
+    {
+      "name": "lobby: Esc returns to lobby",
+      "passed": true
+    },
+    {
+      "name": "lobby: English language changes menu and document language",
+      "passed": true
+    },
+    {
+      "name": "lobby: Language and audio survive reload",
+      "passed": true
+    },
+    {
+      "name": "lobby: Game start reveals playable HUD",
+      "passed": true
+    },
+    {
+      "name": "lobby: E or F opens investigation",
+      "passed": true
+    },
+    {
+      "name": "lobby: Second E closes without button",
+      "passed": true
+    },
+    {
+      "name": "lobby: Closed investigation can reopen",
+      "passed": true
+    },
+    {
+      "name": "lobby: I opens inventory",
+      "passed": true
+    },
+    {
+      "name": "lobby: E closes inventory too",
+      "passed": true
+    },
+    {
+      "name": "lobby: Directional pad is a visible cross, input readonly",
+      "passed": true
+    },
+    {
+      "name": "lobby: Physical arrow keys do not fill direction lock",
+      "passed": true
+    },
+    {
+      "name": "lobby: Onscreen directional clicks unlock",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 numeric door lock has ten buttons",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 physical typing is ignored",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 backspace removes exactly one entry",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 incomplete code stays locked",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 onscreen digits unlock correct code",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 numeric door lock has ten buttons",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 physical typing is ignored",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 backspace removes exactly one entry",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 incomplete code stays locked",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 onscreen digits unlock correct code",
+      "passed": true
+    },
+    {
+      "name": "lobby: Settings available from pause",
+      "passed": true
+    },
+    {
+      "name": "lobby: Return to lobby preserves run",
+      "passed": true
+    },
+    {
+      "name": "lobby: Resume returns to same run",
+      "passed": true
+    },
+    {
+      "name": "lobby: Narrow lobby menu stays reachable",
+      "passed": true
+    },
+    {
+      "name": "lobby: No runtime or asset errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "suites": [
+    {
+      "name": "patch017",
+      "ok": true,
+      "hash": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94",
+      "checks": 44
+    },
+    {
+      "name": "lobby",
+      "ok": true,
+      "hash": "5466472be0e6f1844804c55a9ef57c045c13ef1ab453a4a2d91b011568c64b94",
+      "checks": 30
+    }
+  ]
+}
