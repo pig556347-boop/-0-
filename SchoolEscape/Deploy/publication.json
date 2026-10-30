@@ -26,7 +26,21 @@
   "webCommit": "e72aff59ba289de8b1608162575db8405e9b7037",
   "mainCommitUnchanged": "1268055a35266ca70e1c1302c2d5852ba537a2ad",
   "publicVerification": {
-    "status": "pending",
-    "workflowRun": 40975588740
+    "status": "success",
+    "workflowRun": 40975588740,
+    "browserChecksPassed": 81,
+    "runtimeErrors": 0,
+    "sha256": "719e5fc4b4b64b3257b28bb19ac831ba9d0da692f225b0123ee7b32482e0d62d"
+  },
+  "selfDiagnostic": {
+    "reproducedBugsFixed": 3,
+    "freshSeedCount": 32,
+    "freshSeedChecks": 4838,
+    "lifecycleChecks": 26,
+    "localRegressionChecks": 43,
+    "localEdgeCaseChecks": 7,
+    "continuousWalkthroughChecks": 13,
+    "continuousWalkthroughMeters": 1081.59,
+    "continuousWalkthroughEnemyEnabled": false
   }
 }

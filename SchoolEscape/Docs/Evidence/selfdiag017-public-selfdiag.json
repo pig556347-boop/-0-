@@ -1,0 +1,62 @@
+{
+  "ok": true,
+  "url": "https://rawcdn.githack.com/pig556347-boop/-0-/e72aff59ba289de8b1608162575db8405e9b7037/index.html",
+  "checks": [
+    {
+      "name": "Music countdown survives save/load",
+      "passed": true,
+      "actual": {
+        "before": 7.99999999999998,
+        "after": 8.09999999999998
+      }
+    },
+    {
+      "name": "Science blackout count survives save/load",
+      "passed": true,
+      "actual": {
+        "before": {
+          "elapsed": 22.500000000000185,
+          "blackouts": 2
+        },
+        "after": {
+          "elapsed": 22.600000000000186,
+          "blackouts": 2
+        }
+      }
+    },
+    {
+      "name": "Dunkyboy can catch idle player",
+      "passed": true
+    },
+    {
+      "name": "Developer toggle cannot dismiss death or bypass revive",
+      "passed": true,
+      "actual": {
+        "disabled": true,
+        "lives": 4
+      }
+    },
+    {
+      "name": "Revive returns to safe spawn and consumes one life",
+      "passed": true
+    },
+    {
+      "name": "Full inventory refuses pickup without losing item",
+      "passed": true,
+      "actual": {
+        "before": 9,
+        "after": 9,
+        "picked": false,
+        "ok": false
+      }
+    },
+    {
+      "name": "No browser exceptions or missing resources",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "method": "Actual Chromium UI with QA placement/time advancement for isolated edge cases.",
+  "sha256": "719e5fc4b4b64b3257b28bb19ac831ba9d0da692f225b0123ee7b32482e0d62d"
+}

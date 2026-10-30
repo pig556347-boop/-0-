@@ -315,3 +315,7 @@
 
 최종 공개 Chromium 검증: 74개 통과, 실행·콘솔 오류 0. 공개 파일과 로컬 검증 빌드 SHA-256 일치. 새 웹 주소: https://rawcdn.githack.com/pig556347-boop/-0-/61d1aafda1a96c56e2c3abeed660868ea567794d/index.html
 구현 체크포인트 `3115bd2c3199ed7753875d1383ba6441b903e8f8`, 전용 웹 커밋 `61d1aafda1a96c56e2c3abeed660868ea567794d`. 다음 재개: 활성화된 Unity Editor에서 새 C# 런타임 Play와 WebGL 검사, 최종 몬스터/음향 에셋 교체. main과 다른 게임 배포는 변경하지 않았다.
+
+
+0.17.1 최종 공개 검증: Chromium 81개 통과, 실행·콘솔 오류 0, 공개 파일과 로컬 검증 SHA-256 일치. https://rawcdn.githack.com/pig556347-boop/-0-/e72aff59ba289de8b1608162575db8405e9b7037/index.html
+Unity C# 컴파일은 성공했으나 실제 Play/WebGL은 라이선스 오류로 미검증. 다음 재개는 활성화된 Unity 실행 검수와 몬스터 ON·마스터키 없는 난이도/힌트 자연 플레이이다.
