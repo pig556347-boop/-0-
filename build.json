@@ -1,25 +1,27 @@
 {
   "game": "폐교탈출",
-  "version": "0.17.1",
-  "featureRevision": "self-diagnostic-save-state-2026-10-30",
-  "sourceCommit": "11f593b328001a55b8cbeb9f0d36e32413547ef8",
-  "htmlSha256": "719e5fc4b4b64b3257b28bb19ac831ba9d0da692f225b0123ee7b32482e0d62d",
-  "htmlBytes": 6669166,
+  "version": "0.18",
+  "featureRevision": "library-rooftop-roaming-018-2026-11-02",
+  "sourceCommit": "ddcb990cae8c7170bf896e9f17f523b7a3e99984",
+  "htmlSha256": "834f5d83065bf8b9dd49df734ad7b5b46d7f0ea0cc2d6fe0b917f185d7fd4874",
+  "htmlBytes": 6674951,
   "roomCount": 105,
   "totalSpaces": 110,
   "mainFloors": 4,
   "browserChecks": {
-    "browser": 43,
-    "selfdiag": 7
+    "browser": 51,
+    "selfdiag": 7,
+    "walkthrough": 12
   },
-  "kernelChecks": 2425,
-  "staticChecks": 77455,
-  "routeChecks": 3729,
+  "seedChecks": 4966,
+  "staticChecks": 77581,
+  "routeChecks": 3738,
+  "balanceChecks": 20,
   "unityNativePortImplemented": true,
   "unityCSharpCompiled": true,
   "unityPlayValidated": false,
   "unityWebGL": false,
-  "unityExecutionBlock": "No valid Unity Editor license found",
-  "nativeGeneration": "16 authored placement layouts, runtime password/book/classroom randomization",
-  "languageScope": "Korean and English menus/settings; in-world records Korean"
+  "unityExecutionBlock": "Play: No valid Unity Editor license found; WebGL Build Support absent",
+  "nativeGeneration": "16 authored placement layouts, runtime password/classroom randomization",
+  "newSaveVersion": 18
 }
