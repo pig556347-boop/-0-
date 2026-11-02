@@ -57,7 +57,7 @@ try {
    const tiles=[],walls=[],caps=[],lower=[],windows=[],mullions=[],lamps=[],papers=[],trim=[];
    const interiorWall=(x,y)=>f.isRoom;
    const doorCells=new Set([...f.rooms,...(f.portals||[])].map(r=>`${r.doorX},${r.doorY}`)),isDoor=(x,y)=>doorCells.has(`${x},${y}`);
-   if(!f.voidRects)box('Ground',root,pos((f.width-1)/2,(f.height-1)/2,-.1),[f.width*tile+2,.2,f.height*tile+2],f.isOutdoor?yardMaterial:f.isRoom?mat({classroom:'#757a66',music:'#79664b',art:'#8c8874',artStorage:'#777762',library:'#786e55',infirmary:'#89988c',administration:'#7c8070',staff:'#7a8274',computer:'#737f7d',broadcast:'#7f7765',studentRestroom:'#83958a',staffRestroom:'#9b9e8c',storage:'#777a67',assembly:'#7e7665',maintenance:'#6b7976',seminar:'#7e8070',preparation:'#858171',archives:'#7d7866',lounge:'#7f806a',counseling:'#828776',meeting:'#7f7b6c',principal:'#7b715f',control:'#6b7e7d'}[f.kind]||'#757a66',{map:floorTexture}):materials.floor);
+   if(!f.voidRects)box('Ground',root,pos((f.width-1)/2,(f.height-1)/2,-.1),[f.width*tile+2,.2,f.height*tile+2],f.kind==='rooftop'?mat('#6d7975',{map:floorTexture}):f.isOutdoor?yardMaterial:f.isRoom?mat({classroom:'#757a66',music:'#79664b',art:'#8c8874',artStorage:'#777762',library:'#786e55',infirmary:'#89988c',administration:'#7c8070',staff:'#7a8274',computer:'#737f7d',broadcast:'#7f7765',studentRestroom:'#83958a',staffRestroom:'#9b9e8c',storage:'#777a67',assembly:'#7e7665',maintenance:'#6b7976',seminar:'#7e8070',preparation:'#858171',archives:'#7d7866',lounge:'#7f806a',counseling:'#828776',meeting:'#7f7b6c',principal:'#7b715f',control:'#6b7e7d'}[f.kind]||'#757a66',{map:floorTexture}):materials.floor);
    const isVoid=(x,y)=>(f.voidRects||[]).some(r=>x>=r[0]&&y>=r[1]&&x<=r[2]&&y<=r[3]);
    for(let y=0;y<f.height;y++)for(let x=0;x<f.width;){
      if(isVoid(x,y)){x++;continue;}
@@ -203,7 +203,7 @@ try {
  function updateAudio(dt=0){
    const cooking=kitchen.active&&game.spaceId===kitchen.map.id,enemy=subjects.nearest||(cooking?kitchen:pursuit);const sameSpace=pursuit.enabled&&(subjects.active||cooking||(!subjects.inEncounter&&pursuit.spaceId===game.spaceId));
    const enemyDistance=sameSpace?Math.hypot(enemy.x-game.x,enemy.y-game.y)*tile:Infinity;
-   const alerted=pursuit.enabled&&(subjects.active||cooking||(!subjects.inEncounter&&pursuit.alerted));
+   const alerted=pursuit.enabled&&(subjects.alerted||cooking||(!subjects.inEncounter&&pursuit.alerted));
    const goal=alerted?(sameSpace?Math.max(.45,1-enemyDistance/22):.4):0;
    chaseIntensity+=(goal-chaseIntensity)*(1-Math.exp(-3*Math.max(dt,.001)));
    const stair=game.nearby(),onStairs=!!stair&&Math.abs(stair.x-game.x)*tile<1.2&&Math.abs(stair.y-game.y)*tile<1.05;
@@ -234,9 +234,9 @@ try {
    floorRoots.forEach(r=>r.visible=r.userData.spaceId===game.spaceId);
    const m=game.map,label=m.isOutdoor?m.label:game.roomId?m.label:`본관 ${game.floor}층 · ${m.subtitle}`;
    scene.background.set(m.isOutdoor?'#14222a':'#0c1721');scene.fog.color.copy(scene.background);scene.fog.density=m.isOutdoor?.0045:.009;
-   document.querySelector('.legend').innerHTML=m.isOutdoor?(m.id==='playground'?'<i></i>현재 위치 <b></b>탈출 교문 <em style="background:#91c8c3"></em>건물 출입구':'<i></i>현재 위치 <em></em>운동장 연결문'):'<i></i>현재 위치 <b></b>계단 <em></em>방 출입구';
-   $('area').textContent=label;$('floor-label').textContent=m.isOutdoor?(m.id==='playground'?'SCHOOL YARD':'WALKWAY'):game.roomId?m.label:`MAIN BUILDING — 0${game.floor}`;
-   $('route-note').textContent=m.isOutdoor?(m.id==='playground'?'북쪽: 본관 / 동쪽: 산책로 / 남쪽: 탈출 교문':'순환 산책로 · 입구에서 E로 운동장에 돌아갑니다.'):game.map.noExit?'계단 방향 표지를 따라 이동합니다.':game.roomId?'출입문 앞에서 E를 눌러 복도로 돌아갑니다.':game.floor===1?'현관문에서 E로 운동장에 나갈 수 있습니다.':'닫힌 문 앞에서 E를 눌러 방에 들어갑니다.';
+   document.querySelector('.legend').innerHTML=m.isOutdoor?(m.kind==='rooftop'?'<i></i>현재 위치 <b></b>4층 계단':m.id==='playground'?'<i></i>현재 위치 <b></b>탈출 교문 <em style="background:#91c8c3"></em>건물 출입구':'<i></i>현재 위치 <em></em>운동장 연결문'):'<i></i>현재 위치 <b></b>계단 <em></em>방 출입구';
+   $('area').textContent=label;$('floor-label').textContent=m.isOutdoor?(m.kind==='rooftop'?'ROOFTOP':m.id==='playground'?'SCHOOL YARD':'WALKWAY'):game.roomId?m.label:`MAIN BUILDING — 0${game.floor}`;
+   $('route-note').textContent=m.isOutdoor?(m.kind==='rooftop'?'남쪽 계단으로 본관 4층 복귀 · 교문 열쇠 탐색':m.id==='playground'?'북쪽: 본관 / 동쪽: 산책로 / 남쪽: 탈출 교문':'순환 산책로 · 입구에서 E로 운동장에 돌아갑니다.'):game.map.noExit?'계단 방향 표지를 따라 이동합니다.':game.roomId?'출입문 앞에서 E를 눌러 복도로 돌아갑니다.':game.floor===1?'현관문에서 E로 운동장에 나갈 수 있습니다.':'닫힌 문 앞에서 E를 눌러 방에 들어갑니다.';
    seenFloor=game.spaceId;camera.position.copy(pos(game.x,game.y,16)).add(new T.Vector3(0,0,10.4));camera.lookAt(pos(game.x,game.y));if(started)toast(label);
  }
  function drawMap(){
@@ -279,7 +279,7 @@ try {
    artMask.style.display=started&&game.map.subjectEvent==='art'?'block':'none';if(game.map.subjectEvent==='art'){const origin=pos(game.x,game.y).project(camera),facing=game.lookDirection||game.direction,a=Math.atan2(facing.y,facing.x),points=[];const screen=p=>[(p.x+1)*innerWidth/2,(1-p.y)*innerHeight/2];const [cx,cy]=screen(origin);for(let n=0;n<=32;n++){const t=a-Math.PI/3+n/32*Math.PI*2/3,dx=Math.cos(t),dy=Math.sin(t);let d=0;while(d<23&&game.open(Math.round(game.x+dx*d),Math.round(game.y+dy*d)))d+=.25;points.push(screen(pos(game.x+dx*d,game.y+dy*d).project(camera)).join(','))}artMask.querySelector('#art-cone').setAttribute('d',`M${cx},${cy} L${points.join(' L')} Z`);const circle=artMask.querySelector('#art-near');circle.setAttribute('cx',cx);circle.setAttribute('cy',cy);}
    const near=game.nearby();$('stair-prompt').hidden=!near||!started||game.caught;if(near)$('stair-prompt').querySelector('span').textContent=near.label+' 계단';
    if(near)$('stair-prompt').querySelector('small').textContent=progression.describe(near.targetId||`floor-${near.target}`)|| (game.arrivalLock===near.id?'계단 구역을 벗어난 뒤 다시 진입하세요':'계단 안으로 이동하면 자동 전환');
-   const room=game.currentRoom();$('room-status').textContent=game.map.isOutdoor?(game.map.id==='playground'?'운동장 탐방 중 · 남쪽 교문 탈출':'산책로 탐방 중 · 연결문 E로 운동장 복귀'):room?room.label+(room.theme?' · '+room.theme:'')+' 탐방 중':'방문 기본 닫힘 · E 입장';
+   const room=game.currentRoom();$('room-status').textContent=game.map.isOutdoor?(game.map.kind==='rooftop'?'옥상 탐방 중 · 남쪽 계단으로 4층 복귀':game.map.id==='playground'?'운동장 탐방 중 · 남쪽 교문 탈출':'산책로 탐방 중 · 연결문 E로 운동장 복귀'):room?room.label+(room.theme?' · '+room.theme:'')+' 탐방 중':'방문 기본 닫힘 · E 입장';
    const door=game.nearbyDoor();$('door-prompt').hidden=!door||!started||game.caught;if(door)$('door-prompt').querySelector('span').textContent=door.label+' · '+(kitchen.active&&door.id===kitchen.map.kitchenSequence.triggerPortal?'북쪽 문 봉쇄 · 서쪽 비상문으로':progression.describe(door.targetId)||(door.exit?'문 열고 복도로 나가기':'문 열고 입장'));
    const transit=pursuit.enabled?pursuit.transit:null,portal=transit?.portal;
    let enemyDoor=null,enemyDoorAmount=0;
@@ -293,7 +293,7 @@ try {
    survival.capture();subjects.recoverEquipment();$('lives').textContent=survival.rules.label+' · 남은 목숨 '+survival.lives+' / '+survival.rules.lives;const stamina=Math.max(0,Math.min(game.maxStamina,game.stamina));$('stamina-value').textContent=game.unlimitedStamina?.()?'∞ · 조리실 추격':Math.ceil(stamina)+' / '+game.maxStamina;$('stamina-fill').style.transform=`scaleX(${stamina/game.maxStamina})`;
    $('stamina-meter').setAttribute('aria-valuemax',String(game.maxStamina));$('stamina-meter').setAttribute('aria-valuenow',String(Math.round(stamina)));$('vitals').classList.toggle('exhausted',game.exhausted);
    $('stamina-hint').textContent=game.unlimitedStamina?.()?'조리실 추격 중 스태미나 무제한':game.exhausted?'지침 · 25% 회복 후 다시 달릴 수 있습니다':game.isRunning?'달리는 중 · 스태미나 소모':'달리면 소모 · 걸으면 회복';
-   const alerted=pursuit.enabled&&(subjects.active||kitchen.active||(!subjects.inEncounter&&pursuit.alerted));$('threat-status').hidden=!started||!alerted||frozen;$('toast').hidden=false;$('toast').style.top=alerted?'82px':'30px';
+   const alerted=pursuit.enabled&&(subjects.alerted||kitchen.active||(!subjects.inEncounter&&pursuit.alerted));$('threat-status').hidden=!started||!alerted||frozen;$('toast').hidden=false;$('toast').style.top=alerted?'82px':'30px';
    $('threat-status').textContent=subjects.active?subjects.hint:kitchen.active?'배식장이 선반을 부수며 쫓아옵니다 · 서쪽 비상문으로':pursuit.state==='transit'?'문 너머로 발소리가 다가옵니다':pursuit.state==='search'?'발소리가 아직 멀어지지 않았습니다':'당직자가 쫓아오고 있습니다';
    $('danger-vignette').style.opacity=started&&!frozen?String(chaseIntensity*.65):'0';
    $('caught').hidden=!game.caught;$('revive').hidden=survival.lives<=0;$('caught-detail').textContent=survival.lives>0?'남은 목숨 '+survival.lives+'개. '+(survival.mode==='easy'?'소지품은 그대로 유지됩니다.':'가이드북을 제외한 소지품을 붙잡힌 공간에 떨어뜨렸습니다.'):'남은 목숨이 없습니다. 새 판을 시작하세요.';$('pause').hidden=!paused||!started||game.caught;
@@ -320,7 +320,7 @@ try {
  $('success-restart').onclick=()=>{unlockAudio();restart()};$('new-run').onclick=()=>{unlockAudio();restart()};
  $('inventory-toggle').onclick=toggleInventory;
  const saveButton=document.createElement('button');saveButton.id='save-run';saveButton.textContent='현재 판 저장';$('new-run').after(saveButton);saveButton.onclick=()=>{try{saveRun({game,items,survival,kitchen,progression,pursuit,subjects});toast('현재 판을 저장했습니다. 시작 화면의 저장한 판 계속하기로 이어갈 수 있습니다.')}catch(e){toast(e.message)}};
- const loadButton=document.createElement('button');loadButton.id='load-run';loadButton.textContent='저장한 판 계속하기';$('begin').after(loadButton);loadButton.disabled=!localStorage.getItem('school.save017');loadButton.onclick=()=>{sessionStorage.setItem('school.load017','1');location.reload()};
+ const loadButton=document.createElement('button');loadButton.id='load-run';loadButton.textContent='저장한 판 계속하기';$('begin').after(loadButton);loadButton.disabled=!localStorage.getItem('school.save018');loadButton.onclick=()=>{sessionStorage.setItem('school.load018','1');location.reload()};
  $('enemy-toggle').onclick=()=>{if(game.caught||game.won)return;const enabled=!pursuit.enabled;pursuit.setEnabled(enabled);if(enabled)pursuit.reset();$('enemy-toggle').textContent=enabled?'추적자 ON':'추적자 OFF';$('enemy-toggle').setAttribute('aria-pressed',String(enabled));if(!game.caught)$('caught').hidden=true;keys.clear();chaseIntensity=0;updateAudio(0);toast(enabled?'추적자 ON · 지정 지점에서 배회합니다':'추적자 OFF · 개발 중 추격을 멈춥니다');try{localStorage.setItem('schoolEscape.enemyEnabled',String(enabled))}catch{}};
  $('sound-toggle').onclick=()=>{muted=!muted;audio.setMuted(muted);soundUI();if(!muted)unlockAudio();try{localStorage.setItem('schoolEscape.muted',String(muted))}catch{}};
  $('volume').oninput=event=>{volume=Number(event.target.value)/100;audio.setVolume(volume);try{localStorage.setItem('schoolEscape.volume',String(volume))}catch{}};

@@ -37,7 +37,7 @@ export class ItemSystem {
   this.searchById=new Map(this.searchables.map(s=>[s.id,s]));this.game.speedBoostUntil=0;
   const floors=shuffle(this.game.data.floors.map(f=>f.number),this.random),modes=shuffle(['hidden','ground',this.random()<.5?'hidden':'ground'],this.random);
   if(this.game.spaces.has('playground')){
-   const regions=shuffle(['playground','main',this.random()<.5?'playground':'main'],this.random);
+   const regions=shuffle(['playground','main',this.game.spaces.has('main-rooftop')?'main-rooftop':'main'],this.random);
    shuffle(KEYS,this.random).forEach((id,i)=>this._spawn(id,regions[i],modes[i]));
   }else KEYS.forEach((id,i)=>this._spawn(id,floors[i],modes[i]));
   for(const floor of this.game.data.floors.map(f=>f.number)){this._spawn('vitamin-water',floor,this.random()<.6?'hidden':'ground');this._spawn('chocolate-bar',floor,this.random()<.6?'hidden':'ground');}
@@ -92,7 +92,7 @@ export class ItemSystem {
   }
  }
  _floor(f){return f.isRoom?f.sourceFloor:f.number}
- _selectedSpace(f,selection){if(f.noLoot)return false;return typeof selection==='number'?this._floor(f)===selection:selection==='main'?!f.isOutdoor&&!['annex','west'].includes(f.building)&&f.id!=='playground':f.id===selection}
+ _selectedSpace(f,selection){if(f.noLoot)return false;return typeof selection==='number'?this._floor(f)===selection:selection==='main'?!f.isOutdoor&&!['annex','west'].includes(f.building)&&f.id!=='playground'&&f.id!=='main-rooftop':f.id===selection}
  _safeKeyLocation(f,p){return!(this.keyExclusions.get(f.id)||[]).some(q=>Math.hypot(q.x-p.x,q.y-p.y)*this.game.data.tileSize<4)}
  _freshUid(itemId){return`run-${this.seed.toString(16)}-${++this.serial}-${itemId}`}
  _spawn(itemId,selection,mode){

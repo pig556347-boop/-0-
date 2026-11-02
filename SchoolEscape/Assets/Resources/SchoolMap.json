@@ -1,10 +1,10 @@
 {
   "title": "폐교탈출",
   "schemaVersion": 4,
-  "revision": "unity-port-017-2026-10-29",
+  "revision": "library-rooftop-roaming-018-2026-10-30",
   "tileSize": 1.25,
-  "walkSpeed": 2.6,
-  "runSpeed": 4.7,
+  "walkSpeed": 3.1,
+  "runSpeed": 5.5,
   "stairEntryHalfWidth": 0.8,
   "stairEntryHalfDepth": 0.65,
   "stairExitRadius": 3.2,
@@ -64095,7 +64095,7 @@
       "isRoom": true,
       "number": 3,
       "sourceFloor": 3,
-      "subtitle": "도서실 · 독립 실내 공간",
+      "subtitle": "도서실 · 서가와 사서 자리를 자유롭게 조사",
       "width": 29,
       "height": 27,
       "spawnX": 14,
@@ -76444,7 +76444,7 @@
           "color": "#796247",
           "solid": true,
           "shape": "box",
-          "label": "대출·반납 기록대"
+          "label": "사서 선생님 책상"
         },
         {
           "id": "room-f2-1-016-769",
@@ -76458,8 +76458,7 @@
           "color": "#726a53",
           "solid": true,
           "shape": "box",
-          "label": "000 · 총류",
-          "bookCode": "000"
+          "label": "000 · 총류"
         },
         {
           "id": "room-f2-1-016-770",
@@ -76473,8 +76472,7 @@
           "color": "#726a53",
           "solid": true,
           "shape": "box",
-          "label": "300 · 사회과학",
-          "bookCode": "300"
+          "label": "300 · 사회과학"
         },
         {
           "id": "room-f2-1-016-771",
@@ -76488,8 +76486,7 @@
           "color": "#726a53",
           "solid": true,
           "shape": "box",
-          "label": "400 · 자연과학",
-          "bookCode": "400"
+          "label": "400 · 자연과학"
         },
         {
           "id": "room-f2-1-016-772",
@@ -76503,8 +76500,7 @@
           "color": "#726a53",
           "solid": true,
           "shape": "box",
-          "label": "600 · 예술",
-          "bookCode": "600"
+          "label": "600 · 예술"
         },
         {
           "id": "room-f2-1-016-773",
@@ -76518,8 +76514,7 @@
           "color": "#726a53",
           "solid": true,
           "shape": "box",
-          "label": "800 · 문학",
-          "bookCode": "800"
+          "label": "800 · 문학"
         },
         {
           "id": "room-f2-1-016-774",
@@ -76533,8 +76528,7 @@
           "color": "#726a53",
           "solid": true,
           "shape": "box",
-          "label": "900 · 역사",
-          "bookCode": "900"
+          "label": "900 · 역사"
         },
         {
           "id": "room-f2-1-016-775",
@@ -76548,7 +76542,7 @@
           "color": "#536f69",
           "solid": true,
           "shape": "box",
-          "label": "반납 완료 보관함"
+          "label": "도서실 비상 물품 보관함"
         },
         {
           "id": "room-f2-1-016-776",
@@ -76591,6 +76585,85 @@
           "solid": true,
           "shape": "box",
           "label": "열람 책상"
+        },
+        {
+          "id": "room-f2-1-018-779",
+          "kind": "librarian-chair",
+          "x": 10,
+          "y": 5,
+          "width": 0.55,
+          "depth": 0.55,
+          "height": 0.48,
+          "elevation": 0,
+          "color": "#53665e",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "room-f2-1-018-780",
+          "kind": "chair-back",
+          "x": 10,
+          "y": 5.2,
+          "width": 0.55,
+          "depth": 0.1,
+          "height": 0.45,
+          "elevation": 0.48,
+          "color": "#53665e",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "room-f2-1-018-781",
+          "kind": "desk-monitor",
+          "x": 9.65,
+          "y": 4,
+          "width": 0.52,
+          "depth": 0.13,
+          "height": 0.4,
+          "elevation": 0.85,
+          "color": "#283b3c",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "room-f2-1-018-782",
+          "kind": "desk-records",
+          "x": 10.4,
+          "y": 3.9,
+          "width": 0.36,
+          "depth": 0.25,
+          "height": 0.07,
+          "elevation": 0.86,
+          "color": "#b1ac8d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "room-f2-1-018-783",
+          "kind": "desk-lamp",
+          "x": 10.7,
+          "y": 4.1,
+          "width": 0.15,
+          "depth": 0.15,
+          "height": 0.4,
+          "elevation": 0.85,
+          "color": "#9e976e",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "room-f2-1-018-784",
+          "kind": "librarian-files-cabinet",
+          "x": 8,
+          "y": 4,
+          "width": 0.8,
+          "depth": 0.6,
+          "height": 1.1,
+          "elevation": 0,
+          "color": "#606d60",
+          "solid": true,
+          "shape": "box",
+          "label": "사서 자료 보관함"
         }
       ],
       "interiorZones": [
@@ -299044,7 +299117,7 @@
       "isRoom": true,
       "number": 5,
       "sourceFloor": 5,
-      "subtitle": "본관 4층 위 옥상 · 설비 점검 구역",
+      "subtitle": "옥상 · 급수탑과 휴게 공간 / 교문 열쇠 탐색",
       "width": 28,
       "height": 24,
       "spawnX": 14,
@@ -299098,6 +299171,21 @@
           "label": "입구",
           "x": 14,
           "y": 3
+        },
+        {
+          "label": "급수탑",
+          "x": 12,
+          "y": 18
+        },
+        {
+          "label": "옥상 휴게 자리",
+          "x": 6,
+          "y": 20
+        },
+        {
+          "label": "설비 점검 상자",
+          "x": 23,
+          "y": 20
         }
       ],
       "fixtures": [
@@ -299212,6 +299300,462 @@
           "color": "#607572",
           "solid": true,
           "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-8",
+          "kind": "roof-water-tank",
+          "x": 12,
+          "y": 20,
+          "width": 2.8,
+          "depth": 2.8,
+          "height": 2.5,
+          "elevation": 0,
+          "color": "#7e9493",
+          "solid": true,
+          "shape": "cylinder"
+        },
+        {
+          "id": "main-rooftop-018-9",
+          "kind": "water-tank-cap",
+          "x": 12,
+          "y": 20,
+          "width": 3,
+          "depth": 3,
+          "height": 0.15,
+          "elevation": 2.5,
+          "color": "#5c7272",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-10",
+          "kind": "roof-planter",
+          "x": 4,
+          "y": 4,
+          "width": 2,
+          "depth": 0.8,
+          "height": 0.5,
+          "elevation": 0,
+          "color": "#716454",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-11",
+          "kind": "dry-shrub",
+          "x": 3.5,
+          "y": 4,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-12",
+          "kind": "dry-shrub",
+          "x": 4,
+          "y": 4,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-13",
+          "kind": "dry-shrub",
+          "x": 4.5,
+          "y": 4,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-14",
+          "kind": "roof-planter",
+          "x": 21,
+          "y": 4,
+          "width": 2,
+          "depth": 0.8,
+          "height": 0.5,
+          "elevation": 0,
+          "color": "#716454",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-15",
+          "kind": "dry-shrub",
+          "x": 20.5,
+          "y": 4,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-16",
+          "kind": "dry-shrub",
+          "x": 21,
+          "y": 4,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-17",
+          "kind": "dry-shrub",
+          "x": 21.5,
+          "y": 4,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-18",
+          "kind": "roof-planter",
+          "x": 24,
+          "y": 14,
+          "width": 2,
+          "depth": 0.8,
+          "height": 0.5,
+          "elevation": 0,
+          "color": "#716454",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-19",
+          "kind": "dry-shrub",
+          "x": 23.5,
+          "y": 14,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-20",
+          "kind": "dry-shrub",
+          "x": 24,
+          "y": 14,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-21",
+          "kind": "dry-shrub",
+          "x": 24.5,
+          "y": 14,
+          "width": 0.32,
+          "depth": 0.35,
+          "height": 0.55,
+          "elevation": 0.5,
+          "color": "#5a6850",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-22",
+          "kind": "roof-bench",
+          "x": 6,
+          "y": 21,
+          "width": 2,
+          "depth": 0.65,
+          "height": 0.48,
+          "elevation": 0,
+          "color": "#77705b",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-23",
+          "kind": "bench-back",
+          "x": 6,
+          "y": 21.22,
+          "width": 2,
+          "depth": 0.12,
+          "height": 0.45,
+          "elevation": 0.48,
+          "color": "#68634e",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-24",
+          "kind": "roof-bench",
+          "x": 22,
+          "y": 5,
+          "width": 2,
+          "depth": 0.65,
+          "height": 0.48,
+          "elevation": 0,
+          "color": "#77705b",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-25",
+          "kind": "bench-back",
+          "x": 22,
+          "y": 5.22,
+          "width": 2,
+          "depth": 0.12,
+          "height": 0.45,
+          "elevation": 0.48,
+          "color": "#68634e",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-26",
+          "kind": "roof-maintenance-crate",
+          "x": 23,
+          "y": 21,
+          "width": 1.2,
+          "depth": 0.9,
+          "height": 0.7,
+          "elevation": 0,
+          "color": "#81765c",
+          "solid": true,
+          "shape": "box",
+          "label": "옥상 점검 상자"
+        },
+        {
+          "id": "main-rooftop-018-27",
+          "kind": "roof-hose-reel",
+          "x": 3,
+          "y": 13,
+          "width": 0.7,
+          "depth": 0.7,
+          "height": 0.8,
+          "elevation": 0,
+          "color": "#5c776f",
+          "solid": true,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-28",
+          "kind": "parapet-rail",
+          "x": 4,
+          "y": 22.7,
+          "width": 4.9,
+          "depth": 0.08,
+          "height": 0.12,
+          "elevation": 1.1,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-29",
+          "kind": "parapet-post",
+          "x": 4,
+          "y": 22.7,
+          "width": 0.1,
+          "depth": 0.1,
+          "height": 1.2,
+          "elevation": 0,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-30",
+          "kind": "parapet-rail",
+          "x": 8,
+          "y": 22.7,
+          "width": 4.9,
+          "depth": 0.08,
+          "height": 0.12,
+          "elevation": 1.1,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-31",
+          "kind": "parapet-post",
+          "x": 8,
+          "y": 22.7,
+          "width": 0.1,
+          "depth": 0.1,
+          "height": 1.2,
+          "elevation": 0,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-32",
+          "kind": "parapet-rail",
+          "x": 12,
+          "y": 22.7,
+          "width": 4.9,
+          "depth": 0.08,
+          "height": 0.12,
+          "elevation": 1.1,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-33",
+          "kind": "parapet-post",
+          "x": 12,
+          "y": 22.7,
+          "width": 0.1,
+          "depth": 0.1,
+          "height": 1.2,
+          "elevation": 0,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-34",
+          "kind": "parapet-rail",
+          "x": 16,
+          "y": 22.7,
+          "width": 4.9,
+          "depth": 0.08,
+          "height": 0.12,
+          "elevation": 1.1,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-35",
+          "kind": "parapet-post",
+          "x": 16,
+          "y": 22.7,
+          "width": 0.1,
+          "depth": 0.1,
+          "height": 1.2,
+          "elevation": 0,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-36",
+          "kind": "parapet-rail",
+          "x": 20,
+          "y": 22.7,
+          "width": 4.9,
+          "depth": 0.08,
+          "height": 0.12,
+          "elevation": 1.1,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-37",
+          "kind": "parapet-post",
+          "x": 20,
+          "y": 22.7,
+          "width": 0.1,
+          "depth": 0.1,
+          "height": 1.2,
+          "elevation": 0,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-38",
+          "kind": "parapet-rail",
+          "x": 24,
+          "y": 22.7,
+          "width": 4.9,
+          "depth": 0.08,
+          "height": 0.12,
+          "elevation": 1.1,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-39",
+          "kind": "parapet-post",
+          "x": 24,
+          "y": 22.7,
+          "width": 0.1,
+          "depth": 0.1,
+          "height": 1.2,
+          "elevation": 0,
+          "color": "#657b7d",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-40",
+          "kind": "roof-drain",
+          "x": 10,
+          "y": 10,
+          "width": 0.6,
+          "depth": 0.6,
+          "height": 0.02,
+          "elevation": 0.015,
+          "color": "#354647",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-41",
+          "kind": "roof-drain",
+          "x": 15,
+          "y": 16,
+          "width": 0.6,
+          "depth": 0.6,
+          "height": 0.02,
+          "elevation": 0.015,
+          "color": "#354647",
+          "solid": false,
+          "shape": "box"
+        },
+        {
+          "id": "main-rooftop-018-42",
+          "kind": "roof-drain",
+          "x": 20,
+          "y": 20,
+          "width": 0.6,
+          "depth": 0.6,
+          "height": 0.02,
+          "elevation": 0.015,
+          "color": "#354647",
+          "solid": false,
+          "shape": "box"
         }
       ],
       "interiorZones": [
@@ -299231,7 +299775,8 @@
       "building": "main",
       "returnSpaceId": "floor-4",
       "portals": [],
-      "noExit": true
+      "noExit": true,
+      "isOutdoor": true
     },
     {
       "id": "room-f20-0",

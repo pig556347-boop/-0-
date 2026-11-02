@@ -1,9 +1,9 @@
 {
-  "version": "0.17.1",
-  "sourceCommit": "59233dc656cba2e07dad1d6dcd4ea73ad74fbf60",
-  "projectTree": "5dd2cf666b4e3f64d4c1ac6b77398108d176d1ef",
-  "webCommit": "e72aff59ba289de8b1608162575db8405e9b7037",
-  "webUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/e72aff59ba289de8b1608162575db8405e9b7037/index.html",
-  "date": "2026-10-30",
+  "version": "0.18",
+  "sourceCommit": "850c37856e6311d975e2308c4533ef02321ba767",
+  "projectTree": "2da76c5c9ac0c68697d80495a689cba94bf012ee",
+  "webCommit": "c2795862ef044b5750d89dc0273ae40c3b074640",
+  "webUrl": "https://rawcdn.githack.com/pig556347-boop/-0-/c2795862ef044b5750d89dc0273ae40c3b074640/index.html",
+  "date": "2026-11-02",
   "scope": "SchoolEscape only"
 }

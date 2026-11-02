@@ -94,7 +94,11 @@ namespace SchoolEscape
             Pursuer.Initialize(this);
             Items=gameObject.AddComponent<ItemInventory>();Items.Initialize(this);
             Native=gameObject.AddComponent<NativeRun017>();Native.Initialize(this);
-            if (Array.IndexOf(Environment.GetCommandLineArgs(), "-escapeValidate") >= 0)
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "-escapeValidate018") >= 0)
+            {
+                validationMode=true;started=true;Player.InputEnabled=false;Pursuer.SimulationEnabled=false;ItemInteractionsEnabled=false;gameObject.AddComponent<RuntimeValidation018>().Game=this;
+            }
+            else if (Array.IndexOf(Environment.GetCommandLineArgs(), "-escapeValidate") >= 0)
             {
                 validationMode=true;started = true; Player.InputEnabled = false;Pursuer.SimulationEnabled=false;ItemInteractionsEnabled=false;
                 gameObject.AddComponent<RuntimeValidation>().Game = this;
@@ -148,7 +152,7 @@ namespace SchoolEscape
             // Single ground collider; no holes or unsupported landing points.
             Vector3 groundCenter=Data.World((f.width-1)*.5f,(f.height-1)*.5f);groundCenter.y=-.15f;
             Material groundMaterial=floorMat;
-            if(f.isOutdoor)
+            if(f.isOutdoor&&f.kind!="rooftop")
             {
                 groundMaterial=Mat(new Color(.65f,.60f,.48f),"YardTexture");
                 // Match the outdoor review renderer's ground scale: the soil
@@ -347,7 +351,7 @@ namespace SchoolEscape
         }
         public bool CheckAutomaticStairs()
         {
-            if(Current.isOutdoor||Opening||Caught||Won||Paused)return false;
+            if(Opening||Caught||Won||Paused)return false;
             if(arrivalLock!=null)
             {
                 var locked=Array.Find(Current.stairs,s=>s.id==arrivalLock);
@@ -588,7 +592,7 @@ namespace SchoolEscape
                 return;
             }
             GUI.Box(new Rect(18,18,360,82),"");
-            GUI.Label(new Rect(32,26,340,30),"폐교탈출    "+(Current.isOutdoor?"운동장":"본관 "+Floor+"F"),text);
+            GUI.Label(new Rect(32,26,340,30),"폐교탈출    "+(Current.kind=="rooftop"?"옥상":Current.isOutdoor?"운동장":"본관 "+Floor+"F"),text);
             GUI.Label(new Rect(32,58,340,30),Current.isRoom?Current.label+" · 내부":Current.subtitle,new GUIStyle(text){fontSize=14});
             GUI.Label(new Rect(24,112,240,24),"스태미나 "+Mathf.CeilToInt(Player.Stamina)+(Player.Exhausted?" · 숨 고르기":""),new GUIStyle(text){fontSize=14});
             var oldColor=GUI.color;GUI.color=new Color(.12f,.18f,.18f);GUI.DrawTexture(new Rect(24,140,220,10),Texture2D.whiteTexture);

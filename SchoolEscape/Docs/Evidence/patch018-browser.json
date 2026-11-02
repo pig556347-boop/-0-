@@ -1,0 +1,261 @@
+{
+  "ok": true,
+  "url": "http://127.0.0.1:8840/",
+  "checks": [
+    {
+      "name": "Playable HTML response",
+      "passed": true
+    },
+    {
+      "name": "Keyboard walk normalized speed",
+      "passed": true
+    },
+    {
+      "name": "Keyboard diagonal normalized speed",
+      "passed": true
+    },
+    {
+      "name": "Keyboard run normalized speed",
+      "passed": true
+    },
+    {
+      "name": "Automatic stairs 1→2→3→4→3→2→1 and safe idle landings",
+      "passed": true
+    },
+    {
+      "name": "Walkway reached and returned entirely within playground",
+      "passed": true
+    },
+    {
+      "name": "Closed doors and boundaries block movement",
+      "passed": true
+    },
+    {
+      "name": "New run grants developer master key",
+      "passed": true
+    },
+    {
+      "name": "Both science tools on third floor",
+      "passed": true
+    },
+    {
+      "name": "Contiguous yard contains walkway without door",
+      "passed": true
+    },
+    {
+      "name": "Password note occupies inventory slot",
+      "passed": true
+    },
+    {
+      "name": "Science preparation exact note code unlocks correct door",
+      "passed": true
+    },
+    {
+      "name": "Note consumed immediately without room entry",
+      "passed": true
+    },
+    {
+      "name": "Keypad audio sounds while investigation pauses world",
+      "passed": true
+    },
+    {
+      "name": "E closes dialog",
+      "passed": true
+    },
+    {
+      "name": "Roster rendered as readable table",
+      "passed": true
+    },
+    {
+      "name": "Guard locker has exactly two named compartments",
+      "passed": true
+    },
+    {
+      "name": "Small librarian desk is searchable without a puzzle",
+      "passed": true
+    },
+    {
+      "name": "Library shelves have no return sequence UI",
+      "passed": true
+    },
+    {
+      "name": "Science equipment collected via UI on same floor",
+      "passed": true
+    },
+    {
+      "name": "Esc freezes recorded play time",
+      "passed": true
+    },
+    {
+      "name": "Resume advances time",
+      "passed": true
+    },
+    {
+      "name": "Statue freezes while visibly watched",
+      "passed": true
+    },
+    {
+      "name": "Statue approaches when looking away",
+      "passed": true
+    },
+    {
+      "name": "Dunkyboy accelerates on straight court route",
+      "passed": true
+    },
+    {
+      "name": "Science spawns exactly two shadows",
+      "passed": true
+    },
+    {
+      "name": "Shadows frozen during light",
+      "passed": true
+    },
+    {
+      "name": "Shadows move only during blackout",
+      "passed": true
+    },
+    {
+      "name": "Music climax spawns giant-headed musician",
+      "passed": true
+    },
+    {
+      "name": "Musician starts roaming instead of knowing distant player",
+      "passed": true
+    },
+    {
+      "name": "Roaming musician moves along walkable floor",
+      "passed": true
+    },
+    {
+      "name": "Musician spots player and enters chase",
+      "passed": true
+    },
+    {
+      "name": "Musician loses unseen player and resumes patrol",
+      "passed": true
+    },
+    {
+      "name": "Rooftop has water tank, seating and maintenance storage",
+      "passed": true
+    },
+    {
+      "name": "Roof furnishing leaves walkable loop and stairs return",
+      "passed": true
+    },
+    {
+      "name": "Exactly one ABC escape key is placed on rooftop",
+      "passed": true
+    },
+    {
+      "name": "Rooftop key can be collected through actual inventory UI",
+      "passed": true
+    },
+    {
+      "name": "Rooftop key installs into gate alone",
+      "passed": true
+    },
+    {
+      "name": "Everyday kitchen is smaller than chase passage",
+      "passed": true
+    },
+    {
+      "name": "Searching end crate arms but does not spawn chef",
+      "passed": true
+    },
+    {
+      "name": "Return route triggers expanded chase passage",
+      "passed": true
+    },
+    {
+      "name": "Standing still is quickly lethal in kitchen",
+      "passed": true
+    },
+    {
+      "name": "Retry starts safely without immediate monster",
+      "passed": true
+    },
+    {
+      "name": "Death, renewed investigation, and return spawn chef again",
+      "passed": true
+    },
+    {
+      "name": "Uninterrupted sprint can complete the entire one-cell chase route",
+      "passed": true
+    },
+    {
+      "name": "Chase exits safely into cafeteria",
+      "passed": true
+    },
+    {
+      "name": "A alone can be installed without escaping",
+      "passed": true
+    },
+    {
+      "name": "Installed key restored from save",
+      "passed": true
+    },
+    {
+      "name": "Three installed keys require explicit final opening",
+      "passed": true
+    },
+    {
+      "name": "Final E action escapes with empty inventory",
+      "passed": true
+    },
+    {
+      "name": "No browser exceptions or asset errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "http": {
+    "status": 200,
+    "contentType": "text/html",
+    "bytes": 6674951
+  },
+  "sha256": "834f5d83065bf8b9dd49df734ad7b5b46d7f0ea0cc2d6fe0b917f185d7fd4874",
+  "keyboard": [
+    {
+      "name": "walk",
+      "speed": 3.100000000000057,
+      "before": {
+        "x": 24.372000000000007,
+        "y": 9,
+        "t": 0.35
+      },
+      "after": {
+        "x": 25.488000000000028,
+        "y": 9,
+        "t": 0.8000000000000002
+      }
+    },
+    {
+      "name": "diagonal",
+      "speed": 3.100000000000014,
+      "before": {
+        "x": 24.263043722601402,
+        "y": 9.263043722601392,
+        "t": 1.1000000000000003
+      },
+      "after": {
+        "x": 25.05217489040561,
+        "y": 10.052174890405567,
+        "t": 1.5500000000000007
+      }
+    },
+    {
+      "name": "run",
+      "speed": 5.50000000000008,
+      "before": {
+        "x": 24.78400000000001,
+        "y": 9,
+        "t": 1.950000000000001
+      },
+      "after": {
+        "x": 26.984000000000034,
+        "y": 9,
+        "t": 2.4499999999999993
+      }
+    }
+  ]
+}

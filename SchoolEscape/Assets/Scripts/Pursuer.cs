@@ -183,7 +183,7 @@ namespace SchoolEscape
                 else
                 {
                     portalAlerted=portal.alerted;State=portal.alerted?"transit":"patrol";
-                    MoveToward(f,portal.source,portal.alerted?3.3f:1.35f,dt);
+                    MoveToward(f,portal.source,portal.alerted?3.9f:1.6f,dt);
                     if(Vector2.Distance(Position,portal.source)*Game.Data.tileSize<.55f)
                     {
                         if(transitAt<0)transitAt=now+(portal.kind=="stairs"?1.45f:1.25f);
@@ -210,7 +210,7 @@ namespace SchoolEscape
                         direction=new Vector2(Mathf.Sin(now*.8f),Mathf.Cos(now*.8f));
                         if(now>=searchUntil)GiveUp("last-location-searched");
                     }
-                    else MoveToward(f,lastKnown,State=="chase"?3.3f:1.9f,dt);
+                    else MoveToward(f,lastKnown,State=="chase"?3.9f:2.2f,dt);
                 }
             }
             else Patrol(f,dt);
@@ -263,7 +263,7 @@ namespace SchoolEscape
                 if(options.Count==0){dwellUntil=now+2;return;}
                 patrolGoal=options[random.Next(options.Count)];hasPatrolGoal=true;path=null;repathAt=0;
             }
-            MoveToward(f,patrolGoal,1.35f,dt);
+            MoveToward(f,patrolGoal,1.6f,dt);
             if(path==null){hasPatrolGoal=false;dwellUntil=now+1;}
         }
         List<Portal> RoamExits(FloorData f)

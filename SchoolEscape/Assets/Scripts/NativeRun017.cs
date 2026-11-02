@@ -15,7 +15,7 @@ namespace SchoolEscape
         [Serializable] public class Document { public string id,title,text,sourceId,itemId,lockId,classLabel; public Student[] roster; }
         [Serializable] public class Run { public int seed; public Definition[] defs; public ItemInventory.Item[] items; public ItemInventory.Searchable[] sources; public Lock[] locks; public Card[] cards; public Document[] documents; public string[] library; }
         [Serializable] class Layouts { public int version; public Run[] runs; }
-        [Serializable] class Saved { public int version=17,lives,mode,bookStep,mapSeed; public float time,stamina; public string spaceId; public Vector2 point; public Run run; public string[] inventory,zones,inserted,read; public string equipped; public bool specimen,kitchenExamined,kitchenCleared; public int[] broken; public bool eventStateSaved,eventWasDark; public float eventElapsed,eventShadowAt; public int eventBlackouts; }
+        [Serializable] class Saved { public int version=18,lives,mode,bookStep,mapSeed; public float time,stamina; public string spaceId; public Vector2 point; public Run run; public string[] inventory,zones,inserted,read; public string equipped; public bool specimen,kitchenExamined,kitchenCleared; public int[] broken; public bool eventStateSaved,eventWasDark; public float eventElapsed,eventShadowAt; public int eventBlackouts; }
         public ExplorationGame Game { get; private set; }
         public Run Content { get; private set; }
         public readonly HashSet<string> Zones=new HashSet<string>{"start"},Read=new HashSet<string>();
@@ -26,7 +26,7 @@ namespace SchoolEscape
         public bool OwnsOverlay=>Panel!="";
         public bool RoomEncounter=>new[]{"music","science","art","gym"}.Contains(Game.Current.subjectEvent);
         public bool KitchenActive=>kitchenActive;
-        public bool ThreatActive=>enemies.Count>0||kitchenActive;
+        public bool ThreatActive=>enemies.Any(e=>e.kind!="musician"||e.chasing)||kitchenActive;
         readonly List<GameObject> gateKeys=new List<GameObject>();
         public bool Dark=>Game.Current.subjectEvent=="science"&&elapsed>=10&&elapsed%10<2&&!Captured;
         Layouts layouts; string lastSpace="",lockInput="",documentText=""; Lock activeLock;
@@ -34,7 +34,7 @@ namespace SchoolEscape
         bool settings,english,handledDeath;Document currentDocument;
         readonly List<GameObject> chains=new List<GameObject>(); float elapsed,shadowAt=-1; int blackouts; bool wasDark;
         readonly List<Enemy> enemies=new List<Enemy>();
-        class Enemy { public string kind; public Vector2 at,direction=Vector2.down; public GameObject visual; public float grace=1.5f,repath,charge,speed; public List<Vector2> path=new List<Vector2>(); }
+        class Enemy { public string kind; public Vector2 at,direction=Vector2.down; public GameObject visual; public bool chasing,hasGoal; public Vector2 goal; public float lastSensed; public float grace=1.5f,repath,charge,speed; public List<Vector2> path=new List<Vector2>(); }
         FloorData chaseMap; FixtureData[] originalKitchen;
         readonly List<Vector2> kitchenPath=new List<Vector2>();
         readonly List<GameObject> rubble=new List<GameObject>(); readonly List<FixtureData> blocks=new List<FixtureData>();
@@ -59,11 +59,10 @@ namespace SchoolEscape
             ClearEnemies();ClearRubble();chaseMap=Game.Data.FindSpace("annex-kitchen-chase");originalKitchen=chaseMap.fixtures;Content=JsonUtility.FromJson<Run>(JsonUtility.ToJson(layouts.runs[UnityEngine.Random.Range(0,layouts.runs.Length)]));
             // Passwords and book order are fresh each run, independently of the safe layout.
             foreach(var l in Content.locks.Where(l=>!string.IsNullOrEmpty(l.answer))){string old=l.answer;l.answer="";for(int n=0;n<old.Length;n++)l.answer+=l.type=="direction"?new[]{"↑","→","↓","←"}[UnityEngine.Random.Range(0,4)]:UnityEngine.Random.Range(0,10).ToString();foreach(var d in Content.defs.Where(d=>d.lockId==l.id))d.description=d.description.Replace(old,l.answer);foreach(var d in Content.documents.Where(d=>d.lockId==l.id))d.text=d.text.Replace(old,l.answer);}
-            for(int n=Content.library.Length-1;n>0;n--){int j=UnityEngine.Random.Range(0,n+1);string old=Content.library[n];Content.library[n]=Content.library[j];Content.library[j]=old;}var record=Content.documents.First(d=>d.id=="library-return-log");record.text=string.Join("\n",Content.library.Select((code,n)=>(n+1)+". "+BookName(code)+" · 분류 "+code))+"\n\n순서대로 해당 분류 서가에 책을 반납하면 안쪽 보관함이 열립니다.";
             foreach(var i in Content.items)i.picked=i.consumed=false;
             Game.Items.LoadNative(Content.items,Content.sources,Content.defs,Content.seed);
             Game.Items.Grant("master-key");Zones.Clear();Zones.Add("start");Read.Clear();Lives=Mode>=2?(Mode==2?3:1):5;
-            Captured=handledDeath=Specimen=KitchenExamined=KitchenCleared=kitchenActive=false;BookStep=0;broken.Clear();lastSpace="";Panel="";Game.Player.MaximumStamina=MaximumStamina;Game.Player.RestoreStamina();
+            Captured=handledDeath=Specimen=KitchenExamined=KitchenCleared=kitchenActive=false;BookStep=3;broken.Clear();lastSpace="";Panel="";Game.Player.MaximumStamina=MaximumStamina;Game.Player.RestoreStamina();
         }
         public string Zone(string id){var f=Game.Data.FindSpace(id);if(f==null)return "start";return f.building=="annex"?"annex":f.building=="west"?"west":id=="main-rooftop"?"roof":(f.sourceFloor>0?f.sourceFloor:f.number)>=2?"floor"+(f.sourceFloor>0?f.sourceFloor:f.number):"start";}
         public bool Has(string id)=>Game.Items.Inventory.Any(i=>i.id==id);
@@ -95,7 +94,6 @@ namespace SchoolEscape
         {
             var l=Content.locks.FirstOrDefault(l=>l.id=="container:"+candidate.source?.id);
             if(l!=null&&!l.unlocked){if(Has("master-key"))Unlock(l);else{activeLock=l;lockInput="";Open("lock");return true;}}
-            if(candidate.source?.kind=="library-reward-cabinet"&&BookStep<3){Game.ShowNotice("먼저 대출대의 반납 기록을 읽고 세 권을 순서대로 반납하세요.");return true;}
             target=candidate;compartment=0;documentText="";currentDocument=null;Open("search");Game.Audio.Cue("cabinet",true);
             if(candidate.source?.kind=="kitchen-reward-crate")KitchenExamined=true;
             if(candidate.source!=null){candidate.source.searched=true;Game.EmitNoise(candidate.source.spaceId,candidate.source.point,4,"search");}return true;
@@ -130,15 +128,26 @@ namespace SchoolEscape
             while(q.Count>0){var p=q.Dequeue();if(p==end)break;foreach(var d in new[]{Vector2Int.up,Vector2Int.down,Vector2Int.left,Vector2Int.right}){var n=p+d;if(prev.ContainsKey(n)||!f.Clear(n.x,n.y,Game.Data.tileSize,.27f)||!Game.Items.ClearSegment(f,p,n))continue;prev[n]=p;q.Enqueue(n);}}
             var result=new List<Vector2>();if(!prev.ContainsKey(end))return result;var at=end;while(at!=start){result.Add(at);at=prev[at];}result.Reverse();return result;
         }
+        Vector2 MusicianGoal(Enemy e,Vector2 player)
+        {
+            float distance=Vector2.Distance(e.at,player)*Game.Data.tileSize;
+            bool clear=Game.Items.ClearSegment(Game.Current,e.at,player),seen=distance<10&&clear&&(distance<2||Vector2.Dot((player-e.at).normalized,e.direction)>.3f),heard=Game.Player.IsRunning&&distance<7&&clear;
+            if(seen||heard){e.chasing=true;e.goal=player;e.hasGoal=true;e.lastSensed=Game.SimulationTime;}
+            else if(e.chasing&&(Game.SimulationTime-e.lastSensed>=8||Vector2.Distance(e.at,e.goal)<.45f)){e.chasing=false;e.hasGoal=false;e.path.Clear();e.repath=0;}
+            if(!e.chasing&&(!e.hasGoal||Vector2.Distance(e.at,e.goal)<.45f)){
+                var f=Game.Current;for(int n=0;n<100;n++){var p=new Vector2(UnityEngine.Random.Range(1,f.width-1),UnityEngine.Random.Range(2,f.height-1));if(Vector2.Distance(p,e.at)>4&&Route(e.at,p).Count>0){e.goal=p;e.hasGoal=true;e.path.Clear();e.repath=0;break;}}
+            }
+            return e.hasGoal?e.goal:e.at;
+        }
         void Move(Enemy e,float dt,bool enabled)
         {
             e.grace-=dt;e.speed=0;e.visual.SetActive(Game.Pursuer.SimulationEnabled);if(!enabled)return;
-            Vector2 player=Game.Data.Grid(Game.Player.transform.position);e.repath-=dt;if(e.repath<=0||e.path.Count==0){e.path=Route(e.at,player);e.repath=.45f;}
-            float speed=e.kind=="musician"?3.15f:e.kind=="statue"?3.8f:3.6f;
-            if(e.kind=="dunky"&&e.path.Count>0){bool straight=Vector2.Dot((e.path[0]-e.at).normalized,e.direction)>.94f;e.charge=straight?Mathf.Min(1,e.charge+dt*.32f):0;speed=2.5f+e.charge*3.5f;}
+            Vector2 player=Game.Data.Grid(Game.Player.transform.position);if(e.kind=="musician")player=MusicianGoal(e,player);e.repath-=dt;if(e.repath<=0||e.path.Count==0){e.path=Route(e.at,player);e.repath=.45f;}
+            float speed=e.kind=="musician"?(e.chasing?3.8f:1.6f):e.kind=="statue"?4.4f:4.15f;
+            if(e.kind=="dunky"&&e.path.Count>0){bool straight=Vector2.Dot((e.path[0]-e.at).normalized,e.direction)>.94f;e.charge=straight?Mathf.Min(1,e.charge+dt*.32f):0;speed=2.9f+e.charge*4.1f;}
             float budget=speed*dt/Game.Data.tileSize;while(budget>0&&e.path.Count>0){Vector2 delta=e.path[0]-e.at;float d=Mathf.Min(delta.magnitude,budget);if(delta.sqrMagnitude>.00001f){var next=e.at+delta.normalized*d;if(!Game.Items.ClearSegment(Game.Current,e.at,next))break;e.at=next;e.direction=delta.normalized;}budget-=d;if(d>=delta.magnitude-.001f)e.path.RemoveAt(0);e.speed=speed;}
             e.visual.transform.position=Game.Data.World(e.at.x,e.at.y);e.visual.transform.rotation=Quaternion.LookRotation(new Vector3(e.direction.x,0,e.direction.y));
-            if(e.grace<=0&&Vector2.Distance(e.at,player)*Game.Data.tileSize<.68f&&Sight(e.at,player))Capture();
+            if(e.grace<=0&&Vector2.Distance(e.at,Game.Data.Grid(Game.Player.transform.position))*Game.Data.tileSize<.68f&&Game.Items.ClearSegment(Game.Current,e.at,Game.Data.Grid(Game.Player.transform.position)))Capture();
         }
         public void Tick(float dt)
         {
@@ -175,7 +184,7 @@ namespace SchoolEscape
             if(Game.Current.id!=chaseMap.id){kitchenActive=false;KitchenCleared=true;return;}
             if(!Game.Pursuer.SimulationEnabled){kitchenActive=false;KitchenCleared=true;return;}
             Game.Player.RestoreStamina();if(Game.SimulationTime-kitchenStarted<1.4f)return;
-            Vector2 player=Game.Data.Grid(Game.Player.transform.position);float speed=new[]{4.15f,4.4f,4.55f,4.65f}[Mode]+(kitchenPath.Select((p,n)=>new{p,n}).OrderBy(v=>(v.p-player).sqrMagnitude).First().n-kitchenIndex>12/Game.Data.tileSize?.6f:0),budget=speed*dt/Game.Data.tileSize;
+            Vector2 player=Game.Data.Grid(Game.Player.transform.position);float speed=new[]{4.85f,5.15f,5.3f,5.45f}[Mode]+(kitchenPath.Select((p,n)=>new{p,n}).OrderBy(v=>(v.p-player).sqrMagnitude).First().n-kitchenIndex>12/Game.Data.tileSize?.6f:0),budget=speed*dt/Game.Data.tileSize;
             while(budget>0&&kitchenIndex<kitchenPath.Count-1){Vector2 dest=kitchenPath[kitchenIndex+1],delta=dest-chef.at;float d=Mathf.Min(budget,delta.magnitude);chef.at+=delta.normalized*d;chef.direction=delta.normalized;budget-=d;if(d>=delta.magnitude-.001f)kitchenIndex++;}
             chef.visual.transform.position=Game.Data.World(chef.at.x,chef.at.y);chef.visual.transform.rotation=Quaternion.LookRotation(new Vector3(chef.direction.x,0,chef.direction.y));
             bool changed=false;for(int n=0;n<blocks.Count;n++)if(!broken.Contains(n)&&Vector2.Distance(new Vector2(blocks[n].x,blocks[n].y),chef.at)<1.65f){broken.Add(n);changed=true;}if(changed){SyncRubble();Game.Audio.Cue("crash");}
@@ -192,11 +201,11 @@ namespace SchoolEscape
         {
             if(Captured||Game.Caught||Game.Won||kitchenActive||enemies.Count>0||Game.Opening){Feedback="추격·이동 중에는 저장할 수 없습니다.";return;}
             Content.items=Game.Items.WorldItems.ToArray();var d=new Saved{eventStateSaved=true,eventElapsed=elapsed,eventBlackouts=blackouts,eventWasDark=wasDark,eventShadowAt=shadowAt,mapSeed=Game.MapSeed,lives=Lives,mode=Mode,time=Game.SimulationTime,stamina=Game.Player.Stamina,spaceId=Game.Current.id,point=Game.Data.Grid(Game.Player.transform.position),run=Content,inventory=Game.Items.Inventory.Select(i=>i.uid).ToArray(),equipped=Game.Items.Equipped?.uid,zones=Zones.ToArray(),inserted=Game.Items.InsertedKeys.ToArray(),read=Read.ToArray(),bookStep=BookStep,specimen=Specimen,kitchenExamined=KitchenExamined,kitchenCleared=KitchenCleared,broken=broken.ToArray()};
-            PlayerPrefs.SetString("SchoolEscape.Native017",JsonUtility.ToJson(d));PlayerPrefs.Save();Feedback="현재 판을 저장했습니다.";
+            PlayerPrefs.SetString("SchoolEscape.Native018",JsonUtility.ToJson(d));PlayerPrefs.Save();Feedback="현재 판을 저장했습니다.";
         }
         public void Load()
         {
-            if(!PlayerPrefs.HasKey("SchoolEscape.Native017"))return;var d=JsonUtility.FromJson<Saved>(PlayerPrefs.GetString("SchoolEscape.Native017"));if(d?.version!=17)return;
+            if(!PlayerPrefs.HasKey("SchoolEscape.Native018"))return;var d=JsonUtility.FromJson<Saved>(PlayerPrefs.GetString("SchoolEscape.Native018"));if(d?.version!=18)return;
             Game.Restart(d.mapSeed);Content=d.run;Game.Items.LoadNative(Content.items,Content.sources,Content.defs,Content.seed);Game.Items.RestoreCarry(d.inventory,d.equipped,d.inserted);Zones.Clear();foreach(var z in d.zones)Zones.Add(z);Read.Clear();foreach(var id in d.read)Read.Add(id);Mode=d.mode;Lives=d.lives;BookStep=d.bookStep;Specimen=d.specimen;KitchenExamined=d.kitchenExamined;KitchenCleared=d.kitchenCleared;Game.Player.MaximumStamina=MaximumStamina;Game.Player.SetStamina(d.stamina);Game.RestoreClock(d.time);Game.RestorePosition(d.spaceId,d.point);if(d.eventStateSaved){lastSpace=d.spaceId;elapsed=d.eventElapsed;blackouts=d.eventBlackouts;wasDark=d.eventWasDark;shadowAt=d.eventShadowAt;BuildChains();}foreach(var n in d.broken)broken.Add(n);if(d.broken.Length>0){BuildRubble();SyncRubble();}Panel="";Game.SetPaused(false);
         }
         public bool Draw()
@@ -207,7 +216,7 @@ namespace SchoolEscape
             bool lobby=!Game.Started,dead=Game.Caught;
             if(!lobby&&!dead&&Panel==""&&!Game.Paused)return false;
             float width=Mathf.Min(760,Screen.width-36),height=Mathf.Min(780,Screen.height-40);Rect rect=new Rect((Screen.width-width)/2,(Screen.height-height)/2,width,height);GUI.Box(rect,"");GUILayout.BeginArea(new Rect(rect.x+22,rect.y+18,width-44,height-36));scroll=GUILayout.BeginScrollView(scroll);
-            if(lobby){GUILayout.Label("폐교탈출",new GUIStyle(style){fontSize=36});GUILayout.Space(20);if(settings){DrawSettings();if(GUILayout.Button(english?"Back":"뒤로"))settings=false;}else{if(GUILayout.Button(english?"Start game":"게임 시작",GUILayout.Height(55))){NewRun();Game.BeginRun();}if(PlayerPrefs.HasKey("SchoolEscape.Native017")&&GUILayout.Button(english?"Continue saved game":"저장한 판 계속하기",GUILayout.Height(45)))Load();GUILayout.Label(english?"Difficulty":"난이도");Mode=GUILayout.SelectionGrid(Mode,english?new[]{"Easy","Normal","Hard","Extreme"}:new[]{"이지","노말","하드","익스트림"},4);if(GUILayout.Button(english?"Settings":"설정"))settings=true;if(GUILayout.Button(english?"Language: English":"언어: 한국어"))english=!english;GUILayout.Label("이동 WASD · 달리기 Shift · 조사/문 E · 인벤토리 I\n게임 내 문서와 방 이름은 한국어입니다.");}}
+            if(lobby){GUILayout.Label("폐교탈출",new GUIStyle(style){fontSize=36});GUILayout.Space(20);if(settings){DrawSettings();if(GUILayout.Button(english?"Back":"뒤로"))settings=false;}else{if(GUILayout.Button(english?"Start game":"게임 시작",GUILayout.Height(55))){NewRun();Game.BeginRun();}if(PlayerPrefs.HasKey("SchoolEscape.Native018")&&GUILayout.Button(english?"Continue saved game":"저장한 판 계속하기",GUILayout.Height(45)))Load();GUILayout.Label(english?"Difficulty":"난이도");Mode=GUILayout.SelectionGrid(Mode,english?new[]{"Easy","Normal","Hard","Extreme"}:new[]{"이지","노말","하드","익스트림"},4);if(GUILayout.Button(english?"Settings":"설정"))settings=true;if(GUILayout.Button(english?"Language: English":"언어: 한국어"))english=!english;GUILayout.Label("이동 WASD · 달리기 Shift · 조사/문 E · 인벤토리 I\n게임 내 문서와 방 이름은 한국어입니다.");}}
             else if(dead){GUILayout.Label("붙잡혔습니다 · 남은 목숨 "+Lives);if(Lives>0&&GUILayout.Button("다시 일어나기",GUILayout.Height(50)))Revive();if(GUILayout.Button("새 판 시작"))Game.Restart();}
             else if(Panel==""){GUILayout.Label(english?"Paused":"잠시 멈춤");if(GUILayout.Button(english?"Resume":"계속하기 · Esc",GUILayout.Height(50)))Game.SetPaused(false);if(GUILayout.Button("현재 판 저장"))Save();if(GUILayout.Button("가이드북 · 별도 보관"))Open("guide");DrawSettings();if(GUILayout.Button("새 판 시작"))Game.Restart();}
             else{
@@ -232,7 +241,6 @@ namespace SchoolEscape
             foreach(var d in Content.documents.Where(d=>d.sourceId==source?.id&&string.IsNullOrEmpty(d.itemId))){if(GUILayout.Button(d.title)){Read.Add(d.id);currentDocument=d;documentText=d.text;if(d.roster!=null&&d.roster.Length>0)documentText=d.classLabel+"\n번호       이름          역할\n"+string.Join("\n",d.roster.Select(s=>s.no.ToString("00")+"        "+s.name+"       "+(s.role=="학생"?"—":s.role)));}}
             DrawRecord();
             var fixture=Game.Current.fixtures.FirstOrDefault(f=>f.id==source?.fixtureId);
-            if(!string.IsNullOrEmpty(fixture?.bookCode)){GUILayout.Label("대출대 반납 기록의 순서대로 같은 분류 서가를 찾아 반납하세요. "+BookStep+" / 3");if(GUILayout.Button(BookName(fixture.bookCode)+" · "+fixture.bookCode+" 반납하기"))ReturnBook(fixture.bookCode);}
             if(source!=null&&source.compartments>1){var labels=Enumerable.Range(0,source.compartments).Select(n=>source.compartmentNames!=null&&n<source.compartmentNames.Length?source.compartmentNames[n]:"공용 보관함 "+(n+1)).ToArray();int selected=GUILayout.SelectionGrid(compartment,labels,4);if(selected!=compartment){compartment=selected;Game.Audio.Cue("cabinet",true);}}
             var found=Game.Items.WorldItems.Where(i=>!i.picked&&!i.consumed&&(target.item!=null?i.uid==target.item.uid:i.sourceId==source?.id&&i.compartment==compartment)).ToArray();
             for(int n=0;n<9;n+=3){GUILayout.BeginHorizontal();for(int k=n;k<n+3;k++){var i=k<found.Length?found[k]:null;GUI.enabled=i!=null;if(GUILayout.Button(i==null?"빈칸":ItemInventory.Name(i.id)+" · 가져오기",GUILayout.Height(70))&&i!=null){Game.Items.Pickup(i);if(i.id=="lab-sample"&&i.picked)Specimen=true;}GUI.enabled=true;}GUILayout.EndHorizontal();}
@@ -247,9 +255,9 @@ namespace SchoolEscape
         void DrawGuide()
         {
             GUILayout.Label("지금 할 일",new GUIStyle(GUI.skin.label){fontSize=24});GUILayout.Label("열쇠를 찾을 때마다 운동장 교문에 하나씩 꽂으세요. 세 개를 모두 꽂으면 탈출합니다.");
-            string next=new[]{"key-a","key-b","key-c"}.FirstOrDefault(id=>!Game.Items.InsertedKeys.Contains(id));if(next==null)GUILayout.Label("교문에서 E를 눌러 탈출하세요.");else if(Has(next))GUILayout.Label(ItemInventory.Name(next)+" 확보 · 운동장 교문에 꽂을 수 있습니다.");else if(Mode<2){var item=Game.Items.WorldItems.FirstOrDefault(i=>i.id==next&&!i.picked&&!i.consumed);var f=Game.Data.FindSpace(item?.spaceId);if(f!=null)GUILayout.Label(ItemInventory.Name(next)+" 단서 · "+(Mode==0?f.label+" · "+(item.hidden?"수납물":"바닥"):(f.isOutdoor?"바깥 흙과 나뭇잎 냄새가 난다.":"본관 "+f.sourceFloor+"층의 "+(f.kind.Contains("Restroom")?"물기와 타일이 있는 곳.":f.kind=="library"?"묵은 종이 냄새가 나는 곳.":"사람들이 머물던 공간."))));}
+            string next=new[]{"key-a","key-b","key-c"}.FirstOrDefault(id=>!Game.Items.InsertedKeys.Contains(id));if(next==null)GUILayout.Label("교문에서 E를 눌러 탈출하세요.");else if(Has(next))GUILayout.Label(ItemInventory.Name(next)+" 확보 · 운동장 교문에 꽂을 수 있습니다.");else if(Mode<2){var item=Game.Items.WorldItems.FirstOrDefault(i=>i.id==next&&!i.picked&&!i.consumed);var f=Game.Data.FindSpace(item?.spaceId);if(f!=null)GUILayout.Label(ItemInventory.Name(next)+" 단서 · "+(Mode==0?f.label+" · "+(item.hidden?"수납물":"바닥"):(f.kind=="rooftop"?"거센 바람과 녹슨 급수 설비의 흔적. 학교의 가장 높은 곳.":f.isOutdoor?"바깥 흙과 나뭇잎 냄새가 난다.":"본관 "+f.sourceFloor+"층의 "+(f.kind.Contains("Restroom")?"물기와 타일이 있는 곳.":f.kind=="library"?"묵은 종이 냄새가 나는 곳.":"사람들이 머물던 공간."))));}
             if(!Has("master-key")&&Mode<2){var nextCard=Content.cards.FirstOrDefault(c=>!Zones.Contains(c.zone)&&Zones.Contains(c.prior));if(nextCard!=null){var item=Game.Items.WorldItems.FirstOrDefault(i=>i.id==nextCard.itemId&&!i.consumed);var source=item!=null?Game.Data.FindSpace(item.spaceId):null;GUILayout.Label(Has(nextCard.itemId)?ItemInventory.Name(nextCard.itemId)+" 확보 · 해당 층 입구로 이동하세요.":ItemInventory.Name(nextCard.itemId)+" 단서 · "+(Mode==0?source?.label:"지금 개방된 구역의 수납물과 바닥을 살펴보세요."));}}
-            if(Game.Current.subjectEvent=="library"&&Mode<2)GUILayout.Label(BookStep>=3?"안쪽 반납 완료 보관함에서 손전등을 가져오세요.":!Read.Contains("library-return-log")?"입구 대출·반납 기록대에서 반납 기록을 읽으세요.":"다음 반납: "+BookName(Content.library[BookStep])+" · 분류 "+Content.library[BookStep]);
+            if(Game.Current.subjectEvent=="library"&&Mode<2)GUILayout.Label("사서 자리와 서가를 조사하세요. 안쪽 비상 물품 보관함에서 손전등을 얻을 수 있습니다.");
             GUILayout.Space(15);GUILayout.Label("발견한 기록");foreach(var d in Content.documents.Where(d=>string.IsNullOrEmpty(d.itemId)&&Read.Contains(d.id)))if(GUILayout.Button((d.classLabel??"")+" · "+d.title)){currentDocument=d;documentText=d.text;}DrawRecord();
         }
     }

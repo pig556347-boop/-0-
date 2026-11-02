@@ -6,10 +6,9 @@ export class SubjectEvents {
   Object.assign(this,{game,items,pursuit,progression});game.subjects=this;
   this.maps=Object.fromEntries(game.data.roomMaps.filter(r=>r.subjectEvent).map(r=>[r.subjectEvent,r]));
   this.lastSpace='';this.music={elapsed:0,phase:'idle',monster:null};this.science={elapsed:0,phase:'idle',dark:false,blackouts:0,monsters:[],rewardTaken:false};
-  this.library={step:0,solved:false,sequence:progression.shuffle(['000','300','400','600','800','900']).slice(0,3)};
+  this.library={step:0,solved:true,sequence:[]};
   this.equipmentSources={};this.installItems();this.distribution=distributeLoot(game,items,progression);this.special={art:null,gym:null};
   const travel=game.travelGuard;game.travelGuard=(target,kind)=>{if(!this.canEnter(target))return false;return travel(target,kind)};
-  const container=progression.checkContainer.bind(progression);progression.checkContainer=id=>{const src=items.searchById.get(id);if(src?.kind==='library-reward-cabinet'&&!this.library.solved){progression.warn('반납 기록 순서대로 분류 서가에 책을 되돌려 놓아야 한다.');return false}return container(id)};
   const guide=progression.guide.bind(progression);progression.guide=hints=>[...guide(hints),...this.guide(hints)];
  }
  installItems(){
@@ -23,9 +22,6 @@ export class SubjectEvents {
   p.place('lab-coat',coat);p.place('flashlight',light);p.place('lab-sample',reward);
   this.equipmentSources={'lab-coat':coat.id,flashlight:light.id};
   p.note(coat,'science-safety','과학실 안전 수칙','실험복과 손전등을 소지하고 앞문으로 들어갈 것.\n10초마다 2초간 모든 빛이 꺼진다. 세 번째 소등이 끝나면 발소리를 경계할 것.\n뒷문 캐비넷의 표본을 회수한 뒤 뒷문으로 나갈 것.');
-  const titles={'000':'색인 없는 사전','300':'사라진 학생의 사회','400':'그림자의 생물학','600':'끝나지 않는 악보','800':'마지막 동화','900':'폐교의 연대기'};
-  this.bookTitles=titles;
-  p.note(record,'library-return-log','도서 반납 기록',this.library.sequence.map((code,n)=>`${n+1}. ${titles[code]} · 분류 ${code}`).join('\n')+'\n\n기록 순서대로 각 분류 서가에서 같은 책을 반납한다. 틀린 책은 소리를 낸다. 세 권을 마치면 안쪽 보관함이 열린다.');
   p.note(light,'library-next-clue','손전등 옆 메모','실험복은 본관 3층 과학 자료실의 캐비넷에 있다.\n실험복과 손전등을 챙겨 과학실 앞문으로 들어가자.');
  }
  has(id){return this.items.inventory.some(i=>i.itemId===id)||this.items.equipped?.itemId===id}
@@ -34,14 +30,6 @@ export class SubjectEvents {
   if(this.game.spaceId===this.maps.science.id&&door.id==='science-rear-exit'&&!this.science.rewardTaken)return '뒷문 옆 캐비넷의 밀봉된 실험 표본을 먼저 가져가자.';
   return null;
  }
- chooseBook(source,code){
-  const fixture=this.maps.library.fixtures.find(f=>f.id===source?.fixtureId);
-  if(this.game.spaceId!==this.maps.library.id||!fixture?.bookCode||!this.items.nearby()||this.items.nearby().sourceId!==source.id)return {ok:false,message:'분류 서가 가까이에서 조사하세요.'};
-  if(this.library.solved)return {ok:true,message:'세 권의 반납이 끝났다. 안쪽 보관함을 열자.'};
-  const correct=fixture.bookCode===code&&this.library.sequence[this.library.step]===code;
-  if(!correct){this.library.step=0;this.game.emit('library-mistake');this.game.emit('noise',{spaceId:this.game.spaceId,x:this.game.x,y:this.game.y,radius:18,loudness:1,kind:'wrong-book'});return {ok:false,message:'책이 바닥에 쏟아졌다. 반납 순서를 처음부터 다시 확인하자.'}}
-  this.library.step++;this.library.solved=this.library.step===3;this.game.emit('library-correct',{complete:this.library.solved});return {ok:true,message:this.library.solved?'찰칵. 안쪽 반납 완료 보관함이 열렸다.':`${this.library.step} / 3권 반납. 다음 기록을 확인하자.`};
- }
  wallSight(ax,ay,bx,by){const n=Math.max(1,Math.ceil(Math.hypot(bx-ax,by-ay)*8));for(let k=0;k<=n;k++)if(!this.game.open(Math.round(ax+(bx-ax)*k/n),Math.round(ay+(by-ay)*k/n)))return false;return true}
  createMonster(map,kind,index=0){
   const g=this.game,nav=this.items.navigation.get(map.id),candidates=nav.available.filter(n=>Math.hypot(n.x-g.x,n.y-g.y)*g.data.tileSize>7);
@@ -49,11 +37,30 @@ export class SubjectEvents {
   const spawn=candidates.sort((a,b)=>Math.hypot(a.x-anchor.x,a.y-anchor.y)-Math.hypot(b.x-anchor.x,b.y-anchor.y))[0]||nav.available.at(-1);
   const m=Object.create(Pursuit.prototype);Object.assign(m,{game:g,grids:this.pursuit.grids,radius:.27,spaceId:map.id,kind,index,x:spawn.x,y:spawn.y,direction:{x:0,y:-1},speed:0,distance:0,phase:0,path:[],repath:0,grace:1.5});return m;
  }
+ roamMusician(m,dt){
+  if(!this.pursuit.enabled)return;
+  const g=this.game,d=Math.hypot(g.x-m.x,g.y-m.y)*g.data.tileSize;
+  const dot=((g.x-m.x)*m.direction.x+(g.y-m.y)*m.direction.y)/(d/g.data.tileSize||1);
+  const clear=g.segmentClear(m.x,m.y,g.x,g.y,g.map,.025);
+  const seen=d<10&&clear&&(d<2||dot>.3),heard=g.isRunning&&d<7&&clear;
+  if(seen||heard){m.state='chase';m.lastSensed=g.time;m.lastKnown={x:g.x,y:g.y};m.goal={...m.lastKnown};}
+  else if(m.state==='chase'){
+   m.goal=m.lastKnown;
+   if(g.time-m.lastSensed>=8||Math.hypot(m.x-m.goal.x,m.y-m.goal.y)<.45){m.state='patrol';m.goal=null;m.path=[];m.repath=0;}
+  }
+  if(m.state!=='chase'){
+   m.state='patrol';
+   if(!m.goal||Math.hypot(m.x-m.goal.x,m.y-m.goal.y)<.45){
+    const nodes=this.items.navigation.get(m.spaceId).available.filter(n=>Math.hypot(n.x-m.x,n.y-m.y)>4);
+    const n=nodes[Math.floor(this.items.random()*nodes.length)];m.goal=n?{x:n.x,y:n.y}:{x:m.x,y:m.y};m.path=[];m.repath=0;
+   }
+  }
+ }
  move(m,dt,enabled){
   m.speed=0;m.grace=Math.max(0,m.grace-dt);if(!enabled)return;
-  const g=this.game;m.repath-=dt;if(m.repath<=0||!m.path.length){m.path=m.route(g.x,g.y);m.repath=.45}
-  let speed=m.kind==='musician'?3.15:m.kind==='statue'?3.8:3.6;
-  if(m.kind==='dunky'){const next=m.path[0],dx=next?next.x-m.x:0,dy=next?next.y-m.y:0,n=Math.hypot(dx,dy);const straight=n&&((dx*m.direction.x+dy*m.direction.y)/n)>.94;m.charge=straight?Math.min(1,(m.charge||0)+dt*.32):0;speed=2.5+3.5*m.charge;} let budget=speed*dt/g.data.tileSize,travel=0;
+  const g=this.game;m.repath-=dt;if(m.repath<=0||!m.path.length){m.path=m.route((m.goal||g).x,(m.goal||g).y);m.repath=.45}
+  let speed=m.kind==='musician'?(m.state==='chase'?3.8:1.6):m.kind==='statue'?4.4:4.15;
+  if(m.kind==='dunky'){const next=m.path[0],dx=next?next.x-m.x:0,dy=next?next.y-m.y:0,n=Math.hypot(dx,dy);const straight=n&&((dx*m.direction.x+dy*m.direction.y)/n)>.94;m.charge=straight?Math.min(1,(m.charge||0)+dt*.32):0;speed=2.9+4.1*m.charge;} let budget=speed*dt/g.data.tileSize,travel=0;
   while(budget>0&&m.path.length){const p=m.path[0],dx=p.x-m.x,dy=p.y-m.y,n=Math.hypot(dx,dy);if(n<.001){m.path.shift();continue}const d=Math.min(budget,n),x=m.x+dx/n*d,y=m.y+dy/n*d;if(g.blocked(x,y,g.map,m.radius)||!g.segmentClear(m.x,m.y,x,y,g.map,m.radius)){m.path=[];break}m.x=x;m.y=y;m.direction={x:dx/n,y:dy/n};budget-=d;travel+=d;if(d>=n-.001)m.path.shift()}
   m.speed=dt?travel*g.data.tileSize/dt:0;m.distance+=travel*g.data.tileSize;m.phase+=travel*5;
   if(m.grace<=0&&Math.hypot(m.x-g.x,m.y-g.y)*g.data.tileSize<.68&&g.segmentClear(m.x,m.y,g.x,g.y,g.map,.025)){g.caught=true;g.emit('caught',{source:({musician:'거두 음악가',shadow:'쉐도어',statue:'움직이는 석상',dunky:'덩키보이'})[m.kind]})}
@@ -76,7 +83,7 @@ export class SubjectEvents {
    const s=this.music;s.elapsed+=dt;
    if(s.phase==='melody'&&s.elapsed>=32&&this.pursuit.enabled){s.phase='sting';g.emit('musician-sting')}
    if(s.phase==='sting'&&s.elapsed>=33){s.phase='chase';s.monster=this.createMonster(this.maps.music,'musician');g.emit('musician-spawn')}
-   if(s.monster)this.move(s.monster,dt,this.pursuit.enabled);
+   if(s.monster){this.roamMusician(s.monster,dt);this.move(s.monster,dt,this.pursuit.enabled);}
   }
   if(g.spaceId===this.maps.science.id){
    const s=this.science,was=s.dark;s.elapsed+=dt;s.dark=s.elapsed>=10&&(s.elapsed%10)<2;
@@ -96,19 +103,20 @@ export class SubjectEvents {
  get dark(){return this.game.spaceId===this.maps.science.id&&this.science.dark&&!this.game.caught}
  get inEncounter(){return ['music','science','art','gym'].includes(this.game.map.subjectEvent)}
  get monsters(){if(!this.pursuit.enabled)return[];return this.game.spaceId===this.maps.music.id?(this.music.monster?[this.music.monster]:[]):this.game.spaceId===this.maps.science.id?this.science.monsters:['art','gym'].includes(this.game.map.subjectEvent)&&this.special[this.game.map.subjectEvent]?[this.special[this.game.map.subjectEvent]]:[]}
+ get alerted(){return this.monsters.some(m=>m.kind!=='musician'||m.state==='chase')}
  get active(){return this.monsters.length>0}
  get nearest(){return this.monsters.slice().sort((a,b)=>Math.hypot(a.x-this.game.x,a.y-this.game.y)-Math.hypot(b.x-this.game.x,b.y-this.game.y))[0]}
  get musicTempo(){return 68+Math.min(1,this.music.elapsed/32)*152}
- get hint(){if(this.game.map.subjectEvent==='art')return '석상 · 바라보면 멈춥니다. 마우스로 시선을 돌리세요.';if(this.game.map.subjectEvent==='gym')return '덩키보이 · 직선에서 빨라집니다. 코너를 활용하세요.';if(this.game.spaceId===this.maps.music.id)return this.music.phase==='chase'?'거두 음악가 · 출입문으로 도망치세요.':'피아노 선율이 점점 빨라집니다…';if(this.game.spaceId===this.maps.science.id)return (this.science.dark?'소등 · 이동할 수 있습니다.':'점등 · 쉐도어는 멈춥니다.')+' 뒷문 캐비넷에서 표본 회수 후 탈출.';return ''}
- guide(hints){if(hints==='none')return[];if(this.game.spaceId===this.maps.library.id){if(!this.progression.readDocuments.has('library-return-log'))return ['도서실: 입구 가까운 대출·반납 기록대에서 E를 눌러 반납 기록을 읽자.'];if(!this.library.solved)return [`도서실 반납 ${this.library.step}/3 · 다음 책: ${this.bookTitles[this.library.sequence[this.library.step]]} · 분류 ${this.library.sequence[this.library.step]}. 같은 번호가 적힌 서가로 가서 E → 반납하기.`];return ['도서실 안쪽 반납 완료 보관함에서 손전등을 가져오자.'];}if(this.game.spaceId===this.maps.science.id)return ['뒷문 옆 캐비넷에서 실험 표본을 가져온 뒤 뒷문으로 나가자.'];return []}
+ get hint(){if(this.game.map.subjectEvent==='art')return '석상 · 바라보면 멈춥니다. 마우스로 시선을 돌리세요.';if(this.game.map.subjectEvent==='gym')return '덩키보이 · 직선에서 빨라집니다. 코너를 활용하세요.';if(this.game.spaceId===this.maps.music.id)return this.music.phase==='chase'?(this.music.monster?.state==='chase'?'거두 음악가가 쫓아옵니다 · 시야를 끊으세요.':'음악가가 배회합니다 · 발소리를 줄이세요.'):'피아노 선율이 점점 빨라집니다…';if(this.game.spaceId===this.maps.science.id)return (this.science.dark?'소등 · 이동할 수 있습니다.':'점등 · 쉐도어는 멈춥니다.')+' 뒷문 캐비넷에서 표본 회수 후 탈출.';return ''}
+ guide(hints){if(hints==='none')return[];if(this.game.spaceId===this.maps.library.id)return ['도서실: 사서 자리와 서가를 자유롭게 조사할 수 있습니다. 안쪽 비상 물품 보관함에 손전등이 있습니다.'];if(this.game.spaceId===this.maps.science.id)return ['뒷문 옆 캐비넷에서 실험 표본을 가져온 뒤 뒷문으로 나가자.'];return []}
 
  snapshot(){
-  const monster=m=>m?Object.fromEntries(['kind','index','x','y','direction','speed','distance','phase','grace','charge'].filter(k=>m[k]!==undefined).map(k=>[k,m[k]])):null;
+  const monster=m=>m?Object.fromEntries(['kind','index','x','y','direction','speed','distance','phase','grace','charge','state','goal','lastKnown','lastSensed','patrolWait'].filter(k=>m[k]!==undefined).map(k=>[k,m[k]])):null;
   return {library:{...this.library,sequence:[...this.library.sequence]},scienceRewardTaken:this.science.rewardTaken,
    encounter:{spaceId:this.lastSpace,music:{...this.music,monster:monster(this.music.monster)},science:{...this.science,monsters:this.science.monsters.map(monster)},special:Object.fromEntries(Object.entries(this.special).map(([id,m])=>[id,monster(m)]))}};
  }
  restore(d){
-  if(!d)return;Object.assign(this.library,d.library);this.science.rewardTaken=!!d.scienceRewardTaken;
+  if(!d)return;Object.assign(this.library,{step:0,solved:true,sequence:[]});this.science.rewardTaken=!!d.scienceRewardTaken;
   // Older saves do not contain these clocks. New saves resume the current room
   // without firing its entry/reset logic again on the first frame after load.
   const e=d.encounter;if(!e)return;
@@ -117,7 +125,7 @@ export class SubjectEvents {
   Object.assign(this.science,e.science,{monsters:e.science.monsters.map(v=>monster(v,this.maps.science))});
   for(const id of ['art','gym'])this.special[id]=monster(e.special?.[id],this.maps[id]);
  }
- inspect(){return {music:{phase:this.music.phase,elapsed:this.music.elapsed,tempo:this.musicTempo},science:{phase:this.science.phase,elapsed:this.science.elapsed,dark:this.dark,blackouts:this.science.blackouts,rewardTaken:this.science.rewardTaken},library:{...this.library},monsters:this.monsters.map(m=>({kind:m.kind,x:m.x,y:m.y,speed:m.speed,distance:m.distance})),inEncounter:this.inEncounter}}
+ inspect(){return {music:{phase:this.music.phase,elapsed:this.music.elapsed,tempo:this.musicTempo},science:{phase:this.science.phase,elapsed:this.science.elapsed,dark:this.dark,blackouts:this.science.blackouts,rewardTaken:this.science.rewardTaken},library:{...this.library},monsters:this.monsters.map(m=>({kind:m.kind,x:m.x,y:m.y,speed:m.speed,distance:m.distance,state:m.state,goal:m.goal})),inEncounter:this.inEncounter}}
 }
 
 function gameFloor(g,source){const f=g.spaces.get(source.spaceId);return f.sourceFloor||f.number}

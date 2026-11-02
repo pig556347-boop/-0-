@@ -1,0 +1,108 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "easy exhaustion time",
+      "passed": true
+    },
+    {
+      "name": "easy cannot sprint exhausted",
+      "passed": true
+    },
+    {
+      "name": "easy no recovery before delay",
+      "passed": true
+    },
+    {
+      "name": "easy recovery is 24 per second",
+      "passed": true
+    },
+    {
+      "name": "easy exhaustion eventually clears",
+      "passed": true
+    },
+    {
+      "name": "normal exhaustion time",
+      "passed": true
+    },
+    {
+      "name": "normal cannot sprint exhausted",
+      "passed": true
+    },
+    {
+      "name": "normal no recovery before delay",
+      "passed": true
+    },
+    {
+      "name": "normal recovery is 24 per second",
+      "passed": true
+    },
+    {
+      "name": "normal exhaustion eventually clears",
+      "passed": true
+    },
+    {
+      "name": "hard exhaustion time",
+      "passed": true
+    },
+    {
+      "name": "hard cannot sprint exhausted",
+      "passed": true
+    },
+    {
+      "name": "hard no recovery before delay",
+      "passed": true
+    },
+    {
+      "name": "hard recovery is 24 per second",
+      "passed": true
+    },
+    {
+      "name": "hard exhaustion eventually clears",
+      "passed": true
+    },
+    {
+      "name": "extreme exhaustion time",
+      "passed": true
+    },
+    {
+      "name": "extreme cannot sprint exhausted",
+      "passed": true
+    },
+    {
+      "name": "extreme no recovery before delay",
+      "passed": true
+    },
+    {
+      "name": "extreme recovery is 24 per second",
+      "passed": true
+    },
+    {
+      "name": "extreme exhaustion eventually clears",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "modes": [
+    {
+      "mode": "easy",
+      "sprintSeconds": 12.500000000000043,
+      "maximum": 200
+    },
+    {
+      "mode": "normal",
+      "sprintSeconds": 9.399999999999999,
+      "maximum": 150
+    },
+    {
+      "mode": "hard",
+      "sprintSeconds": 6.249999999999986,
+      "maximum": 100
+    },
+    {
+      "mode": "extreme",
+      "sprintSeconds": 6.249999999999986,
+      "maximum": 100
+    }
+  ]
+}

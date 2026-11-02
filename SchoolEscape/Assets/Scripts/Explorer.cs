@@ -66,7 +66,7 @@ namespace SchoolEscape
             if(Game?.Native?.KitchenActive==true){RestoreStamina();}
             else if(IsRunning)
             {
-                Stamina = Mathf.Max(0, Stamina - 20 * dt);staminaDelay = 1.5f;
+                Stamina = Mathf.Max(0, Stamina - 16 * dt);staminaDelay = 1f;
                 if(Stamina <= .0001f){Stamina=0;Exhausted=true;}
             }
             else RecoverStamina(dt);
@@ -87,7 +87,7 @@ namespace SchoolEscape
         }
         void RecoverStamina(float dt)
         {
-            if(staminaDelay<=0)Stamina=Mathf.Min(MaximumStamina,Stamina+18*dt);
+            if(staminaDelay<=0)Stamina=Mathf.Min(MaximumStamina,Stamina+24*dt);
             if(Exhausted&&Stamina>=MaximumStamina*.25f)Exhausted=false;
         }
         public void ResetState()

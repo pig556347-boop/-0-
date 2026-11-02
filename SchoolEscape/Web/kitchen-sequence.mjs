@@ -46,7 +46,7 @@ export class KitchenSequence {
   const gap=Math.hypot(g.x-this.x,g.y-this.y)*g.data.tileSize;
   let playerIndex=0,nearest=Infinity;for(let i=0;i<this.path.length;i++){const q=this.path[i],d=Math.hypot(g.x-q[0],g.y-q[1]);if(d<nearest){nearest=d;playerIndex=i;}}
   const routeGap=(playerIndex-this.index)*g.data.tileSize;
-  this.speed=({easy:4.15,normal:4.4,hard:4.55,extreme:4.65})[this.survival.mode]+(routeGap>12?.6:0);
+  this.speed=({easy:4.85,normal:5.15,hard:5.3,extreme:5.45})[this.survival.mode]+(routeGap>12?.6:0);
   let move=this.speed*dt/g.data.tileSize;this.walkPhase+=dt*this.speed*4;
   while(move>0&&this.index<this.path.length-1){const p=this.path[this.index+1],dx=p[0]-this.x,dy=p[1]-this.y,n=Math.hypot(dx,dy),step=Math.min(move,n);if(n){this.direction={x:dx/n,y:dy/n};this.x+=dx/n*step;this.y+=dy/n*step;}this.distance+=step*g.data.tileSize;move-=step;if(n<=step+.00001)this.index++;this.clearAround();}
   if(Math.hypot(g.x-this.x,g.y-this.y)*g.data.tileSize<1.12){g.caught=true;g.emit('caught',{source:'배식장'});this.phase='failed';this.examined=false;this.speed=0;}

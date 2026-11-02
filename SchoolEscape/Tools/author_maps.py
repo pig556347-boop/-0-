@@ -213,6 +213,8 @@ data=dict(title='폐교탈출',schemaVersion=4,revision='subject-encounters-016-
           label='운동장 교문',range=1.7))
 from patch_017 import apply_017
 apply_017(data)
+from patch_018 import apply_018
+apply_018(data)
 dest=ROOT/'Assets/Resources/SchoolMap.json'
 dest.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 print('Wrote',dest)

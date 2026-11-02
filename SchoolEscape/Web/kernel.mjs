@@ -18,7 +18,7 @@ export class Exploration {
   emit(type,detail={}){const event={...detail,id:++this.eventSerial,type,time:this.time};this.events.push(event);if(this.events.length>128)this.events.shift();return event}
   reset(){const serial=this.eventSerial;Object.assign(this,new Exploration(this.data));this.eventSerial=serial;this.emit('restart')}
   recoverStamina(dt){
-    if(this.time-this.lastSprintTime>=1.5)this.stamina=Math.min(this.maxStamina,this.stamina+18*dt);
+    if(this.time-this.lastSprintTime>=1.0)this.stamina=Math.min(this.maxStamina,this.stamina+24*dt);
     if(this.exhausted&&this.stamina>=this.maxStamina*.25){this.exhausted=false;this.emit('recovered')}
   }
   overlaps(x,y,rect,radius=this.data.playerRadius) {
@@ -73,7 +73,7 @@ export class Exploration {
     const distance=Math.hypot(this.lastDelta.x,this.lastDelta.y);
     this.isRunning=sprint&&distance>.0001;
     if(this.isRunning&&!unlimited){
-      this.stamina=Math.max(0,this.stamina-20*dt*Math.min(1,distance/(speed*dt||1)));this.lastSprintTime=this.time;
+      this.stamina=Math.max(0,this.stamina-16*dt*Math.min(1,distance/(speed*dt||1)));this.lastSprintTime=this.time;
       if(this.stamina<=.00001){this.stamina=0;this.exhausted=true;this.emit('exhausted')}
     }else this.recoverStamina(dt);
     this.distance+=distance;this.speed=dt?distance/dt:0;this.phase+=distance*(this.isRunning?4.2:5.3);
@@ -83,7 +83,7 @@ export class Exploration {
     if(this.autoStairsEnabled)this.updateStairs();
   }
   currentRoom(){return this.roomId?this.map:null}
-  nearby(){return this.map.isOutdoor?null:this.map.stairs.find(s=>Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<1.55)}
+  nearby(){return this.map.stairs.find(s=>Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<1.55)}
   nearbyDoor(){
     if(this.pendingDoor)return null;
     const candidates=this.roomId?(this.map.noExit?[]:[{label:this.map.exitLabel||'복도로 나가기',exit:true,targetId:this.map.returnSpaceId||`floor-${this.floor}`,doorX:this.map.exitX,doorY:this.map.exitY,facing:'north'}]):
@@ -118,11 +118,11 @@ export class Exploration {
   setSpaceId(id,x,y){
     const next=this.spaces.get(id);
     if(!next||this.blocked(x,y,next))throw Error(`Blocked space landing ${id}:${x},${y}`);
-    this.currentSpaceId=id;this.roomId=next.isRoom?id:'';this.floor=next.isOutdoor?0:(next.sourceFloor??next.number);
+    this.currentSpaceId=id;this.roomId=next.isRoom?id:'';this.floor=next.kind==='rooftop'?5:next.isOutdoor?0:(next.sourceFloor??next.number);
     this.x=x;this.y=y;this.speed=0;this.isRunning=false;this.arrivalLock=null;this.lastDelta={x:0,y:0};
   }
   updateStairs(){
-    if(this.map.isOutdoor||this.pendingDoor)return false;
+    if(this.pendingDoor)return false;
     if(this.arrivalLock){
       const s=this.map.stairs.find(s=>s.id===this.arrivalLock);
       if(s&&Math.hypot(s.x-this.x,s.y-this.y)*this.data.tileSize<=this.data.stairExitRadius)return false;

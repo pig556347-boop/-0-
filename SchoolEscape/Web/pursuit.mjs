@@ -2,9 +2,9 @@
 // independently chosen patrol routes. It never receives a live hidden target.
 export class Pursuit {
   constructor(game){
-    this.game=game;this.radius=.31;this.walkSpeed=1.35;this.chaseSpeed=3.3;
+    this.game=game;this.radius=.31;this.walkSpeed=1.6;this.chaseSpeed=3.9;
     this.grids=new Map();this.enabled=true;
-    this.rules={sightRange:11,fovDegrees:120,peripheralRange:1.8,investigateSpeed:1.9,
+    this.rules={sightRange:11,fovDegrees:120,peripheralRange:1.8,investigateSpeed:2.2,
       unseenBeforeSearch:8,searchSeconds:4,memorySeconds:12,unreachableSeconds:3,exitEvidenceSeconds:2.5};
     this.reset();
   }
