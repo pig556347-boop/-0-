@@ -1,0 +1,74 @@
+{
+  "checks": [
+    {
+      "name": "Saved English language also applies to start button",
+      "passed": true,
+      "actual": "START GAME →"
+    },
+    {
+      "name": "Hard capture consumes exactly one life",
+      "passed": true
+    },
+    {
+      "name": "Returning to lobby cannot refill lives or switch current-run difficulty",
+      "passed": true,
+      "actual": {
+        "before": {
+          "mode": "hard",
+          "lives": 2,
+          "time": 0
+        },
+        "after": {
+          "mode": "hard",
+          "lives": 2,
+          "time": 0
+        },
+        "locked": true
+      }
+    },
+    {
+      "name": "Inventory shows nine slots plus separate guidebook",
+      "passed": true
+    },
+    {
+      "name": "E closes guide and returns to inventory",
+      "passed": true
+    },
+    {
+      "name": "Second E closes inventory",
+      "passed": true
+    },
+    {
+      "name": "Inventory and guide keep play time frozen",
+      "passed": true
+    },
+    {
+      "name": "Esc closes settings and keeps pause screen open",
+      "passed": true
+    },
+    {
+      "name": "Saving enables continue button without a reload",
+      "passed": true
+    },
+    {
+      "name": "Loaded run preserves difficulty and remaining lives",
+      "passed": true
+    },
+    {
+      "name": "Fresh run permits difficulty selection again",
+      "passed": true
+    },
+    {
+      "name": "Fresh easy run gets five lives",
+      "passed": true
+    },
+    {
+      "name": "No browser exceptions",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "method": "Chromium keyboard/click UI. QA capture flag supplies an isolated death fixture for testing lobby preservation.",
+  "ok": true,
+  "testedBuildSha256": "55f8fe27f5f0d0cae5f6855213d956e7069631aa57c6bbefb4802d81e6ee9917"
+}

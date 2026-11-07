@@ -1,27 +1,25 @@
 {
   "game": "폐교탈출",
-  "version": "0.18",
-  "featureRevision": "library-rooftop-roaming-018-2026-11-02",
-  "sourceCommit": "ddcb990cae8c7170bf896e9f17f523b7a3e99984",
-  "htmlSha256": "834f5d83065bf8b9dd49df734ad7b5b46d7f0ea0cc2d6fe0b917f185d7fd4874",
-  "htmlBytes": 6674951,
-  "roomCount": 105,
-  "totalSpaces": 110,
-  "mainFloors": 4,
+  "version": "0.19",
+  "featureRevision": "imported-art-menu-save-fixes-2026-11-07",
+  "sourceCommit": "793e2e64753a062e671051f14df7cadeb619c696",
+  "includesWorkingTreeChanges": true,
+  "htmlSha256": "55f8fe27f5f0d0cae5f6855213d956e7069631aa57c6bbefb4802d81e6ee9917",
+  "htmlBytes": 39267905,
   "browserChecks": {
-    "browser": 51,
-    "selfdiag": 7,
-    "walkthrough": 12
+    "menu": 13,
+    "art": 12,
+    "save": 7,
+    "walkthrough": 12,
+    "gameplay": 51
   },
-  "seedChecks": 4966,
-  "staticChecks": 77581,
-  "routeChecks": 3738,
-  "balanceChecks": 20,
-  "unityNativePortImplemented": true,
-  "unityCSharpCompiled": true,
+  "browserErrors": [],
+  "environmentAssets": 11,
+  "animatedMonsters": [
+    "chef",
+    "statue"
+  ],
   "unityPlayValidated": false,
   "unityWebGL": false,
-  "unityExecutionBlock": "Play: No valid Unity Editor license found; WebGL Build Support absent",
-  "nativeGeneration": "16 authored placement layouts, runtime password/classroom randomization",
-  "newSaveVersion": 18
+  "unityExecutionBlock": "No valid Unity Editor license found"
 }

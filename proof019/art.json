@@ -1,0 +1,110 @@
+{
+  "checks": [
+    {
+      "name": "All 13 imported assets loaded",
+      "passed": true
+    },
+    {
+      "name": "Both delivered rigs contain their three clips",
+      "passed": true
+    },
+    {
+      "name": "Imported static asset batch count and dimensions",
+      "passed": true
+    },
+    {
+      "name": "Watched statue retains exact animation time",
+      "passed": true
+    },
+    {
+      "name": "Pause retains exact animation time",
+      "passed": true
+    },
+    {
+      "name": "Statue resumes movement animation",
+      "passed": true
+    },
+    {
+      "name": "Right and mirrored left corners select delivered turn",
+      "passed": true
+    },
+    {
+      "name": "Capture selects attack clip",
+      "passed": true
+    },
+    {
+      "name": "Imported chef is the visible chase mesh",
+      "passed": true
+    },
+    {
+      "name": "Chase frame remains below 300k triangles",
+      "passed": true
+    },
+    {
+      "name": "Imported clips do not add horizontal root movement",
+      "passed": true
+    },
+    {
+      "name": "No browser runtime errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "counts": {
+    "door": 209,
+    "lamp": 138,
+    "corridor-floor": 3298,
+    "door-frame": 209,
+    "landing": 17,
+    "stairs": 17,
+    "railing": 34,
+    "classroom-floor": 4160,
+    "blackboard": 20,
+    "desk": 603,
+    "locker": 608,
+    "chef": 1
+  },
+  "render": {
+    "triangles": 101994,
+    "calls": 44
+  },
+  "rootMotion": [
+    {
+      "id": "chef",
+      "clip": "attack",
+      "drift": 3.915377344565485e-08
+    },
+    {
+      "id": "chef",
+      "clip": "run",
+      "drift": 1.3214192462474017e-08
+    },
+    {
+      "id": "chef",
+      "clip": "turn",
+      "drift": 2.2168012703271955e-08
+    },
+    {
+      "id": "chef",
+      "clip": "turn-left",
+      "drift": 2.2168012703271955e-08
+    },
+    {
+      "id": "statue",
+      "clip": "attack",
+      "drift": 1.1774855812564031e-07
+    },
+    {
+      "id": "statue",
+      "clip": "run",
+      "drift": 4.579864001496431e-08
+    },
+    {
+      "id": "statue",
+      "clip": "start",
+      "drift": 2.1175304246168203e-08
+    }
+  ],
+  "ok": true,
+  "testedBuildSha256": "55f8fe27f5f0d0cae5f6855213d956e7069631aa57c6bbefb4802d81e6ee9917"
+}
