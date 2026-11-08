@@ -1,0 +1,80 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Starts with lab coat",
+      "passed": true
+    },
+    {
+      "name": "Starts with flashlight",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation lab-sample",
+      "passed": true
+    },
+    {
+      "name": "Science rear exit works after specimen",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation key-a",
+      "passed": true
+    },
+    {
+      "name": "Inserted key-a without needing other keys",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation key-b",
+      "passed": true
+    },
+    {
+      "name": "Inserted key-b without needing other keys",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation key-c",
+      "passed": true
+    },
+    {
+      "name": "Inserted key-c without needing other keys",
+      "passed": true
+    },
+    {
+      "name": "Continuous route reaches actual escape success",
+      "passed": true
+    },
+    {
+      "name": "No browser exception or resource failure",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "visits": [
+    "floor-2",
+    "floor-3",
+    "room-f2-11",
+    "floor-2",
+    "room-f20-7",
+    "floor-2",
+    "floor-1",
+    "playground",
+    "floor-1",
+    "floor-2",
+    "floor-3",
+    "floor-4",
+    "main-rooftop",
+    "floor-4",
+    "floor-3",
+    "floor-2",
+    "floor-1",
+    "playground"
+  ],
+  "method": "Continuous controller movement, actual E/F and click interactions. Public developer enemy OFF. No teleports, invented items or forced unlocks.",
+  "sha256": "c9eeb6d2ae1b9d69c4f4af0270567f2aae2aedf973a8d5c516eeba74ab6d1b34",
+  "seed": 10365085,
+  "distanceMeters": 993.0359176279156,
+  "simulatedSeconds": 232.68615361220833,
+  "testedBuildSha256": "c9eeb6d2ae1b9d69c4f4af0270567f2aae2aedf973a8d5c516eeba74ab6d1b34"
+}

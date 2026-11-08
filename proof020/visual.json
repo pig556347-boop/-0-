@@ -1,0 +1,66 @@
+{
+  "checks": [
+    {
+      "name": "Test inventory has all three supplied items",
+      "passed": true
+    },
+    {
+      "name": "Stair repair is a closed low-poly flight",
+      "passed": true
+    },
+    {
+      "name": "Door and frame normals and bounds finite",
+      "passed": true
+    },
+    {
+      "name": "Walkway is behind and beside buildings without transition",
+      "passed": true
+    },
+    {
+      "name": "Four separate statue meshes and agents",
+      "passed": true
+    },
+    {
+      "name": "No rear circular vision opening remains",
+      "passed": true
+    },
+    {
+      "name": "Front-facing statue stays frozen at close range",
+      "passed": true
+    },
+    {
+      "name": "Rear statue actually kills through normal enemy tick",
+      "passed": true
+    },
+    {
+      "name": "Statue death consumes one life and revives safely",
+      "passed": true
+    },
+    {
+      "name": "Reentry resets all four statues safely away from entrance",
+      "passed": true
+    },
+    {
+      "name": "Distant statues do not move outside their detection range",
+      "passed": true
+    },
+    {
+      "name": "Chef visual is 2.5 times original scale",
+      "passed": true
+    },
+    {
+      "name": "Standing still is lethal with accelerated chef",
+      "passed": true
+    },
+    {
+      "name": "No JavaScript runtime errors",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "url": "http://127.0.0.1:8841/Builds/Browser/",
+  "sha256": "c9eeb6d2ae1b9d69c4f4af0270567f2aae2aedf973a8d5c516eeba74ab6d1b34",
+  "ok": true,
+  "testedBuildSha256": "c9eeb6d2ae1b9d69c4f4af0270567f2aae2aedf973a8d5c516eeba74ab6d1b34"
+}

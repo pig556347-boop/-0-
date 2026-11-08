@@ -1,0 +1,232 @@
+{
+  "checks": [
+    {
+      "name": "Fresh inventory contains master key and both science tools",
+      "passed": true
+    },
+    {
+      "name": "Art room enlarged to 34 by 30",
+      "passed": true
+    },
+    {
+      "name": "Four distinct statues spawn safely",
+      "passed": true
+    },
+    {
+      "name": "Watching freezes statue",
+      "passed": true
+    },
+    {
+      "name": "Statue reaches and kills from behind",
+      "passed": true
+    },
+    {
+      "name": "Statue does not hunt outside detection radius",
+      "passed": true
+    },
+    {
+      "name": "Save restore retains four independent statues",
+      "passed": true
+    },
+    {
+      "name": "Walk continuous perimeter 3,42",
+      "passed": true
+    },
+    {
+      "name": "Walk continuous perimeter 3,77",
+      "passed": true
+    },
+    {
+      "name": "Walk continuous perimeter 8,82",
+      "passed": true
+    },
+    {
+      "name": "Walk continuous perimeter 72,82",
+      "passed": true
+    },
+    {
+      "name": "Walk continuous perimeter 78,76",
+      "passed": true
+    },
+    {
+      "name": "Walk continuous perimeter 78,44",
+      "passed": true
+    },
+    {
+      "name": "Walk continuous perimeter 66,44",
+      "passed": true
+    },
+    {
+      "name": "Walk continuous perimeter 34,50",
+      "passed": true
+    },
+    {
+      "name": "Exactly one exterior map and no walkway door",
+      "passed": true
+    },
+    {
+      "name": "easy clean sprint can finish",
+      "passed": true,
+      "actual": {
+        "mode": "easy",
+        "pause": 0,
+        "caught": false,
+        "minGap": 4.02499999999999,
+        "finalGap": 5.415823140494556,
+        "maxSpeed": 6.33
+      }
+    },
+    {
+      "name": "easy long mistake is lethal",
+      "passed": true,
+      "actual": {
+        "mode": "easy",
+        "pause": 2.5,
+        "caught": true,
+        "minGap": 1.380323140495241,
+        "finalGap": 1.380323140495241,
+        "maxSpeed": 6.33
+      }
+    },
+    {
+      "name": "normal clean sprint can finish",
+      "passed": true,
+      "actual": {
+        "mode": "normal",
+        "pause": 0,
+        "caught": false,
+        "minGap": 3.10460688859949,
+        "finalGap": 3.9904497933877114,
+        "maxSpeed": 6.390000000000001
+      }
+    },
+    {
+      "name": "normal long mistake is lethal",
+      "passed": true,
+      "actual": {
+        "mode": "normal",
+        "pause": 2.5,
+        "caught": true,
+        "minGap": 1.4164043388425185,
+        "finalGap": 1.4164043388425185,
+        "maxSpeed": 6.390000000000001
+      }
+    },
+    {
+      "name": "hard clean sprint can finish",
+      "passed": true,
+      "actual": {
+        "mode": "hard",
+        "pause": 0,
+        "caught": false,
+        "minGap": 2.189107716856413,
+        "finalGap": 2.5650764462805355,
+        "maxSpeed": 6.45
+      }
+    },
+    {
+      "name": "hard long mistake is lethal",
+      "passed": true,
+      "actual": {
+        "mode": "hard",
+        "pause": 2.5,
+        "caught": true,
+        "minGap": 1.5059855371896003,
+        "finalGap": 1.5059855371896003,
+        "maxSpeed": 6.45
+      }
+    },
+    {
+      "name": "extreme clean sprint can finish",
+      "passed": true,
+      "actual": {
+        "mode": "extreme",
+        "pause": 0,
+        "caught": false,
+        "minGap": 1.7070190907389515,
+        "finalGap": 1.8125034090906034,
+        "maxSpeed": 6.48
+      }
+    },
+    {
+      "name": "extreme long mistake is lethal",
+      "passed": true,
+      "actual": {
+        "mode": "extreme",
+        "pause": 2.5,
+        "caught": true,
+        "minGap": 1.395503409090555,
+        "finalGap": 1.395503409090555,
+        "maxSpeed": 6.48
+      }
+    }
+  ],
+  "kitchen": [
+    {
+      "mode": "easy",
+      "pause": 0,
+      "caught": false,
+      "minGap": 4.02499999999999,
+      "finalGap": 5.415823140494556,
+      "maxSpeed": 6.33
+    },
+    {
+      "mode": "easy",
+      "pause": 2.5,
+      "caught": true,
+      "minGap": 1.380323140495241,
+      "finalGap": 1.380323140495241,
+      "maxSpeed": 6.33
+    },
+    {
+      "mode": "normal",
+      "pause": 0,
+      "caught": false,
+      "minGap": 3.10460688859949,
+      "finalGap": 3.9904497933877114,
+      "maxSpeed": 6.390000000000001
+    },
+    {
+      "mode": "normal",
+      "pause": 2.5,
+      "caught": true,
+      "minGap": 1.4164043388425185,
+      "finalGap": 1.4164043388425185,
+      "maxSpeed": 6.390000000000001
+    },
+    {
+      "mode": "hard",
+      "pause": 0,
+      "caught": false,
+      "minGap": 2.189107716856413,
+      "finalGap": 2.5650764462805355,
+      "maxSpeed": 6.45
+    },
+    {
+      "mode": "hard",
+      "pause": 2.5,
+      "caught": true,
+      "minGap": 1.5059855371896003,
+      "finalGap": 1.5059855371896003,
+      "maxSpeed": 6.45
+    },
+    {
+      "mode": "extreme",
+      "pause": 0,
+      "caught": false,
+      "minGap": 1.7070190907389515,
+      "finalGap": 1.8125034090906034,
+      "maxSpeed": 6.48
+    },
+    {
+      "mode": "extreme",
+      "pause": 2.5,
+      "caught": true,
+      "minGap": 1.395503409090555,
+      "finalGap": 1.395503409090555,
+      "maxSpeed": 6.48
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

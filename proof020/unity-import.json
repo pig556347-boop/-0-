@@ -1,0 +1,110 @@
+{
+    "passed": true,
+    "checks": [
+        {
+            "asset": "classroom-floor",
+            "meshes": 1,
+            "triangles": 12,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "corridor-floor",
+            "meshes": 1,
+            "triangles": 12,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "desk",
+            "meshes": 1,
+            "triangles": 1396,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "door",
+            "meshes": 1,
+            "triangles": 84,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "door-frame",
+            "meshes": 1,
+            "triangles": 36,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "blackboard",
+            "meshes": 1,
+            "triangles": 900,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "locker",
+            "meshes": 1,
+            "triangles": 378,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "lamp",
+            "meshes": 1,
+            "triangles": 699,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "stairs",
+            "meshes": 1,
+            "triangles": 72,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "landing",
+            "meshes": 1,
+            "triangles": 12,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "railing",
+            "meshes": 1,
+            "triangles": 72,
+            "clips": 0,
+            "valid": true,
+            "detail": "Imported static mesh"
+        },
+        {
+            "asset": "chef",
+            "meshes": 1,
+            "triangles": 50000,
+            "clips": 4,
+            "valid": true,
+            "detail": "chef-rig|attack: local=(2.570, 2.953, 2.214) world=(2.099, 2.447, 1.651); chef-rig|run: local=(2.195, 2.930, 2.127) world=(1.684, 2.487, 1.613); chef-rig|turn: local=(2.447, 3.099, 2.800) world=(1.973, 2.415, 2.387); chef-rig|turn-left: local=(2.447, 3.040, 2.774) world=(1.978, 2.392, 2.354)"
+        },
+        {
+            "asset": "statue",
+            "meshes": 1,
+            "triangles": 50000,
+            "clips": 3,
+            "valid": true,
+            "detail": "statue-rig|attack: local=(1.798, 1.982, 2.795) world=(1.521, 2.614, 1.489); statue-rig|run: local=(1.551, 1.954, 2.832) world=(1.030, 2.661, 1.632); statue-rig|start: local=(1.193, 1.040, 2.968) world=(0.886, 2.807, 0.588)"
+        }
+    ],
+    "scope": "Unity Editor asset import and animation sampling; not Play mode"
+}

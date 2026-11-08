@@ -1,25 +1,35 @@
 {
   "game": "폐교탈출",
-  "version": "0.19",
-  "featureRevision": "imported-art-menu-save-fixes-2026-11-07",
+  "version": "0.20",
+  "featureRevision": "giant-chef-statues-campus-2026-11-08",
   "sourceCommit": "793e2e64753a062e671051f14df7cadeb619c696",
   "includesWorkingTreeChanges": true,
-  "htmlSha256": "55f8fe27f5f0d0cae5f6855213d956e7069631aa57c6bbefb4802d81e6ee9917",
-  "htmlBytes": 39267905,
+  "htmlSha256": "c9eeb6d2ae1b9d69c4f4af0270567f2aae2aedf973a8d5c516eeba74ab6d1b34",
+  "htmlBytes": 33061201,
   "browserChecks": {
+    "visual": 14,
+    "gameplay": 51,
     "menu": 13,
-    "art": 12,
     "save": 7,
-    "walkthrough": 12,
-    "gameplay": 51
+    "walkthrough": 12
   },
   "browserErrors": [],
-  "environmentAssets": 11,
-  "animatedMonsters": [
-    "chef",
-    "statue"
+  "chefScale": 2.5,
+  "statues": 4,
+  "startingItems": [
+    "master-key",
+    "lab-coat",
+    "flashlight"
   ],
+  "saveCompatibility": "New 0.20 slot; old saves preserved but not loaded",
   "unityPlayValidated": false,
   "unityWebGL": false,
-  "unityExecutionBlock": "No valid Unity Editor license found"
+  "unityExecutionBlock": "No valid Unity Editor license found",
+  "testScope": "Actual Chromium UI; isolated enemy tests use QA placement/time advancement. Continuous traversal uses enemy OFF. Pursuit and capture tested separately with enemies ON.",
+  "logicAndMapChecks": {
+    "logic": 24,
+    "routes": 3726,
+    "seeds": 4966
+  },
+  "unityImportChecks": 13
 }
