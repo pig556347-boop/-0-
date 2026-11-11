@@ -1,0 +1,405 @@
+{
+  "ok": true,
+  "utc": "2026-11-11T16:25:26.064Z",
+  "sourceCommit": "cb624dcb37af0faf1a4b1c8f31a3359c30533b47",
+  "publicURL": "https://rawcdn.githack.com/pig556347-boop/-0-/cb624dcb37af0faf1a4b1c8f31a3359c30533b47/index.html",
+  "checks": [
+    {
+      "name": "missions: Fresh run gives 5 lives and all testing gear",
+      "passed": true
+    },
+    {
+      "name": "missions: Held left click scans without cooldown",
+      "passed": true
+    },
+    {
+      "name": "missions: Scan fades after releasing mouse",
+      "passed": true
+    },
+    {
+      "name": "missions: Normal scanner has no shadows before 2 minutes",
+      "passed": true
+    },
+    {
+      "name": "missions: Normal scanner spawns two shadows at 2 minutes",
+      "passed": true
+    },
+    {
+      "name": "missions: Extreme scanner spawns at 30 seconds",
+      "passed": true
+    },
+    {
+      "name": "missions: Extreme lever one initial patrol",
+      "passed": true
+    },
+    {
+      "name": "missions: Each lever adds one shadow up to four",
+      "passed": true
+    },
+    {
+      "name": "missions: Blackout begins after ten seconds",
+      "passed": true
+    },
+    {
+      "name": "missions: Art entry stays lit with no active statues",
+      "passed": true
+    },
+    {
+      "name": "missions: Searching activates four statues",
+      "passed": true
+    },
+    {
+      "name": "missions: Left click toggles flashlight on",
+      "passed": true
+    },
+    {
+      "name": "missions: Flashlight on prevents walking",
+      "passed": true
+    },
+    {
+      "name": "missions: Second left click turns flashlight off",
+      "passed": true
+    },
+    {
+      "name": "missions: Metronome opens clickable timing control",
+      "passed": true
+    },
+    {
+      "name": "missions: First metronome success summons musician",
+      "passed": true
+    },
+    {
+      "name": "missions: Three metronomes unlock music reward",
+      "passed": true
+    },
+    {
+      "name": "missions: Reward enters inventory only after mission success",
+      "passed": true
+    },
+    {
+      "name": "missions: Rhythm response button present",
+      "passed": true
+    },
+    {
+      "name": "missions: Three rhythm sequences complete",
+      "passed": true
+    },
+    {
+      "name": "missions: Violin stops with a short grace window",
+      "passed": true
+    },
+    {
+      "name": "missions: Movement during silence provokes fast pursuit",
+      "passed": true
+    },
+    {
+      "name": "missions: Next violin phrase ends special pursuit",
+      "passed": true
+    },
+    {
+      "name": "missions: Talk starts return mission before minute expires",
+      "passed": true
+    },
+    {
+      "name": "missions: Book mission blocks leaving the room",
+      "passed": true
+    },
+    {
+      "name": "missions: Book must be returned to matching category",
+      "passed": true
+    },
+    {
+      "name": "missions: Reporting to librarian completes returns",
+      "passed": true
+    },
+    {
+      "name": "missions: Korean typing passage and input appear",
+      "passed": true
+    },
+    {
+      "name": "missions: Two library failures preserve real lives",
+      "passed": true
+    },
+    {
+      "name": "missions: Third library failure consumes only one real life",
+      "passed": true
+    },
+    {
+      "name": "missions: All five typed passages pass with final longest",
+      "passed": true
+    },
+    {
+      "name": "missions: Child request permits leaving 0",
+      "passed": true
+    },
+    {
+      "name": "missions: Child request permits leaving 1",
+      "passed": true
+    },
+    {
+      "name": "missions: Child request permits leaving 2",
+      "passed": true
+    },
+    {
+      "name": "missions: Three stationary children requests complete library",
+      "passed": true
+    },
+    {
+      "name": "missions: Child hide positions remain stable",
+      "passed": true
+    },
+    {
+      "name": "missions: E enters hiding cabinet",
+      "passed": true
+    },
+    {
+      "name": "missions: E leaves hiding cabinet",
+      "passed": true
+    },
+    {
+      "name": "missions: Gym entry stage 1",
+      "passed": true
+    },
+    {
+      "name": "missions: Gym entry stage 2",
+      "passed": true
+    },
+    {
+      "name": "missions: Gym entry stage 3",
+      "passed": true
+    },
+    {
+      "name": "missions: Dunky remains after leaving gym",
+      "passed": true
+    },
+    {
+      "name": "missions: Save restores mission variant and retries",
+      "passed": true
+    },
+    {
+      "name": "missions: Restored roamers listen to new events",
+      "passed": true
+    },
+    {
+      "name": "missions: Save restores gym appearance and musician",
+      "passed": true
+    },
+    {
+      "name": "missions: Typing exclusion option saves",
+      "passed": true
+    },
+    {
+      "name": "missions: Typing exclusion replaces an unfinished typing mission",
+      "passed": true
+    },
+    {
+      "name": "missions: No JavaScript or resource errors",
+      "passed": true,
+      "actual": []
+    },
+    {
+      "name": "enemies: Lit statue stays still and does not capture",
+      "passed": true
+    },
+    {
+      "name": "enemies: Unlit rear statue can catch player",
+      "passed": true
+    },
+    {
+      "name": "enemies: Revival clears statue encounter at safe spawn",
+      "passed": true
+    },
+    {
+      "name": "enemies: Scanner noise attracts shadow to scan position",
+      "passed": true
+    },
+    {
+      "name": "enemies: Scanner shadow capture consumes one life",
+      "passed": true
+    },
+    {
+      "name": "enemies: Violin silence violation can capture player",
+      "passed": true
+    },
+    {
+      "name": "enemies: Unseen hiding protects player",
+      "passed": true
+    },
+    {
+      "name": "enemies: E exits unseen hiding",
+      "passed": true
+    },
+    {
+      "name": "enemies: Witnessed hiding is unsafe and deducts one life",
+      "passed": true
+    },
+    {
+      "name": "enemies: Dunky follows witnessed exit to connected space",
+      "passed": true,
+      "actual": {
+        "monster": "annex-2",
+        "portal": {
+          "kind": "door",
+          "fromId": "annex-gym",
+          "toId": "annex-2",
+          "sourceX": 23,
+          "sourceY": 2,
+          "arrivalX": 6,
+          "arrivalY": 25,
+          "label": "복도로 나가기",
+          "reason": "roam"
+        }
+      }
+    },
+    {
+      "name": "enemies: Dunky does not follow into pre-chase kitchen",
+      "passed": true
+    },
+    {
+      "name": "enemies: No runtime or resource errors",
+      "passed": true,
+      "actual": []
+    },
+    {
+      "name": "lobby: Lobby has start, settings and language",
+      "passed": true
+    },
+    {
+      "name": "lobby: Gameplay HUD hidden in lobby",
+      "passed": true
+    },
+    {
+      "name": "lobby: Settings change game audio and persist",
+      "passed": true
+    },
+    {
+      "name": "lobby: Esc returns to lobby",
+      "passed": true
+    },
+    {
+      "name": "lobby: English language changes menu and document language",
+      "passed": true
+    },
+    {
+      "name": "lobby: Language and audio survive reload",
+      "passed": true
+    },
+    {
+      "name": "lobby: Game start reveals playable HUD",
+      "passed": true
+    },
+    {
+      "name": "lobby: E or F opens investigation",
+      "passed": true
+    },
+    {
+      "name": "lobby: Second E closes without button",
+      "passed": true
+    },
+    {
+      "name": "lobby: Closed investigation can reopen",
+      "passed": true
+    },
+    {
+      "name": "lobby: I opens inventory",
+      "passed": true
+    },
+    {
+      "name": "lobby: E closes inventory too",
+      "passed": true
+    },
+    {
+      "name": "lobby: Directional pad is a visible cross, input readonly",
+      "passed": true
+    },
+    {
+      "name": "lobby: Physical arrow keys do not fill direction lock",
+      "passed": true
+    },
+    {
+      "name": "lobby: Onscreen directional clicks unlock",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 numeric door lock has ten buttons",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 physical typing is ignored",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 backspace removes exactly one entry",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 incomplete code stays locked",
+      "passed": true
+    },
+    {
+      "name": "lobby: code4 onscreen digits unlock correct code",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 numeric door lock has ten buttons",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 physical typing is ignored",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 backspace removes exactly one entry",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 incomplete code stays locked",
+      "passed": true
+    },
+    {
+      "name": "lobby: code6 onscreen digits unlock correct code",
+      "passed": true
+    },
+    {
+      "name": "lobby: Settings available from pause",
+      "passed": true
+    },
+    {
+      "name": "lobby: Return to lobby preserves run",
+      "passed": true
+    },
+    {
+      "name": "lobby: Resume returns to same run",
+      "passed": true
+    },
+    {
+      "name": "lobby: Narrow lobby menu stays reachable",
+      "passed": true
+    },
+    {
+      "name": "lobby: No runtime or asset errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "suites": [
+    {
+      "name": "missions",
+      "ok": true,
+      "hash": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f",
+      "checks": 48
+    },
+    {
+      "name": "enemies",
+      "ok": true,
+      "hash": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f",
+      "checks": 12
+    },
+    {
+      "name": "lobby",
+      "ok": true,
+      "hash": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f",
+      "checks": 30
+    }
+  ]
+}
