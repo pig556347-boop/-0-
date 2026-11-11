@@ -1,0 +1,485 @@
+{
+  "checks": [
+    {
+      "name": "Three start items",
+      "passed": true
+    },
+    {
+      "name": "Science only needs coat",
+      "passed": true
+    },
+    {
+      "name": "Art requires flashlight",
+      "passed": true
+    },
+    {
+      "name": "Stair walkable f1-up",
+      "passed": true
+    },
+    {
+      "name": "Stair walkable f2-down",
+      "passed": true
+    },
+    {
+      "name": "Stair walkable f2-up",
+      "passed": true
+    },
+    {
+      "name": "Stair walkable f3-down",
+      "passed": true
+    },
+    {
+      "name": "Stair walkable f3-up",
+      "passed": true
+    },
+    {
+      "name": "Stair walkable f4-down",
+      "passed": true
+    },
+    {
+      "name": "Stair walkable f4-roof",
+      "passed": true
+    },
+    {
+      "name": "Hiding places exist across school",
+      "passed": true,
+      "actual": 56
+    },
+    {
+      "name": "Mission approach lever0",
+      "passed": true
+    },
+    {
+      "name": "Mission approach lever1",
+      "passed": true
+    },
+    {
+      "name": "Mission approach lever2",
+      "passed": true
+    },
+    {
+      "name": "Mission approach device0",
+      "passed": true
+    },
+    {
+      "name": "Mission approach device1",
+      "passed": true
+    },
+    {
+      "name": "Mission approach device2",
+      "passed": true
+    },
+    {
+      "name": "Mission approach librarian",
+      "passed": true
+    },
+    {
+      "name": "Mission approach shelf0",
+      "passed": true
+    },
+    {
+      "name": "Mission approach shelf1",
+      "passed": true
+    },
+    {
+      "name": "Mission approach shelf2",
+      "passed": true
+    },
+    {
+      "name": "Mission approach shelf3",
+      "passed": true
+    },
+    {
+      "name": "Mission approach shelf4",
+      "passed": true
+    },
+    {
+      "name": "Mission approach shelf5",
+      "passed": true
+    },
+    {
+      "name": "Mission approach child0",
+      "passed": true
+    },
+    {
+      "name": "Mission approach child1",
+      "passed": true
+    },
+    {
+      "name": "Mission approach child2",
+      "passed": true
+    },
+    {
+      "name": "Mission approach piano",
+      "passed": true
+    },
+    {
+      "name": "Mission approach music-reward",
+      "passed": true
+    },
+    {
+      "name": "Mission approach library-reward",
+      "passed": true
+    },
+    {
+      "name": "Mission approach errand0",
+      "passed": true
+    },
+    {
+      "name": "Mission approach errand1",
+      "passed": true
+    },
+    {
+      "name": "Mission approach errand2",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-1-0039",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-2-0060",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-3-0048",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-4-0061",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-5-0190",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-6-0000",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-7-0482",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-8-0148",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-9-0082",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-10-0088",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-11-0000",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-12-0158",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f1-13-0140",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-0-0430",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-1-016-769",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-4-0158",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-5-0000",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-9-0158",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-11-016-15",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-12-0000",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-13-0082",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-14-0088",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-15-0384",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-16-0000",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-17-0384",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-18-0000",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-19-0039",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-20-0060",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f2-21-0230",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-1-0082",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-2-0088",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-4-0612",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-5-0230",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-6-0061",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-7-0073",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-8-0035",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-10-0224",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-11-0060",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-12-0039",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f3-16-0113",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-annex-2-0004",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-annex-toilet-m-0082",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-annex-toilet-f-0088",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-west-prep-0000",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-west-freezer-0080",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-west-pantry-0000",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-west-restroom-0039",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f20-6-0084",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f20-7-0090",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f20-8-0082",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f20-9-0088",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f20-10-0039",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f20-11-0060",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f20-12-0230",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-room-f0-201-0026",
+      "passed": true
+    },
+    {
+      "name": "Mission approach hide-west-school-shop-0089",
+      "passed": true
+    },
+    {
+      "name": "Art initially safe",
+      "passed": true
+    },
+    {
+      "name": "Art four statues on trigger",
+      "passed": true
+    },
+    {
+      "name": "Flashlight immobilizes",
+      "passed": true
+    },
+    {
+      "name": "Scanner delayed spawn",
+      "passed": true
+    },
+    {
+      "name": "Scanner two shadows",
+      "passed": true
+    },
+    {
+      "name": "Extreme lever initial patrol",
+      "passed": true
+    },
+    {
+      "name": "Extreme lever four shadows",
+      "passed": true
+    },
+    {
+      "name": "Blackout each 1-4 once",
+      "passed": true,
+      "actual": [
+        3,
+        1,
+        4,
+        2
+      ]
+    },
+    {
+      "name": "Library scouting minute",
+      "passed": true
+    },
+    {
+      "name": "Return deadline route based",
+      "passed": true
+    },
+    {
+      "name": "Library exit locked",
+      "passed": true
+    },
+    {
+      "name": "Return completes only at librarian",
+      "passed": true
+    },
+    {
+      "name": "Two library mistakes preserve real lives",
+      "passed": true
+    },
+    {
+      "name": "Third mistake costs exactly one life",
+      "passed": true
+    },
+    {
+      "name": "Five typing passages complete",
+      "passed": true
+    },
+    {
+      "name": "Final bilingual passages longest",
+      "passed": true
+    },
+    {
+      "name": "Children permits exterior",
+      "passed": true
+    },
+    {
+      "name": "All child requests unlock reward",
+      "passed": true
+    },
+    {
+      "name": "State save roundtrip",
+      "passed": true
+    },
+    {
+      "name": "Metronome initial safety",
+      "passed": true
+    },
+    {
+      "name": "Metronome 3 success",
+      "passed": true
+    },
+    {
+      "name": "Gym entry 1",
+      "passed": true
+    },
+    {
+      "name": "Gallery not extra entry 1",
+      "passed": true
+    },
+    {
+      "name": "Gym entry 2",
+      "passed": true
+    },
+    {
+      "name": "Gallery not extra entry 2",
+      "passed": true
+    },
+    {
+      "name": "Gym entry 3",
+      "passed": true
+    },
+    {
+      "name": "Gallery not extra entry 3",
+      "passed": true
+    },
+    {
+      "name": "Reload resets roamer event cursors to new session",
+      "passed": true
+    },
+    {
+      "name": "All modes five real lives",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

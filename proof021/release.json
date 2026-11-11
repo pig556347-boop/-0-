@@ -1,0 +1,41 @@
+{
+  "game": "폐교탈출",
+  "version": "0.21",
+  "featureRevision": "subject-missions-021",
+  "sourceCommit": "793e2e64753a062e671051f14df7cadeb619c696",
+  "includesWorkingTreeChanges": true,
+  "htmlSha256": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f",
+  "htmlBytes": 33162903,
+  "browserChecks": {
+    "missions": 48,
+    "enemies": 12,
+    "walkthrough": 12,
+    "lobby": 30
+  },
+  "browserErrors": [],
+  "chefScale": 2.5,
+  "statues": 4,
+  "startingItems": [
+    "master-key",
+    "lab-coat",
+    "flashlight"
+  ],
+  "saveCompatibility": "New 0.21 slot; old saves preserved but not loaded",
+  "unityPlayValidated": false,
+  "unityWebGL": false,
+  "unityExecutionBlock": "No valid Unity Editor license found",
+  "testScope": "Actual Chromium UI; isolated enemy tests use QA placement/time advancement. Continuous traversal uses enemy OFF. Pursuit and capture tested separately with enemies ON.",
+  "logicAndMapChecks": {
+    "logic": 118,
+    "routes": 3762,
+    "seeds": 7558
+  },
+  "unityCompilation": "runtime and Editor assemblies passed",
+  "missionVariants": {
+    "science": 3,
+    "music": 3,
+    "library": 3
+  },
+  "nativeLayouts": 16,
+  "npcArt": "Librarian, children and new devices use provisional procedural models"
+}

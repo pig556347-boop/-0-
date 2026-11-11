@@ -1,0 +1,72 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Lit statue stays still and does not capture",
+      "passed": true
+    },
+    {
+      "name": "Unlit rear statue can catch player",
+      "passed": true
+    },
+    {
+      "name": "Revival clears statue encounter at safe spawn",
+      "passed": true
+    },
+    {
+      "name": "Scanner noise attracts shadow to scan position",
+      "passed": true
+    },
+    {
+      "name": "Scanner shadow capture consumes one life",
+      "passed": true
+    },
+    {
+      "name": "Violin silence violation can capture player",
+      "passed": true
+    },
+    {
+      "name": "Unseen hiding protects player",
+      "passed": true
+    },
+    {
+      "name": "E exits unseen hiding",
+      "passed": true
+    },
+    {
+      "name": "Witnessed hiding is unsafe and deducts one life",
+      "passed": true
+    },
+    {
+      "name": "Dunky follows witnessed exit to connected space",
+      "passed": true,
+      "actual": {
+        "monster": "annex-2",
+        "portal": {
+          "kind": "door",
+          "fromId": "annex-gym",
+          "toId": "annex-2",
+          "sourceX": 23,
+          "sourceY": 2,
+          "arrivalX": 6,
+          "arrivalY": 25,
+          "label": "복도로 나가기",
+          "reason": "roam"
+        }
+      }
+    },
+    {
+      "name": "Dunky does not follow into pre-chase kitchen",
+      "passed": true
+    },
+    {
+      "name": "No runtime or resource errors",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "method": "Chromium with enemies ON. QA actor placement and clock stepping isolate perception, capture, revival and witnessed portal following; UI buttons handle revival.",
+  "sha256": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f",
+  "testedBuildSha256": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f"
+}

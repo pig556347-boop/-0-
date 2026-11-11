@@ -6,10 +6,9 @@ on:
     paths:
       - index.html
       - verify-web.mjs
-      - verify-patch020.cjs
-      - verify-selfdiag018.cjs
+      - verify-patch021.cjs
+      - verify-enemies021.cjs
       - verify-lobby.mjs
-      - verify-visual020.cjs
       - .github/workflows/verify-web-play.yml
 
 permissions:

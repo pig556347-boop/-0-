@@ -1,0 +1,202 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Fresh run gives 5 lives and all testing gear",
+      "passed": true
+    },
+    {
+      "name": "Held left click scans without cooldown",
+      "passed": true
+    },
+    {
+      "name": "Scan fades after releasing mouse",
+      "passed": true
+    },
+    {
+      "name": "Normal scanner has no shadows before 2 minutes",
+      "passed": true
+    },
+    {
+      "name": "Normal scanner spawns two shadows at 2 minutes",
+      "passed": true
+    },
+    {
+      "name": "Extreme scanner spawns at 30 seconds",
+      "passed": true
+    },
+    {
+      "name": "Extreme lever one initial patrol",
+      "passed": true
+    },
+    {
+      "name": "Each lever adds one shadow up to four",
+      "passed": true
+    },
+    {
+      "name": "Blackout begins after ten seconds",
+      "passed": true
+    },
+    {
+      "name": "Art entry stays lit with no active statues",
+      "passed": true
+    },
+    {
+      "name": "Searching activates four statues",
+      "passed": true
+    },
+    {
+      "name": "Left click toggles flashlight on",
+      "passed": true
+    },
+    {
+      "name": "Flashlight on prevents walking",
+      "passed": true
+    },
+    {
+      "name": "Second left click turns flashlight off",
+      "passed": true
+    },
+    {
+      "name": "Metronome opens clickable timing control",
+      "passed": true
+    },
+    {
+      "name": "First metronome success summons musician",
+      "passed": true
+    },
+    {
+      "name": "Three metronomes unlock music reward",
+      "passed": true
+    },
+    {
+      "name": "Reward enters inventory only after mission success",
+      "passed": true
+    },
+    {
+      "name": "Rhythm response button present",
+      "passed": true
+    },
+    {
+      "name": "Three rhythm sequences complete",
+      "passed": true
+    },
+    {
+      "name": "Violin stops with a short grace window",
+      "passed": true
+    },
+    {
+      "name": "Movement during silence provokes fast pursuit",
+      "passed": true
+    },
+    {
+      "name": "Next violin phrase ends special pursuit",
+      "passed": true
+    },
+    {
+      "name": "Talk starts return mission before minute expires",
+      "passed": true
+    },
+    {
+      "name": "Book mission blocks leaving the room",
+      "passed": true
+    },
+    {
+      "name": "Book must be returned to matching category",
+      "passed": true
+    },
+    {
+      "name": "Reporting to librarian completes returns",
+      "passed": true
+    },
+    {
+      "name": "Korean typing passage and input appear",
+      "passed": true
+    },
+    {
+      "name": "Two library failures preserve real lives",
+      "passed": true
+    },
+    {
+      "name": "Third library failure consumes only one real life",
+      "passed": true
+    },
+    {
+      "name": "All five typed passages pass with final longest",
+      "passed": true
+    },
+    {
+      "name": "Child request permits leaving 0",
+      "passed": true
+    },
+    {
+      "name": "Child request permits leaving 1",
+      "passed": true
+    },
+    {
+      "name": "Child request permits leaving 2",
+      "passed": true
+    },
+    {
+      "name": "Three stationary children requests complete library",
+      "passed": true
+    },
+    {
+      "name": "Child hide positions remain stable",
+      "passed": true
+    },
+    {
+      "name": "E enters hiding cabinet",
+      "passed": true
+    },
+    {
+      "name": "E leaves hiding cabinet",
+      "passed": true
+    },
+    {
+      "name": "Gym entry stage 1",
+      "passed": true
+    },
+    {
+      "name": "Gym entry stage 2",
+      "passed": true
+    },
+    {
+      "name": "Gym entry stage 3",
+      "passed": true
+    },
+    {
+      "name": "Dunky remains after leaving gym",
+      "passed": true
+    },
+    {
+      "name": "Save restores mission variant and retries",
+      "passed": true
+    },
+    {
+      "name": "Restored roamers listen to new events",
+      "passed": true
+    },
+    {
+      "name": "Save restores gym appearance and musician",
+      "passed": true
+    },
+    {
+      "name": "Typing exclusion option saves",
+      "passed": true
+    },
+    {
+      "name": "Typing exclusion replaces an unfinished typing mission",
+      "passed": true
+    },
+    {
+      "name": "No JavaScript or resource errors",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "method": "Real Chromium keys, pointer and buttons; QA placement and simulation clock isolate all randomly selected mission variants.",
+  "sha256": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f",
+  "testedBuildSha256": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f"
+}
