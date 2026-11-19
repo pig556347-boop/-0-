@@ -1,0 +1,97 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Empty starting inventory, no testing keys or equipment",
+      "passed": true
+    },
+    {
+      "name": "Only hiding nodes remain; no minigame UI or special monsters",
+      "passed": true
+    },
+    {
+      "name": "Final box cannot reveal key before the story",
+      "passed": true
+    },
+    {
+      "name": "Read actual document story-broadcast",
+      "passed": true
+    },
+    {
+      "name": "Read actual document story-office",
+      "passed": true
+    },
+    {
+      "name": "Read actual document story-duty",
+      "passed": true
+    },
+    {
+      "name": "Read actual document story-kitchen",
+      "passed": true
+    },
+    {
+      "name": "All documents without chef escape still produce no key",
+      "passed": true
+    },
+    {
+      "name": "Returning from the kitchen triggers the giant chef",
+      "passed": true
+    },
+    {
+      "name": "Actual kitchen exit clears the chase and reveals exactly one key",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation escape-key",
+      "passed": true
+    },
+    {
+      "name": "Saved run button enabled immediately",
+      "passed": true
+    },
+    {
+      "name": "Reload retains all four clues, chef completion and exactly one carried key",
+      "passed": true
+    },
+    {
+      "name": "One key and one final E opens the gate",
+      "passed": true
+    },
+    {
+      "name": "Success screen is visible",
+      "passed": true
+    },
+    {
+      "name": "No browser exceptions or resource errors",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "visits": [
+    "room-f1-7",
+    "floor-1",
+    "room-f1-5",
+    "floor-1",
+    "room-f1-7",
+    "floor-1",
+    "floor-2",
+    "room-f20-12",
+    "floor-2",
+    "annex-2",
+    "annex-cafeteria",
+    "annex-kitchen",
+    "annex-2",
+    "floor-2",
+    "floor-1",
+    "room-f1-7",
+    "floor-1",
+    "playground"
+  ],
+  "method": "Continuous controller route, actual document/UI clicks; caretaker and chef enabled throughout, no teleports, grants or forced completion.",
+  "sha256": "db10934e768e77a4f5ecf3275549bd49fa3054306b4b7d20c5092120beec9bd1",
+  "seed": 10365085,
+  "caretakerEnabled": true,
+  "distanceMeters": 124.50421420200128,
+  "simulatedSeconds": 178.30935015481407
+}

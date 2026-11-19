@@ -1,0 +1,40 @@
+{
+  "game": "폐교탈출",
+  "version": "0.22",
+  "featureRevision": "story-escape-022",
+  "sourceCommit": "793e2e64753a062e671051f14df7cadeb619c696",
+  "includesWorkingTreeChanges": true,
+  "htmlSha256": "db10934e768e77a4f5ecf3275549bd49fa3054306b4b7d20c5092120beec9bd1",
+  "htmlBytes": 33054684,
+  "browserChecks": {
+    "story": 16,
+    "exploration": 22
+  },
+  "logicChecks": {
+    "story": 21,
+    "logic": 8
+  },
+  "browserErrors": [],
+  "chefScale": 5.617283950617283,
+  "playerChefHeightRatio": "3:25",
+  "escapeKeys": 1,
+  "startingItems": [],
+  "minigames": 0,
+  "activeMonsters": [
+    "caretaker",
+    "chef"
+  ],
+  "disabledMonsters": [
+    "dunky",
+    "illusionist",
+    "shadow",
+    "statue",
+    "musician"
+  ],
+  "saveCompatibility": "0.22 slot; earlier saves untouched and not loaded",
+  "unityCompilation": "Runtime and Editor passed",
+  "unityPlayValidated": false,
+  "unityWebGL": false,
+  "unityExecutionBlock": "No valid Unity Editor license",
+  "testScope": "Continuous controller route with caretaker and chef ON; actual UI reads, pickup, save/reload and gate escape. Isolated room/hiding/capture checks use QA placement. Six seeds and four chase difficulties checked."
+}

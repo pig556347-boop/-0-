@@ -1,41 +1,40 @@
 {
   "game": "폐교탈출",
-  "version": "0.21",
-  "featureRevision": "subject-missions-021",
+  "version": "0.22",
+  "featureRevision": "story-escape-022",
   "sourceCommit": "793e2e64753a062e671051f14df7cadeb619c696",
   "includesWorkingTreeChanges": true,
-  "htmlSha256": "d49253956b336d1632fdaff0bef49d2b2bc370181ace521593d29c1c70f55f9f",
-  "htmlBytes": 33162903,
+  "htmlSha256": "db10934e768e77a4f5ecf3275549bd49fa3054306b4b7d20c5092120beec9bd1",
+  "htmlBytes": 33054684,
   "browserChecks": {
-    "missions": 48,
-    "enemies": 12,
-    "walkthrough": 12,
-    "lobby": 30
+    "story": 16,
+    "exploration": 22
+  },
+  "logicChecks": {
+    "story": 21,
+    "logic": 8
   },
   "browserErrors": [],
-  "chefScale": 2.5,
-  "statues": 4,
-  "startingItems": [
-    "master-key",
-    "lab-coat",
-    "flashlight"
+  "chefScale": 5.617283950617283,
+  "playerChefHeightRatio": "3:25",
+  "escapeKeys": 1,
+  "startingItems": [],
+  "minigames": 0,
+  "activeMonsters": [
+    "caretaker",
+    "chef"
   ],
-  "saveCompatibility": "New 0.21 slot; old saves preserved but not loaded",
+  "disabledMonsters": [
+    "dunky",
+    "illusionist",
+    "shadow",
+    "statue",
+    "musician"
+  ],
+  "saveCompatibility": "0.22 slot; earlier saves untouched and not loaded",
+  "unityCompilation": "Runtime and Editor passed",
   "unityPlayValidated": false,
   "unityWebGL": false,
-  "unityExecutionBlock": "No valid Unity Editor license found",
-  "testScope": "Actual Chromium UI; isolated enemy tests use QA placement/time advancement. Continuous traversal uses enemy OFF. Pursuit and capture tested separately with enemies ON.",
-  "logicAndMapChecks": {
-    "logic": 118,
-    "routes": 3762,
-    "seeds": 7558
-  },
-  "unityCompilation": "runtime and Editor assemblies passed",
-  "missionVariants": {
-    "science": 3,
-    "music": 3,
-    "library": 3
-  },
-  "nativeLayouts": 16,
-  "npcArt": "Librarian, children and new devices use provisional procedural models"
+  "unityExecutionBlock": "No valid Unity Editor license",
+  "testScope": "Continuous controller route with caretaker and chef ON; actual UI reads, pickup, save/reload and gate escape. Isolated room/hiding/capture checks use QA placement. Six seeds and four chase difficulties checked."
 }

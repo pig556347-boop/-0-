@@ -1,0 +1,27 @@
+{
+  "ok": true,
+  "checks": [
+    "Debug enemy toggle cannot award story completion or permanently trap the kitchen",
+    "No minigame rooms, mission nodes, equipment gate or starting master key",
+    "Science/music have open ordinary interiors",
+    "Cannot pick or use a guessed key before story",
+    "Reading all records alone does not grant escape key",
+    "Surviving chase creates exactly one key at the authored box",
+    "Full inventory preserves key for later collection",
+    "Death drops and recovery preserve the only key and story",
+    "Save/reload retains clues, chef clearance and the one carried key",
+    "One key opens the final gate in one interaction",
+    "Missing record story-broadcast blocks key even after chef",
+    "Missing record story-office blocks key even after chef",
+    "Missing record story-duty blocks key even after chef",
+    "Missing record story-kitchen blocks key even after chef",
+    "Hiding blocks movement and seen hiding captures once",
+    "Seed 1: all story sources, exits and final gate reachable",
+    "Seed 16: all story sources, exits and final gate reachable",
+    "Seed 71: all story sources, exits and final gate reachable",
+    "Seed 2026: all story sources, exits and final gate reachable",
+    "Seed 10365085: all story sources, exits and final gate reachable",
+    "Seed 4294967295: all story sources, exits and final gate reachable"
+  ],
+  "errors": []
+}
