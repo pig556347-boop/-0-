@@ -1,7 +1,7 @@
 // End-to-end story navigation: controller movement + actual E/F and document clicks.
 // Caretaker OFF only for the navigation route; chef chase ON. Separate enemy tests cover pursuit.
 const fs=require('node:fs'),crypto=require('node:crypto'),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'/workspace/escape-tools/node_modules/playwright');
-const out=process.env.PROOF_DIR||'/workspace/scratch/022/walkthrough',url=process.env.PLAY_URL||'http://127.0.0.1:8841/Builds/Browser/';fs.mkdirSync(out,{recursive:true});const report={ok:false,checks:[],errors:[],visits:[],method:'Continuous movement and real UI. Caretaker OFF during navigation, giant chef ON during chase. No teleports, grants or forced completion.'};let browser,page;
+const out=process.env.PROOF_DIR||'/workspace/scratch/023/walkthrough',url=process.env.PLAY_URL||'http://127.0.0.1:8841/Builds/Browser/';fs.mkdirSync(out,{recursive:true});const report={ok:false,checks:[],errors:[],visits:[],method:'Continuous movement and real UI. Caretaker ON during opening, OFF during later route, giant chef ON during chase. No teleports, grants or forced completion.'};let browser,page;
 function check(name,passed,actual){report.checks.push({name,passed,actual});console.log(name,passed);if(!passed)throw Error(name)}
 async function move(x,y){return page.evaluate(({x,y})=>{
  const q=escapeQA,g=q.game,from=g.spaceId,nav=q.items.navigation.get(from).available;
@@ -18,13 +18,36 @@ async function go(id){for(let attempt=0;attempt<30;attempt++){const edge=await p
 async function openSource(id){const source=await page.evaluate(id=>escapeQA.items.searchById.get(id),id);await go(source.spaceId);for(const a of source.approaches){await move(a.x,a.y);if(await page.evaluate(id=>escapeQA.items.nearby()?.sourceId===id,id)){await page.keyboard.press('KeyF');await page.waitForFunction(()=>escapeQA.discovery.isOpen);return}}throw Error('Cannot select '+id)}
 async function collect(itemId){const item=await page.evaluate(id=>escapeQA.items.worldItems.find(i=>i.itemId===id&&!i.picked),itemId);if(!item)throw Error('Missing '+itemId);if(item.hidden){await openSource(item.sourceId);const c=page.locator('[data-compartment="'+item.compartment+'"]');if(await c.count())await c.click()}else{await go(item.spaceId);await move(item.x,item.y);await page.keyboard.press('KeyF');await page.waitForFunction(()=>escapeQA.discovery.isOpen)}await page.click('[data-uid="'+item.uid+'"]');check('Collected through actual investigation '+itemId,await page.evaluate(id=>escapeQA.items.inventory.some(i=>i.itemId===id),itemId));await page.keyboard.press('KeyE')}
 
+async function dismissStory(){for(let n=0;n<30;n++){await page.evaluate(()=>escapeQA.storyUI.update(.05,true));if(!await page.locator('#story-dialogue').isVisible())return;await page.click('#story-next');}throw Error('Dialogue did not close')}
+async function openingRoute(){
+ check('Renamed title',await page.title().then(t=>t.includes('이스케이프 투 데이')));
+ check('Dialogue freezes movement and gameplay audio',await page.evaluate(()=>{const q=escapeQA,x=q.game.x,y=q.game.y;q.tick(.05,1,0,true);q.updateAudio(.01);return q.game.x===x&&q.game.y===y&&q.audio.paused}));
+ check('Wake inside classroom',await page.evaluate(()=>escapeQA.game.spaceId==='room-f1-99'));
+ await page.evaluate(()=>escapeQA.render(5));await page.screenshot({path:out+'/awakening.png'});fs.writeFileSync(out+'/protagonist.png',Buffer.from((await page.evaluate(()=>escapeQA.storyUI.portrait)).split(',')[1],'base64'));await dismissStory();
+ await move(9,2);await page.keyboard.press('KeyE');check('Classroom door locked and protagonist reacts',await page.evaluate(()=>escapeQA.opening.doorTried&&escapeQA.game.spaceId==='room-f1-99'&&!escapeQA.game.pendingDoor));await dismissStory();
+ await move(7,3);await page.keyboard.press('KeyE');check('Window requires its clue',await page.evaluate(()=>!escapeQA.opening.escaped));
+ const memo=await page.evaluate(()=>escapeQA.opening.memoSource.id);await openSource(memo);await page.click('[data-document="opening-window-note"]');await page.keyboard.press('KeyE');await dismissStory();
+ // Save the classroom checkpoint and restore through the UI.
+ await page.keyboard.press('Escape');await page.click('#save-run');await page.click('#return-lobby');await page.click('#load-run');await page.waitForFunction(()=>window.escapeLoaded);await page.click('#begin');await page.evaluate(()=>escapeQA.setManual(true));
+ check('Classroom save preserves clue and door state without replaying awakening',await page.evaluate(()=>escapeQA.opening.doorTried&&!escapeQA.opening.escaped&&escapeQA.progression.readDocuments.has('opening-window-note')&&escapeQA.opening.queue.length===0));
+ await move(7,3);await page.keyboard.press('KeyE');check('Window exits into first floor and starts protected sighting',await page.evaluate(()=>escapeQA.game.spaceId==='floor-1'&&escapeQA.opening.sighting>0&&escapeQA.opening.protected));
+ await page.evaluate(()=>{for(let i=0;i<25;i++)escapeQA.storyUI.update(.05,true);escapeQA.render(5)});await page.screenshot({path:out+'/caretaker-glimpse.png'});
+ await page.evaluate(()=>{for(let i=0;i<65;i++)escapeQA.storyUI.update(.05,true)});await dismissStory();check('Sighting completes without losing a life',await page.evaluate(()=>escapeQA.opening.seen&&escapeQA.survival.lives===5&&!escapeQA.game.caught));
+ check('Bathrooms open but main rooms and upper floor locked',await page.evaluate(()=>escapeQA.progression.travel('room-f1-9')&&escapeQA.progression.travel('room-f1-1')&&!escapeQA.progression.travel('room-f1-5')&&!escapeQA.progression.travel('floor-2')));
+ await go('room-f1-9');await go('floor-1');await openSource('opening-board');await page.click('[data-document="opening-board-note"]');await page.screenshot({path:out+'/notice-board.png'});await page.keyboard.press('KeyE');await dismissStory();
+ check('Board updates guide to maintenance room',await page.evaluate(()=>escapeQA.progression.guide()[0].includes('설비관리실')));
+ await openSource(await page.evaluate(()=>escapeQA.opening.panelSource.id));check('Power action requires reading procedure',await page.locator('#restore-entry-power').isDisabled());await page.click('[data-document="opening-panel-note"]');await page.click('#restore-entry-power');await dismissStory();
+ check('Physical switch opens main rooms and reconnects story route',await page.evaluate(()=>escapeQA.opening.powered&&escapeQA.progression.travel('room-f1-5')&&escapeQA.progression.travel('floor-2')&&escapeQA.progression.guide()[0].includes('방송실')));
+}
+
 (async()=>{try{
  report.sha256=crypto.createHash('sha256').update(Buffer.from(await(await fetch(url)).arrayBuffer())).digest('hex');
  browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});page=await browser.newPage({viewport:{width:1280,height:800}});page.setDefaultTimeout(120000);
  await page.addInitScript(seed=>{const native=crypto.getRandomValues.bind(crypto);crypto.getRandomValues=array=>{if(array instanceof Uint32Array&&array.length===1){array[0]=seed;return array}return native(array)}},Number(process.env.RUN_SEED||10365085));
  page.on('pageerror',e=>report.errors.push(e.message));page.on('console',e=>{if(e.type()==='error')report.errors.push(e.text())});
  await page.goto(url+'?qa=1');const hostedOpen=page.getByRole('button',{name:'Open the page',exact:true}).or(page.getByRole('link',{name:'Open the page',exact:true})).first();if(await hostedOpen.count())await hostedOpen.click();
- await page.waitForFunction(()=>window.escapeLoaded);await page.click('#begin');if(process.env.ENEMIES_ON!=='1')await page.click('#enemy-toggle');await page.evaluate(()=>escapeQA.setManual(true));report.seed=await page.evaluate(()=>escapeQA.game.runSeed);report.caretakerEnabled=process.env.ENEMIES_ON==='1';if(report.caretakerEnabled)report.method='Continuous controller route, actual document/UI clicks; caretaker and chef enabled throughout, no teleports, grants or forced completion.';
+ await page.waitForFunction(()=>window.escapeLoaded);await page.click('#begin');await page.evaluate(()=>escapeQA.setManual(true));report.seed=await page.evaluate(()=>escapeQA.game.runSeed);report.caretakerEnabled=process.env.ENEMIES_ON==='1';if(report.caretakerEnabled)report.method='Continuous controller route, actual document/UI clicks; caretaker and chef enabled throughout, no teleports, grants or forced completion.';
+ await openingRoute();if(process.env.ENEMIES_ON!=='1')await page.click('#enemy-toggle');
  check('Empty starting inventory, no testing keys or equipment',await page.evaluate(()=>escapeQA.items.inventory.length===0));
  check('Only hiding nodes remain; no minigame UI or special monsters',await page.evaluate(()=>escapeQA.subjects.nodes.every(n=>n.type==='hide')&&!document.querySelector('#scanner-view')&&!document.querySelector('#mission-screen')));
  // Explore the final box first: pure luck cannot reveal the gate key.
@@ -34,7 +57,7 @@ async function collect(itemId){const item=await page.evaluate(id=>escapeQA.items
   const source=await page.evaluate(id=>Object.values(escapeQA.progression.documents).flat().find(d=>d.id===id).sourceId,id);await openSource(source);await page.click('[data-document="'+id+'"]');
   check('Read actual document '+id,await page.evaluate(id=>escapeQA.progression.readDocuments.has(id),id));
   if(id==='story-duty')await page.screenshot({path:out+'/duty-record.png'});
-  await page.keyboard.press('KeyE');
+  await page.keyboard.press('KeyE');await dismissStory();
  }
  check('All documents without chef escape still produce no key',await page.evaluate(()=>!escapeQA.items.worldItems.some(i=>i.itemId==='escape-key')));
  if(!await page.evaluate(()=>escapeQA.pursuit.enabled))await page.click('#enemy-toggle');const exit=await page.evaluate(()=>({x:escapeQA.kitchen.normal.exitX,y:escapeQA.kitchen.normal.exitY+1}));await move(exit.x,exit.y);

@@ -1,18 +1,17 @@
 {
-  "game": "폐교탈출",
-  "version": "0.22",
-  "featureRevision": "story-escape-022",
+  "game": "이스케이프 투 데이",
+  "version": "0.23",
+  "featureRevision": "opening-story-023",
   "sourceCommit": "793e2e64753a062e671051f14df7cadeb619c696",
   "includesWorkingTreeChanges": true,
-  "htmlSha256": "db10934e768e77a4f5ecf3275549bd49fa3054306b4b7d20c5092120beec9bd1",
-  "htmlBytes": 33054684,
+  "htmlSha256": "16d773a6671a12b4cea4f93fb887ec860c780341847a04e68e47314d3951c8ce",
+  "htmlBytes": 33071140,
   "browserChecks": {
-    "story": 16,
-    "exploration": 22
+    "story": 28,
+    "exploration": 23
   },
   "logicChecks": {
-    "story": 21,
-    "logic": 8
+    "story": 6
   },
   "browserErrors": [],
   "chefScale": 5.617283950617283,
@@ -31,10 +30,10 @@
     "statue",
     "musician"
   ],
-  "saveCompatibility": "0.22 slot; earlier saves untouched and not loaded",
+  "saveCompatibility": "0.23 slot; earlier saves untouched and not loaded",
   "unityCompilation": "Runtime and Editor passed",
   "unityPlayValidated": false,
   "unityWebGL": false,
   "unityExecutionBlock": "No valid Unity Editor license",
-  "testScope": "Continuous controller route with caretaker and chef ON; actual UI reads, pickup, save/reload and gate escape. Isolated room/hiding/capture checks use QA placement. Six seeds and four chase difficulties checked."
+  "testScope": "Continuous controller route: caretaker ON during opening, OFF during later navigation, chef ON during chase. Actual clue, switch, dialogue, save/reload and gate UI. Isolated post-opening capture/hiding tests use QA placement. Six opening layout seeds checked. No 20-60 minute duration claim."
 }

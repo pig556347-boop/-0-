@@ -6,8 +6,8 @@ on:
     paths:
       - index.html
       - verify-web.mjs
-      - verify-story022.cjs
-      - verify-exploration022.cjs
+      - verify-story023.cjs
+      - verify-exploration023.cjs
       - verify-lobby.mjs
       - .github/workflows/verify-web-play.yml
 
