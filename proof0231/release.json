@@ -1,0 +1,40 @@
+{
+  "game": "이스케이프 투 데이",
+  "version": "0.23.1",
+  "featureRevision": "kitchen-playtest-0231",
+  "sourceCommit": "793e2e64753a062e671051f14df7cadeb619c696",
+  "includesWorkingTreeChanges": true,
+  "htmlSha256": "8707dc432dc30fb36b94e5c131db4d322d945ad2c91f4c41102a441a1356d15a",
+  "htmlBytes": 33071112,
+  "browserChecks": {
+    "story": 28,
+    "exploration": 23
+  },
+  "logicChecks": {
+    "story": 6
+  },
+  "browserErrors": [],
+  "kitchenBrowserChecks": 17,
+  "chefScale": 5.617283950617283,
+  "playerChefHeightRatio": "3:25",
+  "escapeKeys": 1,
+  "startingItems": [],
+  "minigames": 0,
+  "activeMonsters": [
+    "caretaker",
+    "chef"
+  ],
+  "disabledMonsters": [
+    "dunky",
+    "illusionist",
+    "shadow",
+    "statue",
+    "musician"
+  ],
+  "saveCompatibility": "0.23 slot; earlier saves untouched and not loaded",
+  "unityCompilation": "Runtime and Editor passed",
+  "unityPlayValidated": false,
+  "unityWebGL": false,
+  "unityExecutionBlock": "No valid Unity Editor license",
+  "testScope": "Continuous controller route: caretaker ON during opening, OFF during later navigation, chef ON during chase. Actual clue, switch, dialogue, save/reload and gate UI. Isolated post-opening capture/hiding tests use QA placement. Six opening layout seeds checked. No 20-60 minute duration claim."
+}

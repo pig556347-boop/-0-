@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Seed 1: reachable opening sources, locked door, clue-gated window, protected sighting, power action and save restore",
+      "passed": true
+    },
+    {
+      "name": "Seed 16: reachable opening sources, locked door, clue-gated window, protected sighting, power action and save restore",
+      "passed": true
+    },
+    {
+      "name": "Seed 71: reachable opening sources, locked door, clue-gated window, protected sighting, power action and save restore",
+      "passed": true
+    },
+    {
+      "name": "Seed 2026: reachable opening sources, locked door, clue-gated window, protected sighting, power action and save restore",
+      "passed": true
+    },
+    {
+      "name": "Seed 10365085: reachable opening sources, locked door, clue-gated window, protected sighting, power action and save restore",
+      "passed": true
+    },
+    {
+      "name": "Seed 4294967295: reachable opening sources, locked door, clue-gated window, protected sighting, power action and save restore",
+      "passed": true
+    }
+  ]
+}

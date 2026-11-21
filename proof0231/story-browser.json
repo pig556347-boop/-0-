@@ -1,0 +1,149 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Renamed title",
+      "passed": true
+    },
+    {
+      "name": "Dialogue freezes movement and gameplay audio",
+      "passed": true
+    },
+    {
+      "name": "Wake inside classroom",
+      "passed": true
+    },
+    {
+      "name": "Classroom door locked and protagonist reacts",
+      "passed": true
+    },
+    {
+      "name": "Window requires its clue",
+      "passed": true
+    },
+    {
+      "name": "Classroom save preserves clue and door state without replaying awakening",
+      "passed": true
+    },
+    {
+      "name": "Window exits into first floor and starts protected sighting",
+      "passed": true
+    },
+    {
+      "name": "Sighting completes without losing a life",
+      "passed": true
+    },
+    {
+      "name": "Bathrooms open but main rooms and upper floor locked",
+      "passed": true
+    },
+    {
+      "name": "Board updates guide to maintenance room",
+      "passed": true
+    },
+    {
+      "name": "Power action requires reading procedure",
+      "passed": true
+    },
+    {
+      "name": "Physical switch opens main rooms and reconnects story route",
+      "passed": true
+    },
+    {
+      "name": "Empty starting inventory, no testing keys or equipment",
+      "passed": true
+    },
+    {
+      "name": "Only hiding nodes remain; no minigame UI or special monsters",
+      "passed": true
+    },
+    {
+      "name": "Final box cannot reveal key before the story",
+      "passed": true
+    },
+    {
+      "name": "Read actual document story-broadcast",
+      "passed": true
+    },
+    {
+      "name": "Read actual document story-office",
+      "passed": true
+    },
+    {
+      "name": "Read actual document story-duty",
+      "passed": true
+    },
+    {
+      "name": "Read actual document story-kitchen",
+      "passed": true
+    },
+    {
+      "name": "All documents without chef escape still produce no key",
+      "passed": true
+    },
+    {
+      "name": "Returning from the kitchen triggers the giant chef",
+      "passed": true
+    },
+    {
+      "name": "Actual kitchen exit clears the chase and reveals exactly one key",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation escape-key",
+      "passed": true
+    },
+    {
+      "name": "Saved run button enabled immediately",
+      "passed": true
+    },
+    {
+      "name": "Reload retains all four clues, chef completion and exactly one carried key",
+      "passed": true
+    },
+    {
+      "name": "One key and one final E opens the gate",
+      "passed": true
+    },
+    {
+      "name": "Success screen is visible",
+      "passed": true
+    },
+    {
+      "name": "No browser exceptions or resource errors",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "visits": [
+    "room-f1-9",
+    "floor-1",
+    "room-f1-11",
+    "floor-1",
+    "room-f1-7",
+    "floor-1",
+    "room-f1-5",
+    "floor-1",
+    "room-f1-7",
+    "floor-1",
+    "floor-2",
+    "room-f20-12",
+    "floor-2",
+    "annex-2",
+    "annex-cafeteria",
+    "annex-kitchen",
+    "annex-2",
+    "floor-2",
+    "floor-1",
+    "room-f1-7",
+    "floor-1",
+    "playground"
+  ],
+  "method": "Continuous movement and real UI. Caretaker ON during opening, OFF during later route, giant chef ON during chase. No teleports, grants or forced completion.",
+  "sha256": "8707dc432dc30fb36b94e5c131db4d322d945ad2c91f4c41102a441a1356d15a",
+  "seed": 10365085,
+  "caretakerEnabled": false,
+  "distanceMeters": 124.50421420200128,
+  "simulatedSeconds": 209.71434762483375
+}

@@ -1,0 +1,100 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Typing mission preference removed",
+      "passed": true
+    },
+    {
+      "name": "English menu available",
+      "passed": true
+    },
+    {
+      "name": "Five lives and one-key goal",
+      "passed": true
+    },
+    {
+      "name": "science: no equipment, blackout or automatic monster spawn",
+      "passed": true
+    },
+    {
+      "name": "science: ordinary door exits without completing any task",
+      "passed": true
+    },
+    {
+      "name": "music: no equipment, blackout or automatic monster spawn",
+      "passed": true
+    },
+    {
+      "name": "music: ordinary door exits without completing any task",
+      "passed": true
+    },
+    {
+      "name": "library: no equipment, blackout or automatic monster spawn",
+      "passed": true
+    },
+    {
+      "name": "library: ordinary door exits without completing any task",
+      "passed": true
+    },
+    {
+      "name": "art: no equipment, blackout or automatic monster spawn",
+      "passed": true
+    },
+    {
+      "name": "art: ordinary door exits without completing any task",
+      "passed": true
+    },
+    {
+      "name": "gym: no equipment, blackout or automatic monster spawn",
+      "passed": true
+    },
+    {
+      "name": "gym: ordinary door exits without completing any task",
+      "passed": true
+    },
+    {
+      "name": "E enters a themed hiding cabinet",
+      "passed": true
+    },
+    {
+      "name": "E leaves hiding cabinet",
+      "passed": true
+    },
+    {
+      "name": "Witnessed hiding captures once",
+      "passed": true
+    },
+    {
+      "name": "Caretaker now pursues and captures inside the ordinary science room",
+      "passed": true
+    },
+    {
+      "name": "Pause menu opens",
+      "passed": true
+    },
+    {
+      "name": "New save format is 23",
+      "passed": true
+    },
+    {
+      "name": "Return to lobby keeps run and enables continue",
+      "passed": true
+    },
+    {
+      "name": "New run resets story, key, lives and chef",
+      "passed": true
+    },
+    {
+      "name": "New run resets opening",
+      "passed": true
+    },
+    {
+      "name": "No browser or resource errors",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "sha256": "8707dc432dc30fb36b94e5c131db4d322d945ad2c91f4c41102a441a1356d15a"
+}
