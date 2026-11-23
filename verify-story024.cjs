@@ -48,7 +48,7 @@ async function act(sourceName,id){await openSource(await page.evaluate(n=>escape
  browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});page=await browser.newPage({viewport:{width:1280,height:800}});page.setDefaultTimeout(120000);
  await page.addInitScript(seed=>{const native=crypto.getRandomValues.bind(crypto);crypto.getRandomValues=a=>{if(a instanceof Uint32Array&&a.length===1){a[0]=seed;return a}return native(a)}},Number(process.env.RUN_SEED||10365085));
  page.on('pageerror',e=>report.errors.push(e.message));page.on('console',e=>{if(e.type()==='error')report.errors.push(e.text())});
- await page.goto(url+'?qa=1');await page.waitForFunction(()=>window.escapeLoaded);await page.click('#begin');await page.evaluate(()=>escapeQA.setManual(true));
+ await page.goto(url+'?qa=1');const hostedOpen=page.getByRole('button',{name:'Open the page',exact:true}).or(page.getByRole('link',{name:'Open the page',exact:true})).first();if(await hostedOpen.count())await hostedOpen.click();await page.waitForFunction(()=>window.escapeLoaded);await page.click('#begin');await page.evaluate(()=>escapeQA.setManual(true));
  check('Exactly one key is physically present before reading clues',await page.evaluate(()=>escapeQA.items.worldItems.filter(i=>i.itemId==='escape-key').length===1&&!escapeQA.progression.shutterOpen));
  await openingRoute();
  await go('playground');await move(34,3);await page.keyboard.press('KeyE');check('Initial gate remains locked',await page.evaluate(()=>!escapeQA.game.won));
