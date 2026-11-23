@@ -1,0 +1,362 @@
+{
+  "ok": true,
+  "utc": "2026-11-23T07:41:56.379Z",
+  "sourceCommit": "47b1d90436cf0870240dde44c50d0db8ed94613e",
+  "publicURL": "https://rawcdn.githack.com/pig556347-boop/-0-/47b1d90436cf0870240dde44c50d0db8ed94613e/index.html",
+  "checks": [
+    {
+      "name": "story: Exactly one key is physically present before reading clues",
+      "passed": true
+    },
+    {
+      "name": "story: Renamed title",
+      "passed": true
+    },
+    {
+      "name": "story: Dialogue freezes movement and gameplay audio",
+      "passed": true
+    },
+    {
+      "name": "story: Wake inside classroom",
+      "passed": true
+    },
+    {
+      "name": "story: Classroom door locked and protagonist reacts",
+      "passed": true
+    },
+    {
+      "name": "story: Window requires its clue",
+      "passed": true
+    },
+    {
+      "name": "story: Classroom save preserves clue and door state without replaying awakening",
+      "passed": true
+    },
+    {
+      "name": "story: Window exits into first floor and starts protected sighting",
+      "passed": true
+    },
+    {
+      "name": "story: Sighting completes without losing a life",
+      "passed": true
+    },
+    {
+      "name": "story: Bathrooms open but main rooms and upper floor locked",
+      "passed": true
+    },
+    {
+      "name": "story: Board updates guide to maintenance room",
+      "passed": true
+    },
+    {
+      "name": "story: Power action requires reading procedure",
+      "passed": true
+    },
+    {
+      "name": "story: Physical switch opens main rooms and reconnects story route",
+      "passed": true
+    },
+    {
+      "name": "story: Initial gate remains locked",
+      "passed": true
+    },
+    {
+      "name": "story: Collected through actual investigation duty-card",
+      "passed": true
+    },
+    {
+      "name": "story: Caretaker capture preserves checkpoint and supports retry",
+      "passed": true
+    },
+    {
+      "name": "story: Card physically inserted and consumed",
+      "passed": true
+    },
+    {
+      "name": "story: West operations actually open kitchen collision",
+      "passed": true
+    },
+    {
+      "name": "story: Reading crate does not start chef",
+      "passed": true
+    },
+    {
+      "name": "story: Collected through actual investigation escape-key",
+      "passed": true
+    },
+    {
+      "name": "story: Key pickup arms chef before gate escape becomes available",
+      "passed": true
+    },
+    {
+      "name": "story: Saved armed state preserves key, open shutter and caretaker ON",
+      "passed": true
+    },
+    {
+      "name": "story: Returning to the entrance triggers the chef",
+      "passed": true
+    },
+    {
+      "name": "story: Actual emergency exit completes chase",
+      "passed": true
+    },
+    {
+      "name": "story: One key opens final gate and is consumed",
+      "passed": true
+    },
+    {
+      "name": "story: Visited main west annex and yard",
+      "passed": true
+    },
+    {
+      "name": "story: No runtime or resource errors",
+      "passed": true,
+      "actual": []
+    },
+    {
+      "name": "kitchen: Normal kitchen starts without the chef",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Crate investigation alone never arms chase",
+      "passed": true
+    },
+    {
+      "name": "kitchen: E closes investigation with queued protagonist dialogue",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Actual key pickup arms the chase",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Saved armed kitchen restores",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Returning to door starts chase once",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Entering chase does not complete escape",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Chase save is blocked",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Pause freezes chase timer and chef",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Waiting causes one capture and one lost life",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Capture does not repeatedly remove lives",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Revive is safe and no story completion awarded",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Revive immediately rearms retry",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Retry begins and preserves destroyed rubble",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Keyboard sprint can negotiate every chase corner",
+      "passed": true,
+      "actual": {
+        "done": true,
+        "error": null,
+        "corners": [
+          {
+            "index": 0,
+            "x": 24,
+            "y": 28.018848000000048,
+            "gap": 17.47643999999994
+          },
+          {
+            "index": 1,
+            "x": 28.08000000000003,
+            "y": 28.018848000000048,
+            "gap": 18.205382585202603
+          },
+          {
+            "index": 2,
+            "x": 28.08000000000003,
+            "y": 32.91484800000005,
+            "gap": 8.80744911833724
+          },
+          {
+            "index": 3,
+            "x": 46.03199999999961,
+            "y": 32.91484800000005,
+            "gap": 18.300001551050396
+          },
+          {
+            "index": 4,
+            "x": 46.03199999999961,
+            "y": 28.018848000000048,
+            "gap": 11.876388574107493
+          },
+          {
+            "index": 5,
+            "x": 42.13315199999975,
+            "y": 28.018848000000048,
+            "gap": 6.357083842651413
+          },
+          {
+            "index": 6,
+            "x": 42.13315199999975,
+            "y": 19.04284799999998,
+            "gap": 11.52801020020814
+          },
+          {
+            "index": 7,
+            "x": 47.845151999999565,
+            "y": 19.04284799999998,
+            "gap": 9.98311381696582
+          },
+          {
+            "index": 8,
+            "x": 47.845151999999565,
+            "y": 14.962847999999951,
+            "gap": 9.915240566042485
+          },
+          {
+            "index": 9,
+            "x": 39.957151999999816,
+            "y": 14.962847999999951,
+            "gap": 10.869882818250879
+          },
+          {
+            "index": 10,
+            "x": 39.957151999999816,
+            "y": 11.154847999999923,
+            "gap": 10.441926952249114
+          },
+          {
+            "index": 11,
+            "x": 35.06115199999997,
+            "y": 11.154847999999923,
+            "gap": 10.379833595780903
+          },
+          {
+            "index": 12,
+            "x": 35.06115199999997,
+            "y": 14.962847999999951,
+            "gap": 6.465878175661847
+          },
+          {
+            "index": 13,
+            "x": 29.89315200000005,
+            "y": 14.962847999999951,
+            "gap": 10.400378222742567
+          },
+          {
+            "index": 14,
+            "x": 29.89315200000005,
+            "y": 10.066847999999915,
+            "gap": 7.793021575493073
+          },
+          {
+            "index": 15,
+            "x": 23.909152000000006,
+            "y": 10.066847999999915,
+            "gap": 10.041405020020857
+          },
+          {
+            "index": 16,
+            "x": 23.909152000000006,
+            "y": 13.058847999999937,
+            "gap": 7.681206329900261
+          },
+          {
+            "index": 17,
+            "x": 20.101151999999978,
+            "y": 13.058847999999937,
+            "gap": 11.113405984490033
+          },
+          {
+            "index": 18,
+            "x": 20.101151999999978,
+            "y": 10.066847999999915,
+            "gap": 6.680472608738077
+          },
+          {
+            "index": 19,
+            "x": 14.93315199999994,
+            "y": 10.066847999999915,
+            "gap": 10.999029287900893
+          },
+          {
+            "index": 20,
+            "x": 14.93315199999994,
+            "y": 14.962847999999951,
+            "gap": 7.759112718764988
+          },
+          {
+            "index": 21,
+            "x": 11.125151999999911,
+            "y": 14.962847999999951,
+            "gap": 9.981772121026443
+          },
+          {
+            "index": 22,
+            "x": 11.125151999999911,
+            "y": 19.858847999999988,
+            "gap": 10.317522109310001
+          },
+          {
+            "index": 23,
+            "x": 2.1491519999999023,
+            "y": 19.858847999999988,
+            "gap": 11.423488975619609
+          }
+        ],
+        "started": 3.5499999999999954,
+        "elapsed": 24.950000000000273,
+        "samples": 500
+      }
+    },
+    {
+      "name": "kitchen: Actual emergency door completes chase and resets camera",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Physical route permits exit without reading every document",
+      "passed": true
+    },
+    {
+      "name": "kitchen: Cleared kitchen never restarts the chase",
+      "passed": true
+    },
+    {
+      "name": "kitchen: No runtime or resource errors",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "suites": [
+    {
+      "name": "story",
+      "ok": true,
+      "hash": "3f19e6639752e3bc420a53e3a81df8dde6f850dbd8655b2ff6d5dd84ee62b475",
+      "checks": 27
+    },
+    {
+      "name": "kitchen",
+      "ok": true,
+      "hash": "3f19e6639752e3bc420a53e3a81df8dde6f850dbd8655b2ff6d5dd84ee62b475",
+      "checks": 19
+    }
+  ]
+}
