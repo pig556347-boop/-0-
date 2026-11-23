@@ -1,0 +1,38 @@
+{
+  "game": "이스케이프 투 데이",
+  "version": "0.24",
+  "sourceCommit": "793e2e64753a062e671051f14df7cadeb619c696",
+  "includesWorkingTreeChanges": true,
+  "htmlSha256": "3f19e6639752e3bc420a53e3a81df8dde6f850dbd8655b2ff6d5dd84ee62b475",
+  "htmlBytes": 33088360,
+  "checks": {
+    "story": 27,
+    "kitchen": 19,
+    "story-logic": 11,
+    "balance": 8
+  },
+  "browserErrors": [],
+  "activeMonsters": [
+    "caretaker",
+    "chef"
+  ],
+  "escapeKeys": 1,
+  "minigames": 0,
+  "essentialItems": [
+    "duty-card",
+    "escape-key"
+  ],
+  "requiredAreas": [
+    "main",
+    "west",
+    "annex",
+    "playground"
+  ],
+  "saveCompatibility": "New 0.24 manual and automatic slots; old saves preserved",
+  "unityCompilation": "Runtime and Editor passed; two existing JSON serialization warnings",
+  "unityPlayValidated": false,
+  "unityWebGL": false,
+  "unityExecutionBlock": "No valid Unity Editor license",
+  "firstPlayDurationValidated": false,
+  "testScope": "Full route: continuous controller movement plus real UI, caretaker and chef enabled; one caretaker capture and successful revive. Focused chef test: QA starting setup, real frame-loop keyboard sprint and 24 corners, capture/retry/save/pause. Not a human first-play duration study."
+}

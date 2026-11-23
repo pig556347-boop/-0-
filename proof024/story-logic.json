@@ -1,0 +1,49 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Seed 1 physical route, all sources reachable, no document-count gate",
+      "passed": true
+    },
+    {
+      "name": "Seed 71 physical route, all sources reachable, no document-count gate",
+      "passed": true
+    },
+    {
+      "name": "Seed 2026 physical route, all sources reachable, no document-count gate",
+      "passed": true
+    },
+    {
+      "name": "Seed 10365085 physical route, all sources reachable, no document-count gate",
+      "passed": true
+    },
+    {
+      "name": "Full inventory preserves key and does not start chase",
+      "passed": true
+    },
+    {
+      "name": "easy death preserves critical items and retries chef locally",
+      "passed": true
+    },
+    {
+      "name": "normal death preserves critical items and retries chef locally",
+      "passed": true
+    },
+    {
+      "name": "hard death preserves critical items and retries chef locally",
+      "passed": true
+    },
+    {
+      "name": "extreme death preserves critical items and retries chef locally",
+      "passed": true
+    },
+    {
+      "name": "Checkpoint and manual saves isolated; restore world, inventory, retry and blocked shutter",
+      "passed": true
+    },
+    {
+      "name": "Autosave waits for UI and active enemy, malformed saves not offered",
+      "passed": true
+    }
+  ]
+}

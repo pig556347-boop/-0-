@@ -1,0 +1,168 @@
+{
+  "checks": [
+    {
+      "name": "easy clean sprint can finish",
+      "passed": true,
+      "actual": {
+        "mode": "easy",
+        "pause": 0,
+        "caught": false,
+        "minGap": 5.0041392838867385,
+        "finalGap": 13.682281264433321,
+        "maxSpeed": 9.05
+      }
+    },
+    {
+      "name": "easy long mistake is lethal",
+      "passed": true,
+      "actual": {
+        "mode": "easy",
+        "pause": 2.5,
+        "caught": true,
+        "minGap": 2.71944315086128,
+        "finalGap": 2.71944315086128,
+        "maxSpeed": 9.05
+      }
+    },
+    {
+      "name": "normal clean sprint can finish",
+      "passed": true,
+      "actual": {
+        "mode": "normal",
+        "pause": 0,
+        "caught": false,
+        "minGap": 5.002541875173314,
+        "finalGap": 13.63362688830253,
+        "maxSpeed": 9.1
+      }
+    },
+    {
+      "name": "normal long mistake is lethal",
+      "passed": true,
+      "actual": {
+        "mode": "normal",
+        "pause": 2.5,
+        "caught": true,
+        "minGap": 2.665160185004014,
+        "finalGap": 2.665160185004014,
+        "maxSpeed": 9.1
+      }
+    },
+    {
+      "name": "hard clean sprint can finish",
+      "passed": true,
+      "actual": {
+        "mode": "hard",
+        "pause": 0,
+        "caught": false,
+        "minGap": 5.001331799566548,
+        "finalGap": 13.65580537509464,
+        "maxSpeed": 9.15
+      }
+    },
+    {
+      "name": "hard long mistake is lethal",
+      "passed": true,
+      "actual": {
+        "mode": "hard",
+        "pause": 2.5,
+        "caught": true,
+        "minGap": 2.7561599003946253,
+        "finalGap": 2.7561599003946253,
+        "maxSpeed": 9.15
+      }
+    },
+    {
+      "name": "extreme clean sprint can finish",
+      "passed": true,
+      "actual": {
+        "mode": "extreme",
+        "pause": 0,
+        "caught": false,
+        "minGap": 5.001250012200487,
+        "finalGap": 13.630141709013536,
+        "maxSpeed": 9.2
+      }
+    },
+    {
+      "name": "extreme long mistake is lethal",
+      "passed": true,
+      "actual": {
+        "mode": "extreme",
+        "pause": 2.5,
+        "caught": true,
+        "minGap": 2.616883645717085,
+        "finalGap": 2.616883645717085,
+        "maxSpeed": 9.2
+      }
+    }
+  ],
+  "kitchen": [
+    {
+      "mode": "easy",
+      "pause": 0,
+      "caught": false,
+      "minGap": 5.0041392838867385,
+      "finalGap": 13.682281264433321,
+      "maxSpeed": 9.05
+    },
+    {
+      "mode": "easy",
+      "pause": 2.5,
+      "caught": true,
+      "minGap": 2.71944315086128,
+      "finalGap": 2.71944315086128,
+      "maxSpeed": 9.05
+    },
+    {
+      "mode": "normal",
+      "pause": 0,
+      "caught": false,
+      "minGap": 5.002541875173314,
+      "finalGap": 13.63362688830253,
+      "maxSpeed": 9.1
+    },
+    {
+      "mode": "normal",
+      "pause": 2.5,
+      "caught": true,
+      "minGap": 2.665160185004014,
+      "finalGap": 2.665160185004014,
+      "maxSpeed": 9.1
+    },
+    {
+      "mode": "hard",
+      "pause": 0,
+      "caught": false,
+      "minGap": 5.001331799566548,
+      "finalGap": 13.65580537509464,
+      "maxSpeed": 9.15
+    },
+    {
+      "mode": "hard",
+      "pause": 2.5,
+      "caught": true,
+      "minGap": 2.7561599003946253,
+      "finalGap": 2.7561599003946253,
+      "maxSpeed": 9.15
+    },
+    {
+      "mode": "extreme",
+      "pause": 0,
+      "caught": false,
+      "minGap": 5.001250012200487,
+      "finalGap": 13.630141709013536,
+      "maxSpeed": 9.2
+    },
+    {
+      "mode": "extreme",
+      "pause": 2.5,
+      "caught": true,
+      "minGap": 2.616883645717085,
+      "finalGap": 2.616883645717085,
+      "maxSpeed": 9.2
+    }
+  ],
+  "errors": [],
+  "ok": true
+}

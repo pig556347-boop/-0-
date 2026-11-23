@@ -1,0 +1,165 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "Exactly one key is physically present before reading clues",
+      "passed": true
+    },
+    {
+      "name": "Renamed title",
+      "passed": true
+    },
+    {
+      "name": "Dialogue freezes movement and gameplay audio",
+      "passed": true
+    },
+    {
+      "name": "Wake inside classroom",
+      "passed": true
+    },
+    {
+      "name": "Classroom door locked and protagonist reacts",
+      "passed": true
+    },
+    {
+      "name": "Window requires its clue",
+      "passed": true
+    },
+    {
+      "name": "Classroom save preserves clue and door state without replaying awakening",
+      "passed": true
+    },
+    {
+      "name": "Window exits into first floor and starts protected sighting",
+      "passed": true
+    },
+    {
+      "name": "Sighting completes without losing a life",
+      "passed": true
+    },
+    {
+      "name": "Bathrooms open but main rooms and upper floor locked",
+      "passed": true
+    },
+    {
+      "name": "Board updates guide to maintenance room",
+      "passed": true
+    },
+    {
+      "name": "Power action requires reading procedure",
+      "passed": true
+    },
+    {
+      "name": "Physical switch opens main rooms and reconnects story route",
+      "passed": true
+    },
+    {
+      "name": "Initial gate remains locked",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation duty-card",
+      "passed": true
+    },
+    {
+      "name": "Caretaker capture preserves checkpoint and supports retry",
+      "passed": true
+    },
+    {
+      "name": "Card physically inserted and consumed",
+      "passed": true
+    },
+    {
+      "name": "West operations actually open kitchen collision",
+      "passed": true
+    },
+    {
+      "name": "Reading crate does not start chef",
+      "passed": true
+    },
+    {
+      "name": "Collected through actual investigation escape-key",
+      "passed": true
+    },
+    {
+      "name": "Key pickup arms chef before gate escape becomes available",
+      "passed": true
+    },
+    {
+      "name": "Saved armed state preserves key, open shutter and caretaker ON",
+      "passed": true
+    },
+    {
+      "name": "Returning to the entrance triggers the chef",
+      "passed": true
+    },
+    {
+      "name": "Actual emergency exit completes chase",
+      "passed": true
+    },
+    {
+      "name": "One key opens final gate and is consumed",
+      "passed": true
+    },
+    {
+      "name": "Visited main west annex and yard",
+      "passed": true
+    },
+    {
+      "name": "No runtime or resource errors",
+      "passed": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "visits": [
+    "room-f1-9",
+    "floor-1",
+    "room-f1-11",
+    "floor-1",
+    "playground",
+    "gatehouse",
+    "playground",
+    "floor-1",
+    "room-f1-5",
+    "floor-1",
+    "room-f1-7",
+    "floor-1",
+    "playground",
+    "floor-1",
+    "floor-2",
+    "room-f20-12",
+    "floor-2",
+    "floor-3",
+    "floor-4",
+    "room-f3-10",
+    "floor-4",
+    "floor-3",
+    "floor-2",
+    "west-floor-2",
+    "west-control",
+    "west-floor-2",
+    "west-floor-1",
+    "west-prep",
+    "west-floor-1",
+    "west-floor-2",
+    "west-control",
+    "west-floor-2",
+    "floor-2",
+    "annex-2",
+    "annex-cafeteria",
+    "annex-food-store",
+    "annex-cafeteria",
+    "annex-kitchen",
+    "annex-2",
+    "floor-2",
+    "floor-1",
+    "playground"
+  ],
+  "method": "Continuous controller movement through the actual map graph, real document/action/door UI; caretaker and chef ON throughout. No teleports, item grants or forced story completion.",
+  "sha256": "3f19e6639752e3bc420a53e3a81df8dde6f850dbd8655b2ff6d5dd84ee62b475",
+  "captures": 1,
+  "distanceMeters": 422.82026999028085,
+  "simulatedSeconds": 453.1306598597059,
+  "lives": 4
+}
